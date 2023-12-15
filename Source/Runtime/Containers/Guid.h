@@ -3,6 +3,10 @@
 
 namespace Portakal
 {
+	/**
+	 * @class Guid
+	 * @brief 32-bit globally unique identifier.
+	 */
 	class RUNTIME_API Guid final
 	{
 	public:

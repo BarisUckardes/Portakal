@@ -4,8 +4,12 @@
 
 namespace Portakal
 {
+	/**
+	 * @class Vector3
+	 * @brief 3-Dimensional vector class
+	 */
 	template<typename T>
-	struct Vector3
+	struct RUNTIME_API Vector3
 	{
 	public:
 		static T Distance(const Vector3 x, const Vector3 y)
@@ -17,49 +21,51 @@ namespace Portakal
 		{
 			return x.X * y.X + x.Y * y.Y + x.Z * y.Z;
 		}
+
 	public:
-		Vector3(const T x, const T y,const T z) : X(x), Y(y),Z(z)
+		Vector3(const T x, const T y, const T z) : X(x), Y(y), Z(z)
 		{
-
 		}
-		Vector3(const T value) : X(value), Y(value),Z(value)
+
+		Vector3(const T value) : X(value), Y(value), Z(value)
 		{
-
 		}
-		Vector3(const Vector3& other) : X(other.X), Y(other.Y),Z(other.Z)
+
+		Vector3(const Vector3& other) : X(other.X), Y(other.Y), Z(other.Z)
 		{
-
 		}
-		Vector3() : X(0), Y(0),Z(0)
+
+		Vector3() : X(0), Y(0), Z(0)
 		{
-
 		}
+
 		~Vector3() = default;
 
 		FORCEINLINE T GetLength() const noexcept
 		{
-			return Sqrt(X * X + Y * Y + Z*Z);
+			return Math::Sqrt(X * X + Y * Y + Z * Z);
 		}
+
 		FORCEINLINE Vector3 GetNormalized() const noexcept
 		{
 			const T length = GetLength();
 
-			return { X / length,Y / length ,Z / length};
+			return { X / length,Y / length ,Z / length };
 		}
 
 		Vector3 operator+(const Vector3& other) const
 		{
-			return Vector3(X + other.X, Y + other.Y,Z + other.Z);
+			return Vector3(X + other.X, Y + other.Y, Z + other.Z);
 		}
 
 		Vector3 operator-(const Vector3& other) const
 		{
-			return Vector3(X - other.X, Y - other.Y,Z - other.Z);
+			return Vector3(X - other.X, Y - other.Y, Z - other.Z);
 		}
 
 		Vector3 operator*(const Vector3& other) const
 		{
-			return Vector3(X * other.X, Y * other.Y,Z* other.Z);
+			return Vector3(X * other.X, Y * other.Y, Z * other.Z);
 		}
 
 		Vector3 operator/(const Vector3& other) const
@@ -69,22 +75,22 @@ namespace Portakal
 
 		Vector3 operator+(const T& other) const
 		{
-			return Vector3(X + other, Y + other,Z + other);
+			return Vector3(X + other, Y + other, Z + other);
 		}
 
 		Vector3 operator-(const T& other) const
 		{
-			return Vector3(X - other, Y - other,Z-other);
+			return Vector3(X - other, Y - other, Z - other);
 		}
 
 		Vector3 operator*(const T& other) const
 		{
-			return Vector3(X * other, Y * other,Z*other);
+			return Vector3(X * other, Y * other, Z * other);
 		}
 
 		Vector3 operator/(const T& other) const
 		{
-			return Vector3(X / other, Y / other,Z / other);
+			return Vector3(X / other, Y / other, Z / other);
 		}
 
 		Vector3& operator+=(const Vector3& other)
@@ -168,7 +174,7 @@ namespace Portakal
 
 		bool operator!=(const T& other) const
 		{
-			return X != other || Y != other ;
+			return X != other || Y != other;
 		}
 
 		T X;

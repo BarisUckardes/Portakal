@@ -3,17 +3,23 @@
 
 namespace Portakal
 {
+	/**
+	 * @class Color4
+	 * @brief 4 component color class
+	 */
 	template<typename T>
-	struct Color4
+	struct RUNTIME_API Color4
 	{
 		Color4(const T r, const T g, const T b, const T a) : R(r), G(g), B(b), A(a)
 		{
 
 		}
+
 		Color4(const Color4& other) : R(other.R), G(other.G), B(other.B), A(other.A)
 		{
 
 		}
+
 		Color4() : R(0), G(0), B(0), A(0)
 		{
 
@@ -35,7 +41,6 @@ namespace Portakal
 				throw "Index out of range";
 			}
 		}
-
 
 		Color4& operator=(const Color4& other)
 		{
@@ -107,7 +112,6 @@ namespace Portakal
 			return *this;
 		}
 
-
 		Color4 operator+(const Color4& other) const
 		{
 			return Color4(R + other.R, G + other.G, B + other.B, A + other.A);
@@ -167,6 +171,7 @@ namespace Portakal
 		{
 			return R != other || G != other || B != other || A != other;
 		}
+
 		T R;
 		T G;
 		T B;

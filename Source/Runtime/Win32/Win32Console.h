@@ -2,7 +2,6 @@
 #include <Runtime/Containers/String.h>
 #include <Runtime/Console/ConsoleColor.h>
 
-
 namespace Portakal
 {
 	class RUNTIME_API Win32Console final

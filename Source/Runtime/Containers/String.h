@@ -3,6 +3,10 @@
 
 namespace Portakal
 {
+	/**
+	 * @class String
+	 * @brief String class with basic string operations
+	 */
 	class RUNTIME_API String final
 	{
 	public:

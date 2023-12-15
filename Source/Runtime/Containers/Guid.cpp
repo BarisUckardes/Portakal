@@ -1,5 +1,4 @@
 #include "Guid.h"
-#include <stdio.h>
 
 namespace Portakal
 {
@@ -21,7 +20,7 @@ namespace Portakal
         return Guid(0, 0, 0, 0);
     }
 
-    Guid::Guid()
+    Guid::Guid() : A(0), B(0), C(0), D(0)
     {
     }
 

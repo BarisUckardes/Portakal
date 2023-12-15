@@ -4,12 +4,18 @@
 
 namespace Portakal
 {
-	#define PI  3.1415926535897932384626433832795028841971693993751058209749445923078164062f
-	#define	RadToDeg 180.0 / PI;
-	#define DegToRad PI / 180.0;
+	/**
+	 * @class Math
+	 * @brief Math utility tool
+	 */
 	class RUNTIME_API Math final
 	{
 	public:
+		constexpr static float Epsilon = 2.7182818284590452353602874713526624977572470936999595749669676277240766303535f;
+		constexpr static float Pi = 3.1415926535897932384626433832795028841971693993751058209749445923078164062f;
+		constexpr static float RadToDeg = 180.0 / Pi;
+		constexpr static float DegToRad = Pi / 180.0;
+
 		template<typename T>
 		FORCEINLINE static T Sqrt(const T value)
 		{
@@ -53,9 +59,9 @@ namespace Portakal
 		}
 
 		template<typename T>
-		FORCEINLINE static T Atan2(const T x,const T y)
+		FORCEINLINE static T Atan2(const T x, const T y)
 		{
-			return atan2(y,x);
+			return atan2(y, x);
 		}
 
 		template<typename T>

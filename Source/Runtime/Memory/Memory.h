@@ -3,15 +3,18 @@
 
 namespace Portakal
 {
-	/// <summary>
-	/// Memory utility tool
-	/// </summary>
+	/**
+	 * @class Memory
+	 * @brief Memory utility tool
+	 */
 	class RUNTIME_API Memory final
 	{
 	public:
-		static void Copy(void* pDestination, const void* pSource, const uint64 sizeInBytes);
-		static bool Check(const void* pA, const void* pB, const uint64 sizeInBytes);
-		static void Set(void* pDestination, const byte value, const uint64 sizeInBytes);
+#ifdef PORTAKAL_PLATFORM_WINDOWS
+		static void Copy(void* __restrict pDestination, const void* __restrict pSource, uint64 pSizeInBytes);
+		static bool Check(const void* __restrict pA, const void* __restrict pB, const uint64 sizeInBytes);
+		static void Set(void* __restrict pDestination, const byte value, const uint64 sizeInBytes);
+#endif
 	public:
 		Memory() = delete;
 		~Memory() = delete;

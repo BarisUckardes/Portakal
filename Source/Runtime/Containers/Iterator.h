@@ -3,6 +3,10 @@
 
 namespace Portakal
 {
+    /**
+     * @class Iterator
+     * @brief Iterator class for iterating over containers
+     */
     template<typename T>
     class Iterator
     {

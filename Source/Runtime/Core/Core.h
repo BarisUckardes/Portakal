@@ -26,42 +26,6 @@ typedef signed long long int64;
 
 #define NODISCARD NODISCARD_MSG("This function or variable should be used, otherwise it is useless to declare it.")
 
-#define NODISCARD_SMART_PTR_ALLOC                                                                               \
-    NODISCARD_MSG("This function constructs an object wrapped by a smart pointer and has no other effects; "    \
-                   "it is not useful to call this function and discard the return value.")
-
-#define NODISCARD_SMART_PTR_GET \
-    NODISCARD_MSG("This function returns a pointer to an object wrapped by a smart pointer; "                   \
-                   "it is not useful to call this function and discard the return value.")
-
-#define NODISCARD_SMART_PTR_GET_CONST \
-    NODISCARD_MSG("This function returns a pointer to a const object wrapped by a smart pointer; "              \
-                   "it is not useful to call this function and discard the return value.")
-
-#define NODISCARD_SMART_PTR_GET_NON_CONST \
-    NODISCARD_MSG("This function returns a pointer to a non-const object wrapped by a smart pointer; "          \
-                   "it is not useful to call this function and discard the return value.")
-
-#define NODISCARD_SMART_PTR_GET_CONST_REF \
-    NODISCARD_MSG("This function returns a const reference to an object wrapped by a smart pointer; "           \
-                   "it is not useful to call this function and discard the return value.")
-
-#define NODISCARD_SMART_PTR_GET_NON_CONST_REF \
-    NODISCARD_MSG("This function returns a non-const reference to an object wrapped by a smart pointer; "       \
-                   "it is not useful to call this function and discard the return value.")
-
-#define NODISCARD_SMART_PTR_GET_CONST_REF_CONST \
-    NODISCARD_MSG("This function returns a const reference to a const object wrapped by a smart pointer; "      \
-                   "it is not useful to call this function and discard the return value.")
-
-#define NODISCARD_SMART_PTR_GET_CONST_REF_NON_CONST \
-    NODISCARD_MSG("This function returns a const reference to a non-const object wrapped by a smart pointer; "  \
-                   "it is not useful to call this function and discard the return value.")
-
-#define NODISCARD_SMART_PTR_GET_NON_CONST_REF_CONST \
-    NODISCARD_MSG("This function returns a non-const reference to a const object wrapped by a smart pointer; "  \
-                   "it is not useful to call this function and discard the return value.")
-
 namespace Portakal
 {
     enum class LogLevel

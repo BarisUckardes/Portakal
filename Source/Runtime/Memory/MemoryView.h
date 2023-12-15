@@ -14,22 +14,16 @@ namespace Portakal
 	{
 	public:
 		MemoryView(void* pMemory, const uint64 sizeInBytes) : mMemory(pMemory), mSize(sizeInBytes)
-		{
+		{}
 
-		}
 		MemoryView(const MemoryView& other);
 		MemoryView(const MemoryOwnedView* pView);
 		MemoryView();
 		~MemoryView();
 
-		FORCEINLINE void* GetMemory() const noexcept
-		{
-			return mMemory;
-		}
-		FORCEINLINE uint64 GetSize() const noexcept
-		{
-			return mSize;
-		}
+		FORCEINLINE void* GetMemory() const noexcept { return mMemory; }
+		FORCEINLINE uint64 GetSize() const noexcept { return mSize; }
+
 	private:
 		void* mMemory;
 		uint64 mSize;

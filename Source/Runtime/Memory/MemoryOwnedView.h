@@ -3,11 +3,12 @@
 
 namespace Portakal
 {
-	/// <summary>
-	/// Owned version of the MemoryView.
-	/// It will create a copy of the target mmeory.
-	/// The data will be freed when the instance goes beyond scope
-	/// </summary>
+	/**
+	 * @class MemoryOwnedView
+	 * @brief Owned version of the MemoryView. It will create a copy 
+	 * of the target memory. The data will be freed when the instance 
+	 * goes beyond scope.
+	 */
 	class RUNTIME_API MemoryOwnedView final
 	{
 	public:
@@ -18,6 +19,7 @@ namespace Portakal
 
 		FORCEINLINE void* GetMemory() const noexcept { return mMemory; }
 		FORCEINLINE uint64 GetSize() const noexcept { return mSize; }
+
 	private:
 		void* mMemory;
 		uint64 mSize;

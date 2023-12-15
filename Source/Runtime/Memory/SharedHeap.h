@@ -3,8 +3,14 @@
 
 namespace Portakal
 {
+	/**
+	 * @class SharedHeap
+	 * @brief Dynamic shared pointer system that stores 
+	 * the templated type as Object base class.
+	 * @relates Object
+	 */
 	template<typename T>
-	class SharedHeap
+	class RUNTIME_API SharedHeap
 	{
 	public:
 		SharedHeap(const SharedHeap& other) : mData(nullptr),mReferenceCount(nullptr)
@@ -177,29 +183,19 @@ namespace Portakal
 			mData = pData;
 			mReferenceCount = new uint32(1);
 		}
-		bool operator ==(const SharedHeap& other)
-		{
-			return mData == other.mData;
 
-		}
-		bool operator !=(const SharedHeap& other)
-		{
-			return mData != other.mData;
-		}
-		bool operator==(const T* pData)
-		{
-			return mData == (T*)pData;
-		}
-		bool operator!=(const T* pData)
-		{
-			return mData != (T*)pData;
-		}
+		bool operator ==(const SharedHeap& other) { return mData == other.mData; }
+		bool operator !=(const SharedHeap& other) { return mData != other.mData; }
+		bool operator==(const T* pData) { return mData == (T*)pData; }
+		bool operator!=(const T* pData) { return mData != (T*)pData; }
+
 	private:
 		void IncrementReferenceCount()
 		{
 			if (mReferenceCount != nullptr)
 				*mReferenceCount = *mReferenceCount + 1;
 		}
+
 		void DeleteReference()
 		{
 			/*
@@ -219,6 +215,7 @@ namespace Portakal
 			delete mData;
 			delete mReferenceCount;
 		}
+
 	private:
 		T* mData;
 		uint32* mReferenceCount;

@@ -4,8 +4,12 @@
 
 namespace Portakal
 {
+	/**
+	 * @class Vector2
+	 * @brief 2-Dimensional vector class
+	 */
 	template<typename T>
-	class Vector2
+	struct RUNTIME_API Vector2
 	{
 	public:
 		static T Distance(const Vector2 x, const Vector2 y)
@@ -13,32 +17,34 @@ namespace Portakal
 			const Vector2 dir = y - x;
 			return dir.GetLength();
 		}
+
 		static T Dot(const Vector2 x, const Vector2 y)
 		{
 			return x.X * y.X + x.Y * y.Y;
 		}
-	public:
-		Vector2(const T x,const T y) : X(x),Y(y)
-		{
 
+	public:
+		Vector2(const T x, const T y) : X(x), Y(y)
+		{
 		}
+
 		Vector2(const T value) : X(value), Y(value)
 		{
-
 		}
-		Vector2(const Vector2& other) : X(other.X),Y(other.Y)
+
+		Vector2(const Vector2& other) : X(other.X), Y(other.Y)
 		{
-
 		}
+
 		Vector2() : X(0), Y(0)
 		{
-
 		}
+
 		~Vector2() = default;
 
 		FORCEINLINE T GetLength() const noexcept
 		{
-			return Sqrt(X * X + Y * Y);
+			return Math::Sqrt(X * X + Y * Y);
 		}
 		FORCEINLINE Vector2 GetNormalized() const noexcept
 		{
@@ -162,6 +168,7 @@ namespace Portakal
 		{
 			return X != other || Y != other;
 		}
+
 		T X;
 		T Y;
 	};

@@ -5,8 +5,13 @@
 
 namespace Portakal
 {
+	/**
+	 * @class Array
+	 * @brief Dynamic array class that can be resized and holds 
+	 * elements of type T
+	 */
 	template<typename T>
-	class Array final
+	class RUNTIME_API Array final
 	{
 	public:
 		Array(const std::initializer_list<T> initList)
@@ -134,11 +139,7 @@ namespace Portakal
 			mSize--;
 		}
 
-		void Clear()
-		{
-			_Reset();
-		}
-
+		void Clear() { _Reset(); }
 		FORCEINLINE T& operator[](const uint64 index) { return mData[index]; }
 		FORCEINLINE T* operator*() const noexcept { return mData; }
 
