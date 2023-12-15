@@ -14,34 +14,34 @@ namespace Portakal
 	class RUNTIME_API Array final
 	{
 	public:
-		Array(const std::initializer_list<T> initList)
+		Array(const std::initializer_list<T> pInitList)
 		{
-			mData = new T[initList.size()];
-			mSize = initList.size();
-			mCapacity = initList.size();
+			mData = new T[pInitList.pSize()];
+			mSize = pInitList.pSize();
+			mCapacity = pInitList.pSize();
 
-			uint64 index = 0;
-			for (const T& value : initList)
+			uint64 pIndex = 0;
+			for (const T& pValue : pInitList)
 			{
-				mData[value] = value;
-				index++;
+				mData[pValue] = pValue;
+				pIndex++;
 			}
 		}
 
-		Array(const Array& other)
+		Array(const Array& pOther)
 		{
-			mData = new T[other.mSize];
-			mSize = other.mSize;
-			mCapacity = other.mCapacity;
+			mData = new T[pOther.mSize];
+			mSize = pOther.mSize;
+			mCapacity = pOther.mCapacity;
 
-			Memory::Copy(mData, other.mData, mSize * sizeof(T));
+			Memory::Copy(mData, pOther.mData, mSize * sizeof(T));
 		}
 
-		Array(const uint64 size)
+		Array(const uint64 pSize)
 		{
-			mData = new T[size];
+			mData = new T[pSize];
 			mSize = 0;
-			mCapacity = size;
+			mCapacity = pSize;
 		}
 
 		Array()
@@ -56,18 +56,18 @@ namespace Portakal
 			_Reset();
 		}
 
-		FORCEINLINE bool Has(const T& element) const
+		FORCEINLINE bool Has(const T& pElement) const
 		{
 			for (uint64 i = 0; i < mSize; i++)
-				if (mData[i] == element)
+				if (mData[i] == pElement)
 					return true;
 			return false;
 		}
 
-		uint64 FindIndex(const T& element) const
+		uint64 FindIndex(const T& pElement) const
 		{
 			for (uint64 i = 0; i < mSize; i++)
-				if (mData[i] == element)
+				if (mData[i] == pElement)
 					return i;
 			return uint64_max;
 		}
@@ -79,20 +79,20 @@ namespace Portakal
 		FORCEINLINE T* GetFirst() const noexcept { return mData[0]; }
 		FORCEINLINE bool IsEmpty() const noexcept { return mSize == 0; }
 
-		void Add(const T& value)
+		void Add(const T& pValue)
 		{
 			if (mSize == 0)
 				_Resize(1);
 			if (mSize == mCapacity)
 				_Resize(mCapacity * 2);
 
-			mData[mSize] = value;
+			mData[mSize] = pValue;
 			mSize++;
 		}
 
-		void AddAt(const T& value, const uint64 index)
+		void AddAt(const T& pValue, const uint64 pIndex)
 		{
-			if (index >= mSize)
+			if (pIndex >= mSize)
 				return;
 
 			if (mSize == 0)
@@ -101,22 +101,22 @@ namespace Portakal
 			if (mSize == mCapacity)
 				_Resize(mCapacity * 2);
 
-			for (uint64 i = mSize; i > index; i--)
+			for (uint64 i = mSize; i > pIndex; i--)
 			{
 				mData[i] = mData[i - 1];
 			}
 
-			mData[index] = value;
+			mData[pIndex] = pValue;
 			mSize++;
 		}
 
-		bool Remove(const T& element)
+		bool Remove(const T& pElement)
 		{
-			const uint64 index = FindIndex(element);
-			if (index == uint64_max)
+			const uint64 pIndex = FindIndex(pElement);
+			if (pIndex == uint64_max)
 				return false;
 
-			for (uint64 i = index + 1; i < mSize; i++)
+			for (uint64 i = pIndex + 1; i < mSize; i++)
 			{
 				mData[i - 1] = mData;
 			}
@@ -126,12 +126,12 @@ namespace Portakal
 			return true;
 		}
 
-		void RemoveAt(const uint64 index)
+		void RemoveAt(const uint64 pIndex)
 		{
-			if (index >= mSize)
+			if (pIndex >= mSize)
 				return;
 
-			for (uint64 i = index + 1; i < mSize; i++)
+			for (uint64 i = pIndex + 1; i < mSize; i++)
 			{
 				mData[i - 1] = mData;
 			}
@@ -140,31 +140,31 @@ namespace Portakal
 		}
 
 		void Clear() { _Reset(); }
-		FORCEINLINE T& operator[](const uint64 index) { return mData[index]; }
+		FORCEINLINE T& operator[](const uint64 pIndex) { return mData[pIndex]; }
 		FORCEINLINE T* operator*() const noexcept { return mData; }
 
-		FORCEINLINE bool operator==(const Array& other) const
+		FORCEINLINE bool operator==(const Array& pOther) const
 		{
-			if (mSize != other.GetSize())
+			if (mSize != pOther.GetSize())
 				return false;
 
 			for (unsigned int i = 0; i < mSize; i++)
 			{
-				if (mData[i] != other.mData[i])
+				if (mData[i] != pOther.mData[i])
 					return false;
 			}
 
 			return true;
 		}
 
-		FORCEINLINE bool operator!=(const Array& other) const
+		FORCEINLINE bool operator!=(const Array& pOther) const
 		{
-			if (mSize != other.GetSize())
+			if (mSize != pOther.GetSize())
 				return true;
 
 			for (unsigned int i = 0; i < mSize; i++)
 			{
-				if (mData[i] != other.mData[i])
+				if (mData[i] != pOther.mData[i])
 					return true;
 			}
 
@@ -175,16 +175,16 @@ namespace Portakal
 		Iterator<T> end() const noexcept { return Iterator<T>(mData + mSize); }
 
 	private:
-		void _Resize(const uint64 size)
+		void _Resize(const uint64 pSize)
 		{
-			T* pNewData = new T[size];
+			T* pNewData = new T[pSize];
 			Memory::Copy(pNewData, mData, mSize * sizeof(T));
 
 			if (mData != nullptr)
 				delete mData;
 
 			mData = pNewData;
-			mCapacity = size;
+			mCapacity = pSize;
 		}
 
 		void _Reset()

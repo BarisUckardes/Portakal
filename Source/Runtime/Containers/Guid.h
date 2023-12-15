@@ -20,15 +20,15 @@ namespace Portakal
 		static String FromString(const String& str);
 	public:
 		Guid(const uint32 a, const uint32 b, const uint32 c, const uint32 d);
-		Guid(const Guid& other);
+		Guid(const Guid& pOther);
 		Guid();
 		~Guid() = default;
 
-		Guid& operator=(const Guid& other);
-		Guid& operator=(Guid&& other) noexcept;
+		Guid& operator=(const Guid& pOther);
+		Guid& operator=(Guid&& pOther) noexcept;
 
-		bool operator==(const Guid& other) const;
-		bool operator!=(const Guid& other) const;
+		bool operator==(const Guid& pOther) const;
+		bool operator!=(const Guid& pOther) const;
 
 		uint32 A;
 		uint32 B;

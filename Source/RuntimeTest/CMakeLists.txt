@@ -26,6 +26,6 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     target_compile_definitions(RuntimeTest PUBLIC RUNTIME_TEST_API=__attribute__\(\(visibility\(\"default\"\)\)\))
 else()
-	message(FATAL_ERROR "[CMAKE ERROR] -- UNSUPPORTED COMPILER. PLEASE CHECK YOUR COMPILER AND PLATFORM.")
+	pMessage(FATAL_ERROR "[CMAKE ERROR] -- UNSUPPORTED COMPILER. PLEASE CHECK YOUR COMPILER AND PLATFORM.")
 endif()
 # ------------------------------------------------------------

@@ -14,7 +14,7 @@ namespace Portakal
 		String(const byte* pData, const uint64 sizeInBytes);
 		String(const uint64 sizeInBytes);
 		String(const char* pData);
-		String(const String& other);
+		String(const String& pOther);
 		String();
 		~String();
 
@@ -32,16 +32,16 @@ namespace Portakal
 
 		const char* operator*() const { return mSource; }
 
-		String operator+=(const String& other);
-		String operator+=(const char* other);
-		String operator+=(char other);
-		String operator-=(const char* other);
-		String operator-=(const String& other);
+		String operator+=(const String& pOther);
+		String operator+=(const char* pOther);
+		String operator+=(char pOther);
+		String operator-=(const char* pOther);
+		String operator-=(const String& pOther);
 
-		String operator=(const String& other);
-		String operator=(const char* other);
+		String operator=(const String& pOther);
+		String operator=(const char* pOther);
 
-		char operator[](unsigned int index) const { return mSource[index]; }
+		char operator[](unsigned int pIndex) const { return mSource[pIndex]; }
 
 	private:
 		char* mSource;

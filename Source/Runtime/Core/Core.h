@@ -24,7 +24,7 @@ typedef signed long long int64;
 #define _NODISCARD_MSG(_Msg) [[nodiscard(_Msg)]]
 #endif
 
-#define NODISCARD NODISCARD_MSG("This function or variable should be used, otherwise it is useless to declare it.")
+#define NODISCARD NODISCARD_MSG("This function or variable should be used, pOtherwise it is useless to declare it.")
 
 namespace Portakal
 {
@@ -36,18 +36,18 @@ namespace Portakal
 		Fatal
 	};
 
-    void DevInfo(LogLevel type, const char* message,...);
-    void DevLog(const char* title, const char* message,...);
-    void DevSystem(bool condition, const char* title, const char* failed, const char* succeed);
-    void DevAssert(bool condition, const char* title, const char* failed,...);
+    void DevInfo(LogLevel pType, const char* pMessage,...);
+    void DevLog(const char* pTitle, const char* pMessage,...);
+    void DevSystem(bool pCondition, const char* pTitle, const char* pFailed, const char* pSucceed);
+    void DevAssert(bool pCondition, const char* pTitle, const char* pFailed,...);
 }
 
 #ifdef PORTAKAL_DEBUG
-#define DEV_SYSTEM(condition, title, failed, succeed) Portakal::DevSystem(condition, title, failed, succeed) // For one time check to see if the system items has been created successfully
-#define DEV_ASSERT(condition, title, failed, ...) Portakal::DevAssert(condition, title, failed, __VA_ARGS__) // For multiple time error check to see if something is wrong
+#define DEV_SYSTEM(pCondition, pTitle, pFailed, pSucceed) Portakal::DevSystem(pCondition, pTitle, pFailed, pSucceed) // For one time check to see if the system items has been created successfully
+#define DEV_ASSERT(pCondition, pTitle, pFailed, ...) Portakal::DevAssert(pCondition, pTitle, pFailed, __VA_ARGS__) // For multiple times error check to see if something is wrong
 #else
-#define DEV_SYSTEM(condition, title, message, succeed)
-#define DEV_ASSERT(condition, title, message)
+#define DEV_SYSTEM(pCondition, pTitle, pMessage, pSucceed)
+#define DEV_ASSERT(pCondition, pTitle, pMessage)
 #endif
 
 #define PE_INFO Portakal::LogLevel::Info
@@ -61,15 +61,15 @@ namespace Portakal
  *
  * @brief It can be used as logging macro. It can be used in higher level code such as game scripts.
  *
- * @throw PORTAKAL_LOG(PE_INFO, "Message", ...); is to print an info message.
- * @throw PORTAKAL_LOG(PE_WARNING, "Message", ...); is to print an warning message.
- * @throw PORTAKAL_LOG(PE_ERROR, "Message", ...); is to print an error message.
- * @throw PORTAKAL_LOG(PE_FATAL, "Message", ...); is to print an fatal message.
+ * @throw PORTAKAL_LOG(PE_INFO, "Message", ...); is to print an info pMessage.
+ * @throw PORTAKAL_LOG(PE_WARNING, "Message", ...); is to print an warning pMessage.
+ * @throw PORTAKAL_LOG(PE_ERROR, "Message", ...); is to print an error pMessage.
+ * @throw PORTAKAL_LOG(PE_FATAL, "Message", ...); is to print an fatal pMessage.
  */
-#define PORTAKAL_LOG(Level, message, ...) Portakal::DevInfo(Level, message, __VA_ARGS__)
-#define DEV_LOG(title, message, ...) Portakal::DevLog(title, message, __VA_ARGS__)
+#define PORTAKAL_LOG(Level, pMessage, ...) Portakal::DevInfo(Level, pMessage, __VA_ARGS__)
+#define DEV_LOG(pTitle, pMessage, ...) Portakal::DevLog(pTitle, pMessage, __VA_ARGS__)
 #else
-#define DEV_LOG(title, message, ...)
+#define DEV_LOG(pTitle, pMessage, ...)
 #endif
 
 #define GENERATE_FLAGS(flagType,dataType)\

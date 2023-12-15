@@ -5,10 +5,10 @@ namespace Portakal
 {
 	uint64 GetCharPointerSize(const char* target)
 	{
-		unsigned int size = 0;
-		while (target[size] != '\0')
-			size++;
-		return size;
+		unsigned int pSize = 0;
+		while (target[pSize] != '\0')
+			pSize++;
+		return pSize;
 	}
 
 	String::String(const char* pData, const uint64 sizeInBytes)
@@ -50,12 +50,12 @@ namespace Portakal
 		mSource[mSize] = '\0';
 	}
 
-	String::String(const String& other)
+	String::String(const String& pOther)
 	{
-		mSize = other.mSize;
+		mSize = pOther.mSize;
 		mSource = new char[mSize + 1];
 
-		Memory::Copy(mSource, other.mSource, mSize);
+		Memory::Copy(mSource, pOther.mSource, mSize);
 
 		mSource[mSize] = '\0';
 	}
@@ -216,36 +216,36 @@ namespace Portakal
 		mSize = 0;
 	}
 
-	String String::operator=(const String& other)
+	String String::operator=(const String& pOther)
 	{
-		mSize = other.GetSize();
+		mSize = pOther.GetSize();
 		mSource = new char[mSize + 1];
-		Memory::Copy(other.GetSource(), mSource, mSize);
+		Memory::Copy(pOther.GetSource(), mSource, mSize);
 		mSource[mSize] = '\0';
 
 		return String(mSource);
 	}
 
-	String String::operator=(const char* other)
+	String String::operator=(const char* pOther)
 	{
-		mSize = GetCharPointerSize(other);
+		mSize = GetCharPointerSize(pOther);
 		mSource = new char[mSize + 1];
-		Memory::Copy(mSource, other, mSize);
+		Memory::Copy(mSource, pOther, mSize);
 		mSource[mSize] = '\0';
 
 		return String(mSource);
 	}
 
 
-	String String::operator+=(const String& other)
+	String String::operator+=(const String& pOther)
 	{
-		unsigned int otherLength = other.GetSize();
-		unsigned int newLength = mSize + otherLength;
+		unsigned int pOtherLength = pOther.GetSize();
+		unsigned int newLength = mSize + pOtherLength;
 
 		char* newSource = new char[newLength + 1];
 
 		Memory::Copy(newSource, mSource, mSize);
-		Memory::Copy(newSource + mSize, other.GetSource(), otherLength);
+		Memory::Copy(newSource + mSize, pOther.GetSource(), pOtherLength);
 
 		delete[] mSource;
 
@@ -257,15 +257,15 @@ namespace Portakal
 		return String(mSource);
 	}
 
-	String String::operator+=(const char* other)
+	String String::operator+=(const char* pOther)
 	{
-		unsigned int otherLength = GetCharPointerSize(other);
-		unsigned int newLength = mSize + otherLength;
+		unsigned int pOtherLength = GetCharPointerSize(pOther);
+		unsigned int newLength = mSize + pOtherLength;
 
 		char* newSource = new char[newLength + 1];
 
 		Memory::Copy(newSource, mSource, mSize);
-		Memory::Copy(newSource + mSize, other, otherLength);
+		Memory::Copy(newSource + mSize, pOther, pOtherLength);
 
 		delete[] mSource;
 
@@ -277,14 +277,14 @@ namespace Portakal
 		return String(mSource);
 	}
 
-	String String::operator+=(char other)
+	String String::operator+=(char pOther)
 	{
 		unsigned int newLength = mSize + 1;
 
 		char* newSource = new char[newLength + 1];
 
 		Memory::Copy(newSource, mSource, mSize);
-		newSource[mSize] = other;
+		newSource[mSize] = pOther;
 
 		delete[] mSource;
 
@@ -294,10 +294,10 @@ namespace Portakal
 		return String(mSource);
 	}
 
-	String String::operator-=(const char* other)
+	String String::operator-=(const char* pOther)
 	{
-		unsigned int otherLength = GetCharPointerSize(other);
-		unsigned int newLength = mSize - otherLength;
+		unsigned int pOtherLength = GetCharPointerSize(pOther);
+		unsigned int newLength = mSize - pOtherLength;
 
 		char* newSource = new char[newLength + 1];
 
@@ -305,9 +305,9 @@ namespace Portakal
 		for (unsigned int i = 0; i < mSize; i++)
 		{
 			bool found = false;
-			for (unsigned int j = 0; j < otherLength; j++)
+			for (unsigned int j = 0; j < pOtherLength; j++)
 			{
-				if (mSource[i] == other[j])
+				if (mSource[i] == pOther[j])
 				{
 					found = true;
 					break;
@@ -331,10 +331,10 @@ namespace Portakal
 		return String(mSource);
 	}
 
-	String String::operator-=(const String& other)
+	String String::operator-=(const String& pOther)
 	{
-		unsigned int otherLength = other.GetSize();
-		unsigned int newLength = mSize - otherLength;
+		unsigned int pOtherLength = pOther.GetSize();
+		unsigned int newLength = mSize - pOtherLength;
 
 		char* newSource = new char[newLength + 1];
 
@@ -342,9 +342,9 @@ namespace Portakal
 		for (unsigned int i = 0; i < mSize; i++)
 		{
 			bool found = false;
-			for (unsigned int j = 0; j < otherLength; j++)
+			for (unsigned int j = 0; j < pOtherLength; j++)
 			{
-				if (mSource[i] == other[j])
+				if (mSource[i] == pOther[j])
 				{
 					found = true;
 					break;

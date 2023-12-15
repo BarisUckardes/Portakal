@@ -16,7 +16,7 @@ namespace Portakal
 		MemoryView(void* pMemory, const uint64 sizeInBytes) : mMemory(pMemory), mSize(sizeInBytes)
 		{}
 
-		MemoryView(const MemoryView& other);
+		MemoryView(const MemoryView& pOther);
 		MemoryView(const MemoryOwnedView* pView);
 		MemoryView();
 		~MemoryView();
