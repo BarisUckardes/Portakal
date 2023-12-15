@@ -25,7 +25,7 @@ namespace Portakal
 
 		}
 
-		T operator[](const uint32 index) const
+		T operator[](const byte index) const
 		{
 			switch (index)
 			{
@@ -43,16 +43,6 @@ namespace Portakal
 		}
 
 		Color4& operator=(const Color4& other)
-		{
-			R = other.R;
-			G = other.G;
-			B = other.B;
-			A = other.A;
-
-			return *this;
-		}
-
-		Color4& operator=(Color4&& other) noexcept
 		{
 			R = other.R;
 			G = other.G;
