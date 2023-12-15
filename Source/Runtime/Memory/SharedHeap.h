@@ -101,7 +101,7 @@ namespace Portakal
 			/*
 			* Force compiler
 			*/
-			TOther* pChecksum = dynamic_cas<TOTher*>(mData);
+			TOther* pChecksum = dynamic_cas<TOther*>(mData);
 			if (pChecksum == nullptr)
 				return nullptr;
 
@@ -119,7 +119,7 @@ namespace Portakal
 			pTemp->mData = mData;
 			pTemp->mReferenceCount = mReferenceCount;
 
-			return other;
+			return pOther;
 		}
 
 		T* operator->() const noexcept
@@ -188,11 +188,11 @@ namespace Portakal
 		}
 		bool operator==(const T* pData)
 		{
-			return mData == (Object*)pData;
+			return mData == (T*)pData;
 		}
 		bool operator!=(const T* pData)
 		{
-			return mData != (Object*)pData;
+			return mData != (T*)pData;
 		}
 	private:
 		void IncrementReferenceCount()
