@@ -28,20 +28,6 @@ FetchContent_Declare(
         GIT_TAG "1.83"
 )
 
-# VULKAN library
-FetchContent_Declare(
-        vulkan-headers
-        GIT_REPOSITORY https://github.com/KhronosGroup/Vulkan-Headers.git
-        GIT_TAG "2634c96"
-)
-
-# VULKAN UTILS library
-FetchContent_Declare(
-        vulkan-utility
-        GIT_REPOSITORY https://github.com/KhronosGroup/Vulkan-Utility-Libraries.git
-        GIT_TAG "87801a6"
-)
-
 # YAML-CPP library
 FetchContent_Declare(
 		yaml-cpp

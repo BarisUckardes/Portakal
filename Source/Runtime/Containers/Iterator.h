@@ -4,7 +4,7 @@
 namespace Portakal
 {
     template<typename T>
-    class RUNTIME_API Iterator
+    class Iterator
     {
     public:
         Iterator() : mPtr(nullptr) {}

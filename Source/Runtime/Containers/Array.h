@@ -1,7 +1,7 @@
 #pragma once
 #include <Runtime/Memory/Memory.h>
-#include <initializer_list>
 #include <Runtime/Containers/Iterator.h>
+#include <initializer_list>
 
 namespace Portakal
 {
@@ -21,27 +21,34 @@ namespace Portakal
 				mData[value] = value;
 				index++;
 			}
-
 		}
+
 		Array(const Array& other)
 		{
 			mData = new T[other.mSize];
 			mSize = other.mSize;
 			mCapacity = other.mCapacity;
 
-			Memory::Copy(mData, other.mData, mSize*sizeof(T));
+			Memory::Copy(mData, other.mData, mSize * sizeof(T));
 		}
+
 		Array(const uint64 size)
 		{
 			mData = new T[size];
 			mSize = 0;
 			mCapacity = size;
 		}
+
 		Array()
 		{
 			mData = nullptr;
 			mSize = 0;
 			mCapacity = 0;
+		}
+
+		~Array()
+		{
+			_Reset();
 		}
 
 		FORCEINLINE bool Has(const T& element) const
@@ -51,6 +58,7 @@ namespace Portakal
 					return true;
 			return false;
 		}
+
 		uint64 FindIndex(const T& element) const
 		{
 			for (uint64 i = 0; i < mSize; i++)
@@ -58,42 +66,25 @@ namespace Portakal
 					return i;
 			return uint64_max;
 		}
-		FORCEINLINE T* GetData() const noexcept
-		{
-			return mData;
-		}
-		FORCEINLINE uint64 GetSize() const noexcept
-		{
-			return mSize;
-		}
-		FORCEINLINE uint64 GetCapacity() const noexcept
-		{
-			return mCapacity;
-		}
-		FORCEINLINE T* GetLast() const noexcept
-		{
-			return mData[mSize - 1];
-		}
-		FORCEINLINE T* GetFirst() const noexcept
-		{
-			return mData[0];
-		}
-		FORCEINLINE bool IsEmpty() const noexcept
-		{
-			return mSize == 0;
-		}
 
+		FORCEINLINE T* GetData() const noexcept { return mData; }
+		FORCEINLINE uint64 GetSize() const noexcept { return mSize; }
+		FORCEINLINE uint64 GetCapacity() const noexcept { return mCapacity; }
+		FORCEINLINE T* GetLast() const noexcept { return mData[mSize - 1]; }
+		FORCEINLINE T* GetFirst() const noexcept { return mData[0]; }
+		FORCEINLINE bool IsEmpty() const noexcept { return mSize == 0; }
 
 		void Add(const T& value)
 		{
 			if (mSize == 0)
 				_Resize(1);
 			if (mSize == mCapacity)
-				_Resize(mCapacity*2);
+				_Resize(mCapacity * 2);
 
 			mData[mSize] = value;
 			mSize++;
 		}
+
 		void AddAt(const T& value, const uint64 index)
 		{
 			if (index >= mSize)
@@ -105,7 +96,7 @@ namespace Portakal
 			if (mSize == mCapacity)
 				_Resize(mCapacity * 2);
 
-			for (uint64 i = mSize;i>index;i--)
+			for (uint64 i = mSize; i > index; i--)
 			{
 				mData[i] = mData[i - 1];
 			}
@@ -113,13 +104,14 @@ namespace Portakal
 			mData[index] = value;
 			mSize++;
 		}
+
 		bool Remove(const T& element)
 		{
 			const uint64 index = FindIndex(element);
 			if (index == uint64_max)
 				return false;
 
-			for (uint64 i = index+1;i < mSize; i++)
+			for (uint64 i = index + 1; i < mSize; i++)
 			{
 				mData[i - 1] = mData;
 			}
@@ -128,6 +120,7 @@ namespace Portakal
 
 			return true;
 		}
+
 		void RemoveAt(const uint64 index)
 		{
 			if (index >= mSize)
@@ -140,23 +133,15 @@ namespace Portakal
 
 			mSize--;
 		}
+
 		void Clear()
 		{
 			_Reset();
-
-			mData = nullptr;
-			mSize = 0;
-			mCapacity = 0;
 		}
 
-		FORCEINLINE T& operator[](const uint64 index)
-		{
-			return mData[index];
-		}
-		FORCEINLINE T* operator*() const noexcept
-		{
-			return mData;
-		}
+		FORCEINLINE T& operator[](const uint64 index) { return mData[index]; }
+		FORCEINLINE T* operator*() const noexcept { return mData; }
+
 		FORCEINLINE bool operator==(const Array& other) const
 		{
 			if (mSize != other.GetSize())
@@ -185,30 +170,20 @@ namespace Portakal
 			return false;
 		}
 
-		Iterator<T> begin() const noexcept
-		{
-			return Iterator<T>(mData);
-		}
-		Iterator<T> end() const noexcept
-		{
-			return Iterator<T>(mData + mSize);
-		}
+		Iterator<T> begin() const noexcept { return Iterator<T>(mData); }
+		Iterator<T> end() const noexcept { return Iterator<T>(mData + mSize); }
 
 	private:
 		void _Resize(const uint64 size)
 		{
-			/*
-			* Allocate and copy data
-			*/
 			T* pNewData = new T[size];
-			Memory::Copy(pNewData, mData, mSize*sizeof(T));
+			Memory::Copy(pNewData, mData, mSize * sizeof(T));
 
 			if (mData != nullptr)
 				delete mData;
 
 			mData = pNewData;
 			mCapacity = size;
-
 		}
 
 		void _Reset()
@@ -219,6 +194,8 @@ namespace Portakal
 			mSize = 0;
 			mCapacity = 0;
 		}
+
+	private:
 		T* mData;
 		uint64 mSize;
 		uint64 mCapacity;

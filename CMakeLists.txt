@@ -5,6 +5,10 @@ project("Portakal")
 # --------------------------------------------------
 
 # ------------------ CXX FLAGS ---------------------
+if(POLICY CMP0091)
+  cmake_policy(SET CMP0091 NEW) 
+endif()
+
 set(CMAKE_CXX_STANDARD 20)
 # --------------------------------------------------
 
@@ -21,5 +25,5 @@ endif ()
 # --------------------------------------------------
 
 # ------------------ SUBDIRECTORIES ----------------
-add_subdirectory("Source/RuntimeTest")
 add_subdirectory("Source/Runtime")
+add_subdirectory("Source/RuntimeTest")

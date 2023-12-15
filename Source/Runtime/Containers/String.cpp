@@ -1,6 +1,5 @@
 #include "String.h"
 #include <Runtime/Memory/Memory.h>
-#include <string>
 
 namespace Portakal
 {
@@ -11,6 +10,7 @@ namespace Portakal
 			size++;
 		return size;
 	}
+
 	String::String(const char* pData, const uint64 sizeInBytes)
 	{
 		mSize = sizeInBytes;
@@ -19,6 +19,7 @@ namespace Portakal
 		Memory::Copy(mSource, pData, sizeInBytes);
 		mSource[sizeInBytes] = '\0';
 	}
+
 	String::String(const byte* pData, const uint64 sizeInBytes)
 	{
 		mSize = sizeInBytes;
@@ -27,12 +28,14 @@ namespace Portakal
 		Memory::Copy(mSource, pData, sizeInBytes);
 		mSource[sizeInBytes] = '\0';
 	}
+
 	String::String(const uint64 sizeInBytes)
 	{
 		mSize = sizeInBytes;
 		mSource = new char[sizeInBytes + 1];
 		mSource[sizeInBytes] = '\0';
 	}
+
 	String::String(const char* pData)
 	{
 		mSize = GetCharPointerSize(pData);
@@ -46,6 +49,7 @@ namespace Portakal
 		Memory::Copy(mSource, pData, mSize);
 		mSource[mSize] = '\0';
 	}
+
 	String::String(const String& other)
 	{
 		mSize = other.mSize;
@@ -55,11 +59,22 @@ namespace Portakal
 
 		mSource[mSize] = '\0';
 	}
+
 	String::String()
 	{
 		mSource = nullptr;
 		mSize = 0;
 	}
+
+	String::~String()
+	{
+		if (mSource != nullptr)
+			delete[] mSource;
+
+		mSource = nullptr;
+		mSize = 0;
+	}
+
 	uint64 String::FindIndex(const String& target, const uint64 startIndex, const uint64 count) const
 	{
 		if (startIndex >= mSize)
@@ -97,6 +112,7 @@ namespace Portakal
 
 		return uint64_max;
 	}
+
 	uint64 String::FindIndex(const char target) const
 	{
 		for (uint64 i = 0; i < mSize; i++)
@@ -105,6 +121,7 @@ namespace Portakal
 
 		return uint64_max;
 	}
+
 	uint64 String::FindIndex(const String& target) const
 	{
 		const uint64 targetSize = target.GetSize();
@@ -136,6 +153,7 @@ namespace Portakal
 
 		return uint64_max;
 	}
+
 	uint64 String::FindLastIndex(const String& target, const uint64 startIndex) const
 	{
 		if (startIndex >= mSize)
@@ -171,6 +189,7 @@ namespace Portakal
 
 		return uint64_max;
 	}
+
 	uint64 String::GetCount(const char target) const
 	{
 		uint64 count = 0;
@@ -180,12 +199,14 @@ namespace Portakal
 
 		return count;
 	}
+
 	String String::GetSubset(const uint64 startIndex, const uint64 length) const
 	{
 		String subset(length);
 		Memory::Copy(subset.GetSource(), mSource, length);
 		return subset;
 	}
+
 	void String::Clear()
 	{
 		if (mSource != nullptr)
@@ -346,5 +367,62 @@ namespace Portakal
 
 		return String(mSource);
 	}
-	
+
+	bool operator==(const String& target0, const String& target1)
+	{
+		unsigned int target0Length = target0.GetSize();
+		unsigned int target1Length = target1.GetSize();
+		const char* target0Source = target0.GetSource();
+		const char* target1Source = target1.GetSource();
+
+		if (target0Length != target1Length)
+			return false;
+
+		for (unsigned int i = 0; i < target0Length; i++)
+		{
+			if (target0Source[i] != target1Source[i])
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	String operator+(const String& target0, const String& target1)
+	{
+		unsigned int target0Length = target0.GetSize();
+		unsigned int target1Length = target1.GetSize();
+		unsigned int newLength = target0Length + target1Length;
+
+		char* newSource = new char[newLength + 1];
+
+		Memory::Copy(newSource, target0.GetSource(), target0Length);
+		Memory::Copy(newSource + target0Length, target1.GetSource(), target1Length);
+
+		newSource[newLength] = '\0';
+
+		return String(newSource);
+	}
+
+	bool operator!=(const String& target0, const String& target1)
+	{
+		unsigned int target0Length = target0.GetSize();
+		unsigned int target1Length = target1.GetSize();
+		const char* target0Source = target0.GetSource();
+		const char* target1Source = target1.GetSource();
+
+		if (target0Length != target1Length)
+			return true;
+
+		for (unsigned int i = 0; i < target0Length; i++)
+		{
+			if (target0Source[i] != target1Source[i])
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
 }

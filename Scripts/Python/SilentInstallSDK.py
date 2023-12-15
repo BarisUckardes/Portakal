@@ -1,7 +1,7 @@
 import subprocess
 import sys
 
-print("\033[32m WELCOME TO ROVELDO ENGINE\n-----------------------------\n\033[00m")
+print("\033[32m WELCOME TO PORTAKAL ENGINE\n-----------------------------\n\033[00m")
 
 def install(package):
 	subprocess.check_call([sys.executable, "-m", "pip", "install", package])
@@ -96,6 +96,7 @@ sdkPath += maxVersionStr
 externalPath = os.path.dirname(os.path.realpath(__file__))
 
 # Go one folder back
+externalPath = os.path.dirname(externalPath)
 externalPath = os.path.dirname(externalPath)
 
 # Create folder paths if there is no path 
@@ -207,6 +208,6 @@ with open(externalPath + "/External/Vulkan/Include/vulkan_core.h", "w") as file:
 
 print(Fore.GREEN + "[SUCCESS] -- " + Style.RESET_ALL + "Needed files has been edited.")
 
-print(Fore.YELLOW + "[WARNING] -- " + Style.RESET_ALL + "If you still get compiler error during the build, please check the Roveldo/wiki/Home from github.com")
+print(Fore.YELLOW + "[WARNING] -- " + Style.RESET_ALL + "If you still get compiler error during the build, please check the Portakal/wiki/Home from github.com")
 time.sleep(sleepTime)
 exit()

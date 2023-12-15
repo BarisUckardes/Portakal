@@ -1,16 +1,13 @@
 cmake_minimum_required(VERSION 3.26)
 
 # ---------------------- CMAKE INCLUDES ----------------------
-include(${CMAKE_SOURCE_DIR}/CMake/FetchLibraries.cmake)
+include(${CMAKE_SOURCE_DIR}/Scripts/CMake/FetchLibraries.cmake)
 # ------------------------------------------------------------
 
 # ---------------------- FILE ADDITION -----------------------
-file(GLOB_RECURSE SUBDIRECTORIES "${CMAKE_SOURCE_DIR}/Source/RuntimeTest/**.cpp" "${CMAKE_SOURCE_DIR}/Source/RuntimeTest/**.h")
+file(GLOB_RECURSE SUBDIRECTORIES "${CMAKE_SOURCE_DIR}/Source/RuntimeTest/*.cpp" "${CMAKE_SOURCE_DIR}/Source/RuntimeTest/*.h")
 source_group(TREE "${CMAKE_SOURCE_DIR}/Source/RuntimeTest" FILES ${SUBDIRECTORIES})
 add_executable(RuntimeTest main.cpp ${SUBDIRECTORIES})
-# ------------------------------------------------------------
-
-
 # ------------------------------------------------------------
 
 # -------------------- INCLUDE LIBRARIES ---------------------
@@ -31,8 +28,4 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 else()
 	message(FATAL_ERROR "[CMAKE ERROR] -- UNSUPPORTED COMPILER. PLEASE CHECK YOUR COMPILER AND PLATFORM.")
 endif()
-# ------------------------------------------------------------
-
-# -------------------- REFLECTION PARSER ---------------------
-###SetReflectionParser(EditorPlayer)
 # ------------------------------------------------------------

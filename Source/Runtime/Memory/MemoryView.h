@@ -7,8 +7,8 @@ namespace Portakal
 
 	/**
 	 * @class MemoryView
-	 * @brief Blob Storage implementation for Roveldo Engine. It is used for storing huge media, large file backups, and data logs in a single file.
-	 * It is also used for storing data in a single file for the Roveldo Engine. It enables developers to build data lakes and data warehouses.
+	 * @brief Blob Storage implementation for Portakal Engine. It is used for storing huge media, large file backups, and data logs in a single file.
+	 * It is also used for storing data in a single file for the Portakal Engine. It enables developers to build data lakes and data warehouses.
 	 */
 	class RUNTIME_API MemoryView final
 	{

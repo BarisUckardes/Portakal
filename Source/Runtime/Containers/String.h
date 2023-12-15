@@ -12,15 +12,11 @@ namespace Portakal
 		String(const char* pData);
 		String(const String& other);
 		String();
+		~String();
 
-		FORCEINLINE uint64 GetSize() const noexcept
-		{
-			return mSize;
-		}
-		FORCEINLINE char* GetSource() const noexcept
-		{
-			return mSource;
-		}
+		FORCEINLINE uint64 GetSize() const noexcept { return mSize; }
+		FORCEINLINE char* GetSource() const noexcept { return mSource; }
+
 		FORCEINLINE uint64 FindIndex(const String& target, const uint64 startIndex, const uint64 count = 0)const;
 		FORCEINLINE uint64 FindIndex(const char target) const;
 		FORCEINLINE uint64 FindIndex(const String& target) const;
@@ -30,10 +26,7 @@ namespace Portakal
 
 		void Clear();
 
-		const char* operator*() const
-		{
-			return mSource;
-		}
+		const char* operator*() const { return mSource; }
 
 		String operator+=(const String& other);
 		String operator+=(const char* other);
@@ -45,8 +38,13 @@ namespace Portakal
 		String operator=(const char* other);
 
 		char operator[](unsigned int index) const { return mSource[index]; }
+
 	private:
 		char* mSource;
 		uint64 mSize;
 	};
+
+	String operator+(const String& target0, const String& target1);
+	bool operator==(const String& target0, const String& target1);
+	bool operator!=(const String& target0, const String& target1);
 }

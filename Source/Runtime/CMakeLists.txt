@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.26)
 
 # ---------------------- CMAKE INCLUDES ----------------------
-include(${CMAKE_SOURCE_DIR}/CMake/FetchLibraries.cmake)
+include(${CMAKE_SOURCE_DIR}/Scripts/CMake/FetchLibraries.cmake)
 # ------------------------------------------------------------
 
 # ---------------------- CMAKE FETCH -------------------------
@@ -10,7 +10,7 @@ FetchContent_MakeAvailable(yaml-cpp)
 # ------------------------------------------------------------
 
 # ---------------------- FILE ADDITION -----------------------
-file(GLOB_RECURSE SUBDIRECTORIES "${CMAKE_SOURCE_DIR}/Source/Runtime/**.cpp" "${CMAKE_SOURCE_DIR}/Source/Runtime/**.h")
+file(GLOB_RECURSE SUBDIRECTORIES "${CMAKE_SOURCE_DIR}/Source/Runtime/*.cpp" "${CMAKE_SOURCE_DIR}/Source/Runtime/*.h")
 source_group(TREE "${CMAKE_SOURCE_DIR}/Source/Runtime" FILES ${SUBDIRECTORIES})
 add_library(Runtime STATIC main.cpp ${SUBDIRECTORIES})
 # ------------------------------------------------------------
