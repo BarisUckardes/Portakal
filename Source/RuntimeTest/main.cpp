@@ -18,6 +18,8 @@
 #include <Runtime/Platform/PlatformWindow.h>
 #include <Runtime/Platform/Platform.h>
 #include <Runtime/Graphics/Instance/GraphicsInstance.h>
+#include <Runtime/Graphics/Adapter/GraphicsAdapter.h>
+#include <Runtime/Graphics/Device/GraphicsDevice.h>
 
 int main(const unsigned int argumentCount, const char** ppArguments)
 {
@@ -39,9 +41,21 @@ int main(const unsigned int argumentCount, const char** ppArguments)
 	Portakal::GraphicsInstanceDesc instanceDesc = {};
 	instanceDesc.Backend = Portakal::GraphicsBackend::Vulkan;
 	Portakal::SharedHeap<Portakal::GraphicsInstance> pInstance = Portakal::GraphicsInstance::Create(instanceDesc);
+
+	//Get adapter
+	Portakal::SharedHeap<Portakal::GraphicsAdapter> pAdapter = pInstance->GetAdapters()[0];
+	DEV_LOG("System", "Selecting [%s] device", *pAdapter->GetProductName());
+
+	//Create device
+	Portakal::SharedHeap<Portakal::GraphicsDevice> pDevice = pAdapter->CreateDevice();
 	while (!pWindow.IsShutdown())
 	{
 		pWindow->PollMessages();
 	}
+
+	pDevice.Shutdown();
+	pAdapter.Shutdown();
+	pInstance.Shutdown();
+	pWindow.Shutdown();
 	return 0;
 }

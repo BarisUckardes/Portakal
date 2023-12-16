@@ -57,7 +57,7 @@ namespace Portakal
 		}
 		~SharedHeap()
 		{
-			Shutdown();
+			Deference();
 		}
 
 		FORCEINLINE bool IsShutdown() const noexcept

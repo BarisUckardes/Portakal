@@ -13,14 +13,16 @@ namespace Portakal
 		}
 		~VulkanAdapter() = default;
 
-		virtual void OnShutdown() override
+		FORCEINLINE VkPhysicalDevice GetVkPhysicalDevice() const noexcept
 		{
-
+			return mDevice;
 		}
+		virtual void OnShutdown() override;
+	private:
+		// Inherited via GraphicsAdapter
+		GraphicsDevice* CreateDeviceCore() override;
 	private:
 		VkPhysicalDevice mDevice;
 
-		// Inherited via GraphicsAdapter
-		GraphicsDevice* CreateDeviceCore() override;
 	};
 }

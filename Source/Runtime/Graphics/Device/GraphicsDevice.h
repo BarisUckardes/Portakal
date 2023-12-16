@@ -46,16 +46,12 @@ namespace Portakal
 	class RUNTIME_API GraphicsDevice : public Object
 	{
 	public:
-		GraphicsDevice(const GraphicsDeviceDesc& desc);
+		GraphicsDevice() = default;
 		~GraphicsDevice() = default;
 
 		FORCEINLINE SharedHeap<Swapchain> GetMainSwapchain() const noexcept
 		{
 			return mMainSwapchain;
-		}
-		FORCEINLINE SharedHeap<GraphicsAdapter> GetOwnerAdapter() const noexcept
-		{
-			return mOwnerAdapter;
 		}
 		FORCEINLINE virtual GraphicsBackend GetBackend() const noexcept = 0;
 
@@ -99,7 +95,6 @@ namespace Portakal
 		virtual ResourceTable* CreateResourceTableCore(const ResourceTableDesc& desc) = 0;
 	private:
 		Array<SharedHeap<GraphicsDeviceObject>> mChilds;
-		SharedHeap<GraphicsAdapter> mOwnerAdapter;
 		SharedHeap<Swapchain> mMainSwapchain;
 	};
 }
