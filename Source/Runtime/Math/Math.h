@@ -17,129 +17,129 @@ namespace Portakal
 		constexpr static float DegToRad = Pi / 180.0;
 
 		template<typename T>
-		FORCEINLINE static T Sqrt(const T value)
+		FORCEINLINE static T Sqrt(const T pValue)
 		{
-			return sqrt(value);
+			return sqrt(pValue);
 		}
 
 		template<typename T>
-		FORCEINLINE static T Sin(const T value)
+		FORCEINLINE static T Sin(const T pValue)
 		{
-			return sin(value);
+			return sin(pValue);
 		}
 
 		template<typename T>
-		FORCEINLINE static T Cos(const T value)
+		FORCEINLINE static T Cos(const T pValue)
 		{
-			return cos(value);
+			return cos(pValue);
 		}
 
 		template<typename T>
-		FORCEINLINE static T Tan(const T value)
+		FORCEINLINE static T Tan(const T pValue)
 		{
-			return tan(value);
+			return tan(pValue);
 		}
 
 		template<typename T>
-		FORCEINLINE static T Asin(const T value)
+		FORCEINLINE static T Asin(const T pValue)
 		{
-			return asin(value);
+			return asin(pValue);
 		}
 
 		template<typename T>
-		FORCEINLINE static T Acos(const T value)
+		FORCEINLINE static T Acos(const T pValue)
 		{
-			return acos(value);
+			return acos(pValue);
 		}
 
 		template<typename T>
-		FORCEINLINE static T Atan(const T value)
+		FORCEINLINE static T Atan(const T pValue)
 		{
-			return atan(value);
+			return atan(pValue);
 		}
 
 		template<typename T>
-		FORCEINLINE static T Atan2(const T x, const T y)
+		FORCEINLINE static T Atan2(const T pX, const T pY)
 		{
-			return atan2(y, x);
+			return atan2(pY, pX);
 		}
 
 		template<typename T>
-		FORCEINLINE static T Exp(const T value)
+		FORCEINLINE static T Exp(const T pValue)
 		{
-			return exp(value);
+			return exp(pValue);
 		}
 
 		template<typename T>
-		FORCEINLINE static T Log(const T value)
+		FORCEINLINE static T Log(const T pValue)
 		{
-			return log(value);
+			return log(pValue);
 		}
 
 		template<typename T>
-		FORCEINLINE static T Log2(const T value)
+		FORCEINLINE static T Log2(const T pValue)
 		{
-			return log2(value);
+			return log2(pValue);
 		}
 
 		template<typename T>
-		FORCEINLINE static T Pow(const T value, const T power)
+		FORCEINLINE static T Pow(const T pValue, const T power)
 		{
-			return pow(value, power);
+			return pow(pValue, power);
 		}
 
 		template<typename T>
-		FORCEINLINE static T Fmod(const T x, const T y)
+		FORCEINLINE static T Fmod(const T pX, const T pY)
 		{
-			return fmod(x, y);
+			return fmod(pX, pY);
 		}
 
 		template<typename T>
-		FORCEINLINE static T Ceil(const T value)
+		FORCEINLINE static T Ceil(const T pValue)
 		{
-			return ceil(value);
+			return ceil(pValue);
 		}
 
 		template<typename T>
-		FORCEINLINE static T Round(const T value)
+		FORCEINLINE static T Round(const T pValue)
 		{
-			return round(value);
+			return round(pValue);
 		}
 
 		template<typename T>
-		FORCEINLINE static T Abs(const T value)
+		FORCEINLINE static T Abs(const T pValue)
 		{
-			return fabs(value);
+			return fabs(pValue);
 		}
 
 		template<typename T>
-		FORCEINLINE static T Sign(const T value)
+		FORCEINLINE static T Sign(const T pValue)
 		{
-			return signbit(value);
+			return signbit(pValue);
 		}
 
 		template<typename T>
-		FORCEINLINE static T Min(const T x, const T y)
+		FORCEINLINE static T Min(const T pX, const T pY)
 		{
-			return fmin(x, y);
+			return fmin(pX, pY);
 		}
 
 		template<typename T>
-		FORCEINLINE static T Max(const T x, const T y)
+		FORCEINLINE static T Max(const T pX, const T pY)
 		{
-			return fmax(x, y);
+			return fmax(pX, pY);
 		}
 
 		template<typename T>
-		FORCEINLINE static T Clamp(const T value, const T min, const T max)
+		FORCEINLINE static T Clamp(const T pValue, const T min, const T max)
 		{
-			return Min(Max(value, min), max);
+			return Min(Max(pValue, min), max);
 		}
 
 		template<typename T>
-		FORCEINLINE static T Lerp(const T x, const T y, const T t)
+		FORCEINLINE static T Lerp(const T pX, const T pY, const T t)
 		{
-			return x + (y - x) * t;
+			return pX + (pY - pX) * t;
 		}
 
 	public:

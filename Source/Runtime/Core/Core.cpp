@@ -9,12 +9,12 @@
 
 namespace Portakal
 {
-	void DevInfo(LogLevel type, const char* message, ...)
+	void DevInfo(LogLevel pType, const char* pMessage, ...)
 	{
 		va_list args;
-		va_start(args, message);
+		va_start(args, pMessage);
 
-		switch (type)
+		switch (pType)
 		{
 		case LogLevel::Info:
 			printf("\033[36m[INFO]\033[39m -- ");
@@ -32,52 +32,52 @@ namespace Portakal
 			break;
 		}
 
-		vprintf(message, args);
+		vprintf(pMessage, args);
 		printf("\n");
 		va_end(args);
 
-		if (type == LogLevel::Fatal)
+		if (pType == LogLevel::Fatal)
 		{
 			abort();
 		}
 	}
 
-	void DevLog(const char* title, const char* message, ...)
+	void DevLog(const char* pTitle, const char* pMessage, ...)
 	{
 		va_list args;
-		va_start(args, message);
-		printf("\033[36m[%s]\033[39m -- ", title);
-		vprintf(message, args);
+		va_start(args, pMessage);
+		printf("\033[36m[%s]\033[39m -- ", pTitle);
+		vprintf(pMessage, args);
 		printf("\n");
 		va_end(args);
 	}
 
-	void DevSystem(bool condition, const char* title, const char* failed, const char* succeed)
+	void DevSystem(bool pCondition, const char* pTitle, const char* pFailed, const char* pSucceed)
 	{
-		if (!condition)
+		if (!pCondition)
 		{
-			std::cout << "\033[31m[" << String(title).GetSource() << "]\033[39m -- " << String(failed).GetSource() << "\n";
-			//PlatformMessage::ShowMessageBox(title, failed, Portakal::PlatformMessageBoxFlags::IconStop);
+			std::cout << "\033[31m[" << String(pTitle).GetSource() << "]\033[39m -- " << String(pFailed).GetSource() << "\n";
+			//PlatformMessage::ShowMessageBox(pTitle, pFailed, Portakal::PlatformMessageBoxFlags::IconStop);
 		}
 		else
 		{
-			std::cout << "\033[32m[" << String(title).GetSource() << "]\033[39m -- " << String(succeed).GetSource() << "\n";
+			std::cout << "\033[32m[" << String(pTitle).GetSource() << "]\033[39m -- " << String(pSucceed).GetSource() << "\n";
 		}
 	}
 
-	void DevAssert(bool condition, const char* title, const char* failed, ...)
+	void DevAssert(bool pCondition, const char* pTitle, const char* pFailed, ...)
 	{
-		if (!condition)
+		if (!pCondition)
 		{
 			va_list args;
-			va_start(args, failed);
-			printf("\033[31m[%s]\033[39m -- ", title);
-			vprintf(failed, args);
+			va_start(args, pFailed);
+			printf("\033[31m[%s]\033[39m -- ", pTitle);
+			vprintf(pFailed, args);
 			printf("\n");
 			va_end(args);
 
-			//PlatformMessage::ShowMessageBox(title, failed, Portakal::PlatformMessageBoxFlags::IconStop);
-			assert(condition);
+			//PlatformMessage::ShowMessageBox(pTitle, pFailed, Portakal::PlatformMessageBoxFlags::IconStop);
+			assert(pCondition);
 		}
 	}
 }

@@ -93,7 +93,7 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND PLATFORM_ID STREQUAL "Darwin")
     target_compile_definitions(Runtime PUBLIC PORTAKAL_PLATFORM_LINUX=0)
     target_compile_definitions(Runtime PUBLIC PORTAKAL_PLATFORM_MACOS=1)
 else()
-	message(FATAL_ERROR "[CMAKE ERROR] -- UNSUPPORTED PLATFORM. PLEASE CHECK YOUR COMPILER AND PLATFORM.")
+	pMessage(FATAL_ERROR "[CMAKE ERROR] -- UNSUPPORTED PLATFORM. PLEASE CHECK YOUR COMPILER AND PLATFORM.")
 endif()
 # ------------------------------------------------------------
 
@@ -123,7 +123,7 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GCC")
 	target_compile_definitions(Runtime PUBLIC INLINE=__attribute__\(\(always_inline\)\))
 	target_compile_definitions(Runtime PUBLIC NULLPTR=nullptr)
 else()
-	message(FATAL_ERROR "[CMAKE ERROR] -- UNSUPPORTED COMPILER. PLEASE CHECK YOUR COMPILER AND PLATFORM.")
+	pMessage(FATAL_ERROR "[CMAKE ERROR] -- UNSUPPORTED COMPILER. PLEASE CHECK YOUR COMPILER AND PLATFORM.")
 endif()
 # ------------------------------------------------------------
 
@@ -140,9 +140,4 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_link_libraries(Runtime PRIVATE dxguid.lib)
     target_link_libraries(Runtime PRIVATE Ws2_32.lib)
 endif ()
-# ------------------------------------------------------------
-
-# --------------------- REFLECTION PARSER -----------------------
-set(REFLECTION_TOOL_PATH "${CMAKE_SOURCE_DIR}/Tools/ReflectionParserTool/Build/Debug/net6.0/ReflectionParserTool.exe")
-execute_process(COMMAND ${REFLECTION_TOOL_PATH} "${CMAKE_SOURCE_DIR}/Source/Runtime/")
 # ------------------------------------------------------------

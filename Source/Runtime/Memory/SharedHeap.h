@@ -6,19 +6,19 @@ namespace Portakal
 	/**
 	 * @class SharedHeap
 	 * @brief Dynamic shared pointer system that stores 
-	 * the templated type as Object base class.
+	 * the templated pType as Object base class.
 	 * @relates Object
 	 */
 	template<typename T>
 	class RUNTIME_API SharedHeap
 	{
 	public:
-		SharedHeap(const SharedHeap& other) : mData(nullptr),mReferenceCount(nullptr)
+		SharedHeap(const SharedHeap& pOther) : mData(nullptr),mReferenceCount(nullptr)
 		{
 			/*
-			* Check if other data is nullptr
+			* Check if pOther data is nullptr
 			*/
-			if (other.mData == nullptr)
+			if (pOther.mData == nullptr)
 			{
 				mData = nullptr;
 				mReferenceCount = nullptr;
@@ -28,8 +28,8 @@ namespace Portakal
 			/*
 			* Inherit fields
 			*/
-			mData = other.mData;
-			mReferenceCount = other.mReferenceCount;
+			mData = pOther.mData;
+			mReferenceCount = pOther.mReferenceCount;
 
 			/*
 			* Increment the reference counter
@@ -133,12 +133,12 @@ namespace Portakal
 			return mData;
 		}
 
-		void operator =(const SharedHeap& other)
+		void operator =(const SharedHeap& pOther)
 		{
 			/*
-			* Check if other is nullptr
+			* Check if pOther is nullptr
 			*/
-			if (other.mData == nullptr)
+			if (pOther.mData == nullptr)
 			{
 				mData = nullptr;
 				mReferenceCount = nullptr;
@@ -148,8 +148,8 @@ namespace Portakal
 			/*
 			* Inherit data
 			*/
-			mData = other.mData;
-			mReferenceCount = other.mReferenceCount;
+			mData = pOther.mData;
+			mReferenceCount = pOther.mReferenceCount;
 
 			/*
 			* Increment
@@ -168,7 +168,7 @@ namespace Portakal
 			Deference();
 
 			/*
-			* Check if other is nullptr
+			* Check if pOther is nullptr
 			*/
 			if (pData == nullptr)
 			{
@@ -184,8 +184,8 @@ namespace Portakal
 			mReferenceCount = new uint32(1);
 		}
 
-		bool operator ==(const SharedHeap& other) { return mData == other.mData; }
-		bool operator !=(const SharedHeap& other) { return mData != other.mData; }
+		bool operator ==(const SharedHeap& pOther) { return mData == pOther.mData; }
+		bool operator !=(const SharedHeap& pOther) { return mData != pOther.mData; }
 		bool operator==(const T* pData) { return mData == (T*)pData; }
 		bool operator!=(const T* pData) { return mData != (T*)pData; }
 

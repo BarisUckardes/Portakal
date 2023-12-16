@@ -6,32 +6,32 @@ namespace Portakal
 {
 	/**
 	 * @class Vector3
-	 * @brief 3-Dimensional vector class
+	 * @brief 3-Dimensional pVector class
 	 */
 	template<typename T>
 	struct RUNTIME_API Vector3
 	{
 	public:
-		static T Distance(const Vector3 x, const Vector3 y)
+		static T Distance(const Vector3 pX, const Vector3 pY)
 		{
-			const Vector3 dir = y - x;
+			const Vector3 dir = pY - pX;
 			return dir.GetLength();
 		}
-		static T Dot(const Vector3 x, const Vector3 y)
+		static T Dot(const Vector3 pX, const Vector3 pY)
 		{
-			return x.X * y.X + x.Y * y.Y + x.Z * y.Z;
+			return pX.X * pY.X + pX.Y * pY.Y + pX.Z * pY.Z;
 		}
 
 	public:
-		Vector3(const T x, const T y, const T z) : X(x), Y(y), Z(z)
+		Vector3(const T pX, const T pY, const T z) : X(pX), Y(pY), Z(z)
 		{
 		}
 
-		Vector3(const T value) : X(value), Y(value), Z(value)
+		Vector3(const T pValue) : X(pValue), Y(pValue), Z(pValue)
 		{
 		}
 
-		Vector3(const Vector3& other) : X(other.X), Y(other.Y), Z(other.Z)
+		Vector3(const Vector3& pOther) : X(pOther.X), Y(pOther.Y), Z(pOther.Z)
 		{
 		}
 
@@ -53,128 +53,153 @@ namespace Portakal
 			return { X / length,Y / length ,Z / length };
 		}
 
-		Vector3 operator+(const Vector3& other) const
+		FORCEINLINE Vector3 Cross(const Vector3& pOther) const noexcept
 		{
-			return Vector3(X + other.X, Y + other.Y, Z + other.Z);
+			return { Y * pOther.Z - Z * pOther.Y,Z * pOther.X - X * pOther.Z,X * pOther.Y - Y * pOther.X };
 		}
 
-		Vector3 operator-(const Vector3& other) const
+		FORCEINLINE float Dot(const Vector3& pOther) const noexcept
 		{
-			return Vector3(X - other.X, Y - other.Y, Z - other.Z);
+			return X * pOther.X + Y * pOther.Y + Z * pOther.Z;
 		}
 
-		Vector3 operator*(const Vector3& other) const
+		T operator[](const uint32 pIndex) const
 		{
-			return Vector3(X * other.X, Y * other.Y, Z * other.Z);
+			switch (pIndex)
+			{
+			case 0:
+				return X;
+			case 1:
+				return Y;
+			case 2:
+				return Z;
+			default:
+				return 0;
+			}
 		}
 
-		Vector3 operator/(const Vector3& other) const
+		Vector3 operator+(const Vector3& pOther) const
 		{
-			return Vector3(X / other.X, Y / other.Y, Z / other.Z);
+			return Vector3(X + pOther.X, Y + pOther.Y, Z + pOther.Z);
 		}
 
-		Vector3 operator+(const T& other) const
+		Vector3 operator-(const Vector3& pOther) const
 		{
-			return Vector3(X + other, Y + other, Z + other);
+			return Vector3(X - pOther.X, Y - pOther.Y, Z - pOther.Z);
 		}
 
-		Vector3 operator-(const T& other) const
+		Vector3 operator*(const Vector3& pOther) const
 		{
-			return Vector3(X - other, Y - other, Z - other);
+			return Vector3(X * pOther.X, Y * pOther.Y, Z * pOther.Z);
 		}
 
-		Vector3 operator*(const T& other) const
+		Vector3 operator/(const Vector3& pOther) const
 		{
-			return Vector3(X * other, Y * other, Z * other);
+			return Vector3(X / pOther.X, Y / pOther.Y, Z / pOther.Z);
 		}
 
-		Vector3 operator/(const T& other) const
+		Vector3 operator+(const T& pOther) const
 		{
-			return Vector3(X / other, Y / other, Z / other);
+			return Vector3(X + pOther, Y + pOther, Z + pOther);
 		}
 
-		Vector3& operator+=(const Vector3& other)
+		Vector3 operator-(const T& pOther) const
 		{
-			X += other.X;
-			Y += other.Y;
-			Z += other.Z;
+			return Vector3(X - pOther, Y - pOther, Z - pOther);
+		}
+
+		Vector3 operator*(const T& pOther) const
+		{
+			return Vector3(X * pOther, Y * pOther, Z * pOther);
+		}
+
+		Vector3 operator/(const T& pOther) const
+		{
+			return Vector3(X / pOther, Y / pOther, Z / pOther);
+		}
+
+		Vector3& operator+=(const Vector3& pOther)
+		{
+			X += pOther.X;
+			Y += pOther.Y;
+			Z += pOther.Z;
 			return *this;
 		}
 
-		Vector3& operator-=(const Vector3& other)
+		Vector3& operator-=(const Vector3& pOther)
 		{
-			X -= other.X;
-			Y -= other.Y;
-			Z -= other.Z;
+			X -= pOther.X;
+			Y -= pOther.Y;
+			Z -= pOther.Z;
 			return *this;
 		}
 
-		Vector3& operator*=(const Vector3& other)
+		Vector3& operator*=(const Vector3& pOther)
 		{
-			X *= other.X;
-			Y *= other.Y;
-			Z *= other.Z;
+			X *= pOther.X;
+			Y *= pOther.Y;
+			Z *= pOther.Z;
 			return *this;
 		}
 
-		Vector3& operator/=(const Vector3& other)
+		Vector3& operator/=(const Vector3& pOther)
 		{
-			X /= other.X;
-			Y /= other.Y;
-			Z /= other.Z;
+			X /= pOther.X;
+			Y /= pOther.Y;
+			Z /= pOther.Z;
 			return *this;
 		}
 
-		Vector3& operator+=(const T& other)
+		Vector3& operator+=(const T& pOther)
 		{
-			X += other;
-			Y += other;
-			Z += other;
+			X += pOther;
+			Y += pOther;
+			Z += pOther;
 			return *this;
 		}
 
-		Vector3& operator-=(const T& other)
+		Vector3& operator-=(const T& pOther)
 		{
-			X -= other;
-			Y -= other;
-			Z -= other;
+			X -= pOther;
+			Y -= pOther;
+			Z -= pOther;
 			return *this;
 		}
 
-		Vector3& operator*=(const T& other)
+		Vector3& operator*=(const T& pOther)
 		{
-			X *= other;
-			Y *= other;
-			Z *= other;
+			X *= pOther;
+			Y *= pOther;
+			Z *= pOther;
 			return *this;
 		}
 
-		Vector3& operator/=(const T& other)
+		Vector3& operator/=(const T& pOther)
 		{
-			X /= other;
-			Y /= other;
-			Z /= other;
+			X /= pOther;
+			Y /= pOther;
+			Z /= pOther;
 			return *this;
 		}
 
-		bool operator==(const Vector3& other) const
+		bool operator==(const Vector3& pOther) const
 		{
-			return X == other.X && Y == other.Y && Z == other.Z;;
+			return X == pOther.X && Y == pOther.Y && Z == pOther.Z;;
 		}
 
-		bool operator!=(const Vector3& other) const
+		bool operator!=(const Vector3& pOther) const
 		{
-			return X != other.X || Y != other.Y || Z != other.Z;
+			return X != pOther.X || Y != pOther.Y || Z != pOther.Z;
 		}
 
-		bool operator==(const T& other) const
+		bool operator==(const T& pOther) const
 		{
-			return X == other && Y == other && Z == other;
+			return X == pOther && Y == pOther && Z == pOther;
 		}
 
-		bool operator!=(const T& other) const
+		bool operator!=(const T& pOther) const
 		{
-			return X != other || Y != other;
+			return X != pOther || Y != pOther;
 		}
 
 		T X;
