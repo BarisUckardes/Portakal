@@ -42,7 +42,10 @@ namespace Portakal
 
 	protected:
 		virtual void OnShutdown() = 0;
-		virtual void OnNameChange(const String& name) = 0;
+		virtual void OnNameChange(const String& name)
+		{
+
+		}
 
 	private:
 		String mName;
