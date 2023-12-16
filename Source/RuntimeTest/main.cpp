@@ -17,15 +17,14 @@
 #include <Runtime/Platform/PlatformGuid.h>
 #include <Runtime/Platform/PlatformWindow.h>
 #include <Runtime/Platform/Platform.h>
-
+#include <Runtime/Graphics/Instance/GraphicsInstance.h>
 
 int main(const unsigned int argumentCount, const char** ppArguments)
 {
-	/*
-	* Initialize platform
-	*/
+	//Initialize platform
 	Portakal::Platform::InitializePlatformDependencies();
 
+	//Create window
 	Portakal::WindowDesc windowDesc = {};
 	windowDesc.Title = "Portakal Runtime Test";
 	windowDesc.Position = { 100,100 };				
@@ -34,9 +33,12 @@ int main(const unsigned int argumentCount, const char** ppArguments)
 	windowDesc.Mode = Portakal::WindowMode::Windowed;
 
 	Portakal::SharedHeap<Portakal::PlatformWindow> pWindow = Portakal::PlatformWindow::Create(windowDesc);
-
 	pWindow->Show();
 
+	//Create graphics instance
+	Portakal::GraphicsInstanceDesc instanceDesc = {};
+	instanceDesc.Backend = Portakal::GraphicsBackend::Vulkan;
+	Portakal::SharedHeap<Portakal::GraphicsInstance> pInstance = Portakal::GraphicsInstance::Create(instanceDesc);
 	while (!pWindow.IsShutdown())
 	{
 		pWindow->PollMessages();

@@ -207,6 +207,20 @@ namespace Portakal
 		return subset;
 	}
 
+	String String::GetCopy() const
+	{
+		String target(mSize);
+		Memory::Copy(target.GetSource(), mSource, mSize);
+		return target;
+	}
+
+	const char* String::GetCopyRaw() const
+	{
+		char* pTarget = new char[mSize];
+		Memory::Copy(pTarget, mSource, mSize);
+		return pTarget;
+	}
+
 	void String::Clear()
 	{
 		if (mSource != nullptr)

@@ -27,7 +27,8 @@ namespace Portakal
 		FORCEINLINE uint64 FindLastIndex(const String& target, const uint64 startIndex) const;
 		FORCEINLINE uint64 GetCount(const char target) const;
 		FORCEINLINE String GetSubset(const uint64 startIndex, const uint64 length) const;
-
+		String GetCopy() const;
+		const char* GetCopyRaw() const;
 		void Clear();
 
 		const char* operator*() const { return mSource; }
