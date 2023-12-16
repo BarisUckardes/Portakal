@@ -22,6 +22,6 @@ namespace Portakal
 #endif
 
 		// Inherited via GraphicsInstance
-		void OnShutdown() override;
+		virtual void OnShutdown() override;
 	};
 }

@@ -1,7 +1,6 @@
 #pragma once
 #include <Runtime/Containers/String.h>
 #include <Runtime/Containers/Guid.h>
-#include <Runtime/Memory/SharedHeap.h>
 
 namespace Portakal
 {

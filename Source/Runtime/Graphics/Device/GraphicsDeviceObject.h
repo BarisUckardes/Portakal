@@ -1,5 +1,6 @@
 #pragma once
 #include <Runtime/Object/Object.h>
+#include <Runtime/Memory/SharedHeap.h>
 #include <Runtime/Graphics/Device/GraphicsDeviceObjectType.h>
 
 namespace Portakal

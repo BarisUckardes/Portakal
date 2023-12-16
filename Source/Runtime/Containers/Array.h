@@ -40,7 +40,7 @@ namespace Portakal
 		Array(const uint64 pSize)
 		{
 			mData = new T[pSize];
-			mSize = 0;
+			mSize = pSize;
 			mCapacity = pSize;
 		}
 

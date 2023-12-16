@@ -1,5 +1,6 @@
 #pragma once
 #include <Runtime/Core/Core.h>
+#include <Runtime/Object/Object.h>
 
 namespace Portakal
 {
@@ -40,7 +41,7 @@ namespace Portakal
 			/*
 			* Get data field
 			*/
-			mData = pObject;
+			mData = (Object*)pObject;
 
 			/*
 			* Check and do not create 
@@ -56,15 +57,15 @@ namespace Portakal
 		}
 		~SharedHeap()
 		{
-
+			Shutdown();
 		}
 
 		FORCEINLINE bool IsShutdown() const noexcept
 		{
 			return (mData == nullptr || mData->IsShutdown());
 		}
-		FORCEINLINE T* GetHeap() const noexcept { return mData; }
-		FORCEINLINE T** GetHeapAddress() const noexcept { return &mData; }
+		FORCEINLINE T* GetHeap() const noexcept { return (T*)mData; }
+		FORCEINLINE T** GetHeapAddress() const noexcept { return (T**)&mData; }
 
 		void Deference()
 		{
@@ -130,7 +131,7 @@ namespace Portakal
 
 		T* operator->() const noexcept
 		{
-			return mData;
+			return (T*)mData;
 		}
 
 		void operator =(const SharedHeap& pOther)
@@ -217,7 +218,7 @@ namespace Portakal
 		}
 
 	private:
-		T* mData;
+		Object* mData;
 		uint32* mReferenceCount;
 	};
 }

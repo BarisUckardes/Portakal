@@ -1,6 +1,7 @@
 #pragma once
 #include <Runtime/Graphics/Instance/GraphicsInstanceDesc.h>
 #include <Runtime/Object/Object.h>
+#include <Runtime/Memory/SharedHeap.h>
 
 namespace Portakal
 {
