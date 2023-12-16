@@ -177,6 +177,7 @@ namespace Portakal
             adapterDesc.ProductName = deviceProperties.deviceName;
             adapterDesc.VendorName = "N/A";
             adapterDesc.ImageDimensions = { deviceProperties.limits.maxImageDimension1D,deviceProperties.limits.maxImageDimension2D ,deviceProperties.limits.maxImageDimension3D };
+            adapterDesc.pInstance = this;
             DEV_LOG("VulkanInstance", "Physical device [%s] found", *adapterDesc.ProductName);
             adapters.Add(new VulkanAdapter(adapterDesc, device));
         }

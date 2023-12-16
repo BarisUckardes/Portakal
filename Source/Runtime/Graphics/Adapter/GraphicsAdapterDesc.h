@@ -19,5 +19,6 @@ namespace Portakal
 		uint32 ShaderBufferCount;
 		Vector3UI ImageDimensions;
 		uint64 VRam;
+		GraphicsInstance* pInstance;
 	};
 }

@@ -6,6 +6,6 @@ namespace Portakal
 	class GraphicsAdapter;
 	struct RUNTIME_API GraphicsDeviceDesc
 	{
-		SharedHeap<GraphicsAdapter> Adapter;
+		GraphicsAdapter* pAdapter;
 	};
 }

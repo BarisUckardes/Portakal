@@ -30,7 +30,9 @@ namespace Portakal
 		{
 			return mSize;
 		}
+
 		virtual GraphicsDeviceObjectType GetObjectType() const noexcept override final { return GraphicsDeviceObjectType::Swapchain; }
+		virtual void Present() = 0;
 	private:
 		const byte mBufferCount;
 		const TextureFormat mColorFormat;

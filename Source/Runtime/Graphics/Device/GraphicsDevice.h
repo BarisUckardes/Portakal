@@ -25,6 +25,7 @@ namespace Portakal
 	class ResourceTable;
 	class GraphicsQueue;
 	class Swapchain;
+	class GraphicsAdapter;
 
 	struct TextureDesc;
 	struct TextureViewDesc;
@@ -46,7 +47,7 @@ namespace Portakal
 	class RUNTIME_API GraphicsDevice : public Object
 	{
 	public:
-		GraphicsDevice() = default;
+		GraphicsDevice(const GraphicsDeviceDesc& desc);
 		~GraphicsDevice() = default;
 
 		FORCEINLINE SharedHeap<Swapchain> GetMainSwapchain() const noexcept
@@ -70,7 +71,10 @@ namespace Portakal
 		SharedHeap<ResourceTable> CreateResourceTable(const ResourceTableDesc& desc);
 		SharedHeap<GraphicsQueue> CreateQueue(const GraphicsQueueDesc& desc);
 		SharedHeap<Swapchain> CreateSwapchain(const SwapchainDesc& desc);
-
+		FORCEINLINE GraphicsAdapter* GetOwnerAdapter() const noexcept
+		{
+			return mOwnerAdapter;
+		}
 		void WaitFences(Fence* ppFences, const byte count);
 		void WaitQueueIdle(GraphicsQueue* pQueue);
 		void WaitDeviceIdle();
@@ -96,5 +100,6 @@ namespace Portakal
 	private:
 		Array<SharedHeap<GraphicsDeviceObject>> mChilds;
 		SharedHeap<Swapchain> mMainSwapchain;
+		GraphicsAdapter* mOwnerAdapter;
 	};
 }

@@ -3,10 +3,10 @@
 
 namespace Portakal
 {
-    VulkanDevice::VulkanDevice(const VulkanAdapter* pAdapter)
+    VulkanDevice::VulkanDevice(const GraphicsDeviceDesc& desc) : GraphicsDevice(desc)
     {
         //Get physical device
-        const VkPhysicalDevice physicalDevice = pAdapter->GetVkPhysicalDevice();
+        const VkPhysicalDevice physicalDevice = ((const VulkanAdapter*)desc.pAdapter)->GetVkPhysicalDevice();
 
         //Get queue families
         uint32 queueFamilyCount = 0;

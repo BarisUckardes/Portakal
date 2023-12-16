@@ -12,7 +12,7 @@ namespace Portakal
 		GraphicsAdapter(const GraphicsAdapterDesc& desc) :
 			mProductName(desc.ProductName),mVendorName(desc.VendorName),mSupportGeometryShader(desc.bSupportGeometryShader),mSupportComputeShader(desc.bSupportComputeShader),
 			mColorAttachmentCount(desc.ColorAttachmentCount),mShaderTextureCount(desc.ShaderTextureCount),mShaderSamplerCount(desc.ShaderSamplerCount),mShaderBufferCount(desc.ShaderBufferCount),
-			mVRam(desc.VRam),mImageDimensions(desc.ImageDimensions)
+			mVRam(desc.VRam),mImageDimensions(desc.ImageDimensions),mOwnerInstance(desc.pInstance)
 		{
 			SetName(desc.ProductName);
 		}
@@ -28,9 +28,15 @@ namespace Portakal
 		FORCEINLINE uint32 GetShaderBufferCount() const noexcept { return mShaderBufferCount; }
 		FORCEINLINE uint64 GetVRam() const noexcept { return mVRam; }
 		FORCEINLINE Vector3UI GetImageDimensions() const noexcept { return mImageDimensions; }
+		FORCEINLINE GraphicsInstance* GetOwnerInstance() const noexcept
+		{
+			return mOwnerInstance;
+		}
 		SharedHeap<GraphicsDevice> CreateDevice();
 	protected:
 		virtual GraphicsDevice* CreateDeviceCore() = 0;
+	private:
+
 	private:
 		const String mProductName;
 		const String mVendorName;
@@ -42,6 +48,7 @@ namespace Portakal
 		const uint32 mShaderBufferCount;
 		const uint64 mVRam;
 		const Vector3UI mImageDimensions;
+		GraphicsInstance* mOwnerInstance;
 		Array<SharedHeap<GraphicsDevice>> mDevices;
 	};
 }

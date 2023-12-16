@@ -46,8 +46,10 @@ namespace Portakal
             VkBool32 CanPresent;
         };
 	public:
-		VulkanDevice(const VulkanAdapter* pAdapter);
+		VulkanDevice(const GraphicsDeviceDesc& desc);
 		~VulkanDevice() = default;
+
+        FORCEINLINE VkDevice GetVkLogicalDevice() const noexcept { return mLogicalDevice; }
 	private:
 		// Inherited via GraphicsDevice
 		void OnShutdown() override;
