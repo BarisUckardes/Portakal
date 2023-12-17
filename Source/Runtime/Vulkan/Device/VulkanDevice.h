@@ -49,6 +49,8 @@ namespace Portakal
 		VulkanDevice(const GraphicsDeviceDesc& desc);
 		~VulkanDevice() = default;
 
+        FORCEINLINE int32 GetPresentQueueFamilyIndex(const VkSurfaceKHR surface) const noexcept;
+        FORCEINLINE VkQueue GetPresentQueue(const VkSurfaceKHR surface) const noexcept;
         FORCEINLINE VkDevice GetVkLogicalDevice() const noexcept { return mLogicalDevice; }
 	private:
 		// Inherited via GraphicsDevice
@@ -66,11 +68,14 @@ namespace Portakal
 		ResourceTableLayout* CreateResourceTableLayoutCore(const ResourceTableLayoutDesc& desc) override;
 		ResourceTablePool* CreateResourceTablePoolCore(const ResourceTablePoolDesc& desc) override;
 		ResourceTable* CreateResourceTableCore(const ResourceTableDesc& desc) override;
+        virtual Fence* CreateFenceCore() override;
+        virtual Swapchain* CreateSwapchainCore(const SwapchainDesc& desc) override;
 	private:
         DeviceQueueFamily mGraphicsQueueFamily;
         DeviceQueueFamily mComputeQueueFamily;
         DeviceQueueFamily mTransferQueueFamily;
         DeviceQueueFamily mPresentQueueFamily;
         VkDevice mLogicalDevice;
+        VkPhysicalDevice mPhysicalDevice;
 	};
 }

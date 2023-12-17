@@ -238,12 +238,6 @@ namespace Portakal
 			mCapacity = 0;
 		}
 
-		void Reserve(unsigned int size)
-		{
-			if (size > mCapacity)
-				_Resize(size);
-		}
-
 		NODISCARD const T& GetAt(int index) const { return mData[index]; }
 		NODISCARD const T* GetDataConst() const { return mData; }
 		NODISCARD T* GetData() { return mData; }

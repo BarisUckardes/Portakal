@@ -1,6 +1,7 @@
 #pragma once
 #include <Runtime/Graphics/Texture/TextureFormat.h>
 #include <Runtime/Platform/PlatformWindow.h>
+#include <Runtime/Graphics/Device/GraphicsDevice.h>
 
 namespace Portakal
 {
@@ -10,5 +11,6 @@ namespace Portakal
 		TextureFormat ColorFormat;
 		TextureFormat DepthStencilFormat;
 		SharedHeap<PlatformWindow> pWindow;
+		SharedHeap<GraphicsDevice> pDevice;
 	};
 }

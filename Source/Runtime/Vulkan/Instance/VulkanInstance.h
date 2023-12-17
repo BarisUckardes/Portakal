@@ -14,6 +14,10 @@ namespace Portakal
 		VulkanInstance(const GraphicsInstanceDesc& desc);
 		~VulkanInstance() = delete;
 
+		FORCEINLINE VkInstance GetVkInstance() const noexcept
+		{
+			return mInstance;
+		}
 	private:
 		VkInstance mInstance;
 		Array<const char*> mEnabledValidationLayers;

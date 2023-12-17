@@ -13,5 +13,5 @@ namespace Portakal
 		TransferSource = 16,
 		TransferDestination = 32
 	};
-	GENERATE_FLAGS(TextureFlags, byte);
+	GENERATE_FLAGS(TextureUsage, byte);
 }

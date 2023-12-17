@@ -1,224 +1,168 @@
 #pragma once
 #include <Runtime/Core/Core.h>
+#include <Runtime/Containers/String.h>
 #include <Runtime/Object/Object.h>
 
 namespace Portakal
 {
-	/**
-	 * @class SharedHeap
-	 * @brief Dynamic shared pointer system that stores 
-	 * the templated pType as Object base class.
-	 * @relates Object
-	 */
-	template<typename T>
-	class RUNTIME_API SharedHeap
-	{
-	public:
-		SharedHeap(const SharedHeap& pOther) : mData(nullptr),mReferenceCount(nullptr)
-		{
-			/*
-			* Check if pOther data is nullptr
-			*/
-			if (pOther.mData == nullptr)
-			{
-				mData = nullptr;
-				mReferenceCount = nullptr;
-				return;
-			}
+    template<typename T>
+    class SharedHeap
+    {
+    public:
+        SharedHeap(const SharedHeap& other) : mData(nullptr), mReferenceCount(nullptr)
+        {
+            if (other.mData == nullptr)
+            {
+                mData = nullptr;
+                mReferenceCount = nullptr;
+                return;
+            }
 
-			/*
-			* Inherit fields
-			*/
-			mData = pOther.mData;
-			mReferenceCount = pOther.mReferenceCount;
+            mData = other.mData;
+            mReferenceCount = other.mReferenceCount;
 
-			/*
-			* Increment the reference counter
-			*/
-		}
-		SharedHeap(T* pObject) : mData(nullptr), mReferenceCount(nullptr)
-		{
-			/*
-			* Get data field
-			*/
-			mData = (Object*)pObject;
+            IncrementReferenceCount();
+        }
+        SharedHeap(T* pObject) : mData(nullptr), mReferenceCount(nullptr)
+        {
+            mData = (Object*)pObject;
+            if (pObject != nullptr)
+                mReferenceCount = new uint32(1);
+            else
+                mReferenceCount = nullptr;
 
-			/*
-			* Check and do not create 
-			*/
-			if (pObject != nullptr)
-				mReferenceCount = new uint32(1);
-			else
-				mReferenceCount = nullptr;
-		}
-		SharedHeap() : mData(nullptr), mReferenceCount(nullptr)
-		{
+        }
+        SharedHeap() : mData(nullptr), mReferenceCount(nullptr)
+        {
 
-		}
-		~SharedHeap()
-		{
-			Deference();
-		}
+        }
+        ~SharedHeap()
+        {
+            Deference();
+        }
 
-		FORCEINLINE bool IsShutdown() const noexcept
-		{
-			return (mData == nullptr || mData->IsShutdown());
-		}
-		FORCEINLINE T* GetHeap() const noexcept { return (T*)mData; }
-		FORCEINLINE T** GetHeapAddress() const noexcept { return (T**)&mData; }
+        FORCEINLINE const bool IsShutdown() const noexcept { return (mData == nullptr || mData->IsShutdown()); }
+        FORCEINLINE bool IsValid() const noexcept { return mData != nullptr; }
+        FORCEINLINE T* GetHeap() const noexcept { return (T*)mData; }
+        FORCEINLINE T** GetHeapAddress() const noexcept { return (T**)&mData; }
 
-		void Deference()
-		{
-			/*
-			* Check if valid
-			*/
-			if (mReferenceCount == nullptr)
-				return;
+        void Deference()
+        {
+            if (mReferenceCount == nullptr)
+                return;
 
-			/*
-			* Decrement
-			*/
-			*mReferenceCount = *mReferenceCount - 1;
-			
-			/*
-			* Delete if reference count is 0
-			*/
-			if (*mReferenceCount == 0)
-				DeleteReference();
+            *mReferenceCount = *mReferenceCount - 1;
 
-			/*
-			* Set to defaults
-			*/
-			mData = nullptr;
-			mReferenceCount = nullptr;
-		}
+            if (*mReferenceCount == 0)
+                DeleteReference();
 
-		void Shutdown()
-		{
-			/*
-			* Shutdown the underlying object if only the reference is valid
-			*/
-			if (!IsShutdown())
-				mData->Shutdown();
-		}
+            mData = nullptr;
+            mReferenceCount = nullptr;
+        }
+        void Shutdown() const
+        {
+            if (mData != nullptr)
+                mData->Shutdown();
+        }
 
-		template<typename TOther>
-		SharedHeap<TOther> QueryAs() noexcept
-		{
-			/*
-			* Force compiler
-			*/
-			TOther* pChecksum = dynamic_cas<TOther*>(mData);
-			if (pChecksum == nullptr)
-				return nullptr;
+        T* operator->() const noexcept
+        {
+            return (T*)mData;
+        }
+        template<typename TOther>
+        SharedHeap<TOther> QueryAs() noexcept
+        {
+            TOther* pChecksum = dynamic_cast<TOther*>(mData);
 
-			/*
-			* Increment
-			*/
-			IncrementReferenceCount();
+            if (pChecksum == nullptr)
+                return nullptr;
 
-			/*
-			* Inherit data
-			*/
-			SharedHeap<TOther> pOther = nullptr;
-			SharedHeap<T>* pTemp = (SharedHeap<T>*) & pOther;
+            IncrementReferenceCount();
 
-			pTemp->mData = mData;
-			pTemp->mReferenceCount = mReferenceCount;
+            SharedHeap<TOther> other = nullptr;
+            SharedHeap<T>* pTemp = (SharedHeap<T>*) & other;
 
-			return pOther;
-		}
+            pTemp->mData = mData;
+            pTemp->mReferenceCount = mReferenceCount;
 
-		T* operator->() const noexcept
-		{
-			return (T*)mData;
-		}
+            return other;
+        }
 
-		void operator =(const SharedHeap& pOther)
-		{
-			/*
-			* Check if pOther is nullptr
-			*/
-			if (pOther.mData == nullptr)
-			{
-				mData = nullptr;
-				mReferenceCount = nullptr;
-				return;
-			}
+        void operator =(const SharedHeap& other)
+        {
+            if (other.mData == nullptr)
+            {
+                mData = nullptr;
+                mReferenceCount = nullptr;
+                return;
+            }
 
-			/*
-			* Inherit data
-			*/
-			mData = pOther.mData;
-			mReferenceCount = pOther.mReferenceCount;
+            mData = other.mData;
+            mReferenceCount = other.mReferenceCount;
 
-			/*
-			* Increment
-			*/
-			IncrementReferenceCount();
-		}
+            IncrementReferenceCount();
+        }
+        template<typename TOther>
+        void operator=(TOther* pData)
+        {
+            Deference();
 
-		template<typename TOther>
-		void operator=(TOther* pData) = delete;
+            mData = (Object*)pData;
+            mReferenceCount = new uint32(1);
+        }
+        void operator=(T* pData)
+        {
+            Deference();
 
-		void operator=(T* pData)
-		{
-			/*
-			* First deference 
-			*/
-			Deference();
+            if (pData == nullptr)
+            {
+                mData = nullptr;
+                mReferenceCount = nullptr;
+                return;
+            }
 
-			/*
-			* Check if pOther is nullptr
-			*/
-			if (pData == nullptr)
-			{
-				mData = nullptr;
-				mReferenceCount = nullptr;
-				return;
-			}
+            mData = (Object*)pData;
+            mReferenceCount = new uint32(1);
+        }
+        bool operator ==(const SharedHeap& other)
+        {
+            return mData == other.mData;
 
-			/*
-			* Inherit
-			*/
-			mData = pData;
-			mReferenceCount = new uint32(1);
-		}
+        }
+        bool operator !=(const SharedHeap& other)
+        {
+            return mData != other.mData;
+        }
+        bool operator==(const T* pData)
+        {
+            return mData == (Object*)pData;
+        }
+        bool operator!=(const T* pData)
+        {
+            return mData != (Object*)pData;
+        }
 
-		bool operator ==(const SharedHeap& pOther) { return mData == pOther.mData; }
-		bool operator !=(const SharedHeap& pOther) { return mData != pOther.mData; }
-		bool operator==(const T* pData) { return mData == (T*)pData; }
-		bool operator!=(const T* pData) { return mData != (T*)pData; }
+    protected:
+        //virtual void SetNameCore(const String& name) {}
 
-	private:
-		void IncrementReferenceCount()
-		{
-			if (mReferenceCount != nullptr)
-				*mReferenceCount = *mReferenceCount + 1;
-		}
+    private:
+        void IncrementReferenceCount()
+        {
+            if (mReferenceCount != nullptr)
+                *mReferenceCount = *mReferenceCount + 1;
+        }
 
-		void DeleteReference()
-		{
-			/*
-			* Validate data
-			*/
-			if (mData == nullptr)
-				return;
+        void DeleteReference()
+        {
+            if (mData == nullptr)
+                return;
 
-			/*
-			* Shutdown
-			*/
-			Shutdown();
-
-			/*
-			* Delete heap
-			*/
-			delete mData;
-			delete mReferenceCount;
-		}
-
-	private:
-		Object* mData;
-		uint32* mReferenceCount;
-	};
+            Shutdown();
+            delete mData;
+            delete mReferenceCount;
+        }
+    private:
+        Object* mData;
+        uint32* mReferenceCount;
+    };
 }

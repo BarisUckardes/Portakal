@@ -1,6 +1,7 @@
 #pragma once
 #include <Runtime/Graphics/Device/GraphicsDeviceObject.h>
 #include <Runtime/Graphics/Swapchain/SwapchainDesc.h>
+#include <Runtime/Graphics/Fence/Fence.h>
 
 namespace Portakal
 {
@@ -30,7 +31,10 @@ namespace Portakal
 		{
 			return mSize;
 		}
-
+		FORCEINLINE SharedHeap<Fence> GetFence() const noexcept
+		{
+			return mFence;
+		}
 		virtual GraphicsDeviceObjectType GetObjectType() const noexcept override final { return GraphicsDeviceObjectType::Swapchain; }
 		virtual void Present() = 0;
 	private:
@@ -38,6 +42,7 @@ namespace Portakal
 		const TextureFormat mColorFormat;
 		const TextureFormat mDepthStencilFormat;
 		const SharedHeap<PlatformWindow> mWindow;
+		SharedHeap<Fence> mFence;
 		Vector2US mSize;
 	};
 }

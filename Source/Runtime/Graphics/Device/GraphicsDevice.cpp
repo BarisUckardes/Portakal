@@ -62,9 +62,29 @@ namespace Portakal
     {
         return SharedHeap<GraphicsQueue>();
     }
+    SharedHeap<Fence> GraphicsDevice::CreateFence()
+    {
+        //Create fence
+        SharedHeap<Fence> pFence = CreateFenceCore();
+
+        //Register
+        RegisterChild(pFence.QueryAs<GraphicsDeviceObject>());
+
+        return pFence;
+    }
     SharedHeap<Swapchain> GraphicsDevice::CreateSwapchain(const SwapchainDesc& desc)
     {
-        return SharedHeap<Swapchain>();
+        //Create swapchain
+        SharedHeap<Swapchain> pSwapchain = CreateSwapchainCore(desc);
+
+        //Register
+        RegisterChild(pSwapchain.QueryAs<GraphicsDeviceObject>());
+
+        //Set as main if no swapchain is available
+        if (mMainSwapchain.IsShutdown())
+            mMainSwapchain = pSwapchain;
+
+        return pSwapchain;
     }
     void GraphicsDevice::WaitFences(Fence* ppFences, const byte count)
     {
@@ -86,6 +106,7 @@ namespace Portakal
     }
     void GraphicsDevice::RegisterChild(const SharedHeap<GraphicsDeviceObject>& pObject)
     {
+        pObject->_SetOwnerDevice(this);
         mChilds.Add(pObject);
     }
     void GraphicsDevice::RemoveChild(const SharedHeap<GraphicsDeviceObject>& pObject)

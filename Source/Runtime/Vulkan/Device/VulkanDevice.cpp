@@ -1,20 +1,19 @@
 #include "VulkanDevice.h"
 #include <Runtime/Vulkan/Adapter/VulkanAdapter.h>
+#include <Runtime/Vulkan/Swapchain/VulkanSwapchain.h>
+#include <Runtime/Vulkan/Fence/VulkanFence.h>
 
 namespace Portakal
 {
-    VulkanDevice::VulkanDevice(const GraphicsDeviceDesc& desc) : GraphicsDevice(desc)
+    VulkanDevice::VulkanDevice(const GraphicsDeviceDesc& desc) : GraphicsDevice(desc),mPhysicalDevice(((const VulkanAdapter*)desc.pAdapter)->GetVkPhysicalDevice())
     {
-        //Get physical device
-        const VkPhysicalDevice physicalDevice = ((const VulkanAdapter*)desc.pAdapter)->GetVkPhysicalDevice();
-
         //Get queue families
         uint32 queueFamilyCount = 0;
-        vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, nullptr);
+        vkGetPhysicalDeviceQueueFamilyProperties(mPhysicalDevice, &queueFamilyCount, nullptr);
         DEV_ASSERT(queueFamilyCount > 0, "VulkanDevice", "No queue families found!");
 
         Array<VkQueueFamilyProperties> queueFamilyProperties(queueFamilyCount);
-        vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, queueFamilyProperties.GetData());
+        vkGetPhysicalDeviceQueueFamilyProperties(mPhysicalDevice, &queueFamilyCount, queueFamilyProperties.GetData());
 
         //Collect queue families
         for (uint32 i = 0;i<queueFamilyCount;i++)
@@ -93,21 +92,62 @@ namespace Portakal
         logicalDeviceInfo.enabledLayerCount = 0;
         logicalDeviceInfo.ppEnabledLayerNames = nullptr;
 
-        DEV_ASSERT(vkCreateDevice(physicalDevice, &logicalDeviceInfo, nullptr, &mLogicalDevice) == VK_SUCCESS, "VulkanDevice", "Failed to create logical device!");
+        DEV_ASSERT(vkCreateDevice(mPhysicalDevice, &logicalDeviceInfo, nullptr, &mLogicalDevice) == VK_SUCCESS, "VulkanDevice", "Failed to create logical device!");
 
         //Get default queues
         vkGetDeviceQueue(mLogicalDevice, mGraphicsQueueFamily.FamilyIndex, 0, &mGraphicsQueueFamily.DefaultQueue);
         vkGetDeviceQueue(mLogicalDevice, mComputeQueueFamily.FamilyIndex, 0, &mComputeQueueFamily.DefaultQueue);
         vkGetDeviceQueue(mLogicalDevice, mTransferQueueFamily.FamilyIndex, 0, &mTransferQueueFamily.DefaultQueue);
-        //vkGetDeviceQueue(mLogicalDevice, mPresentQueueFamily.FamilyIndex, 1, &mPresentQueueFamily.DefaultQueue);
 
         //check default queues
         DEV_ASSERT(mGraphicsQueueFamily.DefaultQueue != NULL, "VulkanGraphicsDevice", "Graphics queue is invalid!");
         DEV_ASSERT(mComputeQueueFamily.DefaultQueue != NULL, "VulkanGraphicsDevice", "Compute queue is invalid!");
         DEV_ASSERT(mTransferQueueFamily.DefaultQueue != NULL, "VulkanGraphicsDevice", "Transfer queue is invalid!");
-        //DEV_ASSERT(mPresentQueueFamily.DefaultQueue != NULL, "VulkanGraphicsDevice", "Present queue is invalid");
 
         DEV_LOG("VulkanDevice", "Initialized");
+    }
+    int32 VulkanDevice::GetPresentQueueFamilyIndex(const VkSurfaceKHR surface) const noexcept
+    {
+        //Check graphics
+        VkBool32 bGraphicsCanPresent = false;
+        DEV_ASSERT(vkGetPhysicalDeviceSurfaceSupportKHR(mPhysicalDevice, mGraphicsQueueFamily.FamilyIndex, surface, &bGraphicsCanPresent) == VK_SUCCESS,"VulkanDevice","Failed to check surface support");
+        if (bGraphicsCanPresent)
+            return mGraphicsQueueFamily.FamilyIndex;
+
+        //Check compute
+        VkBool32 bComputeCanPresent = false;
+        DEV_ASSERT(vkGetPhysicalDeviceSurfaceSupportKHR(mPhysicalDevice, mComputeQueueFamily.FamilyIndex, surface, &bComputeCanPresent) == VK_SUCCESS, "VulkanDevice", "Failed to check surface support");
+        if (bComputeCanPresent)
+            return mComputeQueueFamily.FamilyIndex;
+
+        //Check transfer
+        VkBool32 bTransferCanPresent = false;
+        DEV_ASSERT(vkGetPhysicalDeviceSurfaceSupportKHR(mPhysicalDevice, mTransferQueueFamily.FamilyIndex, surface, &bTransferCanPresent) == VK_SUCCESS, "VulkanDevice", "Failed to check surface support");
+        if (bTransferCanPresent)
+            return mTransferQueueFamily.FamilyIndex;
+
+        return -1;
+    }
+    VkQueue VulkanDevice::GetPresentQueue(const VkSurfaceKHR surface) const noexcept
+    {
+        VkBool32 bGraphicsCanPresent = false;
+        DEV_ASSERT(vkGetPhysicalDeviceSurfaceSupportKHR(mPhysicalDevice, mGraphicsQueueFamily.FamilyIndex, surface, &bGraphicsCanPresent) == VK_SUCCESS, "VulkanDevice", "Failed to check surface support");
+        if (bGraphicsCanPresent)
+            return mGraphicsQueueFamily.DefaultQueue;
+
+        //Check compute
+        VkBool32 bComputeCanPresent = false;
+        DEV_ASSERT(vkGetPhysicalDeviceSurfaceSupportKHR(mPhysicalDevice, mComputeQueueFamily.FamilyIndex, surface, &bComputeCanPresent) == VK_SUCCESS, "VulkanDevice", "Failed to check surface support");
+        if (bComputeCanPresent)
+            return mComputeQueueFamily.DefaultQueue;
+
+        //Check transfer
+        VkBool32 bTransferCanPresent = false;
+        DEV_ASSERT(vkGetPhysicalDeviceSurfaceSupportKHR(mPhysicalDevice, mTransferQueueFamily.FamilyIndex, surface, &bTransferCanPresent) == VK_SUCCESS, "VulkanDevice", "Failed to check surface support");
+        if (bTransferCanPresent)
+            return mTransferQueueFamily.DefaultQueue;
+
+        return VK_NULL_HANDLE;
     }
     void VulkanDevice::OnShutdown()
     {
@@ -161,5 +201,13 @@ namespace Portakal
     ResourceTable* VulkanDevice::CreateResourceTableCore(const ResourceTableDesc& desc)
     {
         return nullptr;
+    }
+    Fence* VulkanDevice::CreateFenceCore()
+    {
+        return new VulkanFence(this);
+    }
+    Swapchain* VulkanDevice::CreateSwapchainCore(const SwapchainDesc& desc)
+    {
+        return new VulkanSwapchain(desc,this);
     }
 }

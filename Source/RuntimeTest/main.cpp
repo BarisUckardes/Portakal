@@ -20,6 +20,7 @@
 #include <Runtime/Graphics/Instance/GraphicsInstance.h>
 #include <Runtime/Graphics/Adapter/GraphicsAdapter.h>
 #include <Runtime/Graphics/Device/GraphicsDevice.h>
+#include <Runtime/Graphics/Swapchain/Swapchain.h>
 
 int main(const unsigned int argumentCount, const char** ppArguments)
 {
@@ -48,11 +49,22 @@ int main(const unsigned int argumentCount, const char** ppArguments)
 
 	//Create device
 	Portakal::SharedHeap<Portakal::GraphicsDevice> pDevice = pAdapter->CreateDevice();
+
+	//Create swapchain
+	Portakal::SwapchainDesc swapchainDesc = {};
+	swapchainDesc.ColorFormat = Portakal::TextureFormat::R8_G8_B8_A8_UNorm;
+	swapchainDesc.BufferCount = 3;
+	swapchainDesc.DepthStencilFormat = Portakal::TextureFormat::None;
+	swapchainDesc.pWindow = pWindow;
+	swapchainDesc.pDevice = pDevice;
+	Portakal::SharedHeap<Portakal::Swapchain> pSwapchain = pDevice->CreateSwapchain(swapchainDesc);
+	pSwapchain->Present();
 	while (!pWindow.IsShutdown())
 	{
 		pWindow->PollMessages();
 	}
 
+	pSwapchain.Shutdown();
 	pDevice.Shutdown();
 	pAdapter.Shutdown();
 	pInstance.Shutdown();
