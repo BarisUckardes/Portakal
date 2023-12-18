@@ -70,9 +70,7 @@ namespace Portakal
 		GraphicsBackend GetBackend() const noexcept override { return GraphicsBackend::Vulkan; }
 		Texture* CreateTextureCore(const TextureDesc& desc) override;
 		TextureView* CreateTextureViewCore(const TextureViewDesc& desc) override;
-		Framebuffer* CreateFramebufferCore(const FramebufferDesc& desc) override;
 		CommandList* CreateCommandListCore(const CommandListDesc& desc) override;
-		Pipeline* CreatePipelineCore(const PipelineDesc& desc) override;
 		GraphicsMemoryHeap* CreateMemoryHeapCore(const GraphicsMemoryHeapDesc& desc) override;
 		GraphicsBuffer* CreateBufferCore(const GraphicsBufferDesc& desc) override;
 		Shader* CreateShaderCore(const ShaderDesc& desc) override;
@@ -80,13 +78,26 @@ namespace Portakal
 		ResourceTableLayout* CreateResourceTableLayoutCore(const ResourceTableLayoutDesc& desc) override;
 		ResourceTablePool* CreateResourceTablePoolCore(const ResourceTablePoolDesc& desc) override;
 		ResourceTable* CreateResourceTableCore(const ResourceTableDesc& desc) override;
-        virtual Fence* CreateFenceCore() override;
-        virtual Swapchain* CreateSwapchainCore(const SwapchainDesc& desc) override;
+        Fence* CreateFenceCore() override;
+        Swapchain* CreateSwapchainCore(const SwapchainDesc& desc) override;
+
+        // Inherited via GraphicsDevice
+        CommandPool* CreateCommandPoolCore(const CommandPoolDesc& desc) override;
+        Pipeline* CreateGraphicsPipelineCore(const GraphicsPipelineDesc& desc) override;
+        SharedHeap<Pipeline> CreateComputePipelineCore(const ComputePipelineDesc& desc) override;
+        void WaitFencesCore(Fence** ppFences, const byte count) override;
+        void WaitDeviceIdleCore() override;
+        void WaitQueueDefaultCore(const GraphicsQueueType type) override;
+        void UpdateHostBufferCore(GraphicsBuffer* pBuffer, const GraphicsBufferHostUpdateDesc& desc) override;
+        void UpdateResourceTableCore(ResourceTable* pTable, const ResourceTableUpdateDesc& desc) override;
+        void SubmitCommandListsCore(CommandList** ppCmdLists, const byte cmdListCount, const GraphicsQueueType type, const Fence* pFence) override;
 	private:
         DeviceQueueFamily mGraphicsQueueFamily;
         DeviceQueueFamily mComputeQueueFamily;
         DeviceQueueFamily mTransferQueueFamily;
         VkDevice mLogicalDevice;
         VkPhysicalDevice mPhysicalDevice;
-	};
+
+        
+    };
 }

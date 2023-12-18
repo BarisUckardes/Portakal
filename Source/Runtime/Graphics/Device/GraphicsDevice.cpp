@@ -1,5 +1,6 @@
 #include "GraphicsDevice.h"
 
+
 namespace Portakal
 {
     GraphicsDevice::GraphicsDevice(const GraphicsDeviceDesc& desc) : mOwnerAdapter(desc.pAdapter)
@@ -8,59 +9,113 @@ namespace Portakal
   
     SharedHeap<Texture> GraphicsDevice::CreateTexture(const TextureDesc& desc)
     {
-        return SharedHeap<Texture>();
+        /**
+        * Validate depth
+        */
+        DEV_ASSERT(desc.Size.Z > 0, "GraphicsDevice", "A texture should always have it's depth value higher than 0");
+
+        /**
+        * Validate mip levels
+        */
+        DEV_ASSERT(desc.MipLevels > 0, "GraphicsDevice", "A texture should always have it's mip levels value higher than 0");
+
+        const uint16 maxDimension = Math::Max(desc.Size.X, desc.Size.Y);
+        const uint16 maxMipCount = Math::Log2(maxDimension) + 1;
+        DEV_ASSERT(maxMipCount > desc.MipLevels, "Texture", "Requested mip levels are not possible with this texture, considering the dimensions the max mip levels can be %d while you requested %d",
+            maxMipCount, desc.MipLevels);
+
+        SharedHeap<Texture> Texture = CreateTextureCore(desc);
+        RegisterChild(Texture.QueryAs<GraphicsDeviceObject>());
+        return Texture;
     }
     SharedHeap<TextureView> GraphicsDevice::CreateTextureView(const TextureViewDesc& desc)
     {
-        return SharedHeap<TextureView>();
+        SharedHeap<TextureView> pView = CreateTextureViewCore(desc);
+        RegisterChild(pView.QueryAs<GraphicsDeviceObject>());
+        return pView;
     }
-    SharedHeap<Framebuffer> GraphicsDevice::CreateFramebuffer(const FramebufferDesc& desc)
-    {
-        return SharedHeap<Framebuffer>();
-    }
+ 
     SharedHeap<CommandList> GraphicsDevice::CreateCommandList(const CommandListDesc& desc)
     {
-        return SharedHeap<CommandList>();
+        SharedHeap<CommandList> pCmdList = CreateCommandListCore(desc);
+        RegisterChild(pCmdList.QueryAs<GraphicsDeviceObject>());
+        return pCmdList;
     }
     SharedHeap<CommandPool> GraphicsDevice::CreateCommandPool(const CommandPoolDesc& desc)
     {
-        return SharedHeap<CommandPool>();
+        SharedHeap<CommandPool> pCmdPool = CreateCommandPoolCore(desc);
+        RegisterChild(pCmdPool.QueryAs<GraphicsDeviceObject>());
+        return pCmdPool;
     }
-    SharedHeap<Pipeline> GraphicsDevice::CreatePipeline(const PipelineDesc& desc)
+    SharedHeap<Pipeline> GraphicsDevice::CreateGraphicsPipeline(const GraphicsPipelineDesc& desc)
     {
-        return SharedHeap<Pipeline>();
+        /**
+        * Check pipeline shaders
+        */
+        DEV_ASSERT(desc.GraphicsShaders.GetSize() > 0, "GraphicsDevice", "Pipeline without shaders is invalid!");
+
+        /**
+        * Create and register pipeline
+        */
+        SharedHeap<Pipeline> pPipeline = CreateGraphicsPipelineCore(desc);
+        RegisterChild(pPipeline.QueryAs<GraphicsDeviceObject>());
+        return pPipeline;
+    }
+    SharedHeap<Pipeline> GraphicsDevice::CreateComputePipeline(const ComputePipelineDesc& desc)
+    {
+        /**
+        * Check pipeline shaders
+        */
+        DEV_ASSERT(!desc.ComputeShader.IsShutdown(), "GraphicsDevice", "Pipeline without shaders is invalid!");
+
+        /**
+        * Create and register pipeline
+        */
+        SharedHeap<Pipeline> pPipeline = CreateComputePipeline(desc);
+        RegisterChild(pPipeline.QueryAs<GraphicsDeviceObject>());
+        return pPipeline;
     }
     SharedHeap<GraphicsMemoryHeap> GraphicsDevice::CreateMemoryHeap(const GraphicsMemoryHeapDesc& desc)
     {
-        return SharedHeap<GraphicsMemoryHeap>();
+        SharedHeap<GraphicsMemoryHeap> pHeap = CreateMemoryHeapCore(desc);
+        RegisterChild(pHeap.QueryAs<GraphicsDeviceObject>());
+        return pHeap;
     }
     SharedHeap<GraphicsBuffer> GraphicsDevice::CreateBuffer(const GraphicsBufferDesc& desc)
     {
-        return SharedHeap<GraphicsBuffer>();
+        SharedHeap<GraphicsBuffer> pBuffer = CreateBufferCore(desc);
+        RegisterChild(pBuffer.QueryAs<GraphicsDeviceObject>());
+        return pBuffer;
     }
     SharedHeap<Shader> GraphicsDevice::CreateShader(const ShaderDesc& desc)
     {
-        return SharedHeap<Shader>();
+        SharedHeap<Shader> pShader = CreateShaderCore(desc);
+        RegisterChild(pShader.QueryAs<GraphicsDeviceObject>());
+        return pShader;
     }
     SharedHeap<Sampler> GraphicsDevice::CreateSampler(const SamplerDesc& desc)
     {
-        return SharedHeap<Sampler>();
+        SharedHeap<Sampler> pSampler = CreateSamplerCore(desc);
+        RegisterChild(pSampler.QueryAs<GraphicsDeviceObject>());
+        return pSampler;
     }
     SharedHeap<ResourceTableLayout> GraphicsDevice::CreateResourceTableLayout(const ResourceTableLayoutDesc& desc)
     {
-        return SharedHeap<ResourceTableLayout>();
+        SharedHeap<ResourceTableLayout> pDescriptorLayout = CreateResourceTableLayoutCore(desc);
+        RegisterChild(pDescriptorLayout.QueryAs<GraphicsDeviceObject>());
+        return pDescriptorLayout;
     }
     SharedHeap<ResourceTablePool> GraphicsDevice::CreateResourceTablePooLDesc(const ResourceTablePoolDesc& desc)
     {
-        return SharedHeap<ResourceTablePool>();
+        SharedHeap<ResourceTablePool> pPool = CreateResourceTablePoolCore(desc);
+        RegisterChild(pPool.QueryAs<GraphicsDeviceObject>());
+        return pPool;
     }
     SharedHeap<ResourceTable> GraphicsDevice::CreateResourceTable(const ResourceTableDesc& desc)
     {
-        return SharedHeap<ResourceTable>();
-    }
-    SharedHeap<GraphicsQueue> GraphicsDevice::CreateQueue(const GraphicsQueueDesc& desc)
-    {
-        return SharedHeap<GraphicsQueue>();
+        SharedHeap<ResourceTable> pResourceSet = CreateResourceTableCore(desc);
+        RegisterChild(pResourceSet.QueryAs<GraphicsDeviceObject>());
+        return pResourceSet;
     }
     SharedHeap<Fence> GraphicsDevice::CreateFence()
     {
@@ -86,23 +141,29 @@ namespace Portakal
 
         return pSwapchain;
     }
-    void GraphicsDevice::WaitFences(Fence* ppFences, const byte count)
+    void GraphicsDevice::WaitFences(Fence** ppFences, const byte count)
     {
-    }
-    void GraphicsDevice::WaitQueueIdle(GraphicsQueue* pQueue)
-    {
+        WaitFencesCore(ppFences, count);
     }
     void GraphicsDevice::WaitDeviceIdle()
     {
+        WaitDeviceIdle();
     }
     void GraphicsDevice::WaitQueueDefault(const GraphicsQueueType type)
     {
+        WaitQueueDefaultCore(type);
     }
     void GraphicsDevice::UpdateHostBuffer(GraphicsBuffer* pBuffer, const GraphicsBufferHostUpdateDesc& desc)
     {
+        UpdateHostBufferCore(pBuffer, desc);
     }
     void GraphicsDevice::UpdateResourceTable(ResourceTable* pTable, const ResourceTableUpdateDesc& desc)
     {
+        UpdateResourceTableCore(pTable, desc);
+    }
+    void GraphicsDevice::SubmitCommandLists(CommandList** ppCmdLists, const byte cmdListCount, const GraphicsQueueType type, const Fence* pFence)
+    {
+        SubmitCommandListsCore(ppCmdLists, cmdListCount, type, pFence);
     }
     void GraphicsDevice::RegisterChild(const SharedHeap<GraphicsDeviceObject>& pObject)
     {

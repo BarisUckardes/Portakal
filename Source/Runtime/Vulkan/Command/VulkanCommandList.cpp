@@ -4,7 +4,7 @@
 #include <Runtime/Vulkan/Command/VulkanCommandPool.h>
 #include <Runtime/Vulkan/Fence/VulkanFence.h>
 #include <Runtime/Vulkan/Pipeline/VulkanPipeline.h>
-#include <Runtime/Vulkan/Resource/VulkanDescriptorPool.h>
+#include <Runtime/Vulkan/Resource/VulkanResourcePool.h>
 #include <Runtime/Vulkan/Resource/VulkanResourceTable.h>
 #include <Runtime/Vulkan/Sampler/VulkanSampler.h>
 #include <Runtime/Vulkan/Swapchain/VulkanSwapchain.h>
@@ -194,6 +194,12 @@ namespace Portakal
     void VulkanCommandList::OnShutdown()
     {
 
+    }
+    void VulkanCommandList::BeginRenderPassCore(const RenderPass* pRenderPass)
+    {
+    }
+    void VulkanCommandList::EndRenderPassCore()
+    {
     }
     void VulkanCommandList::SetViewportsCore(const ViewportDesc* pViewports, const byte count)
     {

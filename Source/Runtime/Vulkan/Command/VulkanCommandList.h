@@ -50,6 +50,10 @@ namespace Portakal
         virtual void OnShutdown() override;
     private:
         VkCommandBuffer mCommandBuffer;
+
+        // Inherited via CommandList
+        void BeginRenderPassCore(const RenderPass* pRenderPass) override;
+        void EndRenderPassCore() override;
     };
 
 }

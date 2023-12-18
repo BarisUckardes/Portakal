@@ -1,4 +1,5 @@
 #include "Swapchain.h"
+#include <Runtime/Graphics/Device/GraphicsDevice.h>
 
 namespace Portakal
 {

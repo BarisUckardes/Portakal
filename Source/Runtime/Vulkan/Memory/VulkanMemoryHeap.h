@@ -18,5 +18,9 @@ namespace Portakal
 	private:
 		VkDeviceMemory mMemory;
 		VkDevice mLogicalDevice;
+
+		// Inherited via GraphicsMemoryHeap
+		void OnShutdown() override;
+		MemoryHandle AllocateCore(const uint64 offsetInBytes) override;
 	};
 }

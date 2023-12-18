@@ -21,4 +21,11 @@ namespace Portakal
 		DEV_ASSERT(vkAllocateMemory(mLogicalDevice, &info, nullptr, &mMemory) == VK_SUCCESS, "VulkanMemoryHeap", "Failed to allocate memory!");
 
 	}
+	void VulkanMemoryHeap::OnShutdown()
+	{
+	}
+	MemoryHandle VulkanMemoryHeap::AllocateCore(const uint64 offsetInBytes)
+	{
+		return offsetInBytes;
+	}
 }

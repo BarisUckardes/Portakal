@@ -1,6 +1,6 @@
 #include "VulkanResourceTable.h"
 #include <Runtime/Vulkan/Resource/VulkanResourceTableLayout.h>
-#include <Runtime/Vulkan/Resource/VulkanDescriptorPool.h>
+#include <Runtime/Vulkan/Resource/VulkanResourcePool.h>
 #include <Runtime/Vulkan/Device/VulkanDevice.h>
 
 namespace Portakal
@@ -9,7 +9,7 @@ namespace Portakal
     VulkanResourceTable::VulkanResourceTable(const ResourceTableDesc& desc, VulkanDevice* pDevice) :
         ResourceTable(desc), mDescriptorSet(VK_NULL_HANDLE), mLogicalDevice(pDevice->GetVkLogicalDevice()), mPool(VK_NULL_HANDLE)
     {
-        const VulkanDescriptorPool* pVkPool = (const VulkanDescriptorPool*)desc.pOwnerPool;
+        const VulkanResourcePool* pVkPool = (const VulkanResourcePool*)desc.pOwnerPool;
         const VulkanResourceTableLayout* pVkLayout = (const VulkanResourceTableLayout*)desc.pTargetLayout;
 
         /**

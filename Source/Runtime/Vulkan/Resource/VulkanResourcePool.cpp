@@ -1,10 +1,10 @@
-#include "VulkanDescriptorPool.h"
+#include "VulkanResourcePool.h"
 #include <Runtime/Vulkan/Device/VulkanDevice.h>
 #include <Runtime/Vulkan/Resource/VulkanResourceUtils.h>
 
 namespace Portakal
 {
-    VulkanDescriptorPool::VulkanDescriptorPool(const ResourceTablePoolDesc& desc, VulkanDevice* pDevice) : ResourceTablePool(desc), mPool(VK_NULL_HANDLE), mLogicalDevice(pDevice->GetVkLogicalDevice())
+    VulkanResourcePool::VulkanResourcePool(const ResourceTablePoolDesc& desc, VulkanDevice* pDevice) : ResourceTablePool(desc), mPool(VK_NULL_HANDLE), mLogicalDevice(pDevice->GetVkLogicalDevice())
     {
         /**
         * Create descriptor pool
@@ -28,10 +28,10 @@ namespace Portakal
         createInfo.maxSets = desc.MaxTables;
         createInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
 
-        DEV_ASSERT(vkCreateDescriptorPool(pDevice->GetVkLogicalDevice(), &createInfo, nullptr, &mPool) == VK_SUCCESS, "VulkanDescriptorPool", "Failed to create descriptor pool");
+        DEV_ASSERT(vkCreateDescriptorPool(pDevice->GetVkLogicalDevice(), &createInfo, nullptr, &mPool) == VK_SUCCESS, "VulkanResourcePool", "Failed to create descriptor pool");
     }
 
-    void VulkanDescriptorPool::OnShutdown()
+    void VulkanResourcePool::OnShutdown()
     {
         vkDestroyDescriptorPool(mLogicalDevice, mPool, nullptr);
         mPool = VK_NULL_HANDLE;

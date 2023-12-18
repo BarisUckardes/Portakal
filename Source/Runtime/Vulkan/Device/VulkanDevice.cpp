@@ -2,6 +2,21 @@
 #include <Runtime/Vulkan/Adapter/VulkanAdapter.h>
 #include <Runtime/Vulkan/Swapchain/VulkanSwapchain.h>
 #include <Runtime/Vulkan/Fence/VulkanFence.h>
+#include <Runtime/Vulkan/Buffer/VulkanBuffer.h>
+#include <Runtime/Vulkan/Command/VulkanCommandPool.h>
+#include <Runtime/Vulkan/Command/VulkanCommandList.h>
+#include <Runtime/Vulkan/Memory/VulkanMemoryHeap.h>
+#include <Runtime/Vulkan/Pipeline/VulkanPipeline.h>
+#include <Runtime/Vulkan/RenderPass/VulkanRenderPass.h>
+#include <Runtime/Vulkan/Resource/VulkanResourceTable.h>
+#include <Runtime/Vulkan/Resource/VulkanResourceTableLayout.h>
+#include <Runtime/Vulkan/Resource/VulkanResourcePool.h>
+#include <Runtime/Vulkan/Sampler/VulkanSampler.h>
+#include <Runtime/Vulkan/Shader/VulkanShader.h>
+#include <Runtime/Vulkan/Swapchain/VulkanSwapchain.h>
+#include <Runtime/Vulkan/Texture/VulkanTexture.h>
+#include <Runtime/Vulkan/Texture/VulkanTextureView.h>
+#include <Runtime/Vulkan/Resource/VulkanResourceUtils.h>
 
 namespace Portakal
 {
@@ -155,51 +170,45 @@ namespace Portakal
     }
     Texture* VulkanDevice::CreateTextureCore(const TextureDesc& desc)
     {
-        return nullptr;
+        return new VulkanTexture(desc,this);
     }
     TextureView* VulkanDevice::CreateTextureViewCore(const TextureViewDesc& desc)
     {
-        return nullptr;
+        return new VulkanTextureView(desc,this);
     }
-    Framebuffer* VulkanDevice::CreateFramebufferCore(const FramebufferDesc& desc)
-    {
-        return nullptr;
-    }
+   
     CommandList* VulkanDevice::CreateCommandListCore(const CommandListDesc& desc)
     {
-        return nullptr;
+        return new VulkanCommandList(desc,this);
     }
-    Pipeline* VulkanDevice::CreatePipelineCore(const PipelineDesc& desc)
-    {
-        return nullptr;
-    }
+   
     GraphicsMemoryHeap* VulkanDevice::CreateMemoryHeapCore(const GraphicsMemoryHeapDesc& desc)
     {
-        return nullptr;
+        return new VulkanMemoryHeap(desc,this);
     }
     GraphicsBuffer* VulkanDevice::CreateBufferCore(const GraphicsBufferDesc& desc)
     {
-        return nullptr;
+        return new VulkanBuffer(desc,this);
     }
     Shader* VulkanDevice::CreateShaderCore(const ShaderDesc& desc)
     {
-        return nullptr;
+        return new VulkanShader(desc,this);
     }
     Sampler* VulkanDevice::CreateSamplerCore(const SamplerDesc& desc)
     {
-        return nullptr;
+        return new VulkanSampler(desc,this);
     }
     ResourceTableLayout* VulkanDevice::CreateResourceTableLayoutCore(const ResourceTableLayoutDesc& desc)
     {
-        return nullptr;
+        return new VulkanResourceTableLayout(desc,this);
     }
     ResourceTablePool* VulkanDevice::CreateResourceTablePoolCore(const ResourceTablePoolDesc& desc)
     {
-        return nullptr;
+        return new VulkanResourcePool(desc,this);
     }
     ResourceTable* VulkanDevice::CreateResourceTableCore(const ResourceTableDesc& desc)
     {
-        return nullptr;
+        return new VulkanResourceTable(desc,this);
     }
     Fence* VulkanDevice::CreateFenceCore()
     {
@@ -208,5 +217,184 @@ namespace Portakal
     Swapchain* VulkanDevice::CreateSwapchainCore(const SwapchainDesc& desc)
     {
         return new VulkanSwapchain(desc,this);
+    }
+    CommandPool* VulkanDevice::CreateCommandPoolCore(const CommandPoolDesc& desc)
+    {
+        return new VulkanCommandPool(desc,this);
+    }
+    Pipeline* VulkanDevice::CreateGraphicsPipelineCore(const GraphicsPipelineDesc& desc)
+    {
+        return new VulkanPipeline(desc,this);
+    }
+    SharedHeap<Pipeline> VulkanDevice::CreateComputePipelineCore(const ComputePipelineDesc& desc)
+    {
+        return new VulkanPipeline(desc, this);
+    }
+    void VulkanDevice::WaitFencesCore(Fence** ppFences, const byte count)
+    {
+        VkFence vkFences[128];
+
+        for (uint32 fenceIndex = 0; fenceIndex < count; fenceIndex++)
+        {
+            const VulkanFence* pVkFence = (const VulkanFence*)ppFences[fenceIndex];
+
+            vkFences[fenceIndex] = pVkFence->GetVkFence();
+        }
+
+        DEV_ASSERT(vkWaitForFences(mLogicalDevice, count, vkFences, VK_TRUE, UINT64_MAX) == VK_SUCCESS, "VulkanGraphicsDevice", "Failed to wait fences[%d]", count);
+        DEV_ASSERT(vkResetFences(mLogicalDevice, count, vkFences) == VK_SUCCESS, "VulkanGraphicsDevice", "Failed to reset fences[%hhu]", count);
+    }
+    void VulkanDevice::WaitDeviceIdleCore()
+    {
+        vkDeviceWaitIdle(mLogicalDevice);
+    }
+    void VulkanDevice::WaitQueueDefaultCore(const GraphicsQueueType type)
+    {
+        switch (type)
+        {
+            case GraphicsQueueType::Graphics:
+            default:
+            {
+                vkQueueWaitIdle(mGraphicsQueueFamily.DefaultQueue);
+                break;
+            }
+            case GraphicsQueueType::Compute:
+            {
+                vkQueueWaitIdle(mComputeQueueFamily.DefaultQueue);
+                break;
+            }
+            case GraphicsQueueType::Transfer:
+            {
+                vkQueueWaitIdle(mTransferQueueFamily.DefaultQueue);
+                break;
+            }
+        }
+    }
+    void VulkanDevice::UpdateHostBufferCore(GraphicsBuffer* pBuffer, const GraphicsBufferHostUpdateDesc& desc)
+    {
+        const VulkanMemoryHeap* pHeap = (const VulkanMemoryHeap*)pBuffer->GetGraphicsHeap().GetHeap();
+
+        byte* pTargetHostData = nullptr;
+        vkMapMemory(mLogicalDevice, pHeap->GetVkMemory(), pBuffer->GetAlignedMemoryHandle() + desc.OffsetInBytes, desc.View.GetSize(), 0, (void**)&pTargetHostData);
+        Memory::Copy((void*)desc.View.GetMemory(), pTargetHostData, desc.View.GetSize());
+        vkUnmapMemory(mLogicalDevice, pHeap->GetVkMemory());
+    }
+    void VulkanDevice::UpdateResourceTableCore(ResourceTable* pTable, const ResourceTableUpdateDesc& desc)
+    {
+        VkWriteDescriptorSet writeInformation[32];
+        VkDescriptorBufferInfo writeBufferInformation[32];
+        VkDescriptorImageInfo writeImageInformation[32];
+
+        const VulkanResourceTable* pVkSet = (const VulkanResourceTable*)pTable;
+
+        for (byte entryIndex = 0; entryIndex < desc.Entries.GetSize(); entryIndex++)
+        {
+            const ResourceTableUpdateEntry& entry = desc.Entries[entryIndex];
+
+            VkWriteDescriptorSet writeInfo = {};
+            writeInfo.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            writeInfo.pNext = nullptr;
+            writeInfo.pBufferInfo = nullptr;
+            writeInfo.pImageInfo = nullptr;
+            writeInfo.descriptorType = VulkanResourceUtils::GetDescriptorType(entry.Type);
+            writeInfo.descriptorCount = 1;
+            writeInfo.dstArrayElement = entry.ArrayElement;
+            writeInfo.dstBinding = entry.Binding;
+            writeInfo.dstSet = pVkSet->GetVkDescriptorSet();
+
+            switch (entry.Type)
+            {
+            case GraphicsResourceType::Sampler:
+            {
+                const VulkanSampler* pSampler = (const VulkanSampler*)entry.pResource.GetHeap();
+
+                VkDescriptorImageInfo samplerImageInfo = {};
+                samplerImageInfo.imageView = VK_NULL_HANDLE;
+                samplerImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                samplerImageInfo.sampler = pSampler->GetVkSampler();
+                writeImageInformation[entryIndex] = samplerImageInfo;
+                writeInfo.pImageInfo = &writeImageInformation[entryIndex];
+                break;
+            }
+            case GraphicsResourceType::CombinedTextureSampler:
+            {
+                break;
+            }
+            case GraphicsResourceType::SampledTexture:
+            case GraphicsResourceType::StorageTexture:
+            {
+                const VulkanTextureView* Texture = (const VulkanTextureView*)entry.pResource.GetHeap();
+
+                VkDescriptorImageInfo samplerImageInfo = {};
+                samplerImageInfo.imageView = Texture->GetVkImageView();
+                samplerImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                samplerImageInfo.sampler = VK_NULL_HANDLE;
+                writeImageInformation[entryIndex] = samplerImageInfo;
+                writeInfo.pImageInfo = &writeImageInformation[entryIndex];
+                break;
+            }
+            case GraphicsResourceType::ConstantBuffer:
+            case GraphicsResourceType::StorageBuffer:
+            {
+                const VulkanBuffer* pBuffer = (const VulkanBuffer*)entry.pResource.GetHeap();
+
+                VkDescriptorBufferInfo bufferInfo = {};
+                bufferInfo.buffer = pBuffer->GetVkBuffer();
+                bufferInfo.offset = entry.BufferOffsetInBytes;
+                bufferInfo.range = pBuffer->GetTotalSize();
+                writeBufferInformation[entryIndex] = bufferInfo;
+                writeInfo.pBufferInfo = &writeBufferInformation[entryIndex];
+
+                break;
+            }
+            }
+
+            writeInformation[entryIndex] = writeInfo;
+        }
+
+        vkUpdateDescriptorSets(mLogicalDevice, desc.Entries.GetSize(), writeInformation, 0, nullptr);
+    }
+    void VulkanDevice::SubmitCommandListsCore(CommandList** ppCmdLists, const byte cmdListCount, const GraphicsQueueType type, const Fence* pFence)
+    {
+        const VulkanFence* pVkFence = (const VulkanFence*)pFence;
+        VkCommandBuffer cmdBuffers[10];
+
+        for (uint32 cmdListIndex = 0; cmdListIndex < cmdListCount; cmdListIndex++)
+        {
+            const VulkanCommandList* pCmdList = (const VulkanCommandList*)ppCmdLists[cmdListIndex];
+
+            cmdBuffers[cmdListIndex] = pCmdList->GetVkCommandBuffer();
+        }
+
+        VkSubmitInfo submitInfo = {};
+        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        submitInfo.pNext = nullptr;
+        submitInfo.waitSemaphoreCount = 0;
+        submitInfo.pWaitSemaphores = nullptr;
+        submitInfo.pCommandBuffers = cmdBuffers;
+        submitInfo.commandBufferCount = cmdListCount;
+
+        switch (type)
+        {
+        case GraphicsQueueType::Graphics:
+        default:
+        {
+            DEV_ASSERT(vkQueueSubmit(mGraphicsQueueFamily.DefaultQueue, 1, &submitInfo, pVkFence != nullptr ? pVkFence->GetVkFence() : nullptr) == VK_SUCCESS, "VulkanGraphicsDevice",
+                "Failed to submit command lists to the graphics queue");
+            break;
+        }
+        case GraphicsQueueType::Compute:
+        {
+            DEV_ASSERT(vkQueueSubmit(mComputeQueueFamily.DefaultQueue, 1, &submitInfo, pVkFence != nullptr ? pVkFence->GetVkFence() : nullptr) == VK_SUCCESS, "VulkanGraphicsDevice",
+                "Failed to submit command lists to the compute queue");
+            break;
+        }
+        case GraphicsQueueType::Transfer:
+        {
+            DEV_ASSERT(vkQueueSubmit(mTransferQueueFamily.DefaultQueue, 1, &submitInfo, pVkFence != nullptr ? pVkFence->GetVkFence() : nullptr) == VK_SUCCESS, "VulkanGraphicsDevice",
+                "Failed to submit command lists to the transfer queue");
+            break;
+        }
+        }
     }
 }

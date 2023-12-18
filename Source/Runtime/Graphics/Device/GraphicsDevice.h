@@ -6,6 +6,33 @@
 #include <Runtime/Graphics/Device/GraphicsDeviceDesc.h>
 #include <Runtime/Containers/Array.h>
 
+#include <Runtime/Graphics/Texture/TextureDesc.h>
+#include <Runtime/Graphics/Texture/TextureViewDesc.h>
+
+#include <Runtime/Graphics/Command/CommandListDesc.h>
+#include <Runtime/Graphics/Command/CommandPoolDesc.h>
+
+#include <Runtime/Graphics/Pipeline/GraphicsPipelineDesc.h>
+#include <Runtime/Graphics/Pipeline/ComputePipelineDesc.h>
+
+#include <Runtime/Graphics/Memory/GraphicsMemoryHeapDesc.h>
+#include <Runtime/Graphics/Buffer/GraphicsBufferDesc.h>
+
+#include <Runtime/Graphics/Shader/ShaderDesc.h>
+#include <Runtime/Graphics/Sampler/SamplerDesc.h>
+
+#include <Runtime/Graphics/Resource/ResourceTableLayoutDesc.h>
+#include <Runtime/Graphics/Resource/ResourceTableDesc.h>
+#include <Runtime/Graphics/Resource/ResourceTablePoolDesc.h>
+
+
+#include <Runtime/Graphics/Buffer/GraphicsBufferHostUpdateDesc.h>
+#include <Runtime/Graphics/Resource/ResourceTableUpdateDesc.h>
+#include <Runtime/Graphics/Pipeline/GraphicsPipelineDesc.h>
+#include <Runtime/Graphics/Pipeline/ComputePipelineDesc.h>
+#include <Runtime/Graphics/Swapchain/SwapchainDesc.h>
+
+
 namespace Portakal
 {
 	class CommandList;
@@ -27,23 +54,7 @@ namespace Portakal
 	class Swapchain;
 	class GraphicsAdapter;
 
-	struct TextureDesc;
-	struct TextureViewDesc;
-	struct FramebufferDesc;
-	struct CommandListDesc;
-	struct CommandPoolDesc;
-	struct PipelineDesc;
-	struct GraphicsMemoryHeapDesc;
-	struct GraphicsBufferDesc;
-	struct ShaderDesc;
-	struct SamplerDesc;
-	struct ResourceTableLayoutDesc;
-	struct ResourceTablePoolDesc;
-	struct ResourceTableDesc;
-	struct GraphicsQueueDesc;
-	struct SwapchainDesc;
-	struct GraphicsBufferHostUpdateDesc;
-	struct ResourceTableUpdateDesc;
+	
 	class RUNTIME_API GraphicsDevice : public Object
 	{
 	public:
@@ -58,10 +69,10 @@ namespace Portakal
 
 		SharedHeap<Texture> CreateTexture(const TextureDesc& desc);
 		SharedHeap<TextureView> CreateTextureView(const TextureViewDesc& desc);
-		SharedHeap<Framebuffer> CreateFramebuffer(const FramebufferDesc& desc);
 		SharedHeap<CommandList> CreateCommandList(const CommandListDesc& desc);
 		SharedHeap<CommandPool> CreateCommandPool(const CommandPoolDesc& desc);
-		SharedHeap<Pipeline> CreatePipeline(const PipelineDesc& desc);
+		SharedHeap<Pipeline> CreateGraphicsPipeline(const GraphicsPipelineDesc& desc);
+		SharedHeap<Pipeline> CreateComputePipeline(const ComputePipelineDesc& desc);
 		SharedHeap<GraphicsMemoryHeap> CreateMemoryHeap(const GraphicsMemoryHeapDesc& desc);
 		SharedHeap<GraphicsBuffer> CreateBuffer(const GraphicsBufferDesc& desc);
 		SharedHeap<Shader> CreateShader(const ShaderDesc& desc);
@@ -69,28 +80,29 @@ namespace Portakal
 		SharedHeap<ResourceTableLayout> CreateResourceTableLayout(const ResourceTableLayoutDesc& desc);
 		SharedHeap<ResourceTablePool> CreateResourceTablePooLDesc(const ResourceTablePoolDesc& desc);
 		SharedHeap<ResourceTable> CreateResourceTable(const ResourceTableDesc& desc);
-		SharedHeap<GraphicsQueue> CreateQueue(const GraphicsQueueDesc& desc);
 		SharedHeap<Fence> CreateFence();
 		SharedHeap<Swapchain> CreateSwapchain(const SwapchainDesc& desc);
 		FORCEINLINE GraphicsAdapter* GetOwnerAdapter() const noexcept
 		{
 			return mOwnerAdapter;
 		}
-		void WaitFences(Fence* ppFences, const byte count);
-		void WaitQueueIdle(GraphicsQueue* pQueue);
+
+		void WaitFences(Fence** ppFences, const byte count);
 		void WaitDeviceIdle();
 		void WaitQueueDefault(const GraphicsQueueType type);
 		void UpdateHostBuffer(GraphicsBuffer* pBuffer, const GraphicsBufferHostUpdateDesc& desc);
 		void UpdateResourceTable(ResourceTable* pTable, const ResourceTableUpdateDesc& desc);
+		void SubmitCommandLists(CommandList** ppCmdLists, const byte cmdListCount, const GraphicsQueueType type, const Fence* pFence);
 	protected:
 		void RegisterChild(const SharedHeap<GraphicsDeviceObject>& pObject);
 		void RemoveChild(const SharedHeap<GraphicsDeviceObject>& pObject);
 
 		virtual Texture* CreateTextureCore(const TextureDesc& desc) = 0;
 		virtual TextureView* CreateTextureViewCore(const TextureViewDesc& desc) = 0;
-		virtual Framebuffer* CreateFramebufferCore(const FramebufferDesc& desc) = 0;
 		virtual CommandList* CreateCommandListCore(const CommandListDesc& desc) = 0;
-		virtual Pipeline* CreatePipelineCore(const PipelineDesc& desc) = 0;
+		virtual CommandPool* CreateCommandPoolCore(const CommandPoolDesc& desc) = 0;
+		virtual Pipeline* CreateGraphicsPipelineCore(const GraphicsPipelineDesc& desc) = 0;
+		virtual SharedHeap<Pipeline> CreateComputePipelineCore(const ComputePipelineDesc& desc) = 0;
 		virtual GraphicsMemoryHeap* CreateMemoryHeapCore(const GraphicsMemoryHeapDesc& desc) = 0;
 		virtual GraphicsBuffer* CreateBufferCore(const GraphicsBufferDesc& desc) = 0;
 		virtual Shader* CreateShaderCore(const ShaderDesc& desc) = 0;
@@ -100,6 +112,13 @@ namespace Portakal
 		virtual ResourceTable* CreateResourceTableCore(const ResourceTableDesc& desc) = 0;
 		virtual Fence* CreateFenceCore() = 0;
 		virtual Swapchain* CreateSwapchainCore(const SwapchainDesc& desc) = 0;
+
+		virtual void WaitFencesCore(Fence** ppFences, const byte count) = 0;
+		virtual void WaitDeviceIdleCore() = 0;
+		virtual void WaitQueueDefaultCore(const GraphicsQueueType type) = 0;
+		virtual void UpdateHostBufferCore(GraphicsBuffer* pBuffer, const GraphicsBufferHostUpdateDesc& desc) = 0;
+		virtual void UpdateResourceTableCore(ResourceTable* pTable, const ResourceTableUpdateDesc& desc) = 0;
+		virtual void SubmitCommandListsCore(CommandList** ppCmdLists, const byte cmdListCount, const GraphicsQueueType type, const Fence* pFence) = 0;
 	private:
 		Array<SharedHeap<GraphicsDeviceObject>> mChilds;
 		SharedHeap<Swapchain> mMainSwapchain;

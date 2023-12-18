@@ -21,6 +21,10 @@ namespace Portakal
 		{
 			return mAlignedMemory;
 		}
+		FORCEINLINE SharedHeap<GraphicsMemoryHeap> GetGraphicsHeap() const noexcept
+		{
+			return mHeap;
+		}
 
 	protected:
 		void Allocate(const uint64 size);

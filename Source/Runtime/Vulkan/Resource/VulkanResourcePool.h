@@ -5,11 +5,11 @@
 namespace Portakal
 {
     class VulkanDevice;
-    class RUNTIME_API VulkanDescriptorPool : public ResourceTablePool
+    class RUNTIME_API VulkanResourcePool : public ResourceTablePool
     {
     public:
-        VulkanDescriptorPool(const ResourceTablePoolDesc& desc, VulkanDevice* pDevice);
-        ~VulkanDescriptorPool() = default;
+        VulkanResourcePool(const ResourceTablePoolDesc& desc, VulkanDevice* pDevice);
+        ~VulkanResourcePool() = default;
 
         FORCEINLINE VkDescriptorPool GetVkDescriptorPool() const noexcept { return mPool; }
     private:
