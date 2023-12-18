@@ -16,21 +16,12 @@ namespace Portakal
 		{
 			return mImage;
 		}
-		FORCEINLINE MemoryHandle GetVkMemoryHandle() const noexcept
-		{
-			return mMemoryHandle;
-		}
-		FORCEINLINE MemoryHandle GetVkAlignedMemoryHandle() const noexcept
-		{
-			return mAlignedMemoryHandle;
-		}
 
 		virtual void OnShutdown() override;
 	private:
 		const bool mSwapchain;
 		VkImage mImage;
 		VkDevice mLogicalDevice;
-		MemoryHandle mMemoryHandle;
-		MemoryHandle mAlignedMemoryHandle;
+
 	};
 }

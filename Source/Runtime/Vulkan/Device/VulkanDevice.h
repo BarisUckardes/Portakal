@@ -51,6 +51,18 @@ namespace Portakal
 
         FORCEINLINE int32 GetPresentQueueFamilyIndex(const VkSurfaceKHR surface) const noexcept;
         FORCEINLINE VkQueue GetPresentQueue(const VkSurfaceKHR surface) const noexcept;
+        FORCEINLINE int32 GetGraphicsQueueFamilyIndex()
+        {
+            return mGraphicsQueueFamily.FamilyIndex;
+        }
+        FORCEINLINE int32 GetComputeQueueFamilyIndex()
+        {
+            return mComputeQueueFamily.FamilyIndex;
+        }
+        FORCEINLINE int32 GetTransfersQueueFamilyIndex()
+        {
+            return mTransferQueueFamily.FamilyIndex;
+        }
         FORCEINLINE VkDevice GetVkLogicalDevice() const noexcept { return mLogicalDevice; }
 	private:
 		// Inherited via GraphicsDevice
@@ -74,7 +86,6 @@ namespace Portakal
         DeviceQueueFamily mGraphicsQueueFamily;
         DeviceQueueFamily mComputeQueueFamily;
         DeviceQueueFamily mTransferQueueFamily;
-        DeviceQueueFamily mPresentQueueFamily;
         VkDevice mLogicalDevice;
         VkPhysicalDevice mPhysicalDevice;
 	};

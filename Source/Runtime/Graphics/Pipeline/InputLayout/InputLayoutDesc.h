@@ -6,7 +6,7 @@ namespace Portakal
 {
     struct RUNTIME_API InputLayoutDesc
     {
-        PrimitiveTopology Topology;
+        MeshTopology Topology;
         Array <InputBinding> Bindings;
     };
 }

@@ -7,7 +7,7 @@ namespace Portakal
     VulkanTextureView::VulkanTextureView(const TextureViewDesc& desc, VulkanDevice* pDevice) : TextureView(desc),mLogicalDevice(pDevice->GetVkLogicalDevice())
     {
         //Get vulkan texture
-        const VulkanTexture* pTexture = (const VulkanTexture*)desc.pTexture.GetHeap();
+        const VulkanTexture* pTexture = (VulkanTexture*)desc.pTexture.GetHeap();
         constexpr VkComponentMapping swizzleMap = {
             VK_COMPONENT_SWIZZLE_R,
             VK_COMPONENT_SWIZZLE_G,

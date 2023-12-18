@@ -5,11 +5,11 @@
 
 namespace Portakal
 {
-    VulkanTexture::VulkanTexture(const TextureDesc& desc, const VkImage image, VulkanDevice* pDevice) : Texture(desc,true),mSwapchain(true),mLogicalDevice(pDevice->GetVkLogicalDevice()),mMemoryHandle(uint64_max),mAlignedMemoryHandle(uint64_max),mImage(image)
+    VulkanTexture::VulkanTexture(const TextureDesc& desc, const VkImage image, VulkanDevice* pDevice) : Texture(desc,true),mSwapchain(true),mLogicalDevice(pDevice->GetVkLogicalDevice()),mImage(image)
     {
         
     }
-    VulkanTexture::VulkanTexture(const TextureDesc& desc, VulkanDevice* pDevice) : Texture(desc,false),mSwapchain(false),mLogicalDevice(pDevice->GetVkLogicalDevice()),mMemoryHandle(uint64_max),mAlignedMemoryHandle(uint64_max),mImage(VK_NULL_HANDLE)
+    VulkanTexture::VulkanTexture(const TextureDesc& desc, VulkanDevice* pDevice) : Texture(desc,false),mSwapchain(false),mLogicalDevice(pDevice->GetVkLogicalDevice()),mImage(VK_NULL_HANDLE)
     {
         //Get vulkan memory heap
         const VulkanMemoryHeap* pHeap = (const VulkanMemoryHeap*)desc.pHeap.GetHeap();
@@ -39,14 +39,18 @@ namespace Portakal
         const MemoryHandle alignedMemoryHandle = memoryHandle + (requirements.alignment - (memoryHandle & requirements.alignment));
         DEV_ASSERT(vkBindImageMemory(mLogicalDevice, mImage, pHeap->GetVkMemory(), alignedMemoryHandle),"VulkanTexture","Failed to bind the texture memory!");
 
-        mMemoryHandle = memoryHandle;
-        mAlignedMemoryHandle = alignedMemoryHandle;
+        //Set aligned handle
+        SetAlignedMemory(alignedMemoryHandle);
     }
     void VulkanTexture::OnShutdown()
     {
         if (mSwapchain)
             return;
 
+        //Cal texture impl
+        Texture::OnShutdown();
+
+        //Destroy vk image
         vkDestroyImage(mLogicalDevice, mImage, nullptr);
     }
 }

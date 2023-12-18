@@ -22,6 +22,15 @@
 #include <Runtime/Graphics/Device/GraphicsDevice.h>
 #include <Runtime/Graphics/Swapchain/Swapchain.h>
 #include <Runtime/Graphics/Memory/GraphicsMemoryHeap.h>
+#include <Runtime/Graphics/RenderPass/RenderPass.h>
+#include <Runtime/Graphics/Buffer/GraphicsBuffer.h>
+#include <Runtime/Graphics/Sampler/Sampler.h>
+#include <Runtime/Graphics/Shader/Shader.h>
+#include <Runtime/Graphics/Command/CommandList.h>
+#include <Runtime/Graphics/Pipeline/Pipeline.h>
+#include <Runtime/Graphics/Resource/ResourceTable.h>
+#include <Runtime/Graphics/Resource/ResourceTableLayout.h>
+#include <Runtime/Graphics/Resource/ResourceTablePool.h>
 
 int main(const unsigned int argumentCount, const char** ppArguments)
 {

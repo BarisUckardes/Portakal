@@ -1,6 +1,6 @@
 #pragma once
-#include <Runtime/Graphics/Common/PolygonMode.h>
-#include <Runtime/Graphics/Common/FaceCullMode.h>
+#include <Runtime/Graphics/Pipeline/RasterizerState/PolygonMode.h>
+#include <Runtime/Graphics/Pipeline/RasterizerState/FaceCullMode.h>
 
 namespace Portakal
 {

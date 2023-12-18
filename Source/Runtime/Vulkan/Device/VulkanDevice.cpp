@@ -40,7 +40,6 @@ namespace Portakal
         DEV_ASSERT(mGraphicsQueueFamily.QueueCapacity != 0, "GraphicsDevice", "There is no queue for vk graphics queue family!");
         DEV_ASSERT(mComputeQueueFamily.QueueCapacity != 0, "GraphicsDevice", "There is no queue for vk compute queue family");
         DEV_ASSERT(mTransferQueueFamily.QueueCapacity != 0, "GraphicsDevice", "There is no queue for vk transfer queue family");
-        //DEV_ASSERT(mPresentQueueFamily.QueueCapacity != 0, "GraphicsDevice", "There is no queue for vk present queue family");
 
         //Get queues
         constexpr float queuePriorities[] = { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f };

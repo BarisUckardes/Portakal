@@ -3,9 +3,10 @@
 #include <Runtime/Graphics/Shader/Shader.h>
 
 namespace Portakal
+{
     class ResourceLayout;
 
-    struct PORTAKAL_API ComputePipelineDesc
+    struct RUNTIME_API ComputePipelineDesc
     {
         Array<ResourceLayout*> ResourceLayouts;
         SharedHeap<Shader> ComputeShader;
