@@ -4,10 +4,12 @@
 #include <Runtime/Graphics/Texture/TextureSampleCount.h>
 #include <Runtime/Graphics/Texture/TextureType.h>
 #include <Runtime/Graphics/Texture/TextureFormat.h>
+#include <Runtime/Graphics/Texture/TextureUsage.h>
+#include <Runtime/Memory/SharedHeap.h>
+#include <Runtime/Graphics/Memory/GraphicsMemoryHeap.h>
 
 namespace Portakal
 {
-	class GraphicsMemoryHeap;
 	struct RUNTIME_API TextureDesc
 	{
 		TextureType Type;

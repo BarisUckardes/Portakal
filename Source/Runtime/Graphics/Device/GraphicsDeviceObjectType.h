@@ -5,7 +5,7 @@ namespace Portakal
 {
 	enum class RUNTIME_API GraphicsDeviceObjectType : byte
 	{
-		Framebuffer,
+		RenderPass,
 		Buffer,
 		Texture,
 		TextureView,

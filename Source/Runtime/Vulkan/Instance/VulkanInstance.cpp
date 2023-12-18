@@ -16,9 +16,23 @@ namespace Portakal
         const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
         void* pUserData)
     {
-
-        DEV_LOG("VkDebugMessenger", "%s", pCallbackData->pMessage);
-
+        switch (messageSeverity)
+        {
+        case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
+            PORTAKAL_LOG(LogLevel::Info, "%s", pCallbackData->pMessage);
+            break;
+        case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
+            PORTAKAL_LOG(LogLevel::Info, "%s", pCallbackData->pMessage);
+            break;
+        case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
+            PORTAKAL_LOG(LogLevel::Warning, "%s", pCallbackData->pMessage);
+            break;
+        case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
+            PORTAKAL_LOG(LogLevel::Error, "%s", pCallbackData->pMessage);
+            break;
+        default:
+            break;
+        }
         return VK_FALSE;
     }
 #endif

@@ -21,6 +21,7 @@
 #include <Runtime/Graphics/Adapter/GraphicsAdapter.h>
 #include <Runtime/Graphics/Device/GraphicsDevice.h>
 #include <Runtime/Graphics/Swapchain/Swapchain.h>
+#include <Runtime/Graphics/Memory/GraphicsMemoryHeap.h>
 
 int main(const unsigned int argumentCount, const char** ppArguments)
 {
