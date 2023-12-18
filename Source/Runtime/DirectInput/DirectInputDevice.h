@@ -8,7 +8,7 @@ namespace Portakal
 	class RUNTIME_API DirectInputDevice
 	{
 	public:
-		DirectInputDevice(const InputDeviceType type,IDirectInputDevice8* pDevice);
+		DirectInputDevice(const InputDeviceType type, IDirectInputDevice8* pDevice);
 		~DirectInputDevice();
 	protected:
 		FORCEINLINE IDirectInputDevice8* GetDevice() const noexcept { return mDevice; }

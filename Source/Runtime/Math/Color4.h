@@ -15,7 +15,7 @@ namespace Portakal
 
 		}
 
-		Color4(const Color4& pOther) : R(pOther.R), G(pOther.G), B(pOther.B), A(pOther.A)
+		Color4(const Color4& other) : R(other.R), G(other.G), B(other.B), A(other.A)
 		{
 
 		}
@@ -25,9 +25,9 @@ namespace Portakal
 
 		}
 
-		T operator[](const byte pIndex) const
+		T operator[](const byte index) const
 		{
-			switch (pIndex)
+			switch (index)
 			{
 			case 0:
 				return R;
@@ -42,124 +42,124 @@ namespace Portakal
 			}
 		}
 
-		Color4& operator=(const Color4& pOther)
+		Color4& operator=(const Color4& other)
 		{
-			R = pOther.R;
-			G = pOther.G;
-			B = pOther.B;
-			A = pOther.A;
+			R = other.R;
+			G = other.G;
+			B = other.B;
+			A = other.A;
 
 			return *this;
 		}
 
-		Color4& operator+=(const Color4& pOther)
+		Color4& operator+=(const Color4& other)
 		{
-			R += pOther.R;
-			G += pOther.G;
-			B += pOther.B;
-			A += pOther.A;
+			R += other.R;
+			G += other.G;
+			B += other.B;
+			A += other.A;
 
 			return *this;
 		}
 
-		Color4& operator-=(const Color4& pOther)
+		Color4& operator-=(const Color4& other)
 		{
-			R -= pOther.R;
-			G -= pOther.G;
-			B -= pOther.B;
-			A -= pOther.A;
+			R -= other.R;
+			G -= other.G;
+			B -= other.B;
+			A -= other.A;
 
 			return *this;
 		}
 
-		Color4& operator*=(const Color4& pOther)
+		Color4& operator*=(const Color4& other)
 		{
-			R *= pOther.R;
-			G *= pOther.G;
-			B *= pOther.B;
-			A *= pOther.A;
+			R *= other.R;
+			G *= other.G;
+			B *= other.B;
+			A *= other.A;
 
 			return *this;
 		}
 
-		Color4& operator/=(const Color4& pOther)
+		Color4& operator/=(const Color4& other)
 		{
-			R /= pOther.R;
-			G /= pOther.G;
-			B /= pOther.B;
-			A /= pOther.A;
+			R /= other.R;
+			G /= other.G;
+			B /= other.B;
+			A /= other.A;
 
 			return *this;
 		}
 
-		Color4& operator+=(const T& pOther)
+		Color4& operator+=(const T& other)
 		{
-			R += pOther;
-			G += pOther;
-			B += pOther;
-			A += pOther;
+			R += other;
+			G += other;
+			B += other;
+			A += other;
 
 			return *this;
 		}
 
-		Color4 operator+(const Color4& pOther) const
+		Color4 operator+(const Color4& other) const
 		{
-			return Color4(R + pOther.R, G + pOther.G, B + pOther.B, A + pOther.A);
+			return Color4(R + other.R, G + other.G, B + other.B, A + other.A);
 		}
 
-		Color4 operator-(const Color4& pOther) const
+		Color4 operator-(const Color4& other) const
 		{
-			return Color4(R - pOther.R, G - pOther.G, B - pOther.B, A - pOther.A);
+			return Color4(R - other.R, G - other.G, B - other.B, A - other.A);
 		}
 
-		Color4 operator*(const Color4& pOther) const
+		Color4 operator*(const Color4& other) const
 		{
-			return Color4(R * pOther.R, G * pOther.G, B * pOther.B, A * pOther.A);
+			return Color4(R * other.R, G * other.G, B * other.B, A * other.A);
 		}
 
-		Color4 operator/(const Color4& pOther) const
+		Color4 operator/(const Color4& other) const
 		{
-			return Color4(R / pOther.R, G / pOther.G, B / pOther.B, A / pOther.A);
+			return Color4(R / other.R, G / other.G, B / other.B, A / other.A);
 		}
 
-		Color4 operator+(const T& pOther) const
+		Color4 operator+(const T& other) const
 		{
-			return Color4(R + pOther, G + pOther, B + pOther, A + pOther);
+			return Color4(R + other, G + other, B + other, A + other);
 		}
 
-		Color4 operator-(const T& pOther) const
+		Color4 operator-(const T& other) const
 		{
-			return Color4(R - pOther, G - pOther, B - pOther, A - pOther);
+			return Color4(R - other, G - other, B - other, A - other);
 		}
 
-		Color4 operator*(const T& pOther) const
+		Color4 operator*(const T& other) const
 		{
-			return Color4(R * pOther, G * pOther, B * pOther, A * pOther);
+			return Color4(R * other, G * other, B * other, A * other);
 		}
 
-		Color4 operator/(const T& pOther) const
+		Color4 operator/(const T& other) const
 		{
-			return Color4(R / pOther, G / pOther, B / pOther, A / pOther);
+			return Color4(R / other, G / other, B / other, A / other);
 		}
 
-		bool operator==(const Color4& pOther) const
+		bool operator==(const Color4& other) const
 		{
-			return R == pOther.R && G == pOther.G && B == pOther.B && A == pOther.A;
+			return R == other.R && G == other.G && B == other.B && A == other.A;
 		}
 
-		bool operator!=(const Color4& pOther) const
+		bool operator!=(const Color4& other) const
 		{
-			return R != pOther.R || G != pOther.G || B != pOther.B || A != pOther.A;
+			return R != other.R || G != other.G || B != other.B || A != other.A;
 		}
 
-		bool operator==(const T& pOther) const
+		bool operator==(const T& other) const
 		{
-			return R == pOther && G == pOther && B == pOther && A == pOther;
+			return R == other && G == other && B == other && A == other;
 		}
 
-		bool operator!=(const T& pOther) const
+		bool operator!=(const T& other) const
 		{
-			return R != pOther || G != pOther || B != pOther || A != pOther;
+			return R != other || G != other || B != other || A != other;
 		}
 
 		T R;

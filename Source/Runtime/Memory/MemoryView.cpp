@@ -4,7 +4,7 @@
 namespace Portakal
 {
 
-	MemoryView::MemoryView(const MemoryView& pOther) : mMemory(pOther.mMemory), mSize(pOther.mSize)
+	MemoryView::MemoryView(const MemoryView& other) : mMemory(other.mMemory), mSize(other.mSize)
 	{
 
 	}

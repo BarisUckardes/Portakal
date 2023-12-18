@@ -16,28 +16,28 @@ namespace Portakal
 			W = 0;
 		}
 
-		Vector4(_Tx pX, _Tx pY, _Tx z, _Tx w)
+		Vector4(_Tx x, _Tx y, _Tx z, _Tx w)
 		{
-			X = pX;
-			Y = pY;
+			X = x;
+			Y = y;
 			Z = z;
 			W = w;
 		}
 
-		Vector4(const Vector4& pOther)
+		Vector4(const Vector4& other)
 		{
-			X = pOther.X;
-			Y = pOther.Y;
-			Z = pOther.Z;
-			W = pOther.W;
+			X = other.X;
+			Y = other.Y;
+			Z = other.Z;
+			W = other.W;
 		}
 
-		Vector4(Vector4&& pOther) noexcept
+		Vector4(Vector4&& other) noexcept
 		{
-			X = pOther.X;
-			Y = pOther.Y;
-			Z = pOther.Z;
-			W = pOther.W;
+			X = other.X;
+			Y = other.Y;
+			Z = other.Z;
+			W = other.W;
 		}
 
 		~Vector4() = default;
@@ -47,19 +47,19 @@ namespace Portakal
 			return Sqrt(X * X + Y * Y + Z * Z + W * W);
 		}
 
-		NODISCARD _Tx Distance(const Vector4& pOther) const noexcept
+		NODISCARD _Tx Distance(const Vector4& other) const noexcept
 		{
-			return (*this - pOther).Length();
+			return (*this - other).Length();
 		}
 
-		NODISCARD _Tx Dot(const Vector4& pOther) const noexcept
+		NODISCARD _Tx Dot(const Vector4& other) const noexcept
 		{
-			return X * pOther.X + Y * pOther.Y + Z * pOther.Z;
+			return X * other.X + Y * other.Y + Z * other.Z;
 		}
 
-		NODISCARD Vector4 Cross(const Vector4& pOther) const noexcept
+		NODISCARD Vector4 Cross(const Vector4& other) const noexcept
 		{
-			return Vector4(Y * pOther.Z - Z * pOther.Y, Z * pOther.X - X * pOther.Z, X * pOther.Y - Y * pOther.X, 0);
+			return Vector4(Y * other.Z - Z * other.Y, Z * other.X - X * other.Z, X * other.Y - Y * other.X, 0);
 		}
 
 		NODISCARD Vector4 Normalize() const noexcept
@@ -67,14 +67,14 @@ namespace Portakal
 			return *this / Length();
 		}
 
-		NODISCARD Vector4 Lerp(const Vector4& pOther, _Tx pTime) const noexcept
+		NODISCARD Vector4 Lerp(const Vector4& other, _Tx pTime) const noexcept
 		{
-			return *this + (pOther - *this) * pTime;
+			return *this + (other - *this) * pTime;
 		}
 
-		_Tx operator[](size_t pIndex) const
+		_Tx operator[](size_t index) const
 		{
-			switch (pIndex)
+			switch (index)
 			{
 			case 0:
 				return X;
@@ -89,164 +89,164 @@ namespace Portakal
 			}
 		}
 
-		Vector4& operator=(const Vector4& pOther)
+		Vector4& operator=(const Vector4& other)
 		{
-			X = pOther.X;
-			Y = pOther.Y;
-			Z = pOther.Z;
-			W = pOther.W;
+			X = other.X;
+			Y = other.Y;
+			Z = other.Z;
+			W = other.W;
 
 			return *this;
 		}
 
-		Vector4& operator=(Vector4&& pOther)
+		Vector4& operator=(Vector4&& other)
 		{
-			X = pOther.X;
-			Y = pOther.Y;
-			Z = pOther.Z;
-			W = pOther.W;
+			X = other.X;
+			Y = other.Y;
+			Z = other.Z;
+			W = other.W;
 
 			return *this;
 		}
 
-		Vector4& operator+=(const Vector4& pOther)
+		Vector4& operator+=(const Vector4& other)
 		{
-			X += pOther.X;
-			Y += pOther.Y;
-			Z += pOther.Z;
-			W += pOther.W;
+			X += other.X;
+			Y += other.Y;
+			Z += other.Z;
+			W += other.W;
 
 			return *this;
 		}
 
-		Vector4& operator-=(const Vector4& pOther)
+		Vector4& operator-=(const Vector4& other)
 		{
-			X -= pOther.X;
-			Y -= pOther.Y;
-			Z -= pOther.Z;
-			W -= pOther.W;
+			X -= other.X;
+			Y -= other.Y;
+			Z -= other.Z;
+			W -= other.W;
 
 			return *this;
 		}
 
-		Vector4& operator*=(const Vector4& pOther)
+		Vector4& operator*=(const Vector4& other)
 		{
-			X *= pOther.X;
-			Y *= pOther.Y;
-			Z *= pOther.Z;
-			W *= pOther.W;
+			X *= other.X;
+			Y *= other.Y;
+			Z *= other.Z;
+			W *= other.W;
 
 			return *this;
 		}
 
-		Vector4& operator/=(const Vector4& pOther)
+		Vector4& operator/=(const Vector4& other)
 		{
-			X /= pOther.X;
-			Y /= pOther.Y;
-			Z /= pOther.Z;
-			W /= pOther.W;
+			X /= other.X;
+			Y /= other.Y;
+			Z /= other.Z;
+			W /= other.W;
 
 			return *this;
 		}
 
-		Vector4& operator+=(const _Tx& pOther)
+		Vector4& operator+=(const _Tx& other)
 		{
-			X += pOther;
-			Y += pOther;
-			Z += pOther;
-			W += pOther;
+			X += other;
+			Y += other;
+			Z += other;
+			W += other;
 
 			return *this;
 		}
 
-		Vector4& operator-=(const _Tx& pOther)
+		Vector4& operator-=(const _Tx& other)
 		{
-			X -= pOther;
-			Y -= pOther;
-			Z -= pOther;
-			W -= pOther;
+			X -= other;
+			Y -= other;
+			Z -= other;
+			W -= other;
 
 			return *this;
 		}
 
-		Vector4& operator*=(const _Tx& pOther)
+		Vector4& operator*=(const _Tx& other)
 		{
-			X *= pOther;
-			Y *= pOther;
-			Z *= pOther;
-			W *= pOther;
+			X *= other;
+			Y *= other;
+			Z *= other;
+			W *= other;
 
 			return *this;
 		}
 
-		Vector4& operator/=(const _Tx& pOther)
+		Vector4& operator/=(const _Tx& other)
 		{
-			X /= pOther;
-			Y /= pOther;
-			Z /= pOther;
-			W /= pOther;
+			X /= other;
+			Y /= other;
+			Z /= other;
+			W /= other;
 
 			return *this;
 		}
 
-		Vector4 operator+(const Vector4& pOther) const
+		Vector4 operator+(const Vector4& other) const
 		{
-			return Vector4(X + pOther.X, Y + pOther.Y, Z + pOther.Z, W + pOther.W);
+			return Vector4(X + other.X, Y + other.Y, Z + other.Z, W + other.W);
 		}
 
-		Vector4 operator-(const Vector4& pOther) const
+		Vector4 operator-(const Vector4& other) const
 		{
-			return Vector4(X - pOther.X, Y - pOther.Y, Z - pOther.Z, W - pOther.W);
+			return Vector4(X - other.X, Y - other.Y, Z - other.Z, W - other.W);
 		}
 
-		Vector4 operator*(const Vector4& pOther) const
+		Vector4 operator*(const Vector4& other) const
 		{
-			return Vector4(X * pOther.X, Y * pOther.Y, Z * pOther.Z, W * pOther.W);
+			return Vector4(X * other.X, Y * other.Y, Z * other.Z, W * other.W);
 		}
 
-		Vector4 operator/(const Vector4& pOther) const
+		Vector4 operator/(const Vector4& other) const
 		{
-			return Vector4(X / pOther.X, Y / pOther.Y, Z / pOther.Z, W / pOther.W);
+			return Vector4(X / other.X, Y / other.Y, Z / other.Z, W / other.W);
 		}
 
-		Vector4 operator+(const _Tx& pOther) const
+		Vector4 operator+(const _Tx& other) const
 		{
-			return Vector4(X + pOther, Y + pOther, Z + pOther, W + pOther);
+			return Vector4(X + other, Y + other, Z + other, W + other);
 		}
 
-		Vector4 operator-(const _Tx& pOther) const
+		Vector4 operator-(const _Tx& other) const
 		{
-			return Vector4(X - pOther, Y - pOther, Z - pOther, W - pOther);
+			return Vector4(X - other, Y - other, Z - other, W - other);
 		}
 
-		Vector4 operator*(const _Tx& pOther) const
+		Vector4 operator*(const _Tx& other) const
 		{
-			return Vector4(X * pOther, Y * pOther, Z * pOther, W * pOther);
+			return Vector4(X * other, Y * other, Z * other, W * other);
 		}
 
-		Vector4 operator/(const _Tx& pOther) const
+		Vector4 operator/(const _Tx& other) const
 		{
-			return Vector4(X / pOther, Y / pOther, Z / pOther, W / pOther);
+			return Vector4(X / other, Y / other, Z / other, W / other);
 		}
 
-		bool operator==(const Vector4& pOther) const
+		bool operator==(const Vector4& other) const
 		{
-			return X == pOther.X && Y == pOther.Y && Z == pOther.Z && W == pOther.W;
+			return X == other.X && Y == other.Y && Z == other.Z && W == other.W;
 		}
 
-		bool operator!=(const Vector4& pOther) const
+		bool operator!=(const Vector4& other) const
 		{
-			return X != pOther.X || Y != pOther.Y || Z != pOther.Z || W != pOther.W;
+			return X != other.X || Y != other.Y || Z != other.Z || W != other.W;
 		}
 
-		bool operator==(const _Tx& pOther) const
+		bool operator==(const _Tx& other) const
 		{
-			return X == pOther && Y == pOther && Z == pOther && W == pOther;
+			return X == other && Y == other && Z == other && W == other;
 		}
 
-		bool operator!=(const _Tx& pOther) const
+		bool operator!=(const _Tx& other) const
 		{
-			return X != pOther || Y != pOther || Z != pOther || W != pOther;
+			return X != other || Y != other || Z != other || W != other;
 		}
 
 		_Tx X;
@@ -256,101 +256,101 @@ namespace Portakal
 	};
 
 	template<typename _Tx>
-	Vector4<_Tx> operator+(const Vector4<_Tx>& pLeft, const Vector4<_Tx>& pRight)
+	Vector4<_Tx> operator+(const Vector4<_Tx>& left, const Vector4<_Tx>& right)
 	{
-		return Vector4<_Tx>(pLeft.X + pRight.X, pLeft.Y + pRight.Y, pLeft.Z + pRight.Z, pLeft.W + pRight.W);
+		return Vector4<_Tx>(left.X + right.X, left.Y + right.Y, left.Z + right.Z, left.W + right.W);
 	}
 
 	template<typename _Tx>
-	Vector4<_Tx> operator-(const Vector4<_Tx>& pLeft, const Vector4<_Tx>& pRight)
+	Vector4<_Tx> operator-(const Vector4<_Tx>& left, const Vector4<_Tx>& right)
 	{
-		return Vector4<_Tx>(pLeft.X - pRight.X, pLeft.Y - pRight.Y, pLeft.Z - pRight.Z, pLeft.W - pRight.W);
+		return Vector4<_Tx>(left.X - right.X, left.Y - right.Y, left.Z - right.Z, left.W - right.W);
 	}
 
 	template<typename _Tx>
-	Vector4<_Tx> operator*(const Vector4<_Tx>& pLeft, const Vector4<_Tx>& pRight)
+	Vector4<_Tx> operator*(const Vector4<_Tx>& left, const Vector4<_Tx>& right)
 	{
-		return Vector4<_Tx>(pLeft.X * pRight.X, pLeft.Y * pRight.Y, pLeft.Z * pRight.Z, pLeft.W * pRight.W);
+		return Vector4<_Tx>(left.X * right.X, left.Y * right.Y, left.Z * right.Z, left.W * right.W);
 	}
 
 	template<typename _Tx>
-	Vector4<_Tx> operator/(const Vector4<_Tx>& pLeft, const Vector4<_Tx>& pRight)
+	Vector4<_Tx> operator/(const Vector4<_Tx>& left, const Vector4<_Tx>& right)
 	{
-		return Vector4<_Tx>(pLeft.X / pRight.X, pLeft.Y / pRight.Y, pLeft.Z / pRight.Z, pLeft.W / pRight.W);
+		return Vector4<_Tx>(left.X / right.X, left.Y / right.Y, left.Z / right.Z, left.W / right.W);
 	}
 
 	template<typename _Tx>
-	Vector4<_Tx> operator+(const _Tx& pOther, const Vector4<_Tx>& pVector)
+	Vector4<_Tx> operator+(const _Tx& other, const Vector4<_Tx>& pVector)
 	{
-		return Vector4<_Tx>(pVector.X + pOther, pVector.Y + pOther, pVector.Z + pOther, pVector.W + pOther);
+		return Vector4<_Tx>(pVector.X + other, pVector.Y + other, pVector.Z + other, pVector.W + other);
 	}
 
 	template<typename _Tx>
-	Vector4<_Tx> operator-(const _Tx& pOther, const Vector4<_Tx>& pVector)
+	Vector4<_Tx> operator-(const _Tx& other, const Vector4<_Tx>& pVector)
 	{
-		return Vector4<_Tx>(pVector.X - pOther, pVector.Y - pOther, pVector.Z - pOther, pVector.W - pOther);
+		return Vector4<_Tx>(pVector.X - other, pVector.Y - other, pVector.Z - other, pVector.W - other);
 	}
 
 	template<typename _Tx>
-	Vector4<_Tx> operator*(const _Tx& pOther, const Vector4<_Tx>& pVector)
+	Vector4<_Tx> operator*(const _Tx& other, const Vector4<_Tx>& pVector)
 	{
-		return Vector4<_Tx>(pVector.X * pOther, pVector.Y * pOther, pVector.Z * pOther, pVector.W * pOther);
+		return Vector4<_Tx>(pVector.X * other, pVector.Y * other, pVector.Z * other, pVector.W * other);
 	}
 
 	template<typename _Tx>
-	Vector4<_Tx> operator/(const _Tx& pOther, const Vector4<_Tx>& pVector)
+	Vector4<_Tx> operator/(const _Tx& other, const Vector4<_Tx>& pVector)
 	{
-		return Vector4<_Tx>(pVector.X / pOther, pVector.Y / pOther, pVector.Z / pOther, pVector.W / pOther);
+		return Vector4<_Tx>(pVector.X / other, pVector.Y / other, pVector.Z / other, pVector.W / other);
 	}
 
 	template<typename _Tx>
-	Vector4<_Tx> operator+(const Vector4<_Tx>& pVector, const _Tx& pOther)
+	Vector4<_Tx> operator+(const Vector4<_Tx>& pVector, const _Tx& other)
 	{
-		return Vector4<_Tx>(pVector.X + pOther, pVector.Y + pOther, pVector.Z + pOther, pVector.W + pOther);
+		return Vector4<_Tx>(pVector.X + other, pVector.Y + other, pVector.Z + other, pVector.W + other);
 	}
 
 	template<typename _Tx>
-	Vector4<_Tx> operator-(const Vector4<_Tx>& pVector, const _Tx& pOther)
+	Vector4<_Tx> operator-(const Vector4<_Tx>& pVector, const _Tx& other)
 	{
-		return Vector4<_Tx>(pVector.X - pOther, pVector.Y - pOther, pVector.Z - pOther, pVector.W - pOther);
+		return Vector4<_Tx>(pVector.X - other, pVector.Y - other, pVector.Z - other, pVector.W - other);
 	}
 
 	template<typename _Tx>
-	Vector4<_Tx> operator*(const Vector4<_Tx>& pVector, const _Tx& pOther)
+	Vector4<_Tx> operator*(const Vector4<_Tx>& pVector, const _Tx& other)
 	{
-		return Vector4<_Tx>(pVector.X * pOther, pVector.Y * pOther, pVector.Z * pOther, pVector.W * pOther);
+		return Vector4<_Tx>(pVector.X * other, pVector.Y * other, pVector.Z * other, pVector.W * other);
 	}
 
 	template<typename _Tx>
-	Vector4<_Tx> operator/(const Vector4<_Tx>& pVector, const _Tx& pOther)
+	Vector4<_Tx> operator/(const Vector4<_Tx>& pVector, const _Tx& other)
 	{
-		return Vector4<_Tx>(pVector.X / pOther, pVector.Y / pOther, pVector.Z / pOther, pVector.W / pOther);
+		return Vector4<_Tx>(pVector.X / other, pVector.Y / other, pVector.Z / other, pVector.W / other);
 	}
 
 	template<typename _Tx>
-	_Tx DotProduct(const Vector4<_Tx>& pLeft, const Vector4<_Tx>& pRight)
+	_Tx DotProduct(const Vector4<_Tx>& left, const Vector4<_Tx>& right)
 	{
-		return pLeft.X * pRight.X + pLeft.Y * pRight.Y + pLeft.Z * pRight.Z + pLeft.W * pRight.W;
+		return left.X * right.X + left.Y * right.Y + left.Z * right.Z + left.W * right.W;
 	}
 
 	template<typename _Tx>
-	Vector4<_Tx> CrossProduct(const Vector4<_Tx>& pLeft, const Vector4<_Tx>& pRight)
+	Vector4<_Tx> CrossProduct(const Vector4<_Tx>& left, const Vector4<_Tx>& right)
 	{
 		return Vector4<_Tx>(
-			pLeft.Y * pRight.Z - pLeft.Z * pRight.Y,
-			pLeft.Z * pRight.X - pLeft.X * pRight.Z,
-			pLeft.X * pRight.Y - pLeft.Y * pRight.X,
+			left.Y * right.Z - left.Z * right.Y,
+			left.Z * right.X - left.X * right.Z,
+			left.X * right.Y - left.Y * right.X,
 			0);
 	}
 
 	template<typename _Tx>
-	Vector4<_Tx> LinearInterpolation(const Vector4<_Tx>& pLeft, const Vector4<_Tx>& pRight, _Tx pFactor)
+	Vector4<_Tx> LinearInterpolation(const Vector4<_Tx>& left, const Vector4<_Tx>& right, _Tx pFactor)
 	{
 		return Vector4<_Tx>(
-			pLeft.X + (pRight.X - pLeft.X) * pFactor,
-			pLeft.Y + (pRight.Y - pLeft.Y) * pFactor,
-			pLeft.Z + (pRight.Z - pLeft.Z) * pFactor,
-			pLeft.W + (pRight.W - pLeft.W) * pFactor);
+			left.X + (right.X - left.X) * pFactor,
+			left.Y + (right.Y - left.Y) * pFactor,
+			left.Z + (right.Z - left.Z) * pFactor,
+			left.W + (right.W - left.W) * pFactor);
 	}
 
 	typedef Vector4<int32> Vector4I;

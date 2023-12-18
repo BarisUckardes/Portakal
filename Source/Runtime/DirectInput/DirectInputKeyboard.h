@@ -6,7 +6,7 @@
 
 namespace Portakal
 {
-	class RUNTIME_API DirectInputKeyboard : public KeyboardInputDevice,public DirectInputDevice
+	class RUNTIME_API DirectInputKeyboard : public KeyboardInputDevice, public DirectInputDevice
 	{
 	public:
 		DirectInputKeyboard(IDirectInputDevice8* pDevice);

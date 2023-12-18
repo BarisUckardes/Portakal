@@ -14,7 +14,7 @@ namespace Portakal
 	public:
 		MemoryOwnedView(void* pMemory, const uint64 sizeInBytes);
 		MemoryOwnedView(void* pMemoryStart, void* pMemoryEnd);
-		MemoryOwnedView(const MemoryOwnedView& pOther) = delete;
+		MemoryOwnedView(const MemoryOwnedView& other) = delete;
 		~MemoryOwnedView();
 
 		FORCEINLINE void* GetMemory() const noexcept { return mMemory; }

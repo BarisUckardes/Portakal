@@ -29,68 +29,68 @@ namespace Portakal
 
 	public:
 		Matrix3x3F() = default;
-		Matrix3x3F(const std::initializer_list<float>& pInitList)
+		Matrix3x3F(const std::initializer_list<float>& initList)
 		{
 			byte i = 0;
-			for (auto& pElement : pInitList)
+			for (auto& pElement : initList)
 			{
 				mData[i++] = pElement;
 			}
 		}
 
-		Matrix3x3F(const Vector3F& pRow0, const Vector3F& pRow1, const Vector3F& pRow2)
+		Matrix3x3F(const Vector3F& row0, const Vector3F& row1, const Vector3F& row2)
 		{
 			for (byte i = 0; i < 4; ++i)
 			{
-				mData[i] = pRow0[i];
-				mData[i + 4] = pRow1[i];
-				mData[i + 7] = pRow2[i];
+				mData[i] = row0[i];
+				mData[i + 4] = row1[i];
+				mData[i + 7] = row2[i];
 			}
 		}
 
-		Matrix3x3F(const Matrix3x3F& pOther)
+		Matrix3x3F(const Matrix3x3F& other)
 		{
-			Memory::Copy(mData, pOther.mData, sizeof(float) * 9);
+			Memory::Copy(mData, other.mData, sizeof(float) * 9);
 		}
 
-		Matrix3x3F(float pA11, float pA21, float pA31,
-				   float pA12, float pA22, float pA32,
-				   float pA13, float pA23, float pA33)
+		Matrix3x3F(float a11, float a21, float a31,
+				   float a12, float a22, float a32,
+				   float a13, float a23, float a33)
 		{
-			mData[0] = pA11; mData[1] = pA21; mData[2] = pA31;
-			mData[3] = pA12; mData[4] = pA22; mData[5] = pA32;
-			mData[6] = pA13; mData[7] = pA23; mData[8] = pA33;
+			mData[0] = a11; mData[1] = a21; mData[2] = a31;
+			mData[3] = a12; mData[4] = a22; mData[5] = a32;
+			mData[6] = a13; mData[7] = a23; mData[8] = a33;
 
 		}
 
-		Matrix3x3F& operator=(const Matrix3x3F& pOther)
+		Matrix3x3F& operator=(const Matrix3x3F& other)
 		{
 			for (byte i = 0; i < 8; ++i)
 			{
-				mData[i] = pOther.mData[i];
+				mData[i] = other.mData[i];
 			}
 			return *this;
 		}
 
-		Matrix3x3F& operator+=(const Matrix3x3F& pOther)
+		Matrix3x3F& operator+=(const Matrix3x3F& other)
 		{
 			for (byte i = 0; i < 8; ++i)
 			{
-				mData[i] += pOther.mData[i];
+				mData[i] += other.mData[i];
 			}
 			return *this;
 		}
 
-		Matrix3x3F& operator-=(const Matrix3x3F& pOther)
+		Matrix3x3F& operator-=(const Matrix3x3F& other)
 		{
 			for (byte i = 0; i < 8; ++i)
 			{
-				mData[i] -= pOther.mData[i];
+				mData[i] -= other.mData[i];
 			}
 			return *this;
 		}
 
-		Matrix3x3F& operator*=(const Matrix3x3F& pOther)
+		Matrix3x3F& operator*=(const Matrix3x3F& other)
 		{
 			Matrix3x3F result = Matrix3x3F::Identity();
 			for (byte i = 0; i < 4; ++i)
@@ -100,7 +100,7 @@ namespace Portakal
 					result.mData[i * 4 + j] = 0;
 					for (byte k = 0; k < 4; ++k)
 					{
-						result.mData[i * 4 + j] += mData[i * 4 + k] * pOther.mData[k * 4 + j];
+						result.mData[i * 4 + j] += mData[i * 4 + k] * other.mData[k * 4 + j];
 					}
 				}
 			}
@@ -108,83 +108,83 @@ namespace Portakal
 			return *this;
 		}
 
-		Matrix3x3F& operator*=(float pScalar)
+		Matrix3x3F& operator*=(float scalar)
 		{
 			for (byte i = 0; i < 9; ++i)
 			{
-				mData[i] *= pScalar;
+				mData[i] *= scalar;
 			}
 			return *this;
 		}
 
-		Matrix3x3F& operator/=(float pScalar)
+		Matrix3x3F& operator/=(float scalar)
 		{
 			for (byte i = 0; i < 9; ++i)
 			{
-				mData[i] /= pScalar;
+				mData[i] /= scalar;
 			}
 			return *this;
 		}
 
-		float& operator()(byte pRow, byte pColumn) { return mData[pRow * 3 + pColumn]; }
-		const float& operator()(byte pRow, byte pColumn) const { return mData[pRow * 3 + pColumn]; }
-		float& operator[](byte pIndex) { return mData[pIndex]; }
+		float& operator()(byte row, byte column) { return mData[row * 3 + column]; }
+		const float& operator()(byte row, byte column) const { return mData[row * 3 + column]; }
+		float& operator[](byte index) { return mData[index]; }
 
-		Vector3<float> GetRow(byte pRow) const
+		Vector3<float> GetRow(byte row) const
 		{
-			return Vector3<float>(mData[pRow * 3], mData[pRow * 3 + 1], mData[pRow * 3 + 2]);
+			return Vector3<float>(mData[row * 3], mData[row * 3 + 1], mData[row * 3 + 2]);
 		}
 
-		Vector3<float> GetColumn(byte pColumn) const
+		Vector3<float> GetColumn(byte column) const
 		{
-			return Vector3<float>(mData[pColumn], mData[pColumn + 3], mData[pColumn + 6]);
+			return Vector3<float>(mData[column], mData[column + 3], mData[column + 6]);
 		}
 
-		void SetRow(byte pIndex, const Vector3<float>& pRow)
+		void SetRow(byte index, const Vector3<float>& row)
 		{
-			mData[pIndex * 3] = pRow[0];
-			mData[pIndex * 3 + 1] = pRow[1];
-			mData[pIndex * 3 + 2] = pRow[2];
+			mData[index * 3] = row[0];
+			mData[index * 3 + 1] = row[1];
+			mData[index * 3 + 2] = row[2];
 		}
 
-		void SetColumn(byte pIndex, const Vector3<float>& pColumn)
+		void SetColumn(byte index, const Vector3<float>& column)
 		{
-			mData[pIndex] = pColumn[0];
-			mData[pIndex + 3] = pColumn[1];
-			mData[pIndex + 6] = pColumn[2];
+			mData[index] = column[0];
+			mData[index + 3] = column[1];
+			mData[index + 6] = column[2];
 		}
 
 	private:
 		float mData[9];
 	};
 
-	Matrix3x3F operator+(Matrix3x3F const& pLeft, Matrix3x3F const& pRight)
+	Matrix3x3F operator+(Matrix3x3F const& left, Matrix3x3F const& right)
 	{
-		return Matrix3x3F(pLeft) += pRight;
+		return Matrix3x3F(left) += right;
 	}
 
-	Matrix3x3F operator-(Matrix3x3F const& pLeft, Matrix3x3F const& pRight)
+	Matrix3x3F operator-(Matrix3x3F const& left, Matrix3x3F const& right)
 	{
-		return Matrix3x3F(pLeft) -= pRight;
+		return Matrix3x3F(left) -= right;
 	}
 
-	Matrix3x3F operator*(Matrix3x3F const& pLeft, Matrix3x3F const& pRight)
+	Matrix3x3F operator*(Matrix3x3F const& left, Matrix3x3F const& right)
 	{
-		return Matrix3x3F(pLeft) *= pRight;
+		return Matrix3x3F(left) *= right;
 	}
 
-	Matrix3x3F operator*(Matrix3x3F const& pLeft, float pScalar)
+	Matrix3x3F operator*(Matrix3x3F const& left, float scalar)
 	{
-		return Matrix3x3F(pLeft) *= pScalar;
+		return Matrix3x3F(left) *= scalar;
 	}
 
-	Matrix3x3F operator*(float pScalar, Matrix3x3F const& pRight)
+	Matrix3x3F operator*(float scalar, Matrix3x3F const& right)
 	{
-		return Matrix3x3F(pRight) *= pScalar;
+		return Matrix3x3F(right) *= scalar;
 	}
 
-	Matrix3x3F operator/(Matrix3x3F const& pLeft, float pScalar)
+	Matrix3x3F operator/(Matrix3x3F const& left, float scalar)
 	{
-		return Matrix3x3F(pLeft) /= pScalar;
+		return Matrix3x3F(left) /= scalar;
 	}
 }
