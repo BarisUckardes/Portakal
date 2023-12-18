@@ -12,27 +12,27 @@ namespace Portakal
 	struct RUNTIME_API Vector2
 	{
 	public:
-		static T Distance(const Vector2 pX, const Vector2 pY)
+		static T Distance(const Vector2 x, const Vector2 y)
 		{
-			const Vector2 dir = pY - pX;
+			const Vector2 dir = y - x;
 			return dir.GetLength();
 		}
 
-		static T Dot(const Vector2 pX, const Vector2 pY)
+		static T Dot(const Vector2 x, const Vector2 y)
 		{
-			return pX.X * pY.X + pX.Y * pY.Y;
+			return x.X * y.X + x.Y * y.Y;
 		}
 
 	public:
-		Vector2(const T pX, const T pY) : X(pX), Y(pY)
+		Vector2(const T x, const T y) : X(x), Y(y)
 		{
 		}
 
-		Vector2(const T pValue) : X(pValue), Y(pValue)
+		Vector2(const T value) : X(value), Y(value)
 		{
 		}
 
-		Vector2(const Vector2& pOther) : X(pOther.X), Y(pOther.Y)
+		Vector2(const Vector2& other) : X(other.X), Y(other.Y)
 		{
 		}
 
@@ -53,120 +53,120 @@ namespace Portakal
 			return { X / length,Y / length };
 		}
 
-		Vector2 operator+(const Vector2& pOther) const
+		Vector2 operator+(const Vector2& other) const
 		{
-			return Vector2(X + pOther.X, Y + pOther.Y);
+			return Vector2(X + other.X, Y + other.Y);
 		}
 
-		Vector2 operator-(const Vector2& pOther) const
+		Vector2 operator-(const Vector2& other) const
 		{
-			return Vector2(X - pOther.X, Y - pOther.Y);
+			return Vector2(X - other.X, Y - other.Y);
 		}
 
-		Vector2 operator*(const Vector2& pOther) const
+		Vector2 operator*(const Vector2& other) const
 		{
-			return Vector2(X * pOther.X, Y * pOther.Y);
+			return Vector2(X * other.X, Y * other.Y);
 		}
 
-		Vector2 operator/(const Vector2& pOther) const
+		Vector2 operator/(const Vector2& other) const
 		{
-			return Vector2(X / pOther.X, Y / pOther.Y);
+			return Vector2(X / other.X, Y / other.Y);
 		}
 
-		Vector2 operator+(const T& pOther) const
+		Vector2 operator+(const T& other) const
 		{
-			return Vector2(X + pOther, Y + pOther);
+			return Vector2(X + other, Y + other);
 		}
 
-		Vector2 operator-(const T& pOther) const
+		Vector2 operator-(const T& other) const
 		{
-			return Vector2(X - pOther, Y - pOther);
+			return Vector2(X - other, Y - other);
 		}
 
-		Vector2 operator*(const T& pOther) const
+		Vector2 operator*(const T& other) const
 		{
-			return Vector2(X * pOther, Y * pOther);
+			return Vector2(X * other, Y * other);
 		}
 
-		Vector2 operator/(const T& pOther) const
+		Vector2 operator/(const T& other) const
 		{
-			return Vector2(X / pOther, Y / pOther);
+			return Vector2(X / other, Y / other);
 		}
 
-		Vector2& operator+=(const Vector2& pOther)
+		Vector2& operator+=(const Vector2& other)
 		{
-			X += pOther.X;
-			Y += pOther.Y;
+			X += other.X;
+			Y += other.Y;
 			return *this;
 		}
 
-		Vector2& operator-=(const Vector2& pOther)
+		Vector2& operator-=(const Vector2& other)
 		{
-			X -= pOther.X;
-			Y -= pOther.Y;
+			X -= other.X;
+			Y -= other.Y;
 			return *this;
 		}
 
-		Vector2& operator*=(const Vector2& pOther)
+		Vector2& operator*=(const Vector2& other)
 		{
-			X *= pOther.X;
-			Y *= pOther.Y;
+			X *= other.X;
+			Y *= other.Y;
 			return *this;
 		}
 
-		Vector2& operator/=(const Vector2& pOther)
+		Vector2& operator/=(const Vector2& other)
 		{
-			X /= pOther.X;
-			Y /= pOther.Y;
+			X /= other.X;
+			Y /= other.Y;
 			return *this;
 		}
 
-		Vector2& operator+=(const T& pOther)
+		Vector2& operator+=(const T& other)
 		{
-			X += pOther;
-			Y += pOther;
+			X += other;
+			Y += other;
 			return *this;
 		}
 
-		Vector2& operator-=(const T& pOther)
+		Vector2& operator-=(const T& other)
 		{
-			X -= pOther;
-			Y -= pOther;
+			X -= other;
+			Y -= other;
 			return *this;
 		}
 
-		Vector2& operator*=(const T& pOther)
+		Vector2& operator*=(const T& other)
 		{
-			X *= pOther;
-			Y *= pOther;
+			X *= other;
+			Y *= other;
 			return *this;
 		}
 
-		Vector2& operator/=(const T& pOther)
+		Vector2& operator/=(const T& other)
 		{
-			X /= pOther;
-			Y /= pOther;
+			X /= other;
+			Y /= other;
 			return *this;
 		}
 
-		bool operator==(const Vector2& pOther) const
+		bool operator==(const Vector2& other) const
 		{
-			return X == pOther.X && Y == pOther.Y;
+			return X == other.X && Y == other.Y;
 		}
 
-		bool operator!=(const Vector2& pOther) const
+		bool operator!=(const Vector2& other) const
 		{
-			return X != pOther.X || Y != pOther.Y;
+			return X != other.X || Y != other.Y;
 		}
 
-		bool operator==(const T& pOther) const
+		bool operator==(const T& other) const
 		{
-			return X == pOther && Y == pOther;
+			return X == other && Y == other;
 		}
 
-		bool operator!=(const T& pOther) const
+		bool operator!=(const T& other) const
 		{
-			return X != pOther || Y != pOther;
+			return X != other || Y != other;
 		}
 
 		T X;

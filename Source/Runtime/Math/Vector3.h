@@ -12,26 +12,26 @@ namespace Portakal
 	struct RUNTIME_API Vector3
 	{
 	public:
-		static T Distance(const Vector3 pX, const Vector3 pY)
+		static T Distance(const Vector3 x, const Vector3 y)
 		{
-			const Vector3 dir = pY - pX;
+			const Vector3 dir = y - x;
 			return dir.GetLength();
 		}
-		static T Dot(const Vector3 pX, const Vector3 pY)
+		static T Dot(const Vector3 x, const Vector3 y)
 		{
-			return pX.X * pY.X + pX.Y * pY.Y + pX.Z * pY.Z;
+			return x.X * y.X + x.Y * y.Y + x.Z * y.Z;
 		}
 
 	public:
-		Vector3(const T pX, const T pY, const T z) : X(pX), Y(pY), Z(z)
+		Vector3(const T x, const T y, const T z) : X(x), Y(y), Z(z)
 		{
 		}
 
-		Vector3(const T pValue) : X(pValue), Y(pValue), Z(pValue)
+		Vector3(const T value) : X(value), Y(value), Z(value)
 		{
 		}
 
-		Vector3(const Vector3& pOther) : X(pOther.X), Y(pOther.Y), Z(pOther.Z)
+		Vector3(const Vector3& other) : X(other.X), Y(other.Y), Z(other.Z)
 		{
 		}
 
@@ -53,19 +53,19 @@ namespace Portakal
 			return { X / length,Y / length ,Z / length };
 		}
 
-		FORCEINLINE Vector3 Cross(const Vector3& pOther) const noexcept
+		FORCEINLINE Vector3 Cross(const Vector3& other) const noexcept
 		{
-			return { Y * pOther.Z - Z * pOther.Y,Z * pOther.X - X * pOther.Z,X * pOther.Y - Y * pOther.X };
+			return { Y * other.Z - Z * other.Y,Z * other.X - X * other.Z,X * other.Y - Y * other.X };
 		}
 
-		FORCEINLINE float Dot(const Vector3& pOther) const noexcept
+		FORCEINLINE float Dot(const Vector3& other) const noexcept
 		{
-			return X * pOther.X + Y * pOther.Y + Z * pOther.Z;
+			return X * other.X + Y * other.Y + Z * other.Z;
 		}
 
-		T operator[](const uint32 pIndex) const
+		T operator[](const uint32 index) const
 		{
-			switch (pIndex)
+			switch (index)
 			{
 			case 0:
 				return X;
@@ -78,128 +78,128 @@ namespace Portakal
 			}
 		}
 
-		Vector3 operator+(const Vector3& pOther) const
+		Vector3 operator+(const Vector3& other) const
 		{
-			return Vector3(X + pOther.X, Y + pOther.Y, Z + pOther.Z);
+			return Vector3(X + other.X, Y + other.Y, Z + other.Z);
 		}
 
-		Vector3 operator-(const Vector3& pOther) const
+		Vector3 operator-(const Vector3& other) const
 		{
-			return Vector3(X - pOther.X, Y - pOther.Y, Z - pOther.Z);
+			return Vector3(X - other.X, Y - other.Y, Z - other.Z);
 		}
 
-		Vector3 operator*(const Vector3& pOther) const
+		Vector3 operator*(const Vector3& other) const
 		{
-			return Vector3(X * pOther.X, Y * pOther.Y, Z * pOther.Z);
+			return Vector3(X * other.X, Y * other.Y, Z * other.Z);
 		}
 
-		Vector3 operator/(const Vector3& pOther) const
+		Vector3 operator/(const Vector3& other) const
 		{
-			return Vector3(X / pOther.X, Y / pOther.Y, Z / pOther.Z);
+			return Vector3(X / other.X, Y / other.Y, Z / other.Z);
 		}
 
-		Vector3 operator+(const T& pOther) const
+		Vector3 operator+(const T& other) const
 		{
-			return Vector3(X + pOther, Y + pOther, Z + pOther);
+			return Vector3(X + other, Y + other, Z + other);
 		}
 
-		Vector3 operator-(const T& pOther) const
+		Vector3 operator-(const T& other) const
 		{
-			return Vector3(X - pOther, Y - pOther, Z - pOther);
+			return Vector3(X - other, Y - other, Z - other);
 		}
 
-		Vector3 operator*(const T& pOther) const
+		Vector3 operator*(const T& other) const
 		{
-			return Vector3(X * pOther, Y * pOther, Z * pOther);
+			return Vector3(X * other, Y * other, Z * other);
 		}
 
-		Vector3 operator/(const T& pOther) const
+		Vector3 operator/(const T& other) const
 		{
-			return Vector3(X / pOther, Y / pOther, Z / pOther);
+			return Vector3(X / other, Y / other, Z / other);
 		}
 
-		Vector3& operator+=(const Vector3& pOther)
+		Vector3& operator+=(const Vector3& other)
 		{
-			X += pOther.X;
-			Y += pOther.Y;
-			Z += pOther.Z;
+			X += other.X;
+			Y += other.Y;
+			Z += other.Z;
 			return *this;
 		}
 
-		Vector3& operator-=(const Vector3& pOther)
+		Vector3& operator-=(const Vector3& other)
 		{
-			X -= pOther.X;
-			Y -= pOther.Y;
-			Z -= pOther.Z;
+			X -= other.X;
+			Y -= other.Y;
+			Z -= other.Z;
 			return *this;
 		}
 
-		Vector3& operator*=(const Vector3& pOther)
+		Vector3& operator*=(const Vector3& other)
 		{
-			X *= pOther.X;
-			Y *= pOther.Y;
-			Z *= pOther.Z;
+			X *= other.X;
+			Y *= other.Y;
+			Z *= other.Z;
 			return *this;
 		}
 
-		Vector3& operator/=(const Vector3& pOther)
+		Vector3& operator/=(const Vector3& other)
 		{
-			X /= pOther.X;
-			Y /= pOther.Y;
-			Z /= pOther.Z;
+			X /= other.X;
+			Y /= other.Y;
+			Z /= other.Z;
 			return *this;
 		}
 
-		Vector3& operator+=(const T& pOther)
+		Vector3& operator+=(const T& other)
 		{
-			X += pOther;
-			Y += pOther;
-			Z += pOther;
+			X += other;
+			Y += other;
+			Z += other;
 			return *this;
 		}
 
-		Vector3& operator-=(const T& pOther)
+		Vector3& operator-=(const T& other)
 		{
-			X -= pOther;
-			Y -= pOther;
-			Z -= pOther;
+			X -= other;
+			Y -= other;
+			Z -= other;
 			return *this;
 		}
 
-		Vector3& operator*=(const T& pOther)
+		Vector3& operator*=(const T& other)
 		{
-			X *= pOther;
-			Y *= pOther;
-			Z *= pOther;
+			X *= other;
+			Y *= other;
+			Z *= other;
 			return *this;
 		}
 
-		Vector3& operator/=(const T& pOther)
+		Vector3& operator/=(const T& other)
 		{
-			X /= pOther;
-			Y /= pOther;
-			Z /= pOther;
+			X /= other;
+			Y /= other;
+			Z /= other;
 			return *this;
 		}
 
-		bool operator==(const Vector3& pOther) const
+		bool operator==(const Vector3& other) const
 		{
-			return X == pOther.X && Y == pOther.Y && Z == pOther.Z;;
+			return X == other.X && Y == other.Y && Z == other.Z;;
 		}
 
-		bool operator!=(const Vector3& pOther) const
+		bool operator!=(const Vector3& other) const
 		{
-			return X != pOther.X || Y != pOther.Y || Z != pOther.Z;
+			return X != other.X || Y != other.Y || Z != other.Z;
 		}
 
-		bool operator==(const T& pOther) const
+		bool operator==(const T& other) const
 		{
-			return X == pOther && Y == pOther && Z == pOther;
+			return X == other && Y == other && Z == other;
 		}
 
-		bool operator!=(const T& pOther) const
+		bool operator!=(const T& other) const
 		{
-			return X != pOther || Y != pOther;
+			return X != other || Y != other;
 		}
 
 		T X;

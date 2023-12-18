@@ -50,18 +50,18 @@ from colorama import Fore, Style
 
 sleepTime = 0.2
 
-print(Fore.CYAN + "[INFO] -- " + Style.RESET_ALL + "All the python libraries are pUp to date.")
+print(Fore.CYAN + "[INFO] -- " + Style.RESET_ALL + "All the python libraries are up to date.")
 pTime.sleep(sleepTime)
-print(Fore.CYAN + "[INFO] -- " + Style.RESET_ALL + "Checking if VulkanSDK is pUp to date...")
+print(Fore.CYAN + "[INFO] -- " + Style.RESET_ALL + "Checking if VulkanSDK is up to date...")
 pTime.sleep(sleepTime*2)
 
 ourVersion = "1.3.268.0"
 
 sdkPath = "C:/VulkanSDK/"
-# Get a pInitList of all files and directories in the directory
+# Get a initList of all files and directories in the directory
 allItems = os.listdir(sdkPath)
 
-# Filter the pInitList to only include directories
+# Filter the initList to only include directories
 dirs = [item for item in allItems if os.path.isdir(os.path.join(sdkPath, item))]
 
 # Convert the directory names to tuples of integers
@@ -80,11 +80,11 @@ maxVersionStr = '.'.join(map(str, maxVersion))
 
 # Check if maxVersionStr is same with ourVersion 
 if maxVersionStr == ourVersion:
-	print(Fore.GREEN + "[SUCCESS] -- " + Style.RESET_ALL + "VulkanSDK is pUp to date")
+	print(Fore.GREEN + "[SUCCESS] -- " + Style.RESET_ALL + "VulkanSDK is up to date")
 	pTime.sleep(sleepTime * 3)
 # Else print error and exit in 3 seconds
 else:
-	print(Fore.RED + "[WARNING] -- " + Style.RESET_ALL + "VulkanSDK is not pUp to date." + "Please update your VulkanSDK to version " + ourVersion)
+	print(Fore.RED + "[WARNING] -- " + Style.RESET_ALL + "VulkanSDK is not up to date." + "Please update your VulkanSDK to version " + ourVersion)
 	pTime.sleep(sleepTime * 3)
 	exit()
 

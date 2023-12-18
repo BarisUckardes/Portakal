@@ -16,10 +16,10 @@ namespace Portakal
 
 		return true;
 	}
-	void Memory::Set(void* __restrict pDestination, const byte pValue, const uint64 sizeInBytes)
+	void Memory::Set(void* __restrict pDestination, const byte value, const uint64 sizeInBytes)
 	{
 		for (uint64 i = 0; i < sizeInBytes; i++)
-			((byte*)(pDestination))[i] = pValue;
+			((byte*)(pDestination))[i] = value;
 	}
 #endif
 }

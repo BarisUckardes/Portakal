@@ -32,40 +32,40 @@ namespace Portakal
         D = d;
     }
 
-    Guid::Guid(const Guid& pOther)
+    Guid::Guid(const Guid& other)
     {
-        A = pOther.A;
-        B = pOther.B;
-        C = pOther.C;
-        D = pOther.D;
+        A = other.A;
+        B = other.B;
+        C = other.C;
+        D = other.D;
     }
 
-    Guid& Guid::operator=(const Guid& pOther)
+    Guid& Guid::operator=(const Guid& other)
     {
-        A = pOther.A;
-        B = pOther.B;
-        C = pOther.C;
-        D = pOther.D;
+        A = other.A;
+        B = other.B;
+        C = other.C;
+        D = other.D;
         return *this;
     }
 
-    Guid& Guid::operator=(Guid&& pOther) noexcept
+    Guid& Guid::operator=(Guid&& other) noexcept
     {
-        A = pOther.A;
-        B = pOther.B;
-        C = pOther.C;
-        D = pOther.D;
+        A = other.A;
+        B = other.B;
+        C = other.C;
+        D = other.D;
         return *this;
     }
 
-    bool Guid::operator==(const Guid& pOther) const
+    bool Guid::operator==(const Guid& other) const
     {
-        return A == pOther.A && B == pOther.B && C == pOther.C && D == pOther.D;
+        return A == other.A && B == other.B && C == other.C && D == other.D;
     }
 
-    bool Guid::operator!=(const Guid& pOther) const
+    bool Guid::operator!=(const Guid& other) const
     {
-        return A != pOther.A || B != pOther.B || C != pOther.C || D != pOther.D;
+        return A != other.A || B != other.B || C != other.C || D != other.D;
     }
 
 

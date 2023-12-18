@@ -11,10 +11,10 @@
         "CMAKE_C_COMPILER": "cl.exe",
         "CMAKE_CXX_COMPILER": "cl.exe"
       },
-      "pCondition": {
-        "pType": "equals",
-        "pLeft": "${hostSystemName}",
-        "pRight": "Windows"
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
       },
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {
@@ -23,16 +23,16 @@
       }
     },
     {
-      "name": "Debug",
-      "displayName": "Debug",
-      "inherits": "windows-base",
       "architecture": {
-        "pValue": "x64",
+        "value": "x64",
         "strategy": "external"
       },
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug"
       },
+      "displayName": "Debug",
+      "inherits": "windows-base",
+      "name": "Debug",
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {
           "intelliSenseMode": "windows-msvc-x64"
