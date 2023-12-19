@@ -132,11 +132,11 @@ namespace Portakal
     void VulkanCommandList::SetTextureMemoryBarrierCore(const Texture* Texture, const CommandListTextureMemoryBarrierDesc& desc)
     {
         const VulkanTexture* pVkTexture = (const VulkanTexture*)Texture;
-
+        const VkImage image = pVkTexture->GetVkImage();
         VkImageMemoryBarrier memoryBarrier = {};
         memoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
         memoryBarrier.pNext = nullptr;
-        memoryBarrier.image = pVkTexture->GetVkImage();
+        memoryBarrier.image = image;
         memoryBarrier.oldLayout = VulkanTextureUtils::GetImageLayout(desc.SourceLayout);
         memoryBarrier.newLayout = VulkanTextureUtils::GetImageLayout(desc.DestinationLayout);
         memoryBarrier.srcQueueFamilyIndex = GetQueueFamilyIndex(desc.SourceQueue);
@@ -155,7 +155,6 @@ namespace Portakal
             0, nullptr,
             0, nullptr,
             1, &memoryBarrier);
-
     }
     void VulkanCommandList::SetBufferMemoryBarrierCore(const GraphicsBuffer* pBuffer, const BufferBarrierDesc& desc)
     {
@@ -197,17 +196,21 @@ namespace Portakal
     {
         vkFreeCommandBuffers(mLogicalDevice, mCommandPool, 1, &mCommandBuffer);
     }
-    void VulkanCommandList::BeginRenderPassCore(const RenderPass* pRenderPass)
+    void VulkanCommandList::BeginRenderPassCore(const RenderPass* pRenderPass, const byte subFramebufferIndex = 0)
     {
         const VulkanRenderPass* pVkPass = (const VulkanRenderPass*)pRenderPass;
-
+        const VkFramebuffer framebuffer = pVkPass->GetvkSwapchainFramebuffers()[subFramebufferIndex];
         VkRenderPassBeginInfo renderPassInfo = {};
         renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
         renderPassInfo.renderPass = pVkPass->GetVkRenderPass();
-        renderPassInfo.framebuffer = pVkPass->GetvkSwapchainFramebuffers()[0];
+        renderPassInfo.framebuffer = framebuffer;
         renderPassInfo.renderArea.offset = { 0,0 };
         renderPassInfo.renderArea.extent = { 512,512 };
         VkClearValue clearColor = {};
+        clearColor.color.float32[0] = 1.0f;
+        clearColor.color.float32[1] = 0.0f;
+        clearColor.color.float32[2] = 0.0f;
+        clearColor.color.float32[3] = 1.0f;
         renderPassInfo.clearValueCount = 1;
         renderPassInfo.pClearValues = &clearColor;
 

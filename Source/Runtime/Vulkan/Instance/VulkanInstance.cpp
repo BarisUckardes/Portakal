@@ -204,7 +204,9 @@ namespace Portakal
     }
     void VulkanInstance::OnShutdown()
     {
+#ifdef PORTAKAL_DEBUG
         debugMessengerDestroyProc(mInstance, mDebugMessenger, nullptr);
+#endif
         vkDestroyInstance(mInstance, nullptr);
         DEV_LOG("VulkanInstance", "Shutdown!");
     }

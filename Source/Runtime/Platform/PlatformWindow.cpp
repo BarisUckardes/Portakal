@@ -111,7 +111,8 @@ namespace Portakal
 			mSwapchain->TransitionToPresent();
 		}
 
-		DEV_LOG("PlatformWindow", "Resized to %d,%d", size.X, size.Y);
+		//Set size
+		mSize = size;
 	}
 	void PlatformWindow::OnWindowMoved(const Vector2I position)
 	{

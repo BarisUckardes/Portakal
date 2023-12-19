@@ -46,7 +46,7 @@ namespace Portakal
         void CommitResourcesCore(const Array<ResourceTable*>& resources) override;
 
         // Inherited via CommandList
-        void BeginRenderPassCore(const RenderPass* pRenderPass) override;
+        void BeginRenderPassCore(const RenderPass* pRenderPass, const byte subFramebufferIndex) override;
         void EndRenderPassCore() override;
     private:
         byte GetQueueFamilyIndex(const GraphicsQueueType type);

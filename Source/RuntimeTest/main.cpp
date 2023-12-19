@@ -34,7 +34,40 @@
 
 namespace Portakal
 {
-	void RunVulkanTest()
+	SharedHeap<RenderPass> CreateRenderPass(Swapchain* pSwapchain,GraphicsDevice* pDevice)
+	{
+		RenderPassDesc renderPassDesc = {};
+		renderPassDesc.Size = { pSwapchain->GetSize().X,pSwapchain->GetSize().Y };
+		renderPassDesc.DepthStencilAttachment = {};
+		renderPassDesc.AttachmentViews;
+		renderPassDesc.bSwapchain = true;
+		for (const SharedHeap<TextureView>& view : pSwapchain->GetTextureViews())
+			renderPassDesc.AttachmentViews.Add(view);
+
+		//Create render attachment desc
+		for (byte i = 0; i < pSwapchain->GetBufferCount(); i++)
+		{
+			RenderPassAttachmentDesc attachmentDesc = {};
+			attachmentDesc.pTexture = pSwapchain->GetTextures()[i];
+			attachmentDesc.ArrayLevel = 1;
+			attachmentDesc.MipLevel = 1;
+			attachmentDesc.ColorLoadOperation = RenderPassLoadOperation::Clear;
+			attachmentDesc.ColorStoreOperation = RenderPassStoreOperation::Store;
+			attachmentDesc.StencilLoadOperation = RenderPassLoadOperation::Load;
+			attachmentDesc.StencilStoreOperation = RenderPassStoreOperation::Ignore;
+			attachmentDesc.InputLayout = TextureMemoryLayout::ColorAttachment;
+			attachmentDesc.OutputLayout = TextureMemoryLayout::Present;
+			renderPassDesc.ColorAttachments.Add(attachmentDesc);
+		}
+
+		//Create subpass
+		RenderPassSubpassDesc subpassDesc = {};
+		subpassDesc.BindPoint = PipelineBindPoint::Graphics;
+		subpassDesc.Inputs = { 0 };
+		renderPassDesc.Subpasses.Add(subpassDesc);
+		return pDevice->CreateRenderPass(renderPassDesc);
+	}
+	void Run()
 	{
 		//Initialize platform
 		Platform::InitializePlatformDependencies();
@@ -81,68 +114,53 @@ namespace Portakal
 		//Create fence
 		SharedHeap<Fence> pFence = pDevice->CreateFence();
 
-		
+		//Get swapchain textures
 		Array<SharedHeap<Texture>> swapchainTextures = pSwapchain->GetTextures();
-		Array<SharedHeap<TextureView>> swapchainTextureViews = pSwapchain->GetTextureViews();
 
-		//Create render pass
-		RenderPassDesc renderPassDesc = {};
-		renderPassDesc.Size = { pSwapchain->GetSize().X,pSwapchain->GetSize().Y};
-		renderPassDesc.DepthStencilAttachment = {};
-		renderPassDesc.AttachmentViews;
-		renderPassDesc.bSwapchain = true;
-		for(const SharedHeap<TextureView>& view : pSwapchain->GetTextureViews())
-			renderPassDesc.AttachmentViews.Add(view);
+		//Create render pass set
+		SharedHeap<RenderPass> pRenderPass = CreateRenderPass(pSwapchain.GetHeap(),pDevice.GetHeap());
 
-		//Create render attachment desc
-		RenderPassAttachmentDesc attachmentDesc = {};
-		attachmentDesc.pTexture = swapchainTextures[0];
-		attachmentDesc.ArrayLevel = 1;
-		attachmentDesc.MipLevel = 1;
-		attachmentDesc.ColorLoadOperation = RenderPassLoadOperation::Clear;
-		attachmentDesc.ColorStoreOperation = RenderPassStoreOperation::Store;
-		attachmentDesc.StencilLoadOperation = RenderPassLoadOperation::Load;
-		attachmentDesc.StencilStoreOperation = RenderPassStoreOperation::Ignore;
-		attachmentDesc.InputLayout = TextureMemoryLayout::ColorAttachment;
-		attachmentDesc.OutputLayout = TextureMemoryLayout::Present;
-		renderPassDesc.ColorAttachments.Add(attachmentDesc);
-
-		//Create subpass
-		RenderPassSubpassDesc subpassDesc = {};
-		subpassDesc.BindPoint = PipelineBindPoint::Graphics;
-		subpassDesc.Inputs = { 0 };
-		renderPassDesc.Subpasses.Add(subpassDesc);
-
-		SharedHeap<RenderPass> pPass = pDevice->CreateRenderPass(renderPassDesc);
-
+		const byte presentImageIndexStatic = 0;
 		byte presentImageIndex = 0;
+		Vector2US lastWindowSize = pWindow->GetSize();
 		while (!pWindow.IsShutdown())
 		{
 			//Poll window messages first
 			pWindow->PollMessages();
 
+			//Check if window resized and get new set of textures
+			const Vector2US windowSize = pWindow->GetSize();
+			if (lastWindowSize != windowSize)
+			{
+				DEV_LOG("System", "WindowSize changed %d,%d", windowSize.X, windowSize.Y);
+				swapchainTextures = pSwapchain->GetTextures();
+				pRenderPass.Shutdown();
+				pRenderPass = CreateRenderPass(pSwapchain.GetHeap(), pDevice.GetHeap());
+			}
+			lastWindowSize = windowSize;
+
 			//Begin recording
 			pCmdList->BeginRecording();
 
-			//Set texture layouts to color attachment
-			CommandListTextureMemoryBarrierDesc preRenderPassBarrierDesc = {};
-			preRenderPassBarrierDesc.MipIndex = 0;
-			preRenderPassBarrierDesc.ArrayIndex = 0;
-			preRenderPassBarrierDesc.AspectFlags = TextureAspectFlags::Color;
+			//Set pre barrier
+			CommandListTextureMemoryBarrierDesc preRenderPassBarrier = {};
+			preRenderPassBarrier.ArrayIndex = 0;
+			preRenderPassBarrier.MipIndex = 0;
+			preRenderPassBarrier.AspectFlags = TextureAspectFlags::Color;
 
-			preRenderPassBarrierDesc.SourceLayout = TextureMemoryLayout::Present;
-			preRenderPassBarrierDesc.SourceQueue = GraphicsQueueType::Graphics;
-			preRenderPassBarrierDesc.SourceAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentRead;
-			preRenderPassBarrierDesc.SourceStageFlags = PipelineStageFlags::ColorAttachmentOutput;
+			preRenderPassBarrier.SourceAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentRead;
+			preRenderPassBarrier.SourceLayout = TextureMemoryLayout::Present;
+			preRenderPassBarrier.SourceQueue = GraphicsQueueType::Graphics;
+			preRenderPassBarrier.SourceStageFlags = PipelineStageFlags::ColorAttachmentOutput;
 
-			preRenderPassBarrierDesc.DestinationLayout = TextureMemoryLayout::ColorAttachment;
-			preRenderPassBarrierDesc.DestinationQueue = GraphicsQueueType::Graphics;
-			preRenderPassBarrierDesc.DestinationAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentWrite;
-			preRenderPassBarrierDesc.DestinationStageFlags = PipelineStageFlags::ColorAttachmentOutput;
-			pCmdList->SetTextureMemoryBarrier(swapchainTextures[0].GetHeap(), preRenderPassBarrierDesc);
+			preRenderPassBarrier.DestinationAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentRead | GraphicsMemoryAccessFlags::ColorAttachmentWrite;
+			preRenderPassBarrier.DestinationLayout = TextureMemoryLayout::ColorAttachment;
+			preRenderPassBarrier.DestinationQueue = GraphicsQueueType::Graphics;
+			preRenderPassBarrier.DestinationStageFlags = PipelineStageFlags::ColorAttachmentOutput;
+			pCmdList->SetTextureMemoryBarrier(swapchainTextures[presentImageIndex].GetHeap(), preRenderPassBarrier);
 
 			//Begin render pass
-			pCmdList->BeginRenderPass(pPass);
+			pCmdList->BeginRenderPass(pRenderPass, presentImageIndex);
 
 			//End render pass
 			pCmdList->EndRenderPass();
@@ -156,8 +174,13 @@ namespace Portakal
 			//Wait for fence to be signalled
 			pDevice->WaitFences(pFence.GetHeapAddress(), 1);
 
+			//Present
 			pSwapchain->Present();
+
+			//Wait for the present
 			pSwapchain->WaitForPresent(presentImageIndex);
+
+			//Increment the current index
 			presentImageIndex = (presentImageIndex + 1) % pSwapchain->GetBufferCount();
 		}
 
@@ -167,47 +190,16 @@ namespace Portakal
 		pCmdList.Shutdown();
 		pCmdPool.Shutdown();
 		pFence.Shutdown();
-		pPass.Shutdown();
+		pRenderPass.Shutdown();
 		pSwapchain.Shutdown();
 		pDevice.Shutdown();
 		pAdapter.Shutdown();
 		pInstance.Shutdown();
 		pWindow.Shutdown();
 	}
-
-	void RunD3D12Test()
-	{
-		//Initialize platform
-		Platform::InitializePlatformDependencies();
-
-		//Create window
-		WindowDesc windowDesc = {};
-		windowDesc.Title = "Portakal Runtime Test";
-		windowDesc.Position = { 100,100 };
-		windowDesc.Size = { 1024,1024 };
-		windowDesc.pMonitor = nullptr;
-		windowDesc.Mode = WindowMode::Windowed;
-
-		SharedHeap<PlatformWindow> pWindow = PlatformWindow::Create(windowDesc);
-		pWindow->Show();
-
-		//Create graphics instance
-		GraphicsInstanceDesc instanceDesc = {};
-		instanceDesc.Backend = GraphicsBackend::DirectX12;
-		SharedHeap<GraphicsInstance> pInstance = Portakal::GraphicsInstance::Create(instanceDesc);
-
-		//Get adapter
-		SharedHeap<GraphicsAdapter> pAdapter = pInstance->GetAdapters()[0];
-		DEV_LOG("System", "Selecting [%s] device", *pAdapter->GetProductName());
-
-		//Create device
-		SharedHeap<GraphicsDevice> pDevice = pAdapter->CreateDevice();
-	}
 }
-
 int main(const unsigned int argumentCount, const char** ppArguments)
 {
-	//Portakal::RunVulkanTest();
-	Portakal::RunD3D12Test();
+	Portakal::Run();
 	return 0;
 }
