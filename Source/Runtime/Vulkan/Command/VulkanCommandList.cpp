@@ -205,7 +205,7 @@ namespace Portakal
         renderPassInfo.renderPass = pVkPass->GetVkRenderPass();
         renderPassInfo.framebuffer = framebuffer;
         renderPassInfo.renderArea.offset = { 0,0 };
-        renderPassInfo.renderArea.extent = { 512,512 };
+        renderPassInfo.renderArea.extent = { pRenderPass->GetRenderRegion().X,pRenderPass->GetRenderRegion().Y};
         VkClearValue clearColor = {};
         clearColor.color.float32[0] = 1.0f;
         clearColor.color.float32[1] = 0.0f;
