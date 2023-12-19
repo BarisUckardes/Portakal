@@ -221,4 +221,20 @@ namespace Portakal
 		if(mSurface != VK_NULL_HANDLE)
 			vkDestroySurfaceKHR(((VulkanInstance*)mDevice->GetOwnerAdapter()->GetOwnerInstance())->GetVkInstance(), mSurface, nullptr);
 	}
+	bool VulkanSwapchain::SetFullScreen()
+	{
+		//Get monitor and validate
+		SharedHeap<PlatformMonitor> pMonitor = GetWindow()->GetMonitor();
+		if (pMonitor.IsShutdown())
+			return false;
+
+		//Resize according to the monitor
+		Resize(pMonitor->GetSize().X, pMonitor->GetSize().Y);
+
+		return true;
+	}
+	bool VulkanSwapchain::SetWindowed()
+	{
+		return false;
+	}
 }

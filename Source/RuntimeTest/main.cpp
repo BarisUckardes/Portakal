@@ -104,7 +104,6 @@ namespace Portakal
 		swapchainDesc.pDevice = pDevice;
 		SharedHeap<Portakal::Swapchain> pSwapchain = pDevice->CreateSwapchain(swapchainDesc);
 
-
 		//Create command pool
 		SharedHeap<CommandPool> pCmdPool = pDevice->CreateCommandPool({ CommandPoolType::Graphics });
 

@@ -54,6 +54,14 @@ namespace Portakal
         GetOwnerDevice()->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, mLayoutFence.GetHeap());
         GetOwnerDevice()->WaitFences(mLayoutFence.GetHeapAddress(), 1);
     }
+    void Swapchain::SetFullScreen(const bool bState)
+    {
+        //Wait for idle
+        GetOwnerDevice()->WaitDeviceIdle();
+
+        //Set fullscreen
+        const bool bSuccess = bState ? SetFullScreen() : SetWindowed();
+    }
     void Swapchain::SetTextures(const Array<SharedHeap<Texture>>& textures, const Array<SharedHeap<TextureView>>& views)
     {
         DEV_LOG("Swapchain", "New set of textures&views arrived!");

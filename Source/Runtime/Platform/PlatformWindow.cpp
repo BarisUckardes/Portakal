@@ -24,18 +24,42 @@ namespace Portakal
 	}
 	void PlatformWindow::SetPosition(const Vector2I position)
 	{
-		SetPosition(position);
+		SetPositionCore(position);
 		mPosition = position;
 	}
 	void PlatformWindow::SetMode(const WindowMode mode)
 	{
+		//Call implementation
 		SetModeCore(mode);
+
+		//Set new mode
 		mMode = mode;
+
+		//Set sizes
+		if (mode == WindowMode::Fullscreen)
+		{
+			SetPosition({ 0,0 });
+			SetSize({ 3920,2160 });
+		}
+		else
+		{
+
+		}
+
+		//Set swapchain mode
+		if (!mSwapchain.IsShutdown())
+			mSwapchain->SetFullScreen(mode == WindowMode::Fullscreen);
 	}
 	void PlatformWindow::SwitchMonitor(const SharedHeap<PlatformMonitor>& pMonitor)
 	{
+		//Call implementation
 		SwitchMonitorCore(pMonitor);
+
+		//Set monitor
 		mMonitor = pMonitor;
+
+		//Set mode right away
+		SetMode(mMode);
 	}
 	void PlatformWindow::PollMessages()
 	{
