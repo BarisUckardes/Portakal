@@ -13,7 +13,7 @@ namespace Portakal
 
 		virtual void OnShutdown() override;
 	private:
-		void Present() override;
+		void PresentCore() override;
 	private:
 		VkSurfaceKHR mSurface;
 		VkSwapchainKHR mSwapchain;

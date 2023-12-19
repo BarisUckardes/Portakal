@@ -64,6 +64,8 @@ namespace Portakal
             return mTransferQueueFamily.FamilyIndex;
         }
         FORCEINLINE VkDevice GetVkLogicalDevice() const noexcept { return mLogicalDevice; }
+
+        SharedHeap<Texture> CreateVkSwapchainTexture(const TextureDesc& desc, const VkImage image);
 	private:
 		// Inherited via GraphicsDevice
 		void OnShutdown() override;
@@ -80,6 +82,7 @@ namespace Portakal
 		ResourceTable* CreateResourceTableCore(const ResourceTableDesc& desc) override;
         Fence* CreateFenceCore() override;
         Swapchain* CreateSwapchainCore(const SwapchainDesc& desc) override;
+        RenderPass* CreateRenderPassCore(const RenderPassDesc& desc) override;
 
         // Inherited via GraphicsDevice
         CommandPool* CreateCommandPoolCore(const CommandPoolDesc& desc) override;
@@ -97,7 +100,5 @@ namespace Portakal
         DeviceQueueFamily mTransferQueueFamily;
         VkDevice mLogicalDevice;
         VkPhysicalDevice mPhysicalDevice;
-
-        
     };
 }

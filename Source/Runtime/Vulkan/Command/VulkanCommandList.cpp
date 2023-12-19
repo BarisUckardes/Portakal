@@ -15,13 +15,15 @@
 #include <Runtime/Vulkan/Texture/VulkanTextureView.h>
 #include <Runtime/Vulkan/Command/VulkanCommandListUtils.h>
 #include <Runtime/Vulkan/Sampler/VulkanSamplerUtils.h>
+#include <Runtime/Vulkan/RenderPass/VulkanRenderPass.h>
 
 namespace Portakal
 {
 
-    VulkanCommandList::VulkanCommandList(const CommandListDesc& desc, VulkanDevice* pDevice) : CommandList(desc), mCommandBuffer(VK_NULL_HANDLE)
+    VulkanCommandList::VulkanCommandList(const CommandListDesc& desc, VulkanDevice* pDevice) : CommandList(desc), mCommandBuffer(VK_NULL_HANDLE),mLogicalDevice(pDevice->GetVkLogicalDevice())
     {
         VulkanCommandPool* pCmdPool = (VulkanCommandPool*)desc.pPool.GetHeap();
+        mCommandPool = pCmdPool->GetVkCmdPool();
 
         /**
         * Create command buffer
@@ -193,13 +195,27 @@ namespace Portakal
     }
     void VulkanCommandList::OnShutdown()
     {
-
+        vkFreeCommandBuffers(mLogicalDevice, mCommandPool, 1, &mCommandBuffer);
     }
     void VulkanCommandList::BeginRenderPassCore(const RenderPass* pRenderPass)
     {
+        const VulkanRenderPass* pVkPass = (const VulkanRenderPass*)pRenderPass;
+
+        VkRenderPassBeginInfo renderPassInfo = {};
+        renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+        renderPassInfo.renderPass = pVkPass->GetVkRenderPass();
+        renderPassInfo.framebuffer = pVkPass->GetvkSwapchainFramebuffers()[0];
+        renderPassInfo.renderArea.offset = { 0,0 };
+        renderPassInfo.renderArea.extent = { 512,512 };
+        VkClearValue clearColor = {};
+        renderPassInfo.clearValueCount = 1;
+        renderPassInfo.pClearValues = &clearColor;
+
+        vkCmdBeginRenderPass(mCommandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     }
     void VulkanCommandList::EndRenderPassCore()
     {
+        vkCmdEndRenderPass(mCommandBuffer);
     }
     void VulkanCommandList::SetViewportsCore(const ViewportDesc* pViewports, const byte count)
     {

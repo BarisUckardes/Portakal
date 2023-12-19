@@ -39,5 +39,6 @@ namespace Portakal
 	}
 	void VulkanCommandPool::OnShutdown()
 	{
+        vkDestroyCommandPool(mLogicalDevice, mPool, nullptr);
 	}
 }

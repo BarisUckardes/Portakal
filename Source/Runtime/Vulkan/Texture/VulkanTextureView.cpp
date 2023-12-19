@@ -4,7 +4,7 @@
 #include <Runtime/Vulkan/Texture/VulkanTextureUtils.h>
 namespace Portakal
 {
-    VulkanTextureView::VulkanTextureView(const TextureViewDesc& desc, VulkanDevice* pDevice) : TextureView(desc),mLogicalDevice(pDevice->GetVkLogicalDevice())
+    VulkanTextureView::VulkanTextureView(const TextureViewDesc& desc, VulkanDevice* pDevice) : TextureView(desc),mLogicalDevice(pDevice->GetVkLogicalDevice()),mSwapchain(false)
     {
         //Get vulkan texture
         const VulkanTexture* pTexture = (VulkanTexture*)desc.pTexture.GetHeap();
@@ -26,10 +26,14 @@ namespace Portakal
         info.subresourceRange.baseMipLevel = 0;
         info.subresourceRange.layerCount = desc.ArrayLevel;
         info.subresourceRange.levelCount = desc.MipLevel;
+        info.components = swizzleMap;
         info.flags = VkImageViewCreateFlags();
         info.pNext = nullptr;
 
         DEV_ASSERT(vkCreateImageView(mLogicalDevice, &info, nullptr, &mView) == VK_SUCCESS, "VulkanTextureView", "Failed to create view");
+    }
+    VulkanTextureView::VulkanTextureView(const TextureViewDesc& desc, const VkImageView view, VulkanDevice* pDevice) : TextureView(desc),mLogicalDevice(VK_NULL_HANDLE),mSwapchain(true),mView(view)
+    {
     }
     void VulkanTextureView::OnShutdown()
     {

@@ -4,6 +4,7 @@
 #include <Runtime/Vulkan/Adapter/VulkanAdapter.h>
 #include <Runtime/Vulkan/Texture/VulkanTextureUtils.h>
 #include <Runtime/Vulkan/Device/VulkanDevice.h>
+#include <Runtime/Graphics/Command/CommandList.h>
 
 #ifdef PORTAKAL_PLATFORM_WINDOWS
 #include <Runtime/Win32/Win32Window.h>
@@ -11,6 +12,7 @@
 #include <vulkan_win32.h>
 #endif
 #include <Runtime/Vulkan/Fence/VulkanFence.h>
+#include <Runtime/Graphics/Command/CommandListTextureMemoryBarrierDesc.h>
 
 namespace Portakal
 {
@@ -90,6 +92,7 @@ namespace Portakal
 			Math::Clamp((uint32)windowSize.X,surfaceCapabilities.minImageExtent.width,surfaceCapabilities.maxImageExtent.width),
 			Math::Clamp((uint32)windowSize.Y,surfaceCapabilities.minImageExtent.height,surfaceCapabilities.maxImageExtent.height)
 		};
+		SetSize(selectedExtent.width, selectedExtent.height);
 
 		//Try get present queue family index
 		const int32 presentFamilyIndex = pDevice->GetPresentQueueFamilyIndex(mSurface);
@@ -103,8 +106,9 @@ namespace Portakal
 		swapchainInfo.minImageCount = desc.BufferCount;
 		swapchainInfo.imageExtent = selectedExtent;
 		swapchainInfo.imageArrayLayers = 1;
+		swapchainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 		swapchainInfo.imageColorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
-		swapchainInfo.imageUsage = VK_SHARING_MODE_EXCLUSIVE;
+		swapchainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
 		swapchainInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
 		swapchainInfo.preTransform = surfaceCapabilities.currentTransform;
 		swapchainInfo.presentMode = VK_PRESENT_MODE_FIFO_KHR;
@@ -118,13 +122,59 @@ namespace Portakal
 
 		DEV_ASSERT(vkCreateSwapchainKHR(mLogicalDevice,&swapchainInfo,nullptr,&mSwapchain) == VK_SUCCESS,"VulkanSwapchain","Failed to create swapchain");
 		DEV_LOG("VulkanSwapchain", "Initialized!");
+
+		//Get swapchain images
+		uint32 swapchainImageCount = 0;
+		DEV_ASSERT(vkGetSwapchainImagesKHR(mLogicalDevice, mSwapchain, &swapchainImageCount, nullptr) == VK_SUCCESS, "VulkanSwapchain", "Failed to get swapchain images!");
+		DEV_ASSERT(swapchainImageCount == desc.BufferCount, "VulkanSwapchain", "Swapchain image count does not match with the requested image count");
+
+		Array<VkImage> swapchainImages(swapchainImageCount);
+		DEV_ASSERT(vkGetSwapchainImagesKHR(mLogicalDevice, mSwapchain, &swapchainImageCount, swapchainImages.GetData()) == VK_SUCCESS, "VulkanSwapchain", "Failed to get swapchain images!");
+
+		//Create texture wrapper around swapchain textures
+		Array<SharedHeap<Texture>> textures;
+		Array<SharedHeap<TextureView>> views;
+		for (byte i = 0; i < swapchainImageCount; i++)
+		{
+			//Create texture
+			TextureDesc textureDesc = {};
+			textureDesc.Type = TextureType::Texture2D;
+			textureDesc.Format = GetColorFormat();
+			textureDesc.Usage = TextureUsage::ColorAttachment;
+			textureDesc.Size = { (uint16)selectedExtent.width,(uint16)selectedExtent.height,1 };
+			textureDesc.MipLevels = 1;
+			textureDesc.ArrayLevels = 1;
+			textureDesc.SampleCount = TextureSampleCount::SAMPLE_COUNT_1;
+			textureDesc.pHeap = nullptr;
+
+			SharedHeap<Texture> pTexture = pDevice->CreateVkSwapchainTexture(textureDesc, swapchainImages[i]);
+			textures.Add(pTexture);
+
+			//Create view
+			TextureViewDesc viewDesc = {};
+			viewDesc.MipLevel = 1;
+			viewDesc.ArrayLevel = 1;
+			viewDesc.pTexture = pTexture;
+			SharedHeap<TextureView> pView = pDevice->CreateTextureView(viewDesc);
+			views.Add(pView);
+		}
+
+		//Set framebuffer textures and views
+		SetTextures(textures, views);
 	}
 	void VulkanSwapchain::OnShutdown()
 	{
+		Swapchain::OnShutdown();
+
+		//Destroy swapchain
+		vkDestroySwapchainKHR(mLogicalDevice, mSwapchain, nullptr);
+
+		//Destroy surface
 		vkDestroySurfaceKHR(((VulkanInstance*)GetOwnerDevice()->GetOwnerAdapter()->GetOwnerInstance())->GetVkInstance(), mSurface, nullptr);
+
 		DEV_LOG("VulkanSwapchain", "Shutdown");
 	}
-	void VulkanSwapchain::Present()
+	void VulkanSwapchain::PresentCore()
 	{
 		//Get queue first and validate
 		const VkQueue queue = ((VulkanDevice*)GetOwnerDevice())->GetPresentQueue(mSurface);
@@ -134,7 +184,8 @@ namespace Portakal
 			return;
 		}
 
-		VkFence fence = ((VulkanFence*)GetFence().GetHeap())->GetVkFence();
+		//Get current image fence
+		VkFence fence = ((VulkanFence*)GetPresentFence(GetImageIndex()).GetHeap())->GetVkFence();
 
 		//Acquire image
 		uint32 imageIndex = 0;

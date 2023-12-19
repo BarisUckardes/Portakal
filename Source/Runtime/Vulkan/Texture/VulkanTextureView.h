@@ -9,6 +9,7 @@ namespace Portakal
 	{
 	public:
 		VulkanTextureView(const TextureViewDesc& desc, VulkanDevice* pDevice);
+		VulkanTextureView(const TextureViewDesc& desc,const VkImageView view, VulkanDevice* pDevice);
 		~VulkanTextureView() = default;
 
 		FORCEINLINE VkImageView GetVkImageView() const noexcept
@@ -17,7 +18,8 @@ namespace Portakal
 		}
 		virtual void OnShutdown() override;
 	private:
+		const bool mSwapchain;
+		const VkDevice mLogicalDevice;
 		VkImageView mView;
-		VkDevice mLogicalDevice;
 	};
 }

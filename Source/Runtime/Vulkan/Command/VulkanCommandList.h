@@ -44,16 +44,18 @@ namespace Portakal
 
         // Inherited via CommandList
         void CommitResourcesCore(const Array<ResourceTable*>& resources) override;
+
+        // Inherited via CommandList
+        void BeginRenderPassCore(const RenderPass* pRenderPass) override;
+        void EndRenderPassCore() override;
     private:
         byte GetQueueFamilyIndex(const GraphicsQueueType type);
 
         virtual void OnShutdown() override;
     private:
+        VkDevice mLogicalDevice;
+        VkCommandPool mCommandPool;
         VkCommandBuffer mCommandBuffer;
-
-        // Inherited via CommandList
-        void BeginRenderPassCore(const RenderPass* pRenderPass) override;
-        void EndRenderPassCore() override;
     };
 
 }

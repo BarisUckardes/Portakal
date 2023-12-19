@@ -32,52 +32,151 @@
 #include <Runtime/Graphics/Resource/ResourceTableLayout.h>
 #include <Runtime/Graphics/Resource/ResourceTablePool.h>
 
+namespace Portakal
+{
+	void Run()
+	{
+		//Initialize platform
+		Platform::InitializePlatformDependencies();
+
+		//Create window
+		WindowDesc windowDesc = {};
+		windowDesc.Title = "Portakal Runtime Test";
+		windowDesc.Position = { 100,100 };
+		windowDesc.Size = { 1024,1024 };
+		windowDesc.pMonitor = nullptr;
+		windowDesc.Mode = WindowMode::Windowed;
+
+		SharedHeap<PlatformWindow> pWindow = PlatformWindow::Create(windowDesc);
+		pWindow->Show();
+
+		//Create graphics instance
+		GraphicsInstanceDesc instanceDesc = {};
+		instanceDesc.Backend = GraphicsBackend::Vulkan;
+		SharedHeap<GraphicsInstance> pInstance = Portakal::GraphicsInstance::Create(instanceDesc);
+
+		//Get adapter
+		SharedHeap<GraphicsAdapter> pAdapter = pInstance->GetAdapters()[0];
+		DEV_LOG("System", "Selecting [%s] device", *pAdapter->GetProductName());
+
+		//Create device
+		SharedHeap<GraphicsDevice> pDevice = pAdapter->CreateDevice();
+
+		//Create swapchain
+		SwapchainDesc swapchainDesc = {};
+		swapchainDesc.ColorFormat = TextureFormat::R8_G8_B8_A8_UNorm;
+		swapchainDesc.BufferCount = 3;
+		swapchainDesc.DepthStencilFormat = TextureFormat::None;
+		swapchainDesc.pWindow = pWindow;
+		swapchainDesc.pDevice = pDevice;
+		SharedHeap<Portakal::Swapchain> pSwapchain = pDevice->CreateSwapchain(swapchainDesc);
+		pSwapchain->TransitionToPresent();
+
+		//Create command pool
+		SharedHeap<CommandPool> pCmdPool = pDevice->CreateCommandPool({ CommandPoolType::Graphics });
+
+		//Create command list
+		SharedHeap<CommandList> pCmdList = pDevice->CreateCommandList({ pCmdPool });
+
+		//Create fence
+		SharedHeap<Fence> pFence = pDevice->CreateFence();
+
+		
+		const Array<SharedHeap<Texture>> swapchainTextures = pSwapchain->GetTextures();
+		const Array<SharedHeap<TextureView>> swapchainTextureViews = pSwapchain->GetTextureViews();
+
+		//Create render pass
+		RenderPassDesc renderPassDesc = {};
+		renderPassDesc.Size = { pSwapchain->GetSize().X,pSwapchain->GetSize().Y};
+		renderPassDesc.DepthStencilAttachment = {};
+		renderPassDesc.AttachmentViews;
+		renderPassDesc.bSwapchain = true;
+		for(const SharedHeap<TextureView>& view : pSwapchain->GetTextureViews())
+			renderPassDesc.AttachmentViews.Add(view);
+
+		//Create render attachment desc
+		RenderPassAttachmentDesc attachmentDesc = {};
+		attachmentDesc.pTexture = swapchainTextures[0];
+		attachmentDesc.ArrayLevel = 1;
+		attachmentDesc.MipLevel = 1;
+		attachmentDesc.ColorLoadOperation = RenderPassLoadOperation::Clear;
+		attachmentDesc.ColorStoreOperation = RenderPassStoreOperation::Store;
+		attachmentDesc.StencilLoadOperation = RenderPassLoadOperation::Load;
+		attachmentDesc.StencilStoreOperation = RenderPassStoreOperation::Ignore;
+		attachmentDesc.InputLayout = TextureMemoryLayout::ColorAttachment;
+		attachmentDesc.OutputLayout = TextureMemoryLayout::Present;
+		renderPassDesc.ColorAttachments.Add(attachmentDesc);
+
+		//Create subpass
+		RenderPassSubpassDesc subpassDesc = {};
+		subpassDesc.BindPoint = PipelineBindPoint::Graphics;
+		subpassDesc.Inputs = { 0 };
+		renderPassDesc.Subpasses.Add(subpassDesc);
+
+		SharedHeap<RenderPass> pPass = pDevice->CreateRenderPass(renderPassDesc);
+
+		byte presentImageIndex = 0;
+		while (!pWindow.IsShutdown())
+		{
+			//Poll window messages first
+			pWindow->PollMessages();
+
+			//Begin recording
+			pCmdList->BeginRecording();
+
+			//Set texture layouts to color attachment
+			CommandListTextureMemoryBarrierDesc preRenderPassBarrierDesc = {};
+			preRenderPassBarrierDesc.MipIndex = 0;
+			preRenderPassBarrierDesc.ArrayIndex = 0;
+			preRenderPassBarrierDesc.AspectFlags = TextureAspectFlags::Color;
+
+			preRenderPassBarrierDesc.SourceLayout = TextureMemoryLayout::Present;
+			preRenderPassBarrierDesc.SourceQueue = GraphicsQueueType::Graphics;
+			preRenderPassBarrierDesc.SourceAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentRead;
+			preRenderPassBarrierDesc.SourceStageFlags = PipelineStageFlags::ColorAttachmentOutput;
+
+			preRenderPassBarrierDesc.DestinationLayout = TextureMemoryLayout::ColorAttachment;
+			preRenderPassBarrierDesc.DestinationQueue = GraphicsQueueType::Graphics;
+			preRenderPassBarrierDesc.DestinationAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentWrite;
+			preRenderPassBarrierDesc.DestinationStageFlags = PipelineStageFlags::ColorAttachmentOutput;
+			pCmdList->SetTextureMemoryBarrier(swapchainTextures[0].GetHeap(), preRenderPassBarrierDesc);
+
+			//Begin render pass
+			pCmdList->BeginRenderPass(pPass);
+
+			//End render pass
+			pCmdList->EndRenderPass();
+
+			//End recording
+			pCmdList->EndRecording();
+
+			//Submit commands to graphics queue with a fence
+			pDevice->SubmitCommandLists(pCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, pFence.GetHeap());
+
+			//Wait for fence to be signalled
+			pDevice->WaitFences(pFence.GetHeapAddress(), 1);
+
+			pSwapchain->Present();
+			pSwapchain->WaitForPresent(presentImageIndex);
+			presentImageIndex = (presentImageIndex + 1) % pSwapchain->GetBufferCount();
+		}
+
+		//Wati device idle before shutdown
+		pDevice->WaitDeviceIdle();
+
+		pCmdList.Shutdown();
+		pCmdPool.Shutdown();
+		pFence.Shutdown();
+		pPass.Shutdown();
+		pSwapchain.Shutdown();
+		pDevice.Shutdown();
+		pAdapter.Shutdown();
+		pInstance.Shutdown();
+		pWindow.Shutdown();
+	}
+}
 int main(const unsigned int argumentCount, const char** ppArguments)
 {
-	//Initialize platform
-	Portakal::Platform::InitializePlatformDependencies();
-
-	//Create window
-	Portakal::WindowDesc windowDesc = {};
-	windowDesc.Title = "Portakal Runtime Test";
-	windowDesc.Position = { 100,100 };				
-	windowDesc.Size = { 1024,1024 };
-	windowDesc.pMonitor = nullptr;
-	windowDesc.Mode = Portakal::WindowMode::Windowed;
-
-	Portakal::SharedHeap<Portakal::PlatformWindow> pWindow = Portakal::PlatformWindow::Create(windowDesc);
-	pWindow->Show();
-
-	//Create graphics instance
-	Portakal::GraphicsInstanceDesc instanceDesc = {};
-	instanceDesc.Backend = Portakal::GraphicsBackend::Vulkan;
-	Portakal::SharedHeap<Portakal::GraphicsInstance> pInstance = Portakal::GraphicsInstance::Create(instanceDesc);
-
-	//Get adapter
-	Portakal::SharedHeap<Portakal::GraphicsAdapter> pAdapter = pInstance->GetAdapters()[0];
-	DEV_LOG("System", "Selecting [%s] device", *pAdapter->GetProductName());
-
-	//Create device
-	Portakal::SharedHeap<Portakal::GraphicsDevice> pDevice = pAdapter->CreateDevice();
-
-	//Create swapchain
-	Portakal::SwapchainDesc swapchainDesc = {};
-	swapchainDesc.ColorFormat = Portakal::TextureFormat::R8_G8_B8_A8_UNorm;
-	swapchainDesc.BufferCount = 3;
-	swapchainDesc.DepthStencilFormat = Portakal::TextureFormat::None;
-	swapchainDesc.pWindow = pWindow;
-	swapchainDesc.pDevice = pDevice;
-	Portakal::SharedHeap<Portakal::Swapchain> pSwapchain = pDevice->CreateSwapchain(swapchainDesc);
-	pSwapchain->Present();
-	while (!pWindow.IsShutdown())
-	{
-		pWindow->PollMessages();
-	}
-
-	pSwapchain.Shutdown();
-	pDevice.Shutdown();
-	pAdapter.Shutdown();
-	pInstance.Shutdown();
-	pWindow.Shutdown();
+	Portakal::Run();
 	return 0;
 }

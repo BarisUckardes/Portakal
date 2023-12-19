@@ -4,6 +4,7 @@
 #include <Runtime/Graphics/RenderPass/RenderPassSubpassDependencyDesc.h>
 #include <Runtime/Containers/Array.h>
 #include <Runtime/Math/Vector2.h>
+#include <Runtime/Graphics/Texture/TextureView.h>
 
 namespace Portakal
 {
@@ -15,5 +16,7 @@ namespace Portakal
 		RenderPassAttachmentDesc DepthStencilAttachment;
 		Array<RenderPassSubpassDesc> Subpasses;
 		Array<RenderPassSubpassDependencyDesc> Dependencies;
+		Array<SharedHeap<TextureView>> AttachmentViews;
+		bool bSwapchain;
 	};
 }

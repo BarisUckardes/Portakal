@@ -3,9 +3,94 @@
 
 namespace Portakal
 {
-    Swapchain::Swapchain(const SwapchainDesc& desc) : mColorFormat(desc.ColorFormat),mDepthStencilFormat(desc.DepthStencilFormat),mBufferCount(desc.BufferCount),mWindow(desc.pWindow),mSize(desc.pWindow->GetSize())
+    Swapchain::Swapchain(const SwapchainDesc& desc) : mColorFormat(desc.ColorFormat),mDepthStencilFormat(desc.DepthStencilFormat),mBufferCount(desc.BufferCount),mWindow(desc.pWindow),mSize(desc.pWindow->GetSize()),mIndex(0)
     {
-        //Create fence
-        mFence = desc.pDevice->CreateFence();
+        CreateInternalResources(desc.pDevice.GetHeap());
+    }
+    void Swapchain::Present()
+    {
+        PresentCore();
+        IncrementIndex();
+    }
+    void Swapchain::WaitForPresent(const byte index)
+    {
+        GetOwnerDevice()->WaitFences(mPresentFences[index].GetHeapAddress(), 1);
+    }
+    void Swapchain::TransitionToPresent()
+    {
+        mCmdList->BeginRecording();
+        for (byte i = 0; i < mBufferCount; i++)
+        {
+            CommandListTextureMemoryBarrierDesc barrierDesc = {};
+            barrierDesc.MipIndex = 0;
+            barrierDesc.ArrayIndex = 0;
+            barrierDesc.AspectFlags = TextureAspectFlags::Color;
+
+            barrierDesc.SourceLayout = TextureMemoryLayout::Unknown;
+            barrierDesc.SourceQueue = GraphicsQueueType::Graphics;
+            barrierDesc.SourceAccessFlags = GraphicsMemoryAccessFlags::Unknown;
+            barrierDesc.SourceStageFlags = PipelineStageFlags::TopOfPipe;
+
+            barrierDesc.DestinationLayout = TextureMemoryLayout::Present;
+            barrierDesc.DestinationQueue = GraphicsQueueType::Graphics;
+            barrierDesc.DestinationAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentRead;
+            barrierDesc.DestinationStageFlags = PipelineStageFlags::ColorAttachmentOutput;
+
+            mCmdList->SetTextureMemoryBarrier(mTextures[i].GetHeap(), barrierDesc);
+        }
+        mCmdList->EndRecording();
+        GetOwnerDevice()->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, mLayoutFence.GetHeap());
+        GetOwnerDevice()->WaitFences(mLayoutFence.GetHeapAddress(), 1);
+    }
+    void Swapchain::SetTextures(const Array<SharedHeap<Texture>>& textures, const Array<SharedHeap<TextureView>>& views)
+    {
+        mTextures = textures;
+        mViews = views;
+    }
+    void Swapchain::SetSize(const uint16 width, const uint16 height)
+    {
+        mSize = { width,height };
+    }
+    void Swapchain::OnShutdown()
+    {
+        //Clear textures,views and present fences first
+        for (byte i = 0; i < mBufferCount; i++)
+        {
+            mViews[i].Shutdown();
+            mTextures[i].Shutdown();
+            mPresentFences[i].Shutdown();
+        }
+        mViews.Clear();
+        mTextures.Clear();
+
+        //Clear fencens
+        mLayoutFence.Shutdown();
+
+        //Clear cmds
+        mCmdList.Shutdown();
+        mCmdPool.Shutdown();
+    }
+    void Swapchain::CreateInternalResources(GraphicsDevice* pDevice)
+    {
+        //Create cmd pool
+        CommandPoolDesc poolDesc = {};
+        poolDesc.Type = CommandPoolType::Graphics;
+        mCmdPool = pDevice->CreateCommandPool(poolDesc);
+
+        //Create cmdlist
+        CommandListDesc cmdListDesc = {};
+        cmdListDesc.pPool = mCmdPool.GetHeap();
+        mCmdList = pDevice->CreateCommandList(cmdListDesc);
+
+        //Create layout fence
+        mLayoutFence = pDevice->CreateFence();
+
+        //Create present fences
+        for (byte i = 0; i < mBufferCount; i++)
+            mPresentFences.Add(pDevice->CreateFence());
+    }
+    void Swapchain::IncrementIndex()
+    {
+        mIndex = (mIndex + 1) % mBufferCount;
     }
 }

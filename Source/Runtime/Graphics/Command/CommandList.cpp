@@ -83,7 +83,7 @@ namespace Portakal
 		if (IsShutdown())
 			return;
 
-		EndRenderPass();
+		EndRenderPassCore();
 		mBoundRenderPass = nullptr;
 	}
 	void CommandList::SetViewports(const ViewportDesc* pViewports, const byte count)

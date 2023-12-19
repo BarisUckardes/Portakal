@@ -163,6 +163,12 @@ namespace Portakal
 
         return VK_NULL_HANDLE;
     }
+    SharedHeap<Texture> VulkanDevice::CreateVkSwapchainTexture(const TextureDesc& desc, const VkImage image)
+    {
+        SharedHeap<Texture> pTexture = new VulkanTexture(desc,image,this);
+        RegisterChild(pTexture.QueryAs<GraphicsDeviceObject>());
+        return pTexture;
+    }
     void VulkanDevice::OnShutdown()
     {
         vkDestroyDevice(mLogicalDevice,nullptr);
@@ -217,6 +223,10 @@ namespace Portakal
     Swapchain* VulkanDevice::CreateSwapchainCore(const SwapchainDesc& desc)
     {
         return new VulkanSwapchain(desc,this);
+    }
+    RenderPass* VulkanDevice::CreateRenderPassCore(const RenderPassDesc& desc)
+    {
+        return new VulkanRenderPass(desc,this);
     }
     CommandPool* VulkanDevice::CreateCommandPoolCore(const CommandPoolDesc& desc)
     {

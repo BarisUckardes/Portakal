@@ -141,13 +141,19 @@ namespace Portakal
 
         return pSwapchain;
     }
+    SharedHeap<RenderPass> GraphicsDevice::CreateRenderPass(const RenderPassDesc& desc)
+    {
+        SharedHeap<RenderPass> pResourceSet = CreateRenderPassCore(desc);
+        RegisterChild(pResourceSet.QueryAs<GraphicsDeviceObject>());
+        return pResourceSet;
+    }
     void GraphicsDevice::WaitFences(Fence** ppFences, const byte count)
     {
         WaitFencesCore(ppFences, count);
     }
     void GraphicsDevice::WaitDeviceIdle()
     {
-        WaitDeviceIdle();
+        WaitDeviceIdleCore();
     }
     void GraphicsDevice::WaitQueueDefault(const GraphicsQueueType type)
     {

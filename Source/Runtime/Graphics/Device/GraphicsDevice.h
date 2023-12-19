@@ -82,6 +82,7 @@ namespace Portakal
 		SharedHeap<ResourceTable> CreateResourceTable(const ResourceTableDesc& desc);
 		SharedHeap<Fence> CreateFence();
 		SharedHeap<Swapchain> CreateSwapchain(const SwapchainDesc& desc);
+		SharedHeap<RenderPass> CreateRenderPass(const RenderPassDesc& desc);
 		FORCEINLINE GraphicsAdapter* GetOwnerAdapter() const noexcept
 		{
 			return mOwnerAdapter;
@@ -112,6 +113,7 @@ namespace Portakal
 		virtual ResourceTable* CreateResourceTableCore(const ResourceTableDesc& desc) = 0;
 		virtual Fence* CreateFenceCore() = 0;
 		virtual Swapchain* CreateSwapchainCore(const SwapchainDesc& desc) = 0;
+		virtual RenderPass* CreateRenderPassCore(const RenderPassDesc& desc) = 0;
 
 		virtual void WaitFencesCore(Fence** ppFences, const byte count) = 0;
 		virtual void WaitDeviceIdleCore() = 0;

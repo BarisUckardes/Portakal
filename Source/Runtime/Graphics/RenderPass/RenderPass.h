@@ -7,12 +7,16 @@ namespace Portakal
 	class RUNTIME_API RenderPass : public GraphicsDeviceObject
 	{
 	public:
-		RenderPass(const RenderPassDesc& desc) : mColorAttachments(desc.ColorAttachments), mDepthStencilAttachment(desc.DepthStencilAttachment), mSubpasses(desc.Subpasses), mDependencies(desc.Dependencies), mSize(desc.Size)
+		RenderPass(const RenderPassDesc& desc) : mColorAttachments(desc.ColorAttachments), mDepthStencilAttachment(desc.DepthStencilAttachment), mSubpasses(desc.Subpasses), mDependencies(desc.Dependencies), mSize(desc.Size),mSwapchain(desc.bSwapchain)
 		{
 
 		}
 		~RenderPass() = default;
 
+		FORCEINLINE bool IsSwapchain() const noexcept
+		{
+			return mSwapchain;
+		}
 		FORCEINLINE virtual GraphicsDeviceObjectType GetObjectType() const noexcept override final
 		{
 			return GraphicsDeviceObjectType::RenderPass;
@@ -23,5 +27,6 @@ namespace Portakal
 		const Array<RenderPassSubpassDesc> mSubpasses;
 		const Array<RenderPassSubpassDependencyDesc> mDependencies;
 		const Vector2US mSize;
+		const bool mSwapchain;
 	};
 }
