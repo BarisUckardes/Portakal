@@ -56,6 +56,7 @@ namespace Portakal
     }
     void Swapchain::SetTextures(const Array<SharedHeap<Texture>>& textures, const Array<SharedHeap<TextureView>>& views)
     {
+        DEV_LOG("Swapchain", "New set of textures&views arrived!");
         mTextures = textures;
         mViews = views;
     }

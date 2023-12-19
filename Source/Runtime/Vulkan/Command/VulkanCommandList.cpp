@@ -155,7 +155,6 @@ namespace Portakal
             0, nullptr,
             0, nullptr,
             1, &memoryBarrier);
-
     }
     void VulkanCommandList::SetBufferMemoryBarrierCore(const GraphicsBuffer* pBuffer, const BufferBarrierDesc& desc)
     {

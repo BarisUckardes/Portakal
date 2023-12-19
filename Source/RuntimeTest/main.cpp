@@ -114,19 +114,30 @@ namespace Portakal
 		//Create fence
 		SharedHeap<Fence> pFence = pDevice->CreateFence();
 
-		
+		//Get swapchain textures
 		Array<SharedHeap<Texture>> swapchainTextures = pSwapchain->GetTextures();
-		Array<SharedHeap<TextureView>> swapchainTextureViews = pSwapchain->GetTextureViews();
 
 		//Create render pass set
 		SharedHeap<RenderPass> pRenderPass = CreateRenderPass(pSwapchain.GetHeap(),pDevice.GetHeap());
 
 		const byte presentImageIndexStatic = 0;
 		byte presentImageIndex = 0;
+		Vector2US lastWindowSize = pWindow->GetSize();
 		while (!pWindow.IsShutdown())
 		{
 			//Poll window messages first
 			pWindow->PollMessages();
+
+			//Check if window resized and get new set of textures
+			const Vector2US windowSize = pWindow->GetSize();
+			if (lastWindowSize != windowSize)
+			{
+				DEV_LOG("System", "WindowSize changed %d,%d", windowSize.X, windowSize.Y);
+				swapchainTextures = pSwapchain->GetTextures();
+				pRenderPass.Shutdown();
+				pRenderPass = CreateRenderPass(pSwapchain.GetHeap(), pDevice.GetHeap());
+			}
+			lastWindowSize = windowSize;
 
 			//Begin recording
 			pCmdList->BeginRecording();
