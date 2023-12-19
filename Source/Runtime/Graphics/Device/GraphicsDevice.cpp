@@ -1,5 +1,5 @@
 #include "GraphicsDevice.h"
-
+#include <Runtime/Graphics/Swapchain/Swapchain.h>
 
 namespace Portakal
 {
@@ -129,6 +129,8 @@ namespace Portakal
     }
     SharedHeap<Swapchain> GraphicsDevice::CreateSwapchain(const SwapchainDesc& desc)
     {
+        //Check if window has already a swapchain
+        DEV_ASSERT(desc.pWindow->GetSwapchain().IsShutdown(), "GraphicsDevice", "Given window has already a swapchain");
         //Create swapchain
         SharedHeap<Swapchain> pSwapchain = CreateSwapchainCore(desc);
 
@@ -138,6 +140,12 @@ namespace Portakal
         //Set as main if no swapchain is available
         if (mMainSwapchain.IsShutdown())
             mMainSwapchain = pSwapchain;
+
+        //Transition
+        pSwapchain->TransitionToPresent();
+
+        //Register swapchain to window
+        desc.pWindow->_SetSwapchain(pSwapchain);
 
         return pSwapchain;
     }

@@ -1,4 +1,5 @@
 #include "PlatformWindow.h"
+#include <Runtime/Graphics/Swapchain/Swapchain.h>
 
 #ifdef PORTAKAL_PLATFORM_WINDOWS
 #include <Runtime/Win32/Win32Window.h>
@@ -53,8 +54,45 @@ namespace Portakal
 	}
 	void PlatformWindow::DispatchWindowEvent(const WindowEventData& data)
 	{
-		if (data.Type == WindowEventType::WindowClosed)
-			Shutdown();
+		switch (data.Type)
+		{
+			case Portakal::WindowEventType::None:
+				break;
+			case Portakal::WindowEventType::WindowClosed:
+				Shutdown();
+				break;
+			case Portakal::WindowEventType::WindowMoved:
+				break;
+			case Portakal::WindowEventType::WindowResized:
+				OnWindowResize(data.WindowSize);
+				break;
+			case Portakal::WindowEventType::DragDrop:
+				break;
+			case Portakal::WindowEventType::KeyboardDown:
+				break;
+			case Portakal::WindowEventType::KeyboardUp:
+				break;
+			case Portakal::WindowEventType::Char:
+				break;
+			case Portakal::WindowEventType::MouseButtonDown:
+				break;
+			case Portakal::WindowEventType::MouseButtonUp:
+				break;
+			case Portakal::WindowEventType::MouseMoved:
+				break;
+			case Portakal::WindowEventType::MouseScrolled:
+				break;
+			case Portakal::WindowEventType::GamepadButtonDown:
+				break;
+			case Portakal::WindowEventType::GamepadButtonUp:
+				break;
+			case Portakal::WindowEventType::GamepadTriggerMove:
+				break;
+			case Portakal::WindowEventType::GamepadThumbMove:
+				break;
+			default:
+				break;
+		}
 	}
 	void PlatformWindow::OnShutdown()
 	{
@@ -66,8 +104,20 @@ namespace Portakal
 	}
 	void PlatformWindow::OnWindowResize(const Vector2US size)
 	{
+		//Resize swapchain
+		if (!mSwapchain.IsShutdown())
+		{
+			mSwapchain->Resize(size.X, size.Y);
+			mSwapchain->TransitionToPresent();
+		}
+
+		DEV_LOG("PlatformWindow", "Resized to %d,%d", size.X, size.Y);
 	}
 	void PlatformWindow::OnWindowMoved(const Vector2I position)
 	{
+	}
+	void PlatformWindow::_SetSwapchain(const SharedHeap<Swapchain>& swapchain)
+	{
+		mSwapchain = swapchain;
 	}
 }

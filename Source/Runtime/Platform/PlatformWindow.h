@@ -9,6 +9,7 @@ namespace Portakal
 	class Swapchain;
 	class RUNTIME_API PlatformWindow : public Object
 	{
+		friend class GraphicsDevice;
 		friend class SharedHeap<PlatformWindow>;
 	public:
 		static SharedHeap<PlatformWindow> Create(const WindowDesc& desc);
@@ -76,6 +77,7 @@ namespace Portakal
 		void OnWindowClosed();
 		void OnWindowResize(const Vector2US size);
 		void OnWindowMoved(const Vector2I position);
+		void _SetSwapchain(const SharedHeap<Swapchain>& swapchain);
 	private:
 		Array<WindowEventData> mEvents;
 		SharedHeap<PlatformMonitor> mMonitor;

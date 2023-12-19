@@ -14,12 +14,14 @@ namespace Portakal
 		virtual void OnShutdown() override;
 	private:
 		void PresentCore() override;
+		void ResizeCore(const uint16 width, const uint16 height) override;
+		void Free();
 	private:
+		VulkanDevice* mDevice;
 		VkSurfaceKHR mSurface;
 		VkSwapchainKHR mSwapchain;
 		VkDevice mLogicalDevice;
 		VkPhysicalDevice mPhysicalDevice;
 		uint32 mPresentQueueFamilyIndex;
-
 	};
 }

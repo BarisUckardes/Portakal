@@ -70,7 +70,7 @@ namespace Portakal
 		swapchainDesc.pWindow = pWindow;
 		swapchainDesc.pDevice = pDevice;
 		SharedHeap<Portakal::Swapchain> pSwapchain = pDevice->CreateSwapchain(swapchainDesc);
-		pSwapchain->TransitionToPresent();
+
 
 		//Create command pool
 		SharedHeap<CommandPool> pCmdPool = pDevice->CreateCommandPool({ CommandPoolType::Graphics });
@@ -82,8 +82,8 @@ namespace Portakal
 		SharedHeap<Fence> pFence = pDevice->CreateFence();
 
 		
-		const Array<SharedHeap<Texture>> swapchainTextures = pSwapchain->GetTextures();
-		const Array<SharedHeap<TextureView>> swapchainTextureViews = pSwapchain->GetTextureViews();
+		Array<SharedHeap<Texture>> swapchainTextures = pSwapchain->GetTextures();
+		Array<SharedHeap<TextureView>> swapchainTextureViews = pSwapchain->GetTextureViews();
 
 		//Create render pass
 		RenderPassDesc renderPassDesc = {};
@@ -124,28 +124,28 @@ namespace Portakal
 			//Begin recording
 			pCmdList->BeginRecording();
 
-			//Set texture layouts to color attachment
-			CommandListTextureMemoryBarrierDesc preRenderPassBarrierDesc = {};
-			preRenderPassBarrierDesc.MipIndex = 0;
-			preRenderPassBarrierDesc.ArrayIndex = 0;
-			preRenderPassBarrierDesc.AspectFlags = TextureAspectFlags::Color;
+			////Set texture layouts to color attachment
+			//CommandListTextureMemoryBarrierDesc preRenderPassBarrierDesc = {};
+			//preRenderPassBarrierDesc.MipIndex = 0;
+			//preRenderPassBarrierDesc.ArrayIndex = 0;
+			//preRenderPassBarrierDesc.AspectFlags = TextureAspectFlags::Color;
 
-			preRenderPassBarrierDesc.SourceLayout = TextureMemoryLayout::Present;
-			preRenderPassBarrierDesc.SourceQueue = GraphicsQueueType::Graphics;
-			preRenderPassBarrierDesc.SourceAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentRead;
-			preRenderPassBarrierDesc.SourceStageFlags = PipelineStageFlags::ColorAttachmentOutput;
+			//preRenderPassBarrierDesc.SourceLayout = TextureMemoryLayout::Present;
+			//preRenderPassBarrierDesc.SourceQueue = GraphicsQueueType::Graphics;
+			//preRenderPassBarrierDesc.SourceAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentRead;
+			//preRenderPassBarrierDesc.SourceStageFlags = PipelineStageFlags::ColorAttachmentOutput;
 
-			preRenderPassBarrierDesc.DestinationLayout = TextureMemoryLayout::ColorAttachment;
-			preRenderPassBarrierDesc.DestinationQueue = GraphicsQueueType::Graphics;
-			preRenderPassBarrierDesc.DestinationAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentWrite;
-			preRenderPassBarrierDesc.DestinationStageFlags = PipelineStageFlags::ColorAttachmentOutput;
-			pCmdList->SetTextureMemoryBarrier(swapchainTextures[0].GetHeap(), preRenderPassBarrierDesc);
+			//preRenderPassBarrierDesc.DestinationLayout = TextureMemoryLayout::ColorAttachment;
+			//preRenderPassBarrierDesc.DestinationQueue = GraphicsQueueType::Graphics;
+			//preRenderPassBarrierDesc.DestinationAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentWrite;
+			//preRenderPassBarrierDesc.DestinationStageFlags = PipelineStageFlags::ColorAttachmentOutput;
+			//pCmdList->SetTextureMemoryBarrier(swapchainTextures[0].GetHeap(), preRenderPassBarrierDesc);
 
-			//Begin render pass
-			pCmdList->BeginRenderPass(pPass);
+			////Begin render pass
+			//pCmdList->BeginRenderPass(pPass);
 
-			//End render pass
-			pCmdList->EndRenderPass();
+			////End render pass
+			//pCmdList->EndRenderPass();
 
 			//End recording
 			pCmdList->EndRecording();

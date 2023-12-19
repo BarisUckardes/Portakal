@@ -5,7 +5,19 @@ namespace Portakal
 {
     Swapchain::Swapchain(const SwapchainDesc& desc) : mColorFormat(desc.ColorFormat),mDepthStencilFormat(desc.DepthStencilFormat),mBufferCount(desc.BufferCount),mWindow(desc.pWindow),mSize(desc.pWindow->GetSize()),mIndex(0)
     {
+        //Create internal resources
         CreateInternalResources(desc.pDevice.GetHeap());
+    }
+    void Swapchain::Resize(const uint16 width, const uint16 height)
+    {
+        //Wait for all fences to be idle
+        GetOwnerDevice()->WaitDeviceIdle();
+
+        //First free former textures
+        FreeTextures();
+
+        //Call implementation
+        ResizeCore(width, height);
     }
     void Swapchain::Present()
     {
@@ -53,18 +65,13 @@ namespace Portakal
     }
     void Swapchain::OnShutdown()
     {
-        //Clear textures,views and present fences first
-        for (byte i = 0; i < mBufferCount; i++)
-        {
-            mViews[i].Shutdown();
-            mTextures[i].Shutdown();
-            mPresentFences[i].Shutdown();
-        }
-        mViews.Clear();
-        mTextures.Clear();
+        //Free textures;
+        FreeTextures();
 
         //Clear fencens
         mLayoutFence.Shutdown();
+        for(byte i = 0;i<mBufferCount;i++)
+            mPresentFences[i].Shutdown();
 
         //Clear cmds
         mCmdList.Shutdown();
@@ -92,5 +99,16 @@ namespace Portakal
     void Swapchain::IncrementIndex()
     {
         mIndex = (mIndex + 1) % mBufferCount;
+    }
+    void Swapchain::FreeTextures()
+    {
+        //Clear textures,views and present fences first
+        for (byte i = 0; i < mBufferCount; i++)
+        {
+            mViews[i].Shutdown();
+            mTextures[i].Shutdown();
+        }
+        mViews.Clear();
+        mTextures.Clear();
     }
 }

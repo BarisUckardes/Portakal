@@ -64,6 +64,7 @@ namespace Portakal
 		}
 		virtual GraphicsDeviceObjectType GetObjectType() const noexcept override final { return GraphicsDeviceObjectType::Swapchain; }
 	
+		void Resize(const uint16 width, const uint16 height);
 		void Present();
 		void WaitForPresent(const byte index);
 		void TransitionToPresent();
@@ -71,11 +72,13 @@ namespace Portakal
 		void SetTextures(const Array<SharedHeap<Texture>>& textures, const Array<SharedHeap<TextureView>>& views);
 		void SetSize(const uint16 width, const uint16 height);
 
+		virtual void ResizeCore(const uint16 width, const uint16 height) = 0;
 		virtual void OnShutdown() override;
 		virtual void PresentCore() = 0;
 	private:
 		void CreateInternalResources(GraphicsDevice* pDevice);
 		void IncrementIndex();
+		void FreeTextures();
 	private:
 		const byte mBufferCount;
 		const TextureFormat mColorFormat;

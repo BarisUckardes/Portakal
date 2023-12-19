@@ -15,7 +15,7 @@ namespace Portakal
 		}
 		WindowEventType Type;
 
-		Vector2UI WindowSize;
+		Vector2US WindowSize;
 		Vector2I WindowPosition;
 
 		MouseButtons MouseButton;
