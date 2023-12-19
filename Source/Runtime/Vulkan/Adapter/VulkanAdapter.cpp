@@ -7,6 +7,7 @@ namespace Portakal
     {
         DEV_LOG("VulkanAdapter", "Shutdown");
     }
+
     GraphicsDevice* VulkanAdapter::CreateDeviceCore()
     {
         return new VulkanDevice({ this });
