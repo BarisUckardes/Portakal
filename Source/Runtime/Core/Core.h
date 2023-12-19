@@ -31,6 +31,7 @@ namespace Portakal
     enum class LogLevel
 	{
 		Info,
+		Verbose,
 		Warning,
 		Error,
 		Fatal
@@ -51,6 +52,7 @@ namespace Portakal
 #endif
 
 #define PE_INFO Portakal::LogLevel::Info
+#define PE_VERBOSE Portakal::LogLevel::Verbose
 #define PE_WARNING Portakal::LogLevel::Warning
 #define PE_ERROR Portakal::LogLevel::Error
 #define PE_FATAL Portakal::LogLevel::Fatal

@@ -19,6 +19,9 @@ namespace Portakal
 		case LogLevel::Info:
 			printf("\033[36m[INFO]\033[39m -- ");
 			break;
+		case LogLevel::Verbose:
+			printf("\033[32m[VERBOSE]\033[39m -- ");
+			break;
 		case LogLevel::Warning:
 			printf("\033[33m[WARNING]\033[39m -- ");
 			break;

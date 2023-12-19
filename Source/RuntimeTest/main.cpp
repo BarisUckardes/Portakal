@@ -34,7 +34,7 @@
 
 namespace Portakal
 {
-	void Run()
+	void RunVulkanTest()
 	{
 		//Initialize platform
 		Platform::InitializePlatformDependencies();
@@ -124,28 +124,28 @@ namespace Portakal
 			//Begin recording
 			pCmdList->BeginRecording();
 
-			////Set texture layouts to color attachment
-			//CommandListTextureMemoryBarrierDesc preRenderPassBarrierDesc = {};
-			//preRenderPassBarrierDesc.MipIndex = 0;
-			//preRenderPassBarrierDesc.ArrayIndex = 0;
-			//preRenderPassBarrierDesc.AspectFlags = TextureAspectFlags::Color;
+			//Set texture layouts to color attachment
+			CommandListTextureMemoryBarrierDesc preRenderPassBarrierDesc = {};
+			preRenderPassBarrierDesc.MipIndex = 0;
+			preRenderPassBarrierDesc.ArrayIndex = 0;
+			preRenderPassBarrierDesc.AspectFlags = TextureAspectFlags::Color;
 
-			//preRenderPassBarrierDesc.SourceLayout = TextureMemoryLayout::Present;
-			//preRenderPassBarrierDesc.SourceQueue = GraphicsQueueType::Graphics;
-			//preRenderPassBarrierDesc.SourceAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentRead;
-			//preRenderPassBarrierDesc.SourceStageFlags = PipelineStageFlags::ColorAttachmentOutput;
+			preRenderPassBarrierDesc.SourceLayout = TextureMemoryLayout::Present;
+			preRenderPassBarrierDesc.SourceQueue = GraphicsQueueType::Graphics;
+			preRenderPassBarrierDesc.SourceAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentRead;
+			preRenderPassBarrierDesc.SourceStageFlags = PipelineStageFlags::ColorAttachmentOutput;
 
-			//preRenderPassBarrierDesc.DestinationLayout = TextureMemoryLayout::ColorAttachment;
-			//preRenderPassBarrierDesc.DestinationQueue = GraphicsQueueType::Graphics;
-			//preRenderPassBarrierDesc.DestinationAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentWrite;
-			//preRenderPassBarrierDesc.DestinationStageFlags = PipelineStageFlags::ColorAttachmentOutput;
-			//pCmdList->SetTextureMemoryBarrier(swapchainTextures[0].GetHeap(), preRenderPassBarrierDesc);
+			preRenderPassBarrierDesc.DestinationLayout = TextureMemoryLayout::ColorAttachment;
+			preRenderPassBarrierDesc.DestinationQueue = GraphicsQueueType::Graphics;
+			preRenderPassBarrierDesc.DestinationAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentWrite;
+			preRenderPassBarrierDesc.DestinationStageFlags = PipelineStageFlags::ColorAttachmentOutput;
+			pCmdList->SetTextureMemoryBarrier(swapchainTextures[0].GetHeap(), preRenderPassBarrierDesc);
 
-			////Begin render pass
-			//pCmdList->BeginRenderPass(pPass);
+			//Begin render pass
+			pCmdList->BeginRenderPass(pPass);
 
-			////End render pass
-			//pCmdList->EndRenderPass();
+			//End render pass
+			pCmdList->EndRenderPass();
 
 			//End recording
 			pCmdList->EndRecording();
@@ -174,9 +174,40 @@ namespace Portakal
 		pInstance.Shutdown();
 		pWindow.Shutdown();
 	}
+
+	void RunD3D12Test()
+	{
+		//Initialize platform
+		Platform::InitializePlatformDependencies();
+
+		//Create window
+		WindowDesc windowDesc = {};
+		windowDesc.Title = "Portakal Runtime Test";
+		windowDesc.Position = { 100,100 };
+		windowDesc.Size = { 1024,1024 };
+		windowDesc.pMonitor = nullptr;
+		windowDesc.Mode = WindowMode::Windowed;
+
+		SharedHeap<PlatformWindow> pWindow = PlatformWindow::Create(windowDesc);
+		pWindow->Show();
+
+		//Create graphics instance
+		GraphicsInstanceDesc instanceDesc = {};
+		instanceDesc.Backend = GraphicsBackend::DirectX12;
+		SharedHeap<GraphicsInstance> pInstance = Portakal::GraphicsInstance::Create(instanceDesc);
+
+		//Get adapter
+		SharedHeap<GraphicsAdapter> pAdapter = pInstance->GetAdapters()[0];
+		DEV_LOG("System", "Selecting [%s] device", *pAdapter->GetProductName());
+
+		//Create device
+		SharedHeap<GraphicsDevice> pDevice = pAdapter->CreateDevice();
+	}
 }
+
 int main(const unsigned int argumentCount, const char** ppArguments)
 {
-	Portakal::Run();
+	//Portakal::RunVulkanTest();
+	Portakal::RunD3D12Test();
 	return 0;
 }

@@ -6,7 +6,7 @@ namespace Portakal
 	enum class RUNTIME_API GraphicsBackend : byte
 	{
 		Vulkan,
-		Directx12,
+		DirectX12,
 		GNMX,
 		NVM
 	};

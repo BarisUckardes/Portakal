@@ -1,6 +1,7 @@
 #include "GraphicsInstance.h"
-#include <Runtime/Vulkan/Instance/VulkanInstance.h>
 
+#include <Runtime/Vulkan/Instance/VulkanInstance.h>
+#include <Runtime/DirectX12/Instance/DirectXInstance.h>
 namespace Portakal
 {
     SharedHeap<GraphicsInstance> GraphicsInstance::Create(const GraphicsInstanceDesc& desc)
@@ -14,8 +15,11 @@ namespace Portakal
                 pInstance = (GraphicsInstance*)new VulkanInstance(desc);
                 break;
             }
-            case Portakal::GraphicsBackend::Directx12:
+            case Portakal::GraphicsBackend::DirectX12:
+            {
+                pInstance = (GraphicsInstance*)new DirectXInstance(desc);
                 break;
+            }
             case Portakal::GraphicsBackend::GNMX:
                 break;
             case Portakal::GraphicsBackend::NVM:
