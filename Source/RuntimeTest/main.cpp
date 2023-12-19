@@ -67,7 +67,7 @@ namespace Portakal
 		renderPassDesc.Subpasses.Add(subpassDesc);
 		return pDevice->CreateRenderPass(renderPassDesc);
 	}
-	void Run()
+	void RunVulkanTest()
 	{
 		//Initialize platform
 		Platform::InitializePlatformDependencies();
@@ -204,6 +204,6 @@ namespace Portakal
 
 int main(const unsigned int argumentCount, const char** ppArguments)
 {
-	Portakal::Run();
+	Portakal::RunVulkanTest();
 	return 0;
 }
