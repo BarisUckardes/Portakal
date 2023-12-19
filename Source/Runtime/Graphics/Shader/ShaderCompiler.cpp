@@ -81,7 +81,7 @@ namespace Portakal
 			*ppBytes = new MemoryOwnedView((byte*)pView.GetMemory(), pView.GetSize());
 			return true;
 		}
-		case GraphicsBackend::Directx12:
+		case GraphicsBackend::DirectX12:
 		{
 			pCompiler = new spirv_cross::CompilerHLSL((const uint32_t*)pView.GetMemory(), pView.GetSize());
 

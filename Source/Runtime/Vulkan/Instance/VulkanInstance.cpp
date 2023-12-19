@@ -19,16 +19,16 @@ namespace Portakal
         switch (messageSeverity)
         {
         case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
-            PORTAKAL_LOG(LogLevel::Info, "%s", pCallbackData->pMessage);
+            PORTAKAL_LOG(PE_VERBOSE, "%s", pCallbackData->pMessage);
             break;
         case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
-            PORTAKAL_LOG(LogLevel::Info, "%s", pCallbackData->pMessage);
+            PORTAKAL_LOG(PE_INFO, "%s", pCallbackData->pMessage);
             break;
         case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
-            PORTAKAL_LOG(LogLevel::Warning, "%s", pCallbackData->pMessage);
+            PORTAKAL_LOG(PE_WARNING, "%s", pCallbackData->pMessage);
             break;
         case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
-            PORTAKAL_LOG(LogLevel::Error, "%s", pCallbackData->pMessage);
+            PORTAKAL_LOG(PE_ERROR, "%s", pCallbackData->pMessage);
             break;
         default:
             break;
