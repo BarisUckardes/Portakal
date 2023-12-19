@@ -196,7 +196,7 @@ namespace Portakal
     {
         vkFreeCommandBuffers(mLogicalDevice, mCommandPool, 1, &mCommandBuffer);
     }
-    void VulkanCommandList::BeginRenderPassCore(const RenderPass* pRenderPass, const byte subFramebufferIndex = 0)
+    void VulkanCommandList::BeginRenderPassCore(const RenderPass* pRenderPass, const Color4F& clearColor, const byte subFramebufferIndex = 0)
     {
         const VulkanRenderPass* pVkPass = (const VulkanRenderPass*)pRenderPass;
         const VkFramebuffer framebuffer = pVkPass->GetvkSwapchainFramebuffers()[subFramebufferIndex];
@@ -206,13 +206,13 @@ namespace Portakal
         renderPassInfo.framebuffer = framebuffer;
         renderPassInfo.renderArea.offset = { 0,0 };
         renderPassInfo.renderArea.extent = { pRenderPass->GetRenderRegion().X,pRenderPass->GetRenderRegion().Y};
-        VkClearValue clearColor = {};
-        clearColor.color.float32[0] = 1.0f;
-        clearColor.color.float32[1] = 0.0f;
-        clearColor.color.float32[2] = 0.0f;
-        clearColor.color.float32[3] = 1.0f;
+        VkClearValue color = {};
+        color.color.float32[0] = clearColor.R;
+        color.color.float32[1] = clearColor.G;
+        color.color.float32[2] = clearColor.B;
+        color.color.float32[3] = clearColor.A;
         renderPassInfo.clearValueCount = 1;
-        renderPassInfo.pClearValues = &clearColor;
+        renderPassInfo.pClearValues = &color;
 
         vkCmdBeginRenderPass(mCommandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     }

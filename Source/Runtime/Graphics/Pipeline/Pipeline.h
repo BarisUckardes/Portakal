@@ -28,7 +28,7 @@ namespace Portakal
             mBlendState(desc.BlendState), mDepthStencilState(desc.DepthStencilState),
             mInputLayout(desc.InputLayout), mMultisample(desc.Multisample),
             mRasterizerState(desc.RasterizerState), mOutputMerger(desc.OutputMerger),
-            mResourceLayout(desc.ResourceLayout), mGraphicsShaders(desc.GraphicsShaders)
+            mResourceLayout(desc.ResourceLayout), mGraphicsShaders(desc.GraphicsShaders),mSubpassIndex(desc.SubpassIndex)
         {
         }
 
@@ -36,7 +36,7 @@ namespace Portakal
             mBlendState(), mDepthStencilState(),
             mInputLayout(), mMultisample(),
             mRasterizerState(), mOutputMerger(),
-            mResourceLayout(), mComputeShaders({ desc.ComputeShader })
+            mResourceLayout(), mComputeShaders({ desc.ComputeShader }),mSubpassIndex(255)
         {
         }
 
@@ -82,6 +82,10 @@ namespace Portakal
         {
             return mComputeShaders;
         }
+        FORCEINLINE byte GetSubpassIndex() const noexcept
+        {
+            return mSubpassIndex;
+        }
 
         FORCEINLINE virtual GraphicsDeviceObjectType GetObjectType() const noexcept override final
         {
@@ -99,6 +103,7 @@ namespace Portakal
         const ResourceLayoutDesc mResourceLayout;
         const Array<SharedHeap<Shader>> mGraphicsShaders;
         const Array<SharedHeap<Shader>> mComputeShaders;
+        const byte mSubpassIndex;
     };
 
 }

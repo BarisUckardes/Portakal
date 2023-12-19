@@ -159,7 +159,8 @@ namespace Portakal
 			pCmdList->SetTextureMemoryBarrier(swapchainTextures[presentImageIndex].GetHeap(), preRenderPassBarrier);
 
 			//Begin render pass
-			pCmdList->BeginRenderPass(pRenderPass, presentImageIndex);
+			Color4F clearColor = Color4F(0.0,1.0f,1.0f,1.0f);
+			pCmdList->BeginRenderPass(pRenderPass,clearColor, presentImageIndex);
 
 			//End render pass
 			pCmdList->EndRenderPass();
