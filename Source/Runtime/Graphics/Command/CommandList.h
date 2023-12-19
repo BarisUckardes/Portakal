@@ -47,7 +47,7 @@ namespace Portakal
 		void DrawIndexed(const uint32 indexCount, const uint32 indexOffset, const uint32 vertexoffset, const uint32 instanceCount, const uint32 instanceOffset);
 		void DispatchCompute(const uint32 groupX, const uint32 groupY, const uint32 groupZ);
 		void SetPipeline(const SharedHeap<Pipeline>& pPipeline);
-		void BeginRenderPass(const SharedHeap<RenderPass>& pRenderPass);
+		void BeginRenderPass(const SharedHeap<RenderPass>& pRenderPass,const byte subFramebufferIndex = 0);
 		void EndRenderPass();
 		void SetViewports(const ViewportDesc* pViewports, const byte count);
 		void SetScissors(const ScissorDesc* pScissors, const byte count);
@@ -65,7 +65,7 @@ namespace Portakal
 		virtual void DrawIndexedCore(const uint32 indexCount, const uint32 indexOffset, const uint32 vertexoffset, const uint32 instanceCount, const uint32 instanceOffset) = 0;
 		virtual void DispatchComputeCore(const uint32 groupX, const uint32 groupY, const uint32 groupZ) = 0;
 		virtual void SetPipelineCore(const Pipeline* pPipeline) = 0;
-		virtual void BeginRenderPassCore(const RenderPass* pRenderPass) = 0;
+		virtual void BeginRenderPassCore(const RenderPass* pRenderPass, const byte subFramebufferIndex) = 0;
 		virtual void EndRenderPassCore() = 0;
 		virtual void SetViewportsCore(const ViewportDesc* pViewports, const byte count) = 0;
 		virtual void SetScissorsCore(const ScissorDesc* pScissors, const byte count) = 0;

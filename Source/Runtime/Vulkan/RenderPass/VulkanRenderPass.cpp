@@ -182,95 +182,96 @@ namespace Portakal
 		//Get depth state
 		const bool bDepthEnabled = !desc.DepthStencilAttachment.pTexture.IsShutdown();
 
-		for (byte framebufferIndex = 0; framebufferIndex < desc.ColorAttachments.GetSize(); framebufferIndex++)
+		const RenderPassAttachmentDesc& attachmentDesc = desc.ColorAttachments[0];
+
+		//Create color attachment desc
+		VkAttachmentDescription attachments[2];
 		{
-			const RenderPassAttachmentDesc& attachmentDesc = desc.ColorAttachments[framebufferIndex];
-
-			//Create color attachment desc
-			VkAttachmentDescription attachments[2];
+			VkAttachmentDescription colorAttachment = {};
+			colorAttachment.format = VulkanTextureUtils::GetTextureFormat(attachmentDesc.pTexture->GetFormat());
+			colorAttachment.samples = (VkSampleCountFlagBits)VulkanTextureUtils::GetSampleCount(attachmentDesc.pTexture->GetSampleCount());
+			colorAttachment.loadOp = VulkanRenderPassUtils::GetLoadOperation(attachmentDesc.ColorLoadOperation);
+			colorAttachment.storeOp = VulkanRenderPassUtils::GetStoreOperation(attachmentDesc.ColorStoreOperation);
+			colorAttachment.initialLayout = VulkanTextureUtils::GetImageLayout(attachmentDesc.InputLayout);
+			colorAttachment.finalLayout = VulkanTextureUtils::GetImageLayout(attachmentDesc.OutputLayout);
+			colorAttachment.stencilLoadOp = VulkanRenderPassUtils::GetLoadOperation(attachmentDesc.StencilLoadOperation);
+			colorAttachment.stencilStoreOp = VulkanRenderPassUtils::GetStoreOperation(attachmentDesc.StencilStoreOperation);
+			attachments[0] = colorAttachment;
+		}
+		{
+			if (bDepthEnabled)
 			{
-				VkAttachmentDescription colorAttachment = {};
-				colorAttachment.format = VulkanTextureUtils::GetTextureFormat(attachmentDesc.pTexture->GetFormat());
-				colorAttachment.samples = (VkSampleCountFlagBits)VulkanTextureUtils::GetSampleCount(attachmentDesc.pTexture->GetSampleCount());
-				colorAttachment.loadOp = VulkanRenderPassUtils::GetLoadOperation(attachmentDesc.ColorLoadOperation);
-				colorAttachment.storeOp = VulkanRenderPassUtils::GetStoreOperation(attachmentDesc.ColorStoreOperation);
-				colorAttachment.initialLayout = VulkanTextureUtils::GetImageLayout(attachmentDesc.InputLayout);
-				colorAttachment.finalLayout = VulkanTextureUtils::GetImageLayout(attachmentDesc.OutputLayout);
-				colorAttachment.stencilLoadOp = VulkanRenderPassUtils::GetLoadOperation(attachmentDesc.StencilLoadOperation);
-				colorAttachment.stencilStoreOp = VulkanRenderPassUtils::GetStoreOperation(attachmentDesc.StencilStoreOperation);
-				attachments[0] = colorAttachment;
+				VkAttachmentDescription depthStencilAttachment = {};
+				depthStencilAttachment.format = VulkanTextureUtils::GetTextureFormat(attachmentDesc.pTexture->GetFormat());
+				depthStencilAttachment.samples = (VkSampleCountFlagBits)VulkanTextureUtils::GetSampleCount(attachmentDesc.pTexture->GetSampleCount());
+				depthStencilAttachment.loadOp = VulkanRenderPassUtils::GetLoadOperation(attachmentDesc.ColorLoadOperation);
+				depthStencilAttachment.storeOp = VulkanRenderPassUtils::GetStoreOperation(attachmentDesc.ColorStoreOperation);
+				depthStencilAttachment.initialLayout = VulkanTextureUtils::GetImageLayout(attachmentDesc.InputLayout);
+				depthStencilAttachment.finalLayout = VulkanTextureUtils::GetImageLayout(attachmentDesc.OutputLayout);
+				depthStencilAttachment.stencilLoadOp = VulkanRenderPassUtils::GetLoadOperation(attachmentDesc.StencilLoadOperation);
+				depthStencilAttachment.stencilStoreOp = VulkanRenderPassUtils::GetStoreOperation(attachmentDesc.StencilStoreOperation);
+				attachments[1] = depthStencilAttachment;
 			}
-			{
-				if (bDepthEnabled)
-				{
-					VkAttachmentDescription depthStencilAttachment = {};
-					depthStencilAttachment.format = VulkanTextureUtils::GetTextureFormat(attachmentDesc.pTexture->GetFormat());
-					depthStencilAttachment.samples = (VkSampleCountFlagBits)VulkanTextureUtils::GetSampleCount(attachmentDesc.pTexture->GetSampleCount());
-					depthStencilAttachment.loadOp = VulkanRenderPassUtils::GetLoadOperation(attachmentDesc.ColorLoadOperation);
-					depthStencilAttachment.storeOp = VulkanRenderPassUtils::GetStoreOperation(attachmentDesc.ColorStoreOperation);
-					depthStencilAttachment.initialLayout = VulkanTextureUtils::GetImageLayout(attachmentDesc.InputLayout);
-					depthStencilAttachment.finalLayout = VulkanTextureUtils::GetImageLayout(attachmentDesc.OutputLayout);
-					depthStencilAttachment.stencilLoadOp = VulkanRenderPassUtils::GetLoadOperation(attachmentDesc.StencilLoadOperation);
-					depthStencilAttachment.stencilStoreOp = VulkanRenderPassUtils::GetStoreOperation(attachmentDesc.StencilStoreOperation);
-					attachments[1] = depthStencilAttachment;
-				}
-			}
+		}
 
-			//Create attachment references
-			VkAttachmentReference references[2];
+		//Create attachment references
+		VkAttachmentReference references[2];
+		{
+			VkAttachmentReference reference = {};
+			reference.attachment = 0;
+			reference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+			references[0] = reference;
+		}
+		{
+			if (bDepthEnabled)
 			{
 				VkAttachmentReference reference = {};
 				reference.attachment = 0;
-				reference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-				references[0] = reference;
+				reference.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+				references[1] = reference;
 			}
-			{
-				if (bDepthEnabled)
-				{
-					VkAttachmentReference reference = {};
-					reference.attachment = 0;
-					reference.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-					references[1] = reference;
-				}
-			}
+		}
 
-			//Create sub passes
-			Array<VkSubpassDescription> subpasses;
-			for (const RenderPassSubpassDesc& subpassDesc : desc.Subpasses)
-			{
-				VkAttachmentReference colorAttachmentsReferences[1] = {references[0]};
+		//Create sub passes
+		Array<VkSubpassDescription> subpasses;
+		for (const RenderPassSubpassDesc& subpassDesc : desc.Subpasses)
+		{
+			VkAttachmentReference colorAttachmentsReferences[1] = { references[0] };
 
-				VkSubpassDescription subpass = {};
-				subpass.pipelineBindPoint = subpassDesc.BindPoint == PipelineBindPoint::Graphics ? VK_PIPELINE_BIND_POINT_GRAPHICS : VK_PIPELINE_BIND_POINT_COMPUTE;
+			VkSubpassDescription subpass = {};
+			subpass.pipelineBindPoint = subpassDesc.BindPoint == PipelineBindPoint::Graphics ? VK_PIPELINE_BIND_POINT_GRAPHICS : VK_PIPELINE_BIND_POINT_COMPUTE;
 
-				subpass.colorAttachmentCount = 1; 
-				subpass.pColorAttachments = colorAttachmentsReferences;
+			subpass.colorAttachmentCount = 1;
+			subpass.pColorAttachments = colorAttachmentsReferences;
 
-				subpass.preserveAttachmentCount = 0;
-				subpass.pPreserveAttachments = nullptr;
+			subpass.preserveAttachmentCount = 0;
+			subpass.pPreserveAttachments = nullptr;
 
-				subpass.inputAttachmentCount = 0;
-				subpass.pInputAttachments = nullptr;
+			subpass.inputAttachmentCount = 0;
+			subpass.pInputAttachments = nullptr;
 
-				subpass.pResolveAttachments = nullptr;
-				subpasses.Add(subpass);
-			}
+			subpass.pResolveAttachments = nullptr;
+			subpasses.Add(subpass);
+		}
 
-			//Create render pass
-			VkRenderPassCreateInfo info = {};
-			info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-			info.attachmentCount = 1 + bDepthEnabled;
-			info.subpassCount = subpasses.GetSize();
-			info.dependencyCount = 0;
-			info.pAttachments = attachments;
-			info.pSubpasses = subpasses.GetData();
-			info.pDependencies = nullptr;
-			info.flags = VkRenderPassCreateFlags();
-			info.pNext = nullptr;
+		//Create render pass
+		VkRenderPassCreateInfo info = {};
+		info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+		info.attachmentCount = 1 + bDepthEnabled;
+		info.subpassCount = subpasses.GetSize();
+		info.dependencyCount = 0;
+		info.pAttachments = attachments;
+		info.pSubpasses = subpasses.GetData();
+		info.pDependencies = nullptr;
+		info.flags = VkRenderPassCreateFlags();
+		info.pNext = nullptr;
 
-			DEV_ASSERT(vkCreateRenderPass(mLogicalDevice, &info, nullptr, &mRenderPass) == VK_SUCCESS, "VulkanRenderPass", "Failed to create render pass!");
+		DEV_ASSERT(vkCreateRenderPass(mLogicalDevice, &info, nullptr, &mRenderPass) == VK_SUCCESS, "VulkanRenderPass", "Failed to create render pass!");
 
-			VkImageView imageViews[2] = { ((const VulkanTextureView*)desc.AttachmentViews[0].GetHeap())->GetVkImageView(),VK_NULL_HANDLE };
+		//Create framebuffers
+		for (byte framebufferIndex = 0; framebufferIndex < desc.ColorAttachments.GetSize(); framebufferIndex++)
+		{
+			VkImageView imageViews[2] = { ((const VulkanTextureView*)desc.AttachmentViews[framebufferIndex].GetHeap())->GetVkImageView(),VK_NULL_HANDLE };
 
 			//Create framebuffer
 			VkFramebufferCreateInfo framebufferInfo = {};
@@ -287,7 +288,6 @@ namespace Portakal
 			VkFramebuffer framebuffer = VK_NULL_HANDLE;
 			DEV_ASSERT(vkCreateFramebuffer(mLogicalDevice, &framebufferInfo, nullptr, &framebuffer) == VK_SUCCESS, "VulkanRenderPass", "Failed to create normal framebuffer!");
 			mSwapchainFramebuffers.Add(framebuffer);
-
 		}
 	}
 }
