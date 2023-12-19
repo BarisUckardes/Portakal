@@ -23,6 +23,10 @@ namespace Portakal
 		{
 			return mSwapchainFramebuffers;
 		}
+		FORCEINLINE Vector2US GetAvailableSize() const noexcept
+		{
+			return mSize;
+		}
 		virtual void OnShutdown() override;
 	private:
 		void CreateAsSwapchain(const RenderPassDesc& desc,VulkanDevice* pDevice);
@@ -31,5 +35,6 @@ namespace Portakal
 		VkFramebuffer mFramebuffer;
 		VkDevice mLogicalDevice;
 		VkRenderPass mRenderPass;
+		Vector2US mSize;
 	};
 }

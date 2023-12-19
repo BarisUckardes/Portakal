@@ -6,6 +6,7 @@
 #include <Runtime/Vulkan/Memory/VulkanMemoryUtils.h>
 #include <Runtime/Vulkan/Pipeline/VulkanPipelineUtils.h>
 #include <Runtime/Vulkan/Texture/VulkanTextureView.h>
+#include <Runtime/Graphics/Swapchain/Swapchain.h>
 
 namespace Portakal
 {

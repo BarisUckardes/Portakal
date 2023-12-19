@@ -128,11 +128,10 @@ namespace Portakal
 			//Poll window messages first
 			pWindow->PollMessages();
 
-			//Check if window resized and get new set of textures
+			//Check if window resized and get new set of textures + create new render pass
 			const Vector2US windowSize = pWindow->GetSize();
 			if (lastWindowSize != windowSize)
 			{
-				DEV_LOG("System", "WindowSize changed %d,%d", windowSize.X, windowSize.Y);
 				swapchainTextures = pSwapchain->GetTextures();
 				pRenderPass.Shutdown();
 				pRenderPass = CreateRenderPass(pSwapchain.GetHeap(), pDevice.GetHeap());
