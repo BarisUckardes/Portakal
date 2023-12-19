@@ -67,7 +67,7 @@ namespace Portakal
 		renderPassDesc.Subpasses.Add(subpassDesc);
 		return pDevice->CreateRenderPass(renderPassDesc);
 	}
-	void Run()
+	void RunVulkanTest()
 	{
 		//Initialize platform
 		Platform::InitializePlatformDependencies();
@@ -128,10 +128,11 @@ namespace Portakal
 			//Poll window messages first
 			pWindow->PollMessages();
 
-			//Check if window resized and get new set of textures + create new render pass
+			//Check if window resized and get new set of textures
 			const Vector2US windowSize = pWindow->GetSize();
 			if (lastWindowSize != windowSize)
 			{
+				DEV_LOG("System", "WindowSize changed %d,%d", windowSize.X, windowSize.Y);
 				swapchainTextures = pSwapchain->GetTextures();
 				pRenderPass.Shutdown();
 				pRenderPass = CreateRenderPass(pSwapchain.GetHeap(), pDevice.GetHeap());
@@ -141,25 +142,25 @@ namespace Portakal
 			//Begin recording
 			pCmdList->BeginRecording();
 
-			//Set pre barrier
-			CommandListTextureMemoryBarrierDesc preRenderPassBarrier = {};
-			preRenderPassBarrier.ArrayIndex = 0;
-			preRenderPassBarrier.MipIndex = 0;
-			preRenderPassBarrier.AspectFlags = TextureAspectFlags::Color;
+			////Set texture layouts to color attachment
+			//CommandListTextureMemoryBarrierDesc preRenderPassBarrierDesc = {};
+			//preRenderPassBarrierDesc.MipIndex = 0;
+			//preRenderPassBarrierDesc.ArrayIndex = 0;
+			//preRenderPassBarrierDesc.AspectFlags = TextureAspectFlags::Color;
 
-			preRenderPassBarrier.SourceAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentRead;
-			preRenderPassBarrier.SourceLayout = TextureMemoryLayout::Present;
-			preRenderPassBarrier.SourceQueue = GraphicsQueueType::Graphics;
-			preRenderPassBarrier.SourceStageFlags = PipelineStageFlags::ColorAttachmentOutput;
+			//preRenderPassBarrierDesc.SourceLayout = TextureMemoryLayout::Present;
+			//preRenderPassBarrierDesc.SourceQueue = GraphicsQueueType::Graphics;
+			//preRenderPassBarrierDesc.SourceAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentRead;
+			//preRenderPassBarrierDesc.SourceStageFlags = PipelineStageFlags::ColorAttachmentOutput;
 
-			preRenderPassBarrier.DestinationAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentRead | GraphicsMemoryAccessFlags::ColorAttachmentWrite;
-			preRenderPassBarrier.DestinationLayout = TextureMemoryLayout::ColorAttachment;
-			preRenderPassBarrier.DestinationQueue = GraphicsQueueType::Graphics;
-			preRenderPassBarrier.DestinationStageFlags = PipelineStageFlags::ColorAttachmentOutput;
-			pCmdList->SetTextureMemoryBarrier(swapchainTextures[presentImageIndex].GetHeap(), preRenderPassBarrier);
+			//preRenderPassBarrierDesc.DestinationLayout = TextureMemoryLayout::ColorAttachment;
+			//preRenderPassBarrierDesc.DestinationQueue = GraphicsQueueType::Graphics;
+			//preRenderPassBarrierDesc.DestinationAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentWrite;
+			//preRenderPassBarrierDesc.DestinationStageFlags = PipelineStageFlags::ColorAttachmentOutput;
+			//pCmdList->SetTextureMemoryBarrier(swapchainTextures[0].GetHeap(), preRenderPassBarrierDesc);
 
-			//Begin render pass
-			pCmdList->BeginRenderPass(pRenderPass, presentImageIndex);
+			////Begin render pass
+			//pCmdList->BeginRenderPass(pPass);
 
 			//End render pass
 			pCmdList->EndRenderPass();
@@ -196,9 +197,40 @@ namespace Portakal
 		pInstance.Shutdown();
 		pWindow.Shutdown();
 	}
+
+	void RunD3D12Test()
+	{
+		//Initialize platform
+		Platform::InitializePlatformDependencies();
+
+		//Create window
+		WindowDesc windowDesc = {};
+		windowDesc.Title = "Portakal Runtime Test";
+		windowDesc.Position = { 100,100 };
+		windowDesc.Size = { 1024,1024 };
+		windowDesc.pMonitor = nullptr;
+		windowDesc.Mode = WindowMode::Windowed;
+
+		SharedHeap<PlatformWindow> pWindow = PlatformWindow::Create(windowDesc);
+		pWindow->Show();
+
+		//Create graphics instance
+		GraphicsInstanceDesc instanceDesc = {};
+		instanceDesc.Backend = GraphicsBackend::DirectX12;
+		SharedHeap<GraphicsInstance> pInstance = Portakal::GraphicsInstance::Create(instanceDesc);
+
+		//Get adapter
+		SharedHeap<GraphicsAdapter> pAdapter = pInstance->GetAdapters()[0];
+		DEV_LOG("System", "Selecting [%s] device", *pAdapter->GetProductName());
+
+		//Create device
+		SharedHeap<GraphicsDevice> pDevice = pAdapter->CreateDevice();
+	}
 }
+
 int main(const unsigned int argumentCount, const char** ppArguments)
 {
-	Portakal::Run();
+	//Portakal::RunVulkanTest();
+	Portakal::RunD3D12Test();
 	return 0;
 }
