@@ -198,12 +198,33 @@ namespace Portakal
 		pWindow.Shutdown();
 	}
 
+#ifdef STBI_IMPLEMENTED
+	#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+#endif
+
+
 	void RunD3DTest()
-	{ }
+	{
+		int width, height, channels;
+		const byte* annen = stbi_load("C:/Users/mtunc/Pictures/Stickers/marvel-venom-with-protruding-tongue-sticker.png", &width, &height, &channels, 4);
+
+		// Check size of image
+		if (width != 981 || height != 1001)
+		{
+			DEV_LOG("D3DTest", "Image size is not correct");
+			return;
+		}
+		else
+		{
+			DEV_LOG("D3DTest", "Image size is correct");
+			return;
+		}
+	}
 }
 
 int main(const unsigned int argumentCount, const char** ppArguments)
 {
-	Portakal::RunVulkanTest();
+	Portakal::RunD3DTest();
 	return 0;
 }

@@ -7,12 +7,12 @@ namespace Portakal
 	DirectXInstance::DirectXInstance(const GraphicsInstanceDesc& desc) : GraphicsInstance(desc)
 	{
 #ifdef PORTAKAL_DEBUG
-		DEV_ASSERT(D3D12GetDebugInterface(IID_PPV_ARGS(&mDebugController)), "DirectXInstance", " Failed to get Debug Interface");
+		DEV_ASSERT(SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&mDebugController))), "DirectXInstance", " Failed to get Debug Interface");
 		mDebugController->EnableDebugLayer();
 #endif
 
 		// Create Factory
-		DEV_ASSERT(CreateDXGIFactory1(IID_PPV_ARGS(&mFactory)), "DirectXInstance", "Failed to create factory");
+		DEV_ASSERT(SUCCEEDED(CreateDXGIFactory1(IID_PPV_ARGS(&mFactory))), "DirectXInstance", "Failed to create factory");
 
 		// Find all the adapters in the system
 		ComPtr<IDXGIAdapter1> adapter;
@@ -21,7 +21,7 @@ namespace Portakal
 			DXGI_ADAPTER_DESC1 desc;
 			adapter->GetDesc1(&desc);
 
-			GraphicsAdapterDesc adapterDesc;
+			GraphicsAdapterDesc adapterDesc = {};
 		}
 
 
