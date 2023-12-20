@@ -14,6 +14,7 @@ namespace Portakal
 	typedef void* (*DefaultHeapObjectGenerator)(void);
 	class RUNTIME_API Type
 	{
+		friend class ReflectionManifest;
 	public:
 		FORCEINLINE String GetName() const noexcept
 		{
