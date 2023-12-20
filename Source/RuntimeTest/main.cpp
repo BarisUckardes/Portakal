@@ -32,6 +32,8 @@
 #include <Runtime/Graphics/Resource/ResourceTableLayout.h>
 #include <Runtime/Graphics/Resource/ResourceTablePool.h>
 #include <Runtime/Platform/PlatformMonitor.h>
+#include <Runtime/Platform/PlatformLibrary.h>
+#include <Runtime/Platform/PlatformMessage.h>
 
 namespace Portakal
 {
