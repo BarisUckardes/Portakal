@@ -34,6 +34,7 @@
 #include <Runtime/Platform/PlatformMonitor.h>
 #include <Runtime/Platform/PlatformLibrary.h>
 #include <Runtime/Platform/PlatformMessage.h>
+#include <Runtime/Platform/PlatformMutex.h>
 
 namespace Portakal
 {
