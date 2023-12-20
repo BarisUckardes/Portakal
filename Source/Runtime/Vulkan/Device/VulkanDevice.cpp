@@ -278,6 +278,11 @@ namespace Portakal
                 vkQueueWaitIdle(mTransferQueueFamily.DefaultQueue);
                 break;
             }
+            case GraphicsQueueType::Present:
+            {
+                vkQueueWaitIdle(mGraphicsQueueFamily.DefaultQueue);
+                break;
+            }
         }
     }
     void VulkanDevice::UpdateHostBufferCore(GraphicsBuffer* pBuffer, const GraphicsBufferHostUpdateDesc& desc)

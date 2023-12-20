@@ -28,14 +28,14 @@ namespace Portakal
 
 		DEV_LOG("VulkanSwapchain", "Shutdown");
 	}
-	void VulkanSwapchain::PresentCore()
+	bool VulkanSwapchain::PresentCore()
 	{
 		//Get queue first and validate
 		const VkQueue queue = ((VulkanDevice*)mDevice)->GetPresentQueue(mSurface);
 		if (queue == VK_NULL_HANDLE)
 		{
 			DEV_LOG("VulkanSwapchain", "Invalid queue handle!");
-			return;
+			return false;
 		}
 
 		//Get current image fence
@@ -46,7 +46,7 @@ namespace Portakal
 		if (vkAcquireNextImageKHR(mLogicalDevice, mSwapchain, uint64_max, VK_NULL_HANDLE, fence, &imageIndex) != VK_SUCCESS)
 		{
 			DEV_LOG("VulkanSwapchain", "Failed to acquire image");
-			return;
+			return false;
 		}
 
 		//Present
@@ -60,7 +60,12 @@ namespace Portakal
 		presentInfo.pResults = nullptr;
 
 		if (vkQueuePresentKHR(queue, &presentInfo) != VK_SUCCESS)
+		{
 			DEV_LOG("VulkanSwapchain", "Failed to present!");
+			return false;
+		}
+
+		return true;
 	}
 	void VulkanSwapchain::ResizeCore(const uint16 width, const uint16 height)
 	{
@@ -155,13 +160,13 @@ namespace Portakal
 		swapchainInfo.minImageCount = GetBufferCount();
 		swapchainInfo.imageExtent = selectedExtent;
 		swapchainInfo.imageArrayLayers = 1;
-		swapchainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+		swapchainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 		swapchainInfo.imageColorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
 		swapchainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
 		swapchainInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
 		swapchainInfo.preTransform = surfaceCapabilities.currentTransform;
 		swapchainInfo.presentMode = VK_PRESENT_MODE_FIFO_KHR;
-		swapchainInfo.clipped = VK_TRUE;
+		swapchainInfo.clipped = VK_FALSE;
 		swapchainInfo.oldSwapchain = VK_NULL_HANDLE;
 
 		swapchainInfo.pQueueFamilyIndices = nullptr;
@@ -235,6 +240,14 @@ namespace Portakal
 	}
 	bool VulkanSwapchain::SetWindowed()
 	{
-		return false;
+		//Get monitor and validate
+		SharedHeap<PlatformMonitor> pMonitor = GetWindow()->GetMonitor();
+		if (pMonitor.IsShutdown())
+			return false;
+
+		//Resize according to the monitor
+		Resize(pMonitor->GetSize().X / 2, pMonitor->GetSize().Y / 2);
+
+		return true;
 	}
 }

@@ -59,6 +59,12 @@ namespace Portakal
 	protected:
 		PlatformWindow(const WindowDesc& desc) : mVisible(false), mSwapchain(nullptr), mTitle(desc.Title), mSize(desc.Size), mPosition(desc.Position), mMode(desc.Mode), mMonitor(desc.pMonitor)
 		{
+			//Check if has no monitor
+			if (mMonitor.IsShutdown())
+			{
+				DEV_LOG("Window", "No monitor is specified within the WindowDesc, choosing the primary monitor as a default behaviour");
+				mMonitor = PlatformMonitor::GetPrimaryMonitor();
+			}
 			DEV_LOG("Window", "Window created.");
 		}
 		~PlatformWindow() = default;

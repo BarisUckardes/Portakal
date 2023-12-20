@@ -13,7 +13,7 @@ namespace Portakal
 
 		virtual void OnShutdown() override;
 	private:
-		void PresentCore() override;
+		bool PresentCore() override;
 		void ResizeCore(const uint16 width, const uint16 height) override;
 		void Free();
 		// Inherited via Swapchain

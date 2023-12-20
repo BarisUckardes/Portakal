@@ -6,6 +6,7 @@ namespace Portakal
 	enum class RUNTIME_API WindowMode : byte
 	{
 		Windowed,
+		WindowedBorderless,
 		Fullscreen
 	};
 }

@@ -1,15 +1,25 @@
 #include "PlatformMonitor.h"
 
-#ifdef PORTAKAL_PLATFORM_WINDOWNS
+#ifdef PORTAKAL_PLATFORM_WINDOWS
+#include <Runtime/Win32/Win32Monitor.h>
+typedef Portakal::Win32Monitor PlatformAbstraction;
 #endif
 
 namespace Portakal
 {
 	Array<SharedHeap<PlatformMonitor>> PlatformMonitor::GetAvailableMonitors()
 	{
-		return Array<SharedHeap<PlatformMonitor>>();
+		return PlatformAbstraction::GetAvailableMonitors();
 	}
-	void PlatformMonitor::OnPositionUpdate(const Vector2US position)
+	SharedHeap<PlatformMonitor> PlatformMonitor::GetPrimaryMonitor()
+	{
+		return PlatformAbstraction::GetPrimaryMonitor();
+	}
+	PlatformMonitor::PlatformMonitor(const Vector2I position,const Vector2US size, const MonitorDisplayMode& currentMode, const Array<MonitorDisplayMode>& displayModes) : mPosition(position),mSize(size), mCurrentDisplayMode(currentMode), mDisplayModes(displayModes)
+	{
+
+	}
+	void PlatformMonitor::OnPositionUpdate(const Vector2I position)
 	{
 		mPosition = position;
 	}

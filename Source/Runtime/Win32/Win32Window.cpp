@@ -226,16 +226,28 @@ namespace Portakal
 	{
 		SetWindowPos(mWindowHandle, NULL, position.X, position.Y, 0, 0, SWP_NOSIZE | SWP_SHOWWINDOW);
 	}
-	void Win32Window::SetModeCore(const WindowMode mode)
+	void Win32Window::SetModeCore(WindowMode mode)
 	{
-		if (mode == WindowMode::Fullscreen)
+		switch (mode)
 		{
-			SetWindowLongPtr(mWindowHandle, GWL_STYLE, WS_POPUP);
+			case Portakal::WindowMode::Windowed:
+			default:
+			{
+				SetWindowLongPtr(mWindowHandle, GWL_STYLE, WS_OVERLAPPEDWINDOW);
+				break;
+			}
+			case Portakal::WindowMode::WindowedBorderless:
+			{
+				SetWindowLongPtr(mWindowHandle, GWL_STYLE, WS_POPUP);
+				break;
+			}
+			case Portakal::WindowMode::Fullscreen:
+			{
+				SetWindowLongPtr(mWindowHandle, GWL_STYLE, WS_POPUP);
+				break;
+			}
 		}
-		else
-		{
-			SetWindowLongPtr(mWindowHandle, GWL_STYLE, WS_OVERLAPPEDWINDOW);
-		}
+	
 	}
 	void Win32Window::SwitchMonitorCore(const SharedHeap<PlatformMonitor>& pMonitor)
 	{
