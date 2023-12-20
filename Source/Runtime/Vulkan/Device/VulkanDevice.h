@@ -47,7 +47,10 @@ namespace Portakal
         };
 	public:
 		VulkanDevice(const GraphicsDeviceDesc& desc);
-		~VulkanDevice() = default;
+        ~VulkanDevice()
+        {
+
+        }
 
         FORCEINLINE int32 GetPresentQueueFamilyIndex(const VkSurfaceKHR surface) const noexcept;
         FORCEINLINE VkQueue GetPresentQueue(const VkSurfaceKHR surface) const noexcept;

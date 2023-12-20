@@ -15,6 +15,7 @@ namespace Portakal
 	class RUNTIME_API Type
 	{
 		friend class ReflectionManifest;
+		friend class TypeDispatcher;
 	public:
 		FORCEINLINE String GetName() const noexcept
 		{
@@ -45,7 +46,7 @@ namespace Portakal
 			return mEnums;
 		}
 	private:
-		Type(const String& name, const uint32 size, const TypeModes mode, const TypeCodes code, DefaultHeapObjectGenerator defaultObjectGenerator, const Array<Field*>& fields, const Array<Attribute*>& attributes, const Array<EnumValue>& enumValues, Type** ppModuleAddress);
+		Type(const String& name, const uint32 size, const TypeModes mode, const TypeCodes code, DefaultHeapObjectGenerator defaultObjectGenerator);
 		~Type();
 	private:
 		const String mName;
@@ -66,9 +67,9 @@ namespace Portakal
 	};
 
 #define typeof(type) TypeAccessor<##type>::GetType()
-#define RSTRUCT()
-#define RCLASS()
-#define RENUM()
-#define RFIELD()
-#define RATTRIBUTE(target,...)
+#define PSTRUCT()
+#define PCLASS()
+#define PENUM()
+#define PFIELD()
+#define PATTRIBUTE(target,...)
 }

@@ -165,7 +165,7 @@ namespace Portakal
 		swapchainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
 		swapchainInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
 		swapchainInfo.preTransform = surfaceCapabilities.currentTransform;
-		swapchainInfo.presentMode = VK_PRESENT_MODE_FIFO_KHR;
+		swapchainInfo.presentMode = VK_PRESENT_MODE_MAILBOX_KHR;
 		swapchainInfo.clipped = VK_FALSE;
 		swapchainInfo.oldSwapchain = VK_NULL_HANDLE;
 
