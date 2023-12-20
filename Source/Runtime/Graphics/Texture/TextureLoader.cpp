@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	void TextureLoader::LoadFromPath(const String& path, TextureLoadResult& resultOut)
+	bool TextureLoader::LoadFromPath(const String& path, TextureLoadResult& resultOut)
 	{
 		int width = 0;
 		int height = 0;
@@ -12,10 +12,12 @@ namespace Portakal
 		if (pData == nullptr)
 		{
 			DEV_LOG("TextureLoader", "Failed to load the texture");
-			return;
+			return false;
 		}
 
 		resultOut.Size = { (uint16)width,(uint16)height };
 		resultOut.pView = new MemoryOwnedView(pData, width * height * 4);
+
+		return true;
 	}
 }
