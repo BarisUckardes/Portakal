@@ -10,4 +10,16 @@ namespace Portakal
     {
         //Do something here
     }
+    void Type::_RegisterEnum(const String& name, const int64 value)
+    {
+        mEnums.Add({ name,value });
+    }
+    void Type::_RegisterField(const String& name, const uint32 offset, Type* pFieldType, Type* pTargetType)
+    {
+
+    }
+    void Type::_SetBaseType(Type* pType)
+    {
+        mBaseType = pType;
+    }
 }

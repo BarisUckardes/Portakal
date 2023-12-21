@@ -48,15 +48,20 @@ namespace Portakal
 	private:
 		Type(const String& name, const uint32 size, const TypeModes mode, const TypeCodes code, DefaultHeapObjectGenerator defaultObjectGenerator);
 		~Type();
+
+		void _RegisterEnum(const String& name, const int64 value);
+		void _RegisterField(const String& name, const uint32 offset, Type* pFieldType, Type* pTargetType);
+		void _SetBaseType(Type* pType);
 	private:
 		const String mName;
 		const uint32 mSize;
 		const TypeModes mMode;
 		const TypeCodes mCode;
 		const DefaultHeapObjectGenerator mDefaultObjectGenerator;
-		const Array<Field*> mFields;
-		const Array<Attribute*> mAttributes;
-		const Array<EnumValue> mEnums;
+		Array<Field*> mFields;
+		Array<Attribute*> mAttributes;
+		Array<EnumValue> mEnums;
+		Type* mBaseType;
 		Type** mModuleAddress;
 	};
 

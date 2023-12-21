@@ -9,6 +9,11 @@ namespace Portakal
 	{
 	public:
 
-	private:
+	public:
+		PFIELD();
+		uint32 mMyType;
+		PFIELD();
+		String mMahString;
+
 	};
 }

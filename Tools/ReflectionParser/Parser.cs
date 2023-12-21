@@ -80,14 +80,6 @@ namespace Portakal
             //Create new reflection manifest path
             File.Create(reflectionManifestPath).Close();
 
-            //First write all the types
-            string typeLines = string.Empty;
-            foreach(FileInfo file in fileInfos)
-            {
-                string lineContent = $"Portakal::Type* p{file.Name} = Portakal::TypeDispatcher::CreateType(\"{file.Name}\",sizeof(Portakal::{file.Name}),Portakal::TypeModes::{file.Type},Portakal::TypeCodes::Composed,nullptr);";
-                typeLines += $"{lineContent}{Environment.NewLine}";
-            }
-
             //Write all includes
             string includeLines = string.Empty;
             foreach(FileInfo file in fileInfos)
@@ -95,6 +87,60 @@ namespace Portakal
                 string lineContent = $"#include \"{file.Path.Replace(targetFolderPath+@"\", "")}\"";
                 includeLines += $"{lineContent}{Environment.NewLine}";
             }
+
+            //Write all types into array
+            string typeArrayContent = string.Empty;
+            foreach(FileInfo file in fileInfos)
+            {
+                //Array list line
+                typeArrayContent += $"p{file.Name},";
+            }
+
+            //First write all the types
+            string typeLines = string.Empty;
+            foreach (FileInfo file in fileInfos)
+            {
+                string lineContent = $"\t\tPortakal::Type* p{file.Name} = Portakal::TypeDispatcher::CreateType(\"{file.Name}\",sizeof(Portakal::{file.Name}),Portakal::TypeModes::{file.Type},Portakal::TypeCodes::Composed,nullptr);";
+                typeLines += $"{lineContent}{Environment.NewLine}";
+            }
+
+            //Register enums
+            string enumLines = string.Empty;
+            foreach(FileInfo file in fileInfos)
+            {
+                foreach(KeyValuePair<string,long> value in file.EnumValues)
+                {
+                    string line = $"\t\tPortakal::TypeDispatcher::RegisterEnum(\"{value.Key}\",{value.Value},p{file.Name});{Environment.NewLine}";
+                    enumLines += line;
+                }
+            }
+
+            //Register fields
+            string fieldLines = string.Empty;
+            foreach(FileInfo file in fileInfos)
+            {
+                foreach(FieldInfo field in file.Fields)
+                {
+                    string line = $"\t\tPortakal::TypeDispatcher::RegisterField(\"{field.VariableName}\",offsetof(Portakal::{file.Name},{field.VariableName}),typeof({field.VariableType}),p{file.Name});{Environment.NewLine}";
+                    fieldLines += line;
+                }
+            }
+            //Register attributes
+            string attributeLines = string.Empty;
+
+            //Register basetypes
+            string baseTypeLines = string.Empty;
+            foreach(FileInfo file in fileInfos)
+            {
+                //Validate
+                if (file.BaseClass == string.Empty)
+                    continue;
+
+                string line = $"\t\tPortakal::TypeDispatcher::SetBaseType(typeof(Portakal::{file.Name}),typeof(Portakal::{file.BaseClass})){Environment.NewLine}";
+                baseTypeLines += line;
+            }
+
+            //Create manifest file string
             string manifestFileContent = $@"
 #pragma once
 #include <Runtime/Reflection/Reflection.h>
@@ -108,20 +154,23 @@ extern ""C""
 		Portakal::ReflectionManifest* pManifest = nullptr;
 
 		//Create types here
-        {typeLines}
+{typeLines}
+        //Register enums here
+{enumLines}
+        //Register fields here
+{fieldLines}
+        //Register attributes here
+{attributeLines}
+        //Register base types here
+{baseTypeLines}
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {{}};
+		Portakal::Array<Portakal::Type*> types = {{{typeArrayContent}}};
 		pManifest = new Portakal::ReflectionManifest(""Runtime"", types);
 
 		return pManifest;
 	}}
 }}
 ";
-
-            //Register fields
-
-            //Register basetypes
-
             //Write to reflection manifest file
             File.WriteAllText(reflectionManifestPath, manifestFileContent);
             return true;
@@ -207,6 +256,15 @@ extern ""C""
             }
 
             //Get fields
+            IReadOnlyCollection<uint> fieldIndexes = GetLineIndexes(file.Lines, "PFIELD()");
+            foreach(uint lineIndex in fieldIndexes)
+            {
+                string lineContent = file.Lines[lineIndex + 1].Trim().Trim('\t').Trim(';');
+                string[] splits = lineContent.Split(" ");
+                string valueType = splits[0];
+                string name = splits[1];
+                file.RegisterField(name, valueType);
+            }
 
             //Get attributes
 
@@ -244,6 +302,18 @@ extern ""C""
             }
 
             return -1;
+        }
+        private static IReadOnlyCollection<uint> GetLineIndexes(string[] lines, string target)
+        {
+            List<uint> indexes = new List<uint>();  
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string line = lines[i];
+                if (line.Contains(target))
+                    indexes.Add((uint)i);
+            }
+
+            return indexes;
         }
 
     }
