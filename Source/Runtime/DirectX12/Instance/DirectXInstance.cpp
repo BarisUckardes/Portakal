@@ -23,8 +23,6 @@ namespace Portakal
 
 			GraphicsAdapterDesc adapterDesc = {};
 		}
-
-
 	}
 	void DirectXInstance::OnShutdown()
 	{
