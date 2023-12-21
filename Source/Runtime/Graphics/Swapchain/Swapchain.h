@@ -6,6 +6,8 @@
 #include <Runtime/Graphics/Texture/TextureView.h>
 #include <Runtime/Graphics/Command/CommandPool.h>
 #include <Runtime/Graphics/Command/CommandList.h>
+#include <Runtime/Graphics/Swapchain/PresentMode.h>
+
 namespace Portakal
 {
 	class RUNTIME_API Swapchain : public GraphicsDeviceObject
@@ -29,6 +31,10 @@ namespace Portakal
 		FORCEINLINE SharedHeap<PlatformWindow> GetWindow() const noexcept
 		{
 			return mWindow;
+		}
+		FORCEINLINE PresentMode GetPresentMode() const noexcept
+		{
+			return mPresentMode;
 		}
 		FORCEINLINE Vector2US GetSize() const noexcept
 		{
@@ -62,6 +68,7 @@ namespace Portakal
 		{
 			return mViews[mIndex];
 		}
+	
 		virtual GraphicsDeviceObjectType GetObjectType() const noexcept override final { return GraphicsDeviceObjectType::Swapchain; }
 	
 		void Resize(const uint16 width, const uint16 height);
@@ -87,6 +94,7 @@ namespace Portakal
 		const TextureFormat mColorFormat;
 		const TextureFormat mDepthStencilFormat;
 		const SharedHeap<PlatformWindow> mWindow;
+		const PresentMode mPresentMode;
 		Array<SharedHeap<Texture>> mTextures;
 		Array<SharedHeap<TextureView>> mViews;
 		Array<SharedHeap<Fence>> mPresentFences;

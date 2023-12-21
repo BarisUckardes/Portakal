@@ -86,7 +86,7 @@ namespace Portakal
 		windowDesc.Title = "Portakal Runtime Test";
 		windowDesc.Position = { 100,100 };
 		windowDesc.Size = { 1024,1024 };
-		windowDesc.pMonitor = monitors[0];
+		windowDesc.pMonitor = monitors[1];
 		windowDesc.Mode = WindowMode::Fullscreen;
 
 		SharedHeap<PlatformWindow> pWindow = PlatformWindow::Create(windowDesc);
@@ -111,6 +111,7 @@ namespace Portakal
 		swapchainDesc.DepthStencilFormat = TextureFormat::None;
 		swapchainDesc.pWindow = pWindow;
 		swapchainDesc.pDevice = pDevice;
+		swapchainDesc.PresentMode = PresentMode::VsyncQueued;
 		SharedHeap<Portakal::Swapchain> pSwapchain = pDevice->CreateSwapchain(swapchainDesc);
 
 		//Create command pool

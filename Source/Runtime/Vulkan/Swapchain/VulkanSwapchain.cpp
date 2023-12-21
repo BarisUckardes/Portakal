@@ -5,6 +5,7 @@
 #include <Runtime/Vulkan/Texture/VulkanTextureUtils.h>
 #include <Runtime/Vulkan/Device/VulkanDevice.h>
 #include <Runtime/Graphics/Command/CommandList.h>
+#include <Runtime/Vulkan/Swapchain/VulkanSwapchainUtils.h>
 
 #ifdef PORTAKAL_PLATFORM_WINDOWS
 #include <Runtime/Win32/Win32Window.h>
@@ -165,7 +166,7 @@ namespace Portakal
 		swapchainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
 		swapchainInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
 		swapchainInfo.preTransform = surfaceCapabilities.currentTransform;
-		swapchainInfo.presentMode = VK_PRESENT_MODE_MAILBOX_KHR;
+		swapchainInfo.presentMode = VulkanSwapchainUtils::GetPresentMode(GetPresentMode());
 		swapchainInfo.clipped = VK_FALSE;
 		swapchainInfo.oldSwapchain = VK_NULL_HANDLE;
 
