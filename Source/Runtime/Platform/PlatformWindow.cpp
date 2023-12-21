@@ -10,7 +10,9 @@ namespace Portakal
 {
 	SharedHeap<PlatformWindow> PlatformWindow::Create(const WindowDesc& desc)
 	{
-		return new PlatformAbstraction(desc);
+		SharedHeap<PlatformWindow> pWindow = new PlatformAbstraction(desc);
+		pWindow->SetMode(desc.Mode);
+		return pWindow;
 	}
 	void PlatformWindow::SetTitle(const String& title)
 	{
@@ -24,18 +26,66 @@ namespace Portakal
 	}
 	void PlatformWindow::SetPosition(const Vector2I position)
 	{
-		SetPosition(position);
+		SetPositionCore(position);
 		mPosition = position;
 	}
-	void PlatformWindow::SetMode(const WindowMode mode)
+	void PlatformWindow::SetMode( WindowMode mode)
 	{
+		//Call implementation
 		SetModeCore(mode);
+
+		//Set new mode
 		mMode = mode;
+
+		const Vector2US monitorSize = mMonitor.IsShutdown() ? Vector2US(1024, 1024) : mMonitor->GetSize();
+		const Vector2US halfMonitorSize = monitorSize / 2;
+		const Vector2I position = mMonitor->GetPosition();
+
+		//Set position
+		SetPosition(position);
+
+		//Set sizes
+		switch (mode)
+		{
+			case Portakal::WindowMode::Windowed:
+			default:
+			{
+				SetSize(halfMonitorSize);
+				break;
+			}
+			case Portakal::WindowMode::WindowedBorderless:
+			{
+				SetSize(halfMonitorSize);
+				break;
+			}
+			case Portakal::WindowMode::Fullscreen:
+			{
+				SetSize(monitorSize);
+				break;
+			}
+		}
+		
+		//Set swapchain mode
+		if (!mSwapchain.IsShutdown())
+			mSwapchain->SetMode(mode);
 	}
 	void PlatformWindow::SwitchMonitor(const SharedHeap<PlatformMonitor>& pMonitor)
 	{
+		//Validate monitor integrity
+		if (pMonitor.IsShutdown())
+		{
+			DEV_LOG("PlatformWindow", "Given monitor is shutdown!");
+			return;
+		}
+
+		//Call implementation
 		SwitchMonitorCore(pMonitor);
+
+		//Set monitor
 		mMonitor = pMonitor;
+
+		//Set mode right away
+		SetMode(mMode);
 	}
 	void PlatformWindow::PollMessages()
 	{

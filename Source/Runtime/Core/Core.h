@@ -48,7 +48,7 @@ namespace Portakal
 #define DEV_ASSERT(pCondition, pTitle, pFailed, ...) Portakal::DevAssert(pCondition, pTitle, pFailed, __VA_ARGS__) // For multiple times error check to see if something is wrong
 #else
 #define DEV_SYSTEM(pCondition, pTitle, pMessage, pSucceed)
-#define DEV_ASSERT(pCondition, pTitle, pMessage)
+#define DEV_ASSERT(pCondition, pTitle, pMessage) (pCondition)
 #endif
 
 #define PE_INFO Portakal::LogLevel::Info

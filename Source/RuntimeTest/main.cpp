@@ -31,6 +31,12 @@
 #include <Runtime/Graphics/Resource/ResourceTable.h>
 #include <Runtime/Graphics/Resource/ResourceTableLayout.h>
 #include <Runtime/Graphics/Resource/ResourceTablePool.h>
+#include <Runtime/Platform/PlatformMonitor.h>
+#include <Runtime/Platform/PlatformLibrary.h>
+#include <Runtime/Platform/PlatformMessage.h>
+#include <Runtime/Platform/PlatformMutex.h>
+#include <Runtime/Platform/PlatformProcess.h>
+#include <Runtime/Platform/PlatformRegistry.h>
 
 namespace Portakal
 {
@@ -72,13 +78,16 @@ namespace Portakal
 		//Initialize platform
 		Platform::InitializePlatformDependencies();
 
+		//Get monitor
+		Array<SharedHeap<PlatformMonitor>> monitors = PlatformMonitor::GetAvailableMonitors();
+
 		//Create window
 		WindowDesc windowDesc = {};
 		windowDesc.Title = "Portakal Runtime Test";
 		windowDesc.Position = { 100,100 };
 		windowDesc.Size = { 1024,1024 };
-		windowDesc.pMonitor = nullptr;
-		windowDesc.Mode = WindowMode::Windowed;
+		windowDesc.pMonitor = monitors[0];
+		windowDesc.Mode = WindowMode::Fullscreen;
 
 		SharedHeap<PlatformWindow> pWindow = PlatformWindow::Create(windowDesc);
 		pWindow->Show();
@@ -98,12 +107,12 @@ namespace Portakal
 		//Create swapchain
 		SwapchainDesc swapchainDesc = {};
 		swapchainDesc.ColorFormat = TextureFormat::R8_G8_B8_A8_UNorm;
-		swapchainDesc.BufferCount = 3;
+		swapchainDesc.BufferCount = 2;
 		swapchainDesc.DepthStencilFormat = TextureFormat::None;
 		swapchainDesc.pWindow = pWindow;
 		swapchainDesc.pDevice = pDevice;
+		swapchainDesc.PresentMode = PresentMode::VsyncQueued;
 		SharedHeap<Portakal::Swapchain> pSwapchain = pDevice->CreateSwapchain(swapchainDesc);
-
 
 		//Create command pool
 		SharedHeap<CommandPool> pCmdPool = pDevice->CreateCommandPool({ CommandPoolType::Graphics });
@@ -123,6 +132,7 @@ namespace Portakal
 		const byte presentImageIndexStatic = 0;
 		byte presentImageIndex = 0;
 		Vector2US lastWindowSize = pWindow->GetSize();
+		bool bRed = true;
 		while (!pWindow.IsShutdown())
 		{
 			//Poll window messages first
@@ -159,7 +169,7 @@ namespace Portakal
 			pCmdList->SetTextureMemoryBarrier(swapchainTextures[presentImageIndex].GetHeap(), preRenderPassBarrier);
 
 			//Begin render pass
-			Color4F clearColor = Color4F(0.0f,1.0f,1.0f,1.0f);
+			Color4F clearColor = bRed ? Color4F(1.0f, 0.0f, 0.0f, 1.0f): Color4F(0.0f, 0.0f, 1.0f, 1.0f);
 			pCmdList->BeginRenderPass(pRenderPass, clearColor, presentImageIndex);
 
 			//End render pass
@@ -175,13 +185,17 @@ namespace Portakal
 			pDevice->WaitFences(pFence.GetHeapAddress(), 1);
 
 			//Present
-			pSwapchain->Present();
+			if(pSwapchain->Present())
+			{
+				//Wait for the present
+				pSwapchain->WaitForPresent(presentImageIndex);
 
-			//Wait for the present
-			pSwapchain->WaitForPresent(presentImageIndex);
+				//Increment the current index
+				presentImageIndex = (presentImageIndex + 1) % pSwapchain->GetBufferCount();
+			}
 
-			//Increment the current index
-			presentImageIndex = (presentImageIndex + 1) % pSwapchain->GetBufferCount();
+			//Tick red
+			bRed = !bRed;
 		}
 
 		//Wati device idle before shutdown
@@ -225,6 +239,7 @@ namespace Portakal
 
 int main(const unsigned int argumentCount, const char** ppArguments)
 {
-	Portakal::RunD3DTest();
+	//Portakal::RunD3DTest()
+	Portakal::RunVulkanTest();
 	return 0;
 }
