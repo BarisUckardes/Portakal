@@ -5,14 +5,14 @@
 #ifdef PORTAKAL_PLATFORM_WINDOWS
 #include <Runtime/DirectX12/DXIncludes.h>
 
-using namespace Microsoft::WRL;
-
 namespace Portakal
 {
+	class DirectXDevice;
+
 	class RUNTIME_API DirectXSwapchain : public Swapchain
 	{
 	public:
-		DirectXSwapchain(const SwapchainDesc& desc, const SharedHeap<GraphicsDevice>& pDevice);
+		DirectXSwapchain(const SwapchainDesc& desc, DirectXDevice* pDevice);
 		~DirectXSwapchain() override = default;
 	private:
 		virtual void ResizeCore(const uint16 width, const uint16 height) override;
@@ -22,7 +22,7 @@ namespace Portakal
 		virtual bool SetWindowed() override;
 
 	private:
-		ComPtr<IDXGISwapChain4> mSwapchain;
+		ComPtr<IDXGISwapChain1> mSwapchain;
 		ComPtr<ID3D12Resource> mBackBuffers[2];
 		ComPtr<ID3D12DescriptorHeap> mRTVHeap;
 		uint32 mRTVDescriptorSize;
