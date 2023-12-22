@@ -21,7 +21,7 @@ namespace Portakal
     }
     bool Swapchain::Present()
     {
-        const bool bState = PresentCore();;
+        const bool bState = PresentCore();
         IncrementIndex();
         return bState;
     }

@@ -40,7 +40,7 @@
 
 namespace Portakal
 {
-	SharedHeap<RenderPass> CreateRenderPass(Swapchain* pSwapchain,GraphicsDevice* pDevice)
+	SharedHeap<RenderPass> CreateRenderPass(Swapchain* pSwapchain, GraphicsDevice* pDevice)
 	{
 		RenderPassDesc renderPassDesc = {};
 		renderPassDesc.Size = { pSwapchain->GetSize().X,pSwapchain->GetSize().Y };
@@ -84,10 +84,10 @@ namespace Portakal
 		//Create window
 		WindowDesc windowDesc = {};
 		windowDesc.Title = "Portakal Runtime Test";
-		windowDesc.Position = { 100,100 };
-		windowDesc.Size = { 1024,1024 };
+		windowDesc.Position = { (monitors[0]->GetSize().X - 1280) / 2, (monitors[0]->GetSize().Y - 720) / 2 };
+		windowDesc.Size = { 1280, 720 };
 		windowDesc.pMonitor = monitors[0];
-		windowDesc.Mode = WindowMode::Fullscreen;
+		windowDesc.Mode = WindowMode::Windowed;
 
 		SharedHeap<PlatformWindow> pWindow = PlatformWindow::Create(windowDesc);
 		pWindow->Show();
@@ -127,7 +127,7 @@ namespace Portakal
 		Array<SharedHeap<Texture>> swapchainTextures = pSwapchain->GetTextures();
 
 		//Create render pass set
-		SharedHeap<RenderPass> pRenderPass = CreateRenderPass(pSwapchain.GetHeap(),pDevice.GetHeap());
+		SharedHeap<RenderPass> pRenderPass = CreateRenderPass(pSwapchain.GetHeap(), pDevice.GetHeap());
 
 		const byte presentImageIndexStatic = 0;
 		byte presentImageIndex = 0;
@@ -169,7 +169,7 @@ namespace Portakal
 			pCmdList->SetTextureMemoryBarrier(swapchainTextures[presentImageIndex].GetHeap(), preRenderPassBarrier);
 
 			//Begin render pass
-			Color4F clearColor = bRed ? Color4F(1.0f, 0.0f, 0.0f, 1.0f): Color4F(0.0f, 0.0f, 1.0f, 1.0f);
+			Color4F clearColor = bRed ? Color4F(1.0f, 0.0f, 0.0f, 1.0f) : Color4F(0.0f, 0.0f, 1.0f, 1.0f);
 			pCmdList->BeginRenderPass(pRenderPass, clearColor, presentImageIndex);
 
 			//End render pass
@@ -185,7 +185,7 @@ namespace Portakal
 			pDevice->WaitFences(pFence.GetHeapAddress(), 1);
 
 			//Present
-			if(pSwapchain->Present())
+			if (pSwapchain->Present())
 			{
 				//Wait for the present
 				pSwapchain->WaitForPresent(presentImageIndex);
@@ -212,34 +212,59 @@ namespace Portakal
 		pWindow.Shutdown();
 	}
 
-#ifdef STBI_IMPLEMENTED
-	#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
-#endif
-
-
 	void RunD3DTest()
 	{
-		int width, height, channels;
-		const byte* annen = stbi_load("C:/Users/mtunc/Pictures/Stickers/marvel-venom-with-protruding-tongue-sticker.png", &width, &height, &channels, 4);
+		Platform::InitializePlatformDependencies();
 
-		// Check size of image
-		if (width != 981 || height != 1001)
-		{
-			DEV_LOG("D3DTest", "Image size is not correct");
-			return;
-		}
-		else
-		{
-			DEV_LOG("D3DTest", "Image size is correct");
-			return;
-		}
+		//Get monitor
+		Array<SharedHeap<PlatformMonitor>> monitors = PlatformMonitor::GetAvailableMonitors();
+		;
+		//Create window
+		WindowDesc windowDesc = {};
+		windowDesc.Title = "Portakal Runtime Test";
+		windowDesc.Position = { (monitors[0]->GetSize().X - 1280)/2, (monitors[0]->GetSize().Y - 720) / 2 };
+		windowDesc.Size = { 1280, 720 };
+		windowDesc.pMonitor = monitors[0];
+		windowDesc.Mode = WindowMode::Windowed;
+
+		SharedHeap<PlatformWindow> pWindow = PlatformWindow::Create(windowDesc);
+		pWindow->Show();
+
+		//Create graphics instance
+		GraphicsInstanceDesc instanceDesc = {};
+		instanceDesc.Backend = GraphicsBackend::DirectX12;
+		SharedHeap<GraphicsInstance> pInstance = Portakal::GraphicsInstance::Create(instanceDesc);
+
+		//Get adapter
+		SharedHeap<GraphicsAdapter> pAdapter = pInstance->GetAdapters()[0];
+		DEV_LOG("System", "Selecting [%s] device", *pAdapter->GetProductName());
+
+		//Create device
+		SharedHeap<GraphicsDevice> pDevice = pAdapter->CreateDevice();
 	}
 }
 
 int main(const unsigned int argumentCount, const char** ppArguments)
 {
-	//Portakal::RunD3DTest()
-	Portakal::RunVulkanTest();
+	printf("Choose an Graphics Backend:\n");
+	printf("1. Vulkan\n");
+	printf("2. D3D12\n");
+	printf("3. Exit\n");
+
+	int option = 0;
+	scanf_s("%d", &option);
+
+	switch (option)
+	{
+	case 1:
+		Portakal::RunVulkanTest();
+		break;
+	case 2:
+		Portakal::RunD3DTest();
+		break;
+	case 3: default:
+		break;
+	}
+
 	return 0;
 }

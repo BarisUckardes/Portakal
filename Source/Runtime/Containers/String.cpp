@@ -11,6 +11,14 @@ namespace Portakal
 		return pSize;
 	}
 
+	uint64 GetWCharPointerSize(const wchar_t* target)
+	{
+		const wchar_t* ptr = target;
+		while (*ptr)
+			++ptr;
+		return ptr - target;
+	}
+
 	String::String(const char* pData, const uint64 sizeInBytes)
 	{
 		mSize = sizeInBytes;
@@ -27,6 +35,21 @@ namespace Portakal
 
 		Memory::Copy(mSource, pData, sizeInBytes);
 		mSource[sizeInBytes] = '\0';
+	}
+
+	String::String(const wchar_t* pData)
+	{
+		mSize = GetWCharPointerSize(pData);
+		if (mSize == 0)
+		{
+			mSource = nullptr;
+			return;
+		}
+
+		mSource = new char[mSize + 1];
+		for (uint64 i = 0; i < mSize; i++)
+			mSource[i] = (char)pData[i];
+		mSource[mSize] = '\0';
 	}
 
 	String::String(const uint64 sizeInBytes)
@@ -250,6 +273,16 @@ namespace Portakal
 		return String(mSource);
 	}
 
+	String String::operator=(const wchar_t* other)
+	{
+		mSize = GetWCharPointerSize(other);
+		mSource = new char[mSize + 1];
+		for (uint64 i = 0; i < mSize; i++)
+			mSource[i] = (char)other[i];
+		mSource[mSize] = '\0';
+
+		return String(mSource);
+	}
 
 	String String::operator+=(const String& other)
 	{

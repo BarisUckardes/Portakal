@@ -1,7 +1,7 @@
 #pragma once 
 
 #include <Runtime/Graphics/Device/GraphicsDevice.h>
-
+#ifdef PORTAKAL_PLATFORM_WINDOWS
 #include <Runtime/DirectX12/DXIncludes.h>
 
 namespace Portakal
@@ -9,7 +9,7 @@ namespace Portakal
 	class RUNTIME_API DirectXDevice : public GraphicsDevice
 	{
 	public:
-		DirectXDevice(const GraphicsDeviceDesc& desc) : GraphicsDevice(desc) {}
+		DirectXDevice(const GraphicsDeviceDesc& desc);
 		~DirectXDevice() = default;
 
 		FORCEINLINE virtual GraphicsBackend GetBackend() const noexcept override { return GraphicsBackend::DirectX12; }
@@ -31,7 +31,7 @@ namespace Portakal
 		virtual ResourceTablePool* CreateResourceTablePoolCore(const ResourceTablePoolDesc& desc) override { return nullptr; }
 		virtual ResourceTable* CreateResourceTableCore(const ResourceTableDesc& desc) override { return nullptr; }
 		virtual Fence* CreateFenceCore() override { return nullptr; }
-		virtual Swapchain* CreateSwapchainCore(const SwapchainDesc& desc) override { return nullptr; }
+		virtual Swapchain* CreateSwapchainCore(const SwapchainDesc& desc) override;
 		virtual RenderPass* CreateRenderPassCore(const RenderPassDesc& desc) override { return nullptr; }
 
 		virtual void WaitFencesCore(Fence** ppFences, const byte count) override { }
@@ -44,5 +44,8 @@ namespace Portakal
 		virtual void OnShutdown() override {};
 	private:
 		ComPtr<ID3D12Device> mDevice;
+		ComPtr<IDXGIAdapter1> mAdapter;
+
 	};
 }
+#endif

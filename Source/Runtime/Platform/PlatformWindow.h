@@ -65,7 +65,7 @@ namespace Portakal
 				DEV_LOG("Window", "No monitor is specified within the WindowDesc, choosing the primary monitor as a default behaviour");
 				mMonitor = PlatformMonitor::GetPrimaryMonitor();
 			}
-			DEV_LOG("Window", "Window created.");
+			DEV_SUCCESS("Window", "Window created.");
 		}
 		~PlatformWindow() = default;
 

@@ -38,6 +38,7 @@ namespace Portakal
 	};
 
     void DevInfo(LogLevel pType, const char* pMessage,...);
+	void DevSuccess(const char* pTitle, const char* pMessage,...);
     void DevLog(const char* pTitle, const char* pMessage,...);
     void DevSystem(bool pCondition, const char* pTitle, const char* pFailed, const char* pSucceed);
     void DevAssert(bool pCondition, const char* pTitle, const char* pFailed,...);
@@ -47,7 +48,7 @@ namespace Portakal
 #define DEV_SYSTEM(pCondition, pTitle, pFailed, pSucceed) Portakal::DevSystem(pCondition, pTitle, pFailed, pSucceed) // For one time check to see if the system items has been created successfully
 #define DEV_ASSERT(pCondition, pTitle, pFailed, ...) Portakal::DevAssert(pCondition, pTitle, pFailed, __VA_ARGS__) // For multiple times error check to see if something is wrong
 #else
-#define DEV_SYSTEM(pCondition, pTitle, pMessage, pSucceed)
+#define DEV_SYSTEM(pCondition, pTitle, pMessage, pSucceed) (pCondition)
 #define DEV_ASSERT(pCondition, pTitle, pMessage) (pCondition)
 #endif
 
@@ -70,6 +71,7 @@ namespace Portakal
  */
 #define PORTAKAL_LOG(Level, pMessage, ...) Portakal::DevInfo(Level, pMessage, __VA_ARGS__)
 #define DEV_LOG(pTitle, pMessage, ...) Portakal::DevLog(pTitle, pMessage, __VA_ARGS__)
+#define DEV_SUCCESS(pTitle, pMessage, ...) Portakal::DevSuccess(pTitle, pMessage, __VA_ARGS__)
 #else
 #define DEV_LOG(pTitle, pMessage, ...)
 #endif

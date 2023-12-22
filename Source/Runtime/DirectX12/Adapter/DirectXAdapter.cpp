@@ -1,5 +1,5 @@
 #include "DirectXAdapter.h"
-
+#ifdef PORTAKAL_PLATFORM_WINDOWS
 #include <Runtime/DirectX12/Device/DirectXDevice.h>
 
 namespace Portakal
@@ -12,3 +12,4 @@ namespace Portakal
 	{
 	}
 }
+#endif

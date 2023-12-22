@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Runtime/Graphics/Instance/GraphicsInstance.h>
-
+#ifdef PORTAKAL_PLATFORM_WINDOWS
 #include <Runtime/DirectX12/DXIncludes.h>
 
 namespace Portakal
@@ -14,7 +14,7 @@ namespace Portakal
 	{
 	public:
 		DirectXInstance(const GraphicsInstanceDesc& desc);
-		~DirectXInstance() = delete;
+		~DirectXInstance() override = default;
 
 		FORCEINLINE ComPtr<IDXGIFactory4> GetFactory() const noexcept
 		{
@@ -32,3 +32,4 @@ namespace Portakal
 #endif
 	};
 }
+#endif
