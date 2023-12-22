@@ -1,14 +1,14 @@
-#include "DirectXSwapchain.h"
-#ifdef PORTAKAL_PLATFORM_WINDOWS
-#include <Runtime/DirectX12/Device/DirectXDevice.h>
-#include <Runtime/DirectX12/Instance/DirectXInstance.h>
-#include <Runtime/DirectX12/Adapter/DirectXAdapter.h>
+#include "D3DSwapchain.h"
+
+#include <Runtime/D3D12/Device/D3DDevice.h>
+#include <Runtime/D3D12/Instance/D3DInstance.h>
+#include <Runtime/D3D12/Adapter/D3DAdapter.h>
 #include <Runtime/Win32/Win32Window.h>
 namespace Portakal
 {
-	DirectXSwapchain::DirectXSwapchain(const SwapchainDesc& desc, DirectXDevice* pDevice) : Swapchain(desc)
+	D3DSwapchain::D3DSwapchain(const SwapchainDesc& desc, D3DDevice* pDevice) : Swapchain(desc)
 	{
-		ComPtr<IDXGIFactory4> factory = ((DirectXInstance*)pDevice->GetOwnerAdapter()->GetOwnerInstance())->GetFactory();
+		ComPtr<IDXGIFactory4> factory = ((D3DInstance*)pDevice->GetOwnerAdapter()->GetOwnerInstance())->GetFactory();
 
 		DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
 		swapChainDesc.BufferCount = desc.BufferCount;
@@ -31,23 +31,22 @@ namespace Portakal
 		)),"DirectXSwapchain", "Failed to create DXGISwapchain", "DXGISwapchain has been created succesfully.");
 
 	}
-	void DirectXSwapchain::ResizeCore(const uint16 width, const uint16 height)
+	void D3DSwapchain::ResizeCore(const uint16 width, const uint16 height)
 	{
 	}
-	void DirectXSwapchain::OnShutdown()
+	void D3DSwapchain::OnShutdown()
 	{
 	}
-	bool DirectXSwapchain::PresentCore()
-	{
-		return false;
-	}
-	bool DirectXSwapchain::SetFullScreen()
+	bool D3DSwapchain::PresentCore()
 	{
 		return false;
 	}
-	bool DirectXSwapchain::SetWindowed()
+	bool D3DSwapchain::SetFullScreen()
+	{
+		return false;
+	}
+	bool D3DSwapchain::SetWindowed()
 	{
 		return false;
 	}
 }
-#endif

@@ -2,18 +2,17 @@
 
 #include <Runtime/Graphics/Swapchain/Swapchain.h>
 
-#ifdef PORTAKAL_PLATFORM_WINDOWS
-#include <Runtime/DirectX12/DXIncludes.h>
+#include <Runtime/D3D12/D3DIncludes.h>
 
 namespace Portakal
 {
-	class DirectXDevice;
+	class D3DDevice;
 
-	class RUNTIME_API DirectXSwapchain : public Swapchain
+	class RUNTIME_API D3DSwapchain : public Swapchain
 	{
 	public:
-		DirectXSwapchain(const SwapchainDesc& desc, DirectXDevice* pDevice);
-		~DirectXSwapchain() override = default;
+		D3DSwapchain(const SwapchainDesc& desc, D3DDevice* pDevice);
+		~D3DSwapchain() override = default;
 	private:
 		virtual void ResizeCore(const uint16 width, const uint16 height) override;
 		virtual void OnShutdown() override;
@@ -23,10 +22,9 @@ namespace Portakal
 
 	private:
 		ComPtr<IDXGISwapChain1> mSwapchain;
-		ComPtr<ID3D12Resource> mBackBuffers[2];
+		Array<ComPtr<ID3D12Resource>> mBackBuffers;
 		ComPtr<ID3D12DescriptorHeap> mRTVHeap;
 		uint32 mRTVDescriptorSize;
 		uint32 mBackBufferIndex;
 	};
 }
-#endif

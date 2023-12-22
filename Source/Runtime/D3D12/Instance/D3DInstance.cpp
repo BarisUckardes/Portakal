@@ -1,10 +1,9 @@
-#include "DirectXInstance.h"
-#ifdef PORTAKAL_PLATFORM_WINDOWS
-#include <Runtime/DirectX12/Adapter/DirectXAdapter.h>
+#include "D3DInstance.h"
+#include <Runtime/D3D12/Adapter/D3DAdapter.h>
 
 namespace Portakal
 {
-	DirectXInstance::DirectXInstance(const GraphicsInstanceDesc& desc) : GraphicsInstance(desc)
+	D3DInstance::D3DInstance(const GraphicsInstanceDesc& desc) : GraphicsInstance(desc)
 	{
 #ifdef PORTAKAL_DEBUG
 		DEV_ASSERT(SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&mDebugController))), "DirectXInstance", " Failed to get Debug Interface");
@@ -27,13 +26,12 @@ namespace Portakal
 			adapterDesc.VRam = dxAdapterDesc.DedicatedVideoMemory;
 			adapterDesc.pInstance = this;
 
-			adapters.Add(new DirectXAdapter(adapterDesc, adapter));
+			adapters.Add(new D3DAdapter(adapterDesc, adapter));
 		}
 
 		SetAdapters(adapters);
 	}
-	void DirectXInstance::OnShutdown()
+	void D3DInstance::OnShutdown()
 	{
 	}
 }
-#endif
