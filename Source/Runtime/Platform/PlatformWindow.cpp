@@ -1,5 +1,6 @@
 #include "PlatformWindow.h"
 #include <Runtime/Graphics/Swapchain/Swapchain.h>
+#include <Runtime/Window/WindowAPI.h>
 
 #ifdef PORTAKAL_PLATFORM_WINDOWS
 #include <Runtime/Win32/Win32Window.h>
@@ -10,8 +11,15 @@ namespace Portakal
 {
 	SharedHeap<PlatformWindow> PlatformWindow::Create(const WindowDesc& desc)
 	{
+		//Create
 		SharedHeap<PlatformWindow> pWindow = new PlatformAbstraction(desc);
+
+		//Set mode
 		pWindow->SetMode(desc.Mode);
+
+		//Register to the API
+		WindowAPI::_RegisterWindow(pWindow);
+
 		return pWindow;
 	}
 	void PlatformWindow::SetTitle(const String& title)
@@ -146,6 +154,9 @@ namespace Portakal
 	}
 	void PlatformWindow::OnShutdown()
 	{
+		SharedHeap<PlatformWindow> self = *((SharedHeap<PlatformWindow>*)this);
+		WindowAPI::_RemoveWindow(self);
+
 		DEV_LOG("PlatformWindow", "Window shutdown");
 	}
 	void PlatformWindow::OnWindowClosed()

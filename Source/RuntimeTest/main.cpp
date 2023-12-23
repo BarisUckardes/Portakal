@@ -39,180 +39,29 @@
 #include <Runtime/Platform/PlatformRegistry.h>
 #include <Runtime/Reflection/ReflectionAPI.h>
 #include <Runtime/ReflectionManifest.h>
+#include <RuntimeTest/VulkanApplication.h>
+#include <Runtime/Window/WindowModule.h>
+#include <RuntimeTest/VulkanWindowCreateModule.h>
+#include <RuntimeTest/VulkanGraphicsModule.h>
 
 namespace Portakal
 {
-	SharedHeap<RenderPass> CreateRenderPass(Swapchain* pSwapchain,GraphicsDevice* pDevice)
-	{
-		RenderPassDesc renderPassDesc = {};
-		renderPassDesc.Size = { pSwapchain->GetSize().X,pSwapchain->GetSize().Y };
-		renderPassDesc.DepthStencilAttachment = {};
-		renderPassDesc.AttachmentViews;
-		renderPassDesc.bSwapchain = true;
-		for (const SharedHeap<TextureView>& view : pSwapchain->GetTextureViews())
-			renderPassDesc.AttachmentViews.Add(view);
-
-		//Create render attachment desc
-		for (byte i = 0; i < pSwapchain->GetBufferCount(); i++)
-		{
-			RenderPassAttachmentDesc attachmentDesc = {};
-			attachmentDesc.pTexture = pSwapchain->GetTextures()[i];
-			attachmentDesc.ArrayLevel = 1;
-			attachmentDesc.MipLevel = 1;
-			attachmentDesc.ColorLoadOperation = RenderPassLoadOperation::Clear;
-			attachmentDesc.ColorStoreOperation = RenderPassStoreOperation::Store;
-			attachmentDesc.StencilLoadOperation = RenderPassLoadOperation::Load;
-			attachmentDesc.StencilStoreOperation = RenderPassStoreOperation::Ignore;
-			attachmentDesc.InputLayout = TextureMemoryLayout::ColorAttachment;
-			attachmentDesc.OutputLayout = TextureMemoryLayout::Present;
-			renderPassDesc.ColorAttachments.Add(attachmentDesc);
-		}
-
-		//Create subpass
-		RenderPassSubpassDesc subpassDesc = {};
-		subpassDesc.BindPoint = PipelineBindPoint::Graphics;
-		subpassDesc.Inputs = { 0 };
-		renderPassDesc.Subpasses.Add(subpassDesc);
-		return pDevice->CreateRenderPass(renderPassDesc);
-	}
+	
 	void RunVulkanTest()
 	{
 		//Initialize platform
 		Platform::InitializePlatformDependencies();
 
-		//Get monitor
-		Array<SharedHeap<PlatformMonitor>> monitors = PlatformMonitor::GetAvailableMonitors();
+		//Create application
+		VulkanApplication* pApplication = new VulkanApplication();
 
-		//Create window
-		WindowDesc windowDesc = {};
-		windowDesc.Title = "Portakal Runtime Test";
-		windowDesc.Position = { 100,100 };
-		windowDesc.Size = { 1024,1024 };
+		//Add modules
+		pApplication->RegisterModule<WindowModule>(0);
+		pApplication->RegisterModule<VulkanWindowCreateModule>(1);
+		pApplication->RegisterModule<VulkanGraphicsModule>(2);
 
-		windowDesc.pMonitor = monitors[0];
-		windowDesc.Mode = WindowMode::Fullscreen;
-
-		SharedHeap<PlatformWindow> pWindow = PlatformWindow::Create(windowDesc);
-		pWindow->Show();
-
-		//Create graphics instance
-		GraphicsInstanceDesc instanceDesc = {};
-		instanceDesc.Backend = GraphicsBackend::Vulkan;
-		SharedHeap<GraphicsInstance> pInstance = Portakal::GraphicsInstance::Create(instanceDesc);
-
-		//Get adapter
-		SharedHeap<GraphicsAdapter> pAdapter = pInstance->GetAdapters()[0];
-		DEV_LOG("System", "Selecting [%s] device", *pAdapter->GetProductName());
-
-		//Create device
-		SharedHeap<GraphicsDevice> pDevice = pAdapter->CreateDevice();
-
-		//Create swapchain
-		SwapchainDesc swapchainDesc = {};
-		swapchainDesc.ColorFormat = TextureFormat::R8_G8_B8_A8_UNorm;
-		swapchainDesc.BufferCount = 2;
-		swapchainDesc.DepthStencilFormat = TextureFormat::None;
-		swapchainDesc.pWindow = pWindow;
-		swapchainDesc.pDevice = pDevice;
-		swapchainDesc.PresentMode = PresentMode::VsyncQueued;
-		SharedHeap<Portakal::Swapchain> pSwapchain = pDevice->CreateSwapchain(swapchainDesc);
-
-		//Create command pool
-		SharedHeap<CommandPool> pCmdPool = pDevice->CreateCommandPool({ CommandPoolType::Graphics });
-
-		//Create command list
-		SharedHeap<CommandList> pCmdList = pDevice->CreateCommandList({ pCmdPool });
-
-		//Create fence
-		SharedHeap<Fence> pFence = pDevice->CreateFence();
-
-		//Get swapchain textures
-		Array<SharedHeap<Texture>> swapchainTextures = pSwapchain->GetTextures();
-
-		//Create render pass set
-		SharedHeap<RenderPass> pRenderPass = CreateRenderPass(pSwapchain.GetHeap(),pDevice.GetHeap());
-
-		const byte presentImageIndexStatic = 0;
-		byte presentImageIndex = 0;
-		Vector2US lastWindowSize = pWindow->GetSize();
-		bool bRed = true;
-		while (!pWindow.IsShutdown())
-		{
-			//Poll window messages first
-			pWindow->PollMessages();
-
-			//Check if window resized and get new set of textures + create new render pass
-			const Vector2US windowSize = pWindow->GetSize();
-			if (lastWindowSize != windowSize)
-			{
-				swapchainTextures = pSwapchain->GetTextures();
-				pRenderPass.Shutdown();
-				pRenderPass = CreateRenderPass(pSwapchain.GetHeap(), pDevice.GetHeap());
-			}
-			lastWindowSize = windowSize;
-
-			//Begin recording
-			pCmdList->BeginRecording();
-
-			//Set pre barrier
-			CommandListTextureMemoryBarrierDesc preRenderPassBarrier = {};
-			preRenderPassBarrier.ArrayIndex = 0;
-			preRenderPassBarrier.MipIndex = 0;
-			preRenderPassBarrier.AspectFlags = TextureAspectFlags::Color;
-
-			preRenderPassBarrier.SourceAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentRead;
-			preRenderPassBarrier.SourceLayout = TextureMemoryLayout::Present;
-			preRenderPassBarrier.SourceQueue = GraphicsQueueType::Graphics;
-			preRenderPassBarrier.SourceStageFlags = PipelineStageFlags::ColorAttachmentOutput;
-
-			preRenderPassBarrier.DestinationAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentRead | GraphicsMemoryAccessFlags::ColorAttachmentWrite;
-			preRenderPassBarrier.DestinationLayout = TextureMemoryLayout::ColorAttachment;
-			preRenderPassBarrier.DestinationQueue = GraphicsQueueType::Graphics;
-			preRenderPassBarrier.DestinationStageFlags = PipelineStageFlags::ColorAttachmentOutput;
-			pCmdList->SetTextureMemoryBarrier(swapchainTextures[presentImageIndex].GetHeap(), preRenderPassBarrier);
-
-			//Begin render pass
-			Color4F clearColor = bRed ? Color4F(1.0f, 0.0f, 0.0f, 1.0f): Color4F(0.0f, 0.0f, 1.0f, 1.0f);
-			pCmdList->BeginRenderPass(pRenderPass, clearColor, presentImageIndex);
-
-			//End render pass
-			pCmdList->EndRenderPass();
-
-			//End recording
-			pCmdList->EndRecording();
-
-			//Submit commands to graphics queue with a fence
-			pDevice->SubmitCommandLists(pCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, pFence.GetHeap());
-
-			//Wait for fence to be signalled
-			pDevice->WaitFences(pFence.GetHeapAddress(), 1);
-
-			//Present
-			if(pSwapchain->Present())
-			{
-				//Wait for the present
-				pSwapchain->WaitForPresent(presentImageIndex);
-
-				//Increment the current index
-				presentImageIndex = (presentImageIndex + 1) % pSwapchain->GetBufferCount();
-			}
-
-			//Tick red
-			bRed = !bRed;
-		}
-
-		//Wati device idle before shutdown
-		pDevice->WaitDeviceIdle();
-
-		pCmdList.Shutdown();
-		pCmdPool.Shutdown();
-		pFence.Shutdown();
-		pRenderPass.Shutdown();
-		pSwapchain.Shutdown();
-		pDevice.Shutdown();
-		pAdapter.Shutdown();
-		pInstance.Shutdown();
-		pWindow.Shutdown();
+		//Run application
+		pApplication->Run();
 	}
 
 #ifdef STBI_IMPLEMENTED
