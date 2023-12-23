@@ -13,7 +13,8 @@ namespace Portakal
 		D3DTextureView(const TextureViewDesc& desc, D3DDevice* pDevice);
 		~D3DTextureView() override = default;
 
+		FORCEINLINE ComPtr<ID3D12DescriptorHeap> GetShaderResourceView() const { return mShaderResourceView; }
 	private:
-		ComPtr<ID3D12Resource> mResource;
+		ComPtr<ID3D12DescriptorHeap> mShaderResourceView;
 	};
 }

@@ -3,10 +3,10 @@
 #include <Runtime/Graphics/Command/CommandPool.h>
 
 #include <Runtime/D3D12/D3DIncludes.h>
-#include <Runtime/D3D12/Device/D3DDevice.h>
 
 namespace Portakal
 {
+	class D3DDevice;
 	class RUNTIME_API D3DCommandPool : public CommandPool
 	{
 	public:

@@ -11,10 +11,18 @@ namespace Portakal
 	}
 	void D3DCommandList::BeginRecordingCore()
 	{
+		DEV_ASSERT(SUCCEEDED(mCommandList->Reset(mCommandPool.Get(), nullptr)), "D3DCommandList", "Failed to reset command pool");
 
+		D3D12_RESOURCE_BARRIER barrier;
+		barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		barrier.Transition = { nullptr, D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COMMON };
+		barrier.UAV = { nullptr };
+		mCommandList->ResourceBarrier(1, &barrier);
 	}
 	void D3DCommandList::EndRecordingCore()
 	{
+		DEV_ASSERT(SUCCEEDED(mCommandList->Close()), "D3DCommandList", "Failed to close command list");
 	}
 	void D3DCommandList::SetVertexBufferCore(const GraphicsBuffer* pBuffer)
 	{
@@ -57,6 +65,7 @@ namespace Portakal
 	}
 	void D3DCommandList::BeginRenderPassCore(const RenderPass* pRenderPass, const Color4F& clearColor, const byte subFramebufferIndex)
 	{
+
 	}
 	void D3DCommandList::EndRenderPassCore()
 	{
