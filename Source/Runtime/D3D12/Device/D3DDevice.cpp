@@ -10,8 +10,35 @@ namespace Portakal
 {
 	D3DDevice::D3DDevice(const GraphicsDeviceDesc& desc) : GraphicsDevice(desc), mAdapter(((const D3DAdapter*)desc.pAdapter)->GetAdapter())
 	{
-		DEV_SYSTEM(SUCCEEDED(D3D12CreateDevice(mAdapter.Get(), D3D_FEATURE_LEVEL_12_0, IID_PPV_ARGS(&mDevice))), "D3DDevice", "Failed to create D3DDevice", 
+		DEV_SYSTEM(SUCCEEDED(D3D12CreateDevice(mAdapter.Get(), D3D_FEATURE_LEVEL_12_2, IID_PPV_ARGS(mDevice.GetAddressOf()))), "D3DDevice", "Failed to create D3DDevice", 
 				   "ID3D12Device has been created successfully.");
+
+		D3D12_COMMAND_QUEUE_DESC graphicsQueueDesc = {};
+		graphicsQueueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
+		graphicsQueueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
+		graphicsQueueDesc.NodeMask = 0;
+		graphicsQueueDesc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;
+
+		DEV_SYSTEM(SUCCEEDED(mDevice->CreateCommandQueue(&graphicsQueueDesc, IID_PPV_ARGS(mGraphicsQueue.GetAddressOf()))), "D3DDevice", "Failed to create graphics queue", 
+				   				   "Graphics queue has been created successfully.");
+
+		D3D12_COMMAND_QUEUE_DESC computeQueueDesc = {};
+		computeQueueDesc.Type = D3D12_COMMAND_LIST_TYPE_COMPUTE;
+		computeQueueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
+		computeQueueDesc.NodeMask = 0;
+		computeQueueDesc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;
+
+		DEV_SYSTEM(SUCCEEDED(mDevice->CreateCommandQueue(&computeQueueDesc, IID_PPV_ARGS(mComputeQueue.GetAddressOf()))), "D3DDevice", "Failed to create compute queue",
+				   				   "Compute queue has been created successfully.");
+
+		D3D12_COMMAND_QUEUE_DESC transferQueueDesc = {};
+		transferQueueDesc.Type = D3D12_COMMAND_LIST_TYPE_COPY;
+		transferQueueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
+		transferQueueDesc.NodeMask = 0;
+		transferQueueDesc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;
+
+		DEV_SYSTEM(SUCCEEDED(mDevice->CreateCommandQueue(&transferQueueDesc, IID_PPV_ARGS(mTransferQueue.GetAddressOf()))), "D3DDevice", "Failed to create transfer queue",
+				   				   				   "Transfer queue has been created successfully.");
 	}
 	CommandList* D3DDevice::CreateCommandListCore(const CommandListDesc& desc)
 	{

@@ -27,7 +27,9 @@ namespace Portakal
 		ComPtr<IDXGIFactory4> mFactory;
 
 #ifdef PORTAKAL_DEBUG
-		ComPtr<ID3D12Debug> mDebugController;
+		ComPtr<ID3D12Debug6> mD3D12Debug;
+		ComPtr<IDXGIDebug1> mDXGIDebug;
+
 #endif
 	};
 }

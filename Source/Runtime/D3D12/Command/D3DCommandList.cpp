@@ -1,12 +1,17 @@
 #include "D3DCommandList.h"
 
+#include <Runtime/D3D12/Command/D3DCommandPool.h>
+
 namespace Portakal
 {
 	D3DCommandList::D3DCommandList(const CommandListDesc& desc, D3DDevice* pDevice) : CommandList(desc)
 	{
+		DEV_ASSERT(SUCCEEDED(pDevice->GetDevice()->CreateCommandList(0, ((D3DCommandPool*)(desc.pPool.GetHeap()))->GetType(), ((D3DCommandPool*)(desc.pPool.GetHeap()))->GetAllocator().Get(),
+				   nullptr, IID_PPV_ARGS(&mCommandList))), "D3DCommandList", "Failed to create command list");
 	}
 	void D3DCommandList::BeginRecordingCore()
 	{
+
 	}
 	void D3DCommandList::EndRecordingCore()
 	{

@@ -1,7 +1,7 @@
 #include "Core.h"
 
 #include <Runtime/Containers/String.h>
-//#include <Runtime/Platform/PlatformMessage.h>
+#include <Runtime/Platform/PlatformMessage.h>
 
 #include <iostream>
 #include <stdarg.h>
@@ -70,7 +70,8 @@ namespace Portakal
 		if (!pCondition)
 		{
 			std::cout << "\033[31m[" << String(pTitle).GetSource() << "]\033[39m -- " << String(pFailed).GetSource() << "\n";
-			//PlatformMessage::ShowMessageBox(pTitle, pFailed, Portakal::PlatformMessageBoxFlags::IconStop);
+			PlatformMessage::Show(pTitle, pFailed, Portakal::MessageFlags::IconStop);
+			assert(pCondition);
 		}
 		else
 		{
@@ -89,7 +90,7 @@ namespace Portakal
 			printf("\n");
 			va_end(args);
 
-			//PlatformMessage::ShowMessageBox(pTitle, pFailed, Portakal::PlatformMessageBoxFlags::IconStop);
+			PlatformMessage::Show(pTitle, pFailed, Portakal::MessageFlags::IconStop);
 			assert(pCondition);
 		}
 	}

@@ -13,9 +13,20 @@ namespace Portakal
 		D3DCommandPool(const CommandPoolDesc& desc, D3DDevice* pDevice);
 		~D3DCommandPool() = default;
 
+		FORCEINLINE ComPtr<ID3D12CommandAllocator> GetAllocator() const noexcept
+		{
+			return mAllocator;
+		}
+
+		FORCEINLINE D3D12_COMMAND_LIST_TYPE GetType() const noexcept
+		{
+			return mType;
+		}
+
 		virtual void OnShutdown() override;
 
 	private:
 		ComPtr<ID3D12CommandAllocator> mAllocator;
+		D3D12_COMMAND_LIST_TYPE mType;
 	};
 }
