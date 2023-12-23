@@ -1,18 +1,17 @@
 #pragma once
 
 #include <Runtime/Graphics/Adapter/GraphicsAdapter.h>
-
-#include <Runtime/DirectX12/DXIncludes.h>
+#include <Runtime/D3D12/D3DIncludes.h>
 
 namespace Portakal
 {
-	class RUNTIME_API DirectXAdapter : public GraphicsAdapter
+	class RUNTIME_API D3DAdapter : public GraphicsAdapter
 	{
 	public:
-		DirectXAdapter(const GraphicsAdapterDesc& desc, ComPtr<IDXGIAdapter1> pAdapter) : GraphicsAdapter(desc), mAdapter(pAdapter)
+		D3DAdapter(const GraphicsAdapterDesc& desc, ComPtr<IDXGIAdapter1> pAdapter) : GraphicsAdapter(desc), mAdapter(pAdapter)
 		{
 		}
-		~DirectXAdapter() = default;
+		~D3DAdapter() = default;
 
 		FORCEINLINE ComPtr<IDXGIAdapter1> GetAdapter() const noexcept
 		{

@@ -11,7 +11,7 @@ namespace Portakal
 		friend class GraphicsDevice;
 	public:
 		GraphicsDeviceObject() = default;
-		~GraphicsDeviceObject() = default;
+		virtual ~GraphicsDeviceObject() override = default;
 
 
 		FORCEINLINE GraphicsDevice* GetOwnerDevice() const noexcept

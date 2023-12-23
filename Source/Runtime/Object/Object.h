@@ -15,7 +15,7 @@ namespace Portakal
 		{
 		}
 
-		~Object() = default;
+		virtual ~Object() = default;
 
 		FORCEINLINE bool IsShutdown() const noexcept { return mShutdown; }
 		FORCEINLINE String GetName() const noexcept { return mName; }

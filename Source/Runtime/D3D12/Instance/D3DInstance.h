@@ -1,8 +1,7 @@
 #pragma once
 
 #include <Runtime/Graphics/Instance/GraphicsInstance.h>
-
-#include <Runtime/DirectX12/DXIncludes.h>
+#include <Runtime/D3D12/D3DIncludes.h>
 
 namespace Portakal
 {
@@ -10,11 +9,11 @@ namespace Portakal
 	 * @class DirectXInstance
 	 * @brief VkInstance is kinda acceptable for equivalent of DirectX Factory.
 	 */
-	class RUNTIME_API DirectXInstance : public GraphicsInstance
+	class RUNTIME_API D3DInstance : public GraphicsInstance
 	{
 	public:
-		DirectXInstance(const GraphicsInstanceDesc& desc);
-		~DirectXInstance() = delete;
+		D3DInstance(const GraphicsInstanceDesc& desc);
+		~D3DInstance() override = default;
 
 		FORCEINLINE ComPtr<IDXGIFactory4> GetFactory() const noexcept
 		{

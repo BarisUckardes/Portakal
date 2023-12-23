@@ -45,6 +45,16 @@ namespace Portakal
 		}
 	}
 
+	void DevSuccess(const char* pTitle, const char* pMessage, ...)
+	{
+		va_list args;
+		va_start(args, pMessage);
+		printf("\033[32m[%s]\033[39m -- ", pTitle);
+		vprintf(pMessage, args);
+		printf("\n");
+		va_end(args);
+	}
+
 	void DevLog(const char* pTitle, const char* pMessage, ...)
 	{
 		va_list args;
