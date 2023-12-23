@@ -37,6 +37,8 @@
 #include <Runtime/Platform/PlatformMutex.h>
 #include <Runtime/Platform/PlatformProcess.h>
 #include <Runtime/Platform/PlatformRegistry.h>
+#include <Runtime/Reflection/ReflectionAPI.h>
+#include <Runtime/ReflectionManifest.h>
 
 namespace Portakal
 {
@@ -86,6 +88,7 @@ namespace Portakal
 		windowDesc.Title = "Portakal Runtime Test";
 		windowDesc.Position = { 100,100 };
 		windowDesc.Size = { 1024,1024 };
+
 		windowDesc.pMonitor = monitors[0];
 		windowDesc.Mode = WindowMode::Fullscreen;
 

@@ -5,6 +5,7 @@ namespace Portakal
 {
 	class RUNTIME_API Assembly final
 	{
+		friend class ReflectionAPI;
 	public:
 		FORCEINLINE String GetName() const noexcept
 		{

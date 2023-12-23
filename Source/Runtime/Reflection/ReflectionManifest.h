@@ -11,6 +11,15 @@ namespace Portakal
 
 		}
 		~ReflectionManifest();
+
+		FORCEINLINE const Array<Type*>& GetTypes() const noexcept
+		{
+			return mTypes;
+		}
+		FORCEINLINE String GetName() const noexcept
+		{
+			return mName;
+		}
 	private:
 		const Array<Type*> mTypes;
 		const String mName;

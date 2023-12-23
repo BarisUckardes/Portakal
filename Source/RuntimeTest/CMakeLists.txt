@@ -16,6 +16,7 @@ target_include_directories(RuntimeTest PRIVATE "${CMAKE_SOURCE_DIR}/Source")
 
 # --------------------- LINK LIBRARIES -----------------------
 target_link_libraries(RuntimeTest PRIVATE Runtime)
+target_link_libraries(RuntimeTest PRIVATE Dbghelp.lib)
 # ------------------------------------------------------------
 
 # -------------------- MACRO DEFINITIONS ---------------------

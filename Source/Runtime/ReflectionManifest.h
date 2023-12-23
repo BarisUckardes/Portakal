@@ -6,9 +6,9 @@
 #include "TestClass.h"
 #include "Platform\PlatformType.h"
 
-extern "C"
+extern  "C"
 {
-	Portakal::ReflectionManifest* GenerateModuleManifest()
+	__declspec(dllexport) Portakal::ReflectionManifest* GenerateModuleManifest()
 	{
 		Portakal::ReflectionManifest* pManifest = nullptr;
 
@@ -23,15 +23,6 @@ extern "C"
 		Portakal::TypeDispatcher::RegisterEnum("PS5",156,pPlatformType);
 		Portakal::TypeDispatcher::RegisterEnum("Switch",157,pPlatformType);
 
-        //Register fields here
-		Portakal::TypeDispatcher::RegisterField("mMyType",offsetof(Portakal::TestClass,mMyType),typeof(uint32),pTestClass);
-		Portakal::TypeDispatcher::RegisterField("mMahString",offsetof(Portakal::TestClass,mMahString),typeof(String),pTestClass);
-
-        //Register attributes here
-
-        //Register base types here
-		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TestClass),typeof(Portakal::Object))
-
 		//Create manifest here
 		Portakal::Array<Portakal::Type*> types = {pTestClass,pPlatformType,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
@@ -39,3 +30,4 @@ extern "C"
 		return pManifest;
 	}
 }
+
