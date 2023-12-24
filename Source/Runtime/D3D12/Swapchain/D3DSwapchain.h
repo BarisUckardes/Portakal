@@ -22,9 +22,5 @@ namespace Portakal
 
 	private:
 		ComPtr<IDXGISwapChain1> mSwapchain;
-		Array<ComPtr<ID3D12Resource>> mBackBuffers;
-		ComPtr<ID3D12DescriptorHeap> mRTVHeap;
-		uint32 mRTVDescriptorSize;
-		uint32 mBackBufferIndex;
 	};
 }

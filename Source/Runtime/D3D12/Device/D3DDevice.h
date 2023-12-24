@@ -14,6 +14,11 @@ namespace Portakal
 		FORCEINLINE virtual GraphicsBackend GetBackend() const noexcept override { return GraphicsBackend::DirectX12; }
 
 		FORCEINLINE ComPtr<ID3D12Device> GetDevice() const noexcept { return mDevice; }
+		FORCEINLINE ComPtr<IDXGIAdapter1> GetAdapter() const noexcept { return mAdapter; }
+		FORCEINLINE ComPtr<ID3D12CommandQueue> GetGraphicsQueue() const noexcept { return mGraphicsQueue; }
+		FORCEINLINE ComPtr<ID3D12CommandQueue> GetComputeQueue() const noexcept { return mComputeQueue; }
+		FORCEINLINE ComPtr<ID3D12CommandQueue> GetTransferQueue() const noexcept { return mTransferQueue; }
+
 	protected:
 		// Inherited via GraphicsDevice
 		virtual Texture* CreateTextureCore(const TextureDesc& desc) override { return nullptr; }
@@ -44,6 +49,10 @@ namespace Portakal
 	private:
 		ComPtr<ID3D12Device> mDevice;
 		ComPtr<IDXGIAdapter1> mAdapter;
+
+		ComPtr<ID3D12CommandQueue> mGraphicsQueue;
+		ComPtr<ID3D12CommandQueue> mComputeQueue;
+		ComPtr<ID3D12CommandQueue> mTransferQueue;
 
 	};
 }

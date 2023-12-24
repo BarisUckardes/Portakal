@@ -20,7 +20,7 @@ namespace Portakal
 
 		FORCEINLINE ID3D12CommandAllocator* GetD3DCommandAllocator() const noexcept
 		{
-			return mCommandAllocator.Get();
+			return mCommandPool.Get();
 		}
 	private:
 
@@ -62,6 +62,6 @@ namespace Portakal
 		virtual void OnShutdown() override;
 	private:
 		ComPtr<ID3D12GraphicsCommandList> mCommandList;
-		ComPtr<ID3D12CommandAllocator> mCommandAllocator;
+		ComPtr<ID3D12CommandAllocator> mCommandPool;
 	};
 }

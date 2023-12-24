@@ -46,7 +46,7 @@
 
 namespace Portakal
 {
-	
+
 	void RunVulkanTest()
 	{
 		//Initialize platform
@@ -64,34 +64,52 @@ namespace Portakal
 		pApplication->Run();
 	}
 
-#ifdef STBI_IMPLEMENTED
-	#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
-#endif
-
-
 	void RunD3DTest()
 	{
-		int width, height, channels;
-		const byte* annen = stbi_load("C:/Users/mtunc/Pictures/Stickers/marvel-venom-with-protruding-tongue-sticker.png", &width, &height, &channels, 4);
+		Platform::InitializePlatformDependencies();
 
-		// Check size of image
-		if (width != 981 || height != 1001)
-		{
-			DEV_LOG("D3DTest", "Image size is not correct");
-			return;
-		}
-		else
-		{
-			DEV_LOG("D3DTest", "Image size is correct");
-			return;
-		}
+		//Get monitor
+		Array<SharedHeap<PlatformMonitor>> monitors = PlatformMonitor::GetAvailableMonitors();
+		;
+		//Create window
+		WindowDesc windowDesc = {};
+		windowDesc.Title = "Portakal Runtime Test";
+		windowDesc.Position = { (monitors[0]->GetSize().X - 1280) / 2, (monitors[0]->GetSize().Y - 720) / 2 };
+		windowDesc.Size = { 1280, 720 };
+		windowDesc.pMonitor = monitors[0];
+		windowDesc.Mode = WindowMode::Windowed;
+
+		SharedHeap<PlatformWindow> pWindow = PlatformWindow::Create(windowDesc);
+		pWindow->Show();
+
+		//Create graphics instance
+		GraphicsInstanceDesc instanceDesc = {};
+		instanceDesc.Backend = GraphicsBackend::DirectX12;
+		SharedHeap<GraphicsInstance> pInstance = Portakal::GraphicsInstance::Create(instanceDesc);
+
+		//Get adapter
+		SharedHeap<GraphicsAdapter> pAdapter = pInstance->GetAdapters()[0];
+		DEV_LOG("System", "Selecting [%s] device", *pAdapter->GetProductName());
+
+		//Create device
+		SharedHeap<GraphicsDevice> pDevice = pAdapter->CreateDevice();
+
+		//Create swapchain
+		SwapchainDesc swapchainDesc = {};
+		swapchainDesc.ColorFormat = TextureFormat::R8_G8_B8_A8_UNorm;
+		swapchainDesc.BufferCount = 2;
+		swapchainDesc.DepthStencilFormat = TextureFormat::None;
+		swapchainDesc.pWindow = pWindow;
+		swapchainDesc.pDevice = pDevice;
+		swapchainDesc.PresentMode = PresentMode::VsyncQueued;
+
+		SharedHeap<Portakal::Swapchain> pSwapchain = pDevice->CreateSwapchain(swapchainDesc);
 	}
 }
 
 int main(const unsigned int argumentCount, const char** ppArguments)
 {
-	//Portakal::RunD3DTest()
-	Portakal::RunVulkanTest();
+	Portakal::RunD3DTest();
+	//Portakal::RunVulkanTest();
 	return 0;
 }

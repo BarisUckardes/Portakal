@@ -1,25 +1,17 @@
 #include "D3DCommandPool.h"
 
+#include <Runtime/D3D12/Command/D3DCommandUtils.h>
+#include <Runtime/D3D12/Device/D3DDevice.h>
+
 namespace Portakal
 {
 	D3DCommandPool::D3DCommandPool(const CommandPoolDesc& desc, D3DDevice* pDevice) : CommandPool(desc)
 	{
-		D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT;
-		switch (desc.Type)
-		{
-		case CommandPoolType::Graphics:
-			type = D3D12_COMMAND_LIST_TYPE_DIRECT;
-			break;
-		case CommandPoolType::Compute:
-			type = D3D12_COMMAND_LIST_TYPE_COMPUTE;
-			break;
-		case CommandPoolType::Transfer:
-			type = D3D12_COMMAND_LIST_TYPE_COPY;
-			break;
-		}
+		mType = D3DCommandUtils::GetCommandType(desc.Type);
 
-		pDevice->GetDevice()->CreateCommandAllocator(type, IID_PPV_ARGS(&mAllocator));
+		DEV_ASSERT(SUCCEEDED(pDevice->GetDevice()->CreateCommandAllocator(mType, IID_PPV_ARGS(&mAllocator))), "D3DCommandPool", "Failed to create command pool/allocator");
 	}
+
 	void D3DCommandPool::OnShutdown()
 	{
 	}
