@@ -6,6 +6,7 @@
 #include <Runtime/D3D12/Command/D3DCommandPool.h>
 #include <Runtime/D3D12/Fence/D3DFence.h>
 #include <Runtime/D3D12/Texture/D3DTexture.h>
+#include <Runtime/D3D12/Texture/D3DTextureView.h>
 
 namespace Portakal
 {
@@ -50,6 +51,10 @@ namespace Portakal
 	Texture* D3DDevice::CreateTextureCore(const TextureDesc& desc)
 	{
 		return new D3DTexture(desc, this);
+	}
+	TextureView* D3DDevice::CreateTextureViewCore(const TextureViewDesc& desc)
+	{
+		return new D3DTextureView(desc, this);
 	}
 	CommandList* D3DDevice::CreateCommandListCore(const CommandListDesc& desc)
 	{

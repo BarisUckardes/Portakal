@@ -72,10 +72,48 @@ namespace Portakal
 		rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 		rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 
-		ID3D12DescriptorHeap* rtvHeap;
-		pDevice->GetDevice()->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvHeap));
+		pDevice->GetDevice()->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&mRTVHeap));
 
-		// Create All the necessary Items
+		mRTVDescriptorSize = pDevice->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+
+		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle(mRTVHeap->GetCPUDescriptorHandleForHeapStart());
+
+		Array<SharedHeap<Texture>> textures;
+		Array<SharedHeap<TextureView>> textureViews;
+		for (uint32 i = 0; i < desc.BufferCount; i++)
+		{
+			ComPtr<ID3D12Resource> backBuffer;
+			DEV_SYSTEM(SUCCEEDED(mSwapchain->GetBuffer(i, IID_PPV_ARGS(&backBuffer))), "D3D12Swapchain", "Failed to get back buffer", "Get backbuffer successfully.");
+			pDevice->GetDevice()->CreateRenderTargetView(backBuffer.Get(), nullptr, rtvHandle);
+			rtvHandle.ptr += mRTVDescriptorSize;
+
+			D3D12_RESOURCE_DESC bufferDesc = backBuffer->GetDesc();
+
+			TextureDesc textureDesc = {};
+			textureDesc.Type = TextureType::Texture2D;
+			textureDesc.Format = GetColorFormat();
+			textureDesc.Usage = TextureUsage::ColorAttachment;
+			textureDesc.Size = { (uint16)bufferDesc.Width,(uint16)bufferDesc.Height, 1 };
+			textureDesc.MipLevels = 1;
+			textureDesc.ArrayLevels = 1;
+			textureDesc.SampleCount = TextureSampleCount::SAMPLE_COUNT_1;
+			textureDesc.pHeap = nullptr;
+
+			SharedHeap<Texture> pTexture = pDevice->CreateD3DSwapchainTexture(textureDesc, backBuffer.Get());
+			textures.Add(pTexture);
+
+			// Create texture view
+
+			TextureViewDesc textureViewDesc = {};
+			textureViewDesc.pTexture = pTexture.GetHeap();
+			textureViewDesc.ArrayLevel = 1;
+			textureViewDesc.MipLevel = 1;
+
+			SharedHeap<TextureView> pTextureView = pDevice->CreateTextureView(textureViewDesc);
+			textureViews.Add(pTextureView);
+		}
+		
+		SetTextures(textures, textureViews);
 
 		ResizeCore(pWindow->GetSize().X, pWindow->GetSize().Y);
 	}

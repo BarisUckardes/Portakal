@@ -43,7 +43,6 @@
 #include <Runtime/Window/WindowModule.h>
 #include <RuntimeTest/VulkanWindowCreateModule.h>
 #include <RuntimeTest/VulkanGraphicsModule.h>
-#include <Runtime/D3D12/Texture/D3DTexture.h>
 
 namespace Portakal
 {
@@ -64,7 +63,6 @@ namespace Portakal
 		//Run application
 		pApplication->Run();
 	}
-
 
 	void RunD3DTest()
 	{
@@ -96,18 +94,15 @@ namespace Portakal
 		//Create device
 		SharedHeap<GraphicsDevice> pDevice = pAdapter->CreateDevice();
 
-		SharedHeap<Texture> texturetest;
+		SwapchainDesc swapchainDesc = {};
+		swapchainDesc.pWindow = pWindow;
+		swapchainDesc.BufferCount = 2;
+		swapchainDesc.ColorFormat = TextureFormat::R8_G8_B8_A8_UNorm;
+		swapchainDesc.DepthStencilFormat = TextureFormat::None;
+		swapchainDesc.pDevice = pDevice;
+		swapchainDesc.PresentMode = PresentMode::VsyncQueued;
 
-		TextureDesc textureDesc = {};
-		textureDesc.Size = { 1280, 1, 1 };
-		textureDesc.ArrayLevels = 1;
-		textureDesc.MipLevels = 1;
-		textureDesc.Format = TextureFormat::None;
-		textureDesc.Usage = TextureUsage::ColorAttachment;
-		textureDesc.Type = TextureType::Texture2D;
-		textureDesc.SampleCount = TextureSampleCount::SAMPLE_COUNT_1;
-		
-		texturetest = pDevice->CreateTexture(textureDesc);
+		SharedHeap<Swapchain> pSwapchain = pDevice->CreateSwapchain(swapchainDesc);
 	}
 }
 

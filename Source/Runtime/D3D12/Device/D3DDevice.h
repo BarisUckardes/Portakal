@@ -23,7 +23,7 @@ namespace Portakal
 	protected:
 		// Inherited via GraphicsDevice
 		virtual Texture* CreateTextureCore(const TextureDesc& desc) override;
-		virtual TextureView* CreateTextureViewCore(const TextureViewDesc& desc) override { return nullptr; }
+		virtual TextureView* CreateTextureViewCore(const TextureViewDesc& desc) override;
 		virtual CommandList* CreateCommandListCore(const CommandListDesc& desc) override;
 		virtual CommandPool* CreateCommandPoolCore(const CommandPoolDesc& desc) override;
 		virtual Pipeline* CreateGraphicsPipelineCore(const GraphicsPipelineDesc& desc) override { return nullptr; }
