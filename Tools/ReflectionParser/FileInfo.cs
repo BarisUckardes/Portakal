@@ -14,7 +14,7 @@ namespace Portakal
             Name = name;
             Path = path;
             Content = content;
-            Lines = content.Replace("\r", "").Split('\n');
+            Lines = new List<string>(content.Replace("\r", "").Split('\n'));
             _enumValues = new List<KeyValuePair<string, long>>();
             _fields = new List<FieldInfo>();
             BaseClass = string.Empty;
@@ -24,7 +24,7 @@ namespace Portakal
         public string Name { get; private init; }
         public string Path { get; private init; }
         public string Content { get; private init; }
-        public string[] Lines { get; private init; }
+        public List<string> Lines { get; private init; }
         public string BaseClass { get;set; }
         public IReadOnlyCollection<KeyValuePair<string, long>> EnumValues => _enumValues;
         public IReadOnlyCollection<FieldInfo> Fields => _fields;

@@ -5,6 +5,8 @@
 
 namespace Portakal
 {
+	typedef ReflectionManifest* (*GetManifestProc)();
+
 	class ReflectionManifest;
 	class RUNTIME_API ReflectionAPI : public API<ReflectionAPI>
 	{
@@ -18,12 +20,18 @@ namespace Portakal
 		};
 	public:
 		static Assembly* LoadLibraryReflection(const SharedHeap<PlatformLibrary>& pLibrary);
+		static const Assembly* GetMainAssembly();
+		static Array<const Assembly*> GetAssemblies();
 	private:
 		ReflectionAPI();
 		~ReflectionAPI();
 
-		void Refresh();
+		void Invalidate();
+		Entry CreateEntry(const SharedHeap<PlatformLibrary>& pLibrary,const bool bMain);
+		void DeleteEntry(const Entry& entry,const bool bMain);
+		void Normalize(Assembly* pAssembly);
 	private:
 		Array<Entry> mEntries;
+		Entry mMainEntry;
 	};
 }

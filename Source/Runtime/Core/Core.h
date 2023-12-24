@@ -1,15 +1,32 @@
 #pragma once
 
 #if defined(_MSC_VER) && _MSC_VER >= 1910
-typedef unsigned char uint8, byte;
-typedef unsigned short uint16;
-typedef unsigned int uint32;
-typedef unsigned long long uint64;
+namespace Portakal
+{
+	typedef unsigned char uint8, byte;
+	typedef unsigned short uint16;
+	typedef unsigned int uint32;
+	typedef unsigned long long uint64;
 
-typedef signed char int8;
-typedef signed short int16;
-typedef signed int int32;
-typedef signed long long int64;
+	typedef signed char int8;
+	typedef signed short int16;
+	typedef signed int int32;
+	typedef signed long long int64;
+
+	class Type;
+	template<typename T>
+	class TypeAccessor
+	{
+
+	};
+#define typeof(type) Portakal::TypeAccessor<##type>::GetType()
+#define PSTRUCT()
+#define PCLASS()
+#define PENUM()
+#define PFIELD()
+#define PATTRIBUTE(target,...)
+
+}
 #define uint64_max 0xFFFFFFFFFFFFFFFF
 #endif
 
@@ -37,11 +54,11 @@ namespace Portakal
 		Fatal
 	};
 
-    void DevInfo(LogLevel pType, const char* pMessage,...);
-	void DevSuccess(const char* pTitle, const char* pMessage,...);
-    void DevLog(const char* pTitle, const char* pMessage,...);
-    void DevSystem(bool pCondition, const char* pTitle, const char* pFailed, const char* pSucceed);
-    void DevAssert(bool pCondition, const char* pTitle, const char* pFailed,...);
+    void RUNTIME_API DevInfo(LogLevel pType, const char* pMessage,...);
+	void RUNTIME_API DevSuccess(const char* pTitle, const char* pMessage,...);
+    void RUNTIME_API DevLog(const char* pTitle, const char* pMessage,...);
+    void RUNTIME_API DevSystem(bool pCondition, const char* pTitle, const char* pFailed, const char* pSucceed);
+    void RUNTIME_API DevAssert(bool pCondition, const char* pTitle, const char* pFailed,...);
 }
 
 #ifdef PORTAKAL_DEBUG

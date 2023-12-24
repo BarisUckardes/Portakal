@@ -1,6 +1,7 @@
 #pragma once
 #include <Runtime/Memory/SharedHeap.h>
 #include <Runtime/Reflection/Reflection.h>
+#include "TestClass.reflected.h"
 
 namespace Portakal
 {
@@ -14,6 +15,37 @@ namespace Portakal
 		uint32 mMyType;
 		PFIELD();
 		String mMahString;
-
 	};
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

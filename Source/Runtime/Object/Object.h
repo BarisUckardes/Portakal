@@ -1,6 +1,8 @@
 #pragma once
 #include <Runtime/Containers/String.h>
 #include <Runtime/Containers/Guid.h>
+#include <Runtime/Reflection/Reflection.h>
+#include "Object.reflected.h"
 
 namespace Portakal
 {
@@ -8,6 +10,7 @@ namespace Portakal
 	 * @class Object
 	 * @brief Base class for all objects in the whole system.
 	 */
+	PCLASS();
 	class RUNTIME_API Object
 	{
 	public:
@@ -52,3 +55,13 @@ namespace Portakal
 		bool mShutdown;
 	};
 }
+
+
+
+
+
+
+
+
+
+

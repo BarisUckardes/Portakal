@@ -6,6 +6,8 @@ namespace Portakal
     {
         internal static void Main(string[] args)
         {
+            Message.Info("Parsing starts...");
+
             //Handle argument
             if(args.Length == 0)
             {
@@ -16,13 +18,16 @@ namespace Portakal
             string folderPath = args[0];
             if (!Directory.Exists(folderPath))
             {
-                Message.Error("Given folder path is invalid!");
+                Message.Error($"Given folder path is invalid! {folderPath}");
                 return;
             }
 
+            Message.Info($"Parsing {folderPath}...");
             //Invoke the parser
             if(!Parser.Parse(folderPath))
                 Message.Error("Parser failed!");
+
+            Message.Info("Parsing finished!");
         }
     }
 }

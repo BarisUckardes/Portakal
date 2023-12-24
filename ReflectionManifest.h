@@ -3,11 +3,11 @@
 #include <Runtime/Reflection/Reflection.h>
 #include <Runtime/Reflection/ReflectionManifest.h>
 #include <Runtime/Reflection/TypeDispatcher.h>
-#include "TestClass.h"
-#include "Application\ApplicationModule.h"
-#include "Containers\String.h"
-#include "Object\Object.h"
-#include "Platform\PlatformType.h"
+#include "Source\Runtime\TestClass.h"
+#include "External\Glslang\Include\Common.h"
+#include "Source\Runtime\Application\ApplicationModule.h"
+#include "Source\Runtime\Object\Object.h"
+#include "Source\Runtime\Platform\PlatformType.h"
 
 extern "C"
 {
@@ -18,10 +18,10 @@ extern "C"
 		//Create types here
 		Portakal::Type* pTestClass = Portakal::TypeDispatcher::CreateType("TestClass",sizeof(Portakal::TestClass),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,nullptr,Portakal::TypeDispatcher::GetTypeAddress<Portakal::TestClass>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::TestClass>(pTestClass);
+;		Portakal::Type* pCommon = Portakal::TypeDispatcher::CreateType("Common",sizeof(Portakal::Common),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,nullptr,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Common>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::Common>(pCommon);
 ;		Portakal::Type* pApplicationModule = Portakal::TypeDispatcher::CreateType("ApplicationModule",sizeof(Portakal::ApplicationModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,nullptr,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ApplicationModule>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ApplicationModule>(pApplicationModule);
-;		Portakal::Type* pString = Portakal::TypeDispatcher::CreateType("String",sizeof(Portakal::String),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,nullptr,Portakal::TypeDispatcher::GetTypeAddress<Portakal::String>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::String>(pString);
 ;		Portakal::Type* pObject = Portakal::TypeDispatcher::CreateType("Object",sizeof(Portakal::Object),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,nullptr,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Object>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::Object>(pObject);
 ;		Portakal::Type* pPlatformType = Portakal::TypeDispatcher::CreateType("PlatformType",sizeof(Portakal::PlatformType),Portakal::TypeModes::Enum,Portakal::TypeCodes::Composed,nullptr,Portakal::TypeDispatcher::GetTypeAddress<Portakal::PlatformType>());
@@ -44,7 +44,7 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TestClass),typeof(Portakal::Object));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {pTestClass,pApplicationModule,pString,pObject,pPlatformType,};
+		Portakal::Array<Portakal::Type*> types = {pTestClass,pCommon,pApplicationModule,pObject,pPlatformType,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;

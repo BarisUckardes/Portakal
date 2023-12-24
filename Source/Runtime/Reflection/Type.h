@@ -12,7 +12,7 @@ namespace Portakal
 	class Field;
 	class Attribute;
 	typedef void* (*DefaultHeapObjectGenerator)(void);
-	class RUNTIME_API Type
+	class RUNTIME_API Type final
 	{
 		friend class ReflectionManifest;
 		friend class TypeDispatcher;
@@ -46,7 +46,7 @@ namespace Portakal
 			return mEnums;
 		}
 	private:
-		Type(const String& name, const uint32 size, const TypeModes mode, const TypeCodes code, DefaultHeapObjectGenerator defaultObjectGenerator);
+		Type(const String& name, const uint32 size, const TypeModes mode, const TypeCodes code, DefaultHeapObjectGenerator defaultObjectGenerator,Type** ppModuleAddress);
 		~Type();
 
 		void _RegisterEnum(const String& name, const int64 value);
@@ -65,16 +65,74 @@ namespace Portakal
 		Type** mModuleAddress;
 	};
 
-	template<typename T>
-	class TypeAccessor
-	{
 
+
+#define GENERATE_PRIMITIVE(type)\
+	template<>\
+	class TypeAccessor<type>\
+	{\
+		friend class TypeDispatcher;\
+	public:\
+		static Type* GetType()\
+		{\
+			return sType;\
+		}\
+	private:\
+		static void SetType(Type* pType)\
+		{\
+			sType = pType;\
+		}\
+		static Type** GetTypeAddress()\
+		{\
+			return &sType;\
+		}\
+	private:\
+		static inline Type* sType = nullptr;\
 	};
-
-#define typeof(type) TypeAccessor<##type>::GetType()
-#define PSTRUCT()
-#define PCLASS()
-#define PENUM()
-#define PFIELD()
-#define PATTRIBUTE(target,...)
+#define GENERATE_CLASS_PRIMITIVE(type)\
+	class type;\
+	template<>\
+	class TypeAccessor<type>\
+	{\
+		friend class TypeDispatcher;\
+	public:\
+		static Type* GetType()\
+		{\
+			return sType;\
+		}\
+	private:\
+		static void SetType(Type* pType)\
+		{\
+			sType = pType;\
+		}\
+		static Type** GetTypeAddress()\
+		{\
+			return &sType;\
+		}\
+	private:\
+		static inline Type* sType = nullptr;\
+	};
+#define GENERATE_ENUMCLASS_PRIMITIVE(type,dataType)\
+	enum class type : dataType;\
+	template<>\
+	class TypeAccessor<type>\
+	{\
+		friend class TypeDispatcher;\
+	public:\
+		static Type* GetType()\
+		{\
+			return sType;\
+		}\
+	private:\
+		static void SetType(Type* pType)\
+		{\
+			sType = pType;\
+		}\
+		static Type** GetTypeAddress()\
+		{\
+			return &sType;\
+		}\
+	private:\
+		static inline Type* sType = nullptr;\
+	};
 }

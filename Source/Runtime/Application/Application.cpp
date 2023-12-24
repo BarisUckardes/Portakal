@@ -61,6 +61,11 @@ namespace Portakal
         //Call finalize impl
         OnFinalize();
 
+        //Clear modules
+        for (uint32 i = mModules.GetSize() - 1; i--; i >= 0)
+            mModules[i]->OnFinalize();
+        mModules.Clear();
+
         //Post quit reason
         DEV_LOG("Application", "Quit reason-> %s", *mQuitReason);
     }

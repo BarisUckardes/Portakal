@@ -1,9 +1,13 @@
 #pragma once
 #include <Runtime/Application/ApplicationModuleState.h>
+#include <Runtime/Reflection/Reflection.h>
+#include "ApplicationModule.reflected.h"
 
 namespace Portakal
 {
+
 	class Application;
+	PCLASS();
 	class RUNTIME_API ApplicationModule
 	{
 		friend class Application;
@@ -28,3 +32,12 @@ namespace Portakal
 		Application* mOwnerApplication;
 	};
 }
+
+
+
+
+
+
+
+
+

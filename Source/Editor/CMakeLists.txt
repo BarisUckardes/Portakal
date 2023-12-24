@@ -29,6 +29,10 @@ target_link_libraries(Editor PRIVATE Runtime)
 target_link_libraries(Editor PUBLIC imgui)
 # ------------------------------------------------------------
 
+# ---------------------- EXECUTES ----------------------------
+execute_process(COMMAND "C:/Users/Roveldo/Documents/GitHub/Portakal/Tools/ReflectionParser/bin/Debug/net8.0/ReflectionParser.exe" ${PROJECT_SOURCE_DIR}/Source/Editor)
+# ------------------------------------------------------------
+
 # -------------------- MACRO DEFINITIONS ---------------------
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_compile_definitions(Editor PUBLIC EDITOR_API=__declspec\(dllexport\))

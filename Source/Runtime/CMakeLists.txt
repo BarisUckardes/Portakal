@@ -127,6 +127,10 @@ else()
 endif()
 # ------------------------------------------------------------
 
+# ---------------------- EXECUTES ----------------------------
+execute_process(COMMAND "C:/Users/Roveldo/Documents/GitHub/Portakal/Tools/ReflectionParser/bin/Debug/net8.0/ReflectionParser.exe" ${PROJECT_SOURCE_DIR}/Source/Runtime)
+# ------------------------------------------------------------
+
 # --------------------- LINK LIBRARIES -----------------------
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_link_libraries(Runtime PRIVATE d3d12.lib)

@@ -35,7 +35,9 @@ namespace Portakal
                 string fileName = fileNames[i];
 
                 //Leave Type out
-                if (fileName == "Type")
+                if (fileName == "Type" || fileName == "Core")
+                    continue;
+                if (fileName.Contains(".reflected"))
                     continue;
 
                 FileType type = FileType.None;
@@ -72,6 +74,64 @@ namespace Portakal
                 }
             }
 
+            //Write .reflected includes
+            foreach (FileInfo file in fileInfos)
+            {
+                //Create/Write .reflected file
+                if (!file.Content.Contains($".reflected"))
+                {
+                    int lastIncludeLineIndex = GetLastLine(file.Lines, "#include");
+                    int targetLineIndex = lastIncludeLineIndex + 1;
+                    string line = $"#include \"{file.Name}.reflected.h\"";
+                    file.Lines.Insert(targetLineIndex, line);
+                }
+
+                //Write to header file
+                File.WriteAllLines(file.Path, file.Lines);
+
+                //Create reflected file content
+                string filePath = @$"{Path.GetDirectoryName(file.Path)}\{file.Name}.reflected.h";
+                string forwardLineContent = string.Empty;
+                switch (file.Type)
+                {
+                    case FileType.Class:
+                        {
+                            forwardLineContent = $@"#undef PCLASS(){Environment.NewLine}#define PCLASS()\{Environment.NewLine} class {file.Name};\";
+                            break;
+                        }
+                    case FileType.Enum:
+                        {
+                            forwardLineContent = @$"#undef PENUM(){Environment.NewLine}#define PENUM()\{Environment.NewLine} enum class {file.Name} : int64;\";
+                            break;
+                        }
+                }
+                string reflectedFileContent = $@"
+{forwardLineContent}
+	template<>\
+	class TypeAccessor<{file.Name}>\
+	{{\
+		friend class TypeDispatcher;\
+	public:\
+		static Type* GetType()\
+		{{\
+			return sType;\
+		}}\
+	private:\
+		static void SetType(Type* pType)\
+		{{\
+			sType = pType;\
+		}}\
+		static Type** GetTypeAddress()\
+		{{\
+			return &sType;\
+		}}\
+	private:\
+		static inline Type* sType = nullptr;\
+	}};";
+
+                File.WriteAllText(filePath, reflectedFileContent);
+            }
+
             //Try find a reflection manifest
             string reflectionManifestPath = $@"{targetFolderPath}\ReflectionManifest.h";
             if(File.Exists(reflectionManifestPath))
@@ -100,8 +160,8 @@ namespace Portakal
             string typeLines = string.Empty;
             foreach (FileInfo file in fileInfos)
             {
-                string lineContent = $"\t\tPortakal::Type* p{file.Name} = Portakal::TypeDispatcher::CreateType(\"{file.Name}\",sizeof(Portakal::{file.Name}),Portakal::TypeModes::{file.Type},Portakal::TypeCodes::Composed,nullptr);";
-                typeLines += $"{lineContent}{Environment.NewLine}";
+                string lineContent = $"\t\tPortakal::Type* p{file.Name} = Portakal::TypeDispatcher::CreateType(\"{file.Name}\",sizeof(Portakal::{file.Name}),Portakal::TypeModes::{file.Type},Portakal::TypeCodes::Composed,nullptr,Portakal::TypeDispatcher::GetTypeAddress<Portakal::{file.Name}>());{Environment.NewLine}\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::{file.Name}>(p{file.Name});{Environment.NewLine};";
+                typeLines += lineContent;
             }
 
             //Register enums
@@ -121,7 +181,7 @@ namespace Portakal
             {
                 foreach(FieldInfo field in file.Fields)
                 {
-                    string line = $"\t\tPortakal::TypeDispatcher::RegisterField(\"{field.VariableName}\",offsetof(Portakal::{file.Name},{field.VariableName}),typeof({field.VariableType}),p{file.Name});{Environment.NewLine}";
+                    string line = $"\t\tPortakal::TypeDispatcher::RegisterField(\"{field.VariableName}\",offsetof(Portakal::{file.Name},{field.VariableName}),typeof(Portakal::{field.VariableType}),p{file.Name});{Environment.NewLine}";
                     fieldLines += line;
                 }
             }
@@ -136,7 +196,7 @@ namespace Portakal
                 if (file.BaseClass == string.Empty)
                     continue;
 
-                string line = $"\t\tPortakal::TypeDispatcher::SetBaseType(typeof(Portakal::{file.Name}),typeof(Portakal::{file.BaseClass})){Environment.NewLine}";
+                string line = $"\t\tPortakal::TypeDispatcher::SetBaseType(typeof(Portakal::{file.Name}),typeof(Portakal::{file.BaseClass}));{Environment.NewLine}";
                 baseTypeLines += line;
             }
 
@@ -149,7 +209,7 @@ namespace Portakal
 {includeLines}
 extern ""C""
 {{
-	Portakal::ReflectionManifest* GenerateModuleManifest()
+	__declspec(dllexport) Portakal::ReflectionManifest* GenerateModuleManifest()
 	{{
 		Portakal::ReflectionManifest* pManifest = nullptr;
 
@@ -259,7 +319,7 @@ extern ""C""
             IReadOnlyCollection<uint> fieldIndexes = GetLineIndexes(file.Lines, "PFIELD()");
             foreach(uint lineIndex in fieldIndexes)
             {
-                string lineContent = file.Lines[lineIndex + 1].Trim().Trim('\t').Trim(';');
+                string lineContent = file.Lines[(int)(lineIndex + 1)].Trim().Trim('\t').Trim(';');
                 string[] splits = lineContent.Split(" ");
                 string valueType = splits[0];
                 string name = splits[1];
@@ -270,9 +330,9 @@ extern ""C""
 
         }
 
-        private static int GetLine(string[] lines,string target)
+        private static int GetLine(List<string> lines,string target)
         {
-            for(int i = 0; i < lines.Length; i++)
+            for(int i = 0; i < lines.Count; i++)
             {
                 string line = lines[i];
                 if (line.Contains(target))
@@ -281,9 +341,9 @@ extern ""C""
 
             return -1;
         }
-        private static int GetLine(string[] lines, string target,int startOffset)
+        private static int GetLine(List<string> lines, string target,int startOffset)
         {
-            for (int i = startOffset; i < lines.Length; i++)
+            for (int i = startOffset; i < lines.Count; i++)
             {
                 string line = lines[i];
                 if (line.Contains(target))
@@ -292,9 +352,9 @@ extern ""C""
 
             return -1;
         }
-        private static int GetLineStartWith(string[] lines, string target)
+        private static int GetLineStartWith(List<string> lines, string target)
         {
-            for (int i = 0; i < lines.Length; i++)
+            for (int i = 0; i < lines.Count; i++)
             {
                 string line = lines[i];
                 if (line.StartsWith(target))
@@ -303,10 +363,10 @@ extern ""C""
 
             return -1;
         }
-        private static IReadOnlyCollection<uint> GetLineIndexes(string[] lines, string target)
+        private static IReadOnlyCollection<uint> GetLineIndexes(List<string> lines, string target)
         {
             List<uint> indexes = new List<uint>();  
-            for (int i = 0; i < lines.Length; i++)
+            for (int i = 0; i < lines.Count; i++)
             {
                 string line = lines[i];
                 if (line.Contains(target))
@@ -314,6 +374,18 @@ extern ""C""
             }
 
             return indexes;
+        }
+        private static int GetLastLine(List<string> lines,string target)
+        {
+            int foundLastLine = -1;
+            for(int i = 0;i < lines.Count;i++)
+            {
+                string line = lines[i];
+                if (line.Contains(target))
+                    foundLastLine = i;
+            }
+
+            return foundLastLine;
         }
 
     }

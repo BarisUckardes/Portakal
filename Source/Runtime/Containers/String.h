@@ -1,5 +1,6 @@
 #pragma once
 #include <Runtime/Core/Core.h>
+#include "String.reflected.h"
 
 namespace Portakal
 {
@@ -7,6 +8,7 @@ namespace Portakal
 	 * @class String
 	 * @brief String class with basic string operations
 	 */
+	PCLASS();
 	class RUNTIME_API String final
 	{
 	public:
@@ -55,3 +57,7 @@ namespace Portakal
 	bool operator==(const String& target0, const String& target1);
 	bool operator!=(const String& target0, const String& target1);
 }
+
+
+
+
