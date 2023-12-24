@@ -5,12 +5,13 @@
 #include <Runtime/D3D12/Command/D3DCommandList.h>
 #include <Runtime/D3D12/Command/D3DCommandPool.h>
 #include <Runtime/D3D12/Fence/D3DFence.h>
+#include <Runtime/D3D12/Texture/D3DTexture.h>
 
 namespace Portakal
 {
 	D3DDevice::D3DDevice(const GraphicsDeviceDesc& desc) : GraphicsDevice(desc), mAdapter(((const D3DAdapter*)desc.pAdapter)->GetAdapter())
 	{
-		DEV_SYSTEM(SUCCEEDED(D3D12CreateDevice(mAdapter.Get(), D3D_FEATURE_LEVEL_12_2, IID_PPV_ARGS(mDevice.GetAddressOf()))), "D3DDevice", "Failed to create D3DDevice", 
+		DEV_SYSTEM(SUCCEEDED(D3D12CreateDevice(mAdapter.Get(), D3D_FEATURE_LEVEL_12_2, IID_PPV_ARGS(mDevice.GetAddressOf()))), "D3DDevice", "Failed to create D3DDevice",
 				   "ID3D12Device has been created successfully.");
 
 		D3D12_COMMAND_QUEUE_DESC graphicsQueueDesc = {};
@@ -19,8 +20,8 @@ namespace Portakal
 		graphicsQueueDesc.NodeMask = 0;
 		graphicsQueueDesc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;
 
-		DEV_SYSTEM(SUCCEEDED(mDevice->CreateCommandQueue(&graphicsQueueDesc, IID_PPV_ARGS(mGraphicsQueue.GetAddressOf()))), "D3DDevice", "Failed to create graphics queue", 
-				   				   "Graphics queue has been created successfully.");
+		DEV_SYSTEM(SUCCEEDED(mDevice->CreateCommandQueue(&graphicsQueueDesc, IID_PPV_ARGS(mGraphicsQueue.GetAddressOf()))), "D3DDevice", "Failed to create graphics queue",
+				   "Graphics queue has been created successfully.");
 
 		D3D12_COMMAND_QUEUE_DESC computeQueueDesc = {};
 		computeQueueDesc.Type = D3D12_COMMAND_LIST_TYPE_COMPUTE;
@@ -29,7 +30,7 @@ namespace Portakal
 		computeQueueDesc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;
 
 		DEV_SYSTEM(SUCCEEDED(mDevice->CreateCommandQueue(&computeQueueDesc, IID_PPV_ARGS(mComputeQueue.GetAddressOf()))), "D3DDevice", "Failed to create compute queue",
-				   				   "Compute queue has been created successfully.");
+				   "Compute queue has been created successfully.");
 
 		D3D12_COMMAND_QUEUE_DESC transferQueueDesc = {};
 		transferQueueDesc.Type = D3D12_COMMAND_LIST_TYPE_COPY;
@@ -38,7 +39,17 @@ namespace Portakal
 		transferQueueDesc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;
 
 		DEV_SYSTEM(SUCCEEDED(mDevice->CreateCommandQueue(&transferQueueDesc, IID_PPV_ARGS(mTransferQueue.GetAddressOf()))), "D3DDevice", "Failed to create transfer queue",
-				   				   				   "Transfer queue has been created successfully.");
+				   "Transfer queue has been created successfully.");
+	}
+	SharedHeap<Texture> D3DDevice::CreateD3DSwapchainTexture(const TextureDesc& desc, ComPtr<ID3D12Resource> pResource)
+	{
+		SharedHeap<Texture> texture = new D3DTexture(desc, this, pResource);
+		RegisterChild(texture.QueryAs<GraphicsDeviceObject>());
+		return texture;
+	}
+	Texture* D3DDevice::CreateTextureCore(const TextureDesc& desc)
+	{
+		return new D3DTexture(desc, this);
 	}
 	CommandList* D3DDevice::CreateCommandListCore(const CommandListDesc& desc)
 	{

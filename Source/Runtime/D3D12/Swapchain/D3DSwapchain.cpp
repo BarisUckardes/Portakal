@@ -5,6 +5,8 @@
 #include <Runtime/D3D12/Adapter/D3DAdapter.h>
 #include <Runtime/Win32/Win32Window.h>
 #include <Runtime/Platform/PlatformMonitor.h>
+
+#include <Runtime/D3D12/Texture/D3DTextureUtils.h>
 namespace Portakal
 {
 	D3DSwapchain::D3DSwapchain(const SwapchainDesc& desc, D3DDevice* pDevice) : Swapchain(desc)
@@ -64,23 +66,42 @@ namespace Portakal
 			nullptr,
 			&mSwapchain)),
 			"DirectXSwapchain", "Failed to create DXGISwapchain", "DXGISwapchain has been created succesfully.");
+
+		D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
+		rtvHeapDesc.NumDescriptors = desc.BufferCount;
+		rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+		rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+
+		ID3D12DescriptorHeap* rtvHeap;
+		pDevice->GetDevice()->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvHeap));
+
+		// Create All the necessary Items
+
+		ResizeCore(pWindow->GetSize().X, pWindow->GetSize().Y);
 	}
 	void D3DSwapchain::ResizeCore(const uint16 width, const uint16 height)
 	{
+		mSwapchain->ResizeBuffers(GetBufferCount(), width, height, D3DTextureUtils::GetD3DTextureFormat(GetColorFormat()), 0);
 	}
 	void D3DSwapchain::OnShutdown()
 	{
 	}
 	bool D3DSwapchain::PresentCore()
 	{
-		return false;
+		return true;
 	}
 	bool D3DSwapchain::SetFullScreen()
 	{
+		if (SUCCEEDED(mSwapchain->SetFullscreenState(true, nullptr)))
+			return true;
+
 		return false;
 	}
 	bool D3DSwapchain::SetWindowed()
 	{
+		if (SUCCEEDED(mSwapchain->SetFullscreenState(false, nullptr)))
+			return true;
+
 		return false;
 	}
 }

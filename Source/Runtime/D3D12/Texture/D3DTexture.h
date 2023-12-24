@@ -9,11 +9,13 @@ namespace Portakal
 	class RUNTIME_API D3DTexture : public Texture
 	{
 	public:
-		D3DTexture(const TextureDesc& desc, D3DDevice* pDevice, const bool bSwapchain);
+		D3DTexture(const TextureDesc& desc, D3DDevice* pDevice);
+		D3DTexture(const TextureDesc& desc, D3DDevice* pDevice, ComPtr<ID3D12Resource> pBuffer);
 		~D3DTexture() override = default;
 
 		ComPtr<ID3D12Resource> GetTexture() const { return mTexture; }
 	private:
+		const bool mSwapchain;
 		ComPtr<ID3D12Resource> mTexture;
 	};
 }
