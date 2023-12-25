@@ -13,7 +13,7 @@ namespace Portakal
 
 		FORCEINLINE virtual GraphicsBackend GetBackend() const noexcept override { return GraphicsBackend::DirectX12; }
 
-		FORCEINLINE ComPtr<ID3D12Device> GetDevice() const noexcept { return mDevice; }
+		FORCEINLINE ComPtr<ID3D12Device> GetD3DDevice() const noexcept { return mDevice; }
 		FORCEINLINE ComPtr<IDXGIAdapter1> GetAdapter() const noexcept { return mAdapter; }
 		FORCEINLINE ComPtr<ID3D12CommandQueue> GetGraphicsQueue() const noexcept { return mGraphicsQueue; }
 		FORCEINLINE ComPtr<ID3D12CommandQueue> GetComputeQueue() const noexcept { return mComputeQueue; }

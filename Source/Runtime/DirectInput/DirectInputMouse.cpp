@@ -14,7 +14,7 @@ namespace Portakal
 	{
 		//Get device state
 		DIMOUSESTATE state = {};
-		if (FAILED(GetDevice()->GetDeviceState(sizeof(state), &state)))
+		if (FAILED(GetDirectInputDevice()->GetDeviceState(sizeof(state), &state)))
 		{
 			DEV_LOG("DirectInputMouse", "Failed to get device state");
 			return;

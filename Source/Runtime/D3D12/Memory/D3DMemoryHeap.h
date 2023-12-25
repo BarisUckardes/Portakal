@@ -15,5 +15,6 @@ namespace Portakal
 		~D3DMemoryHeap() override = default;
 
 	private:
+		ComPtr<ID3D12Heap> mMemoryHeap;
 	};
 }

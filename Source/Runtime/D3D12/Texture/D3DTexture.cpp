@@ -27,7 +27,7 @@ namespace Portakal
 		heapProperties.CreationNodeMask = 1;
 		heapProperties.VisibleNodeMask = 1;
 
-		DEV_ASSERT(SUCCEEDED(pDevice->GetDevice()->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_COPY_DEST, 
+		DEV_ASSERT(SUCCEEDED(pDevice->GetD3DDevice()->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_COPY_DEST, 
 				   nullptr, IID_PPV_ARGS(&mTexture))), "D3DTexture", "Failed to create D3DTexture");
 	}
 	D3DTexture::D3DTexture(const TextureDesc& desc, D3DDevice* pDevice, ComPtr<ID3D12Resource> pBuffer) : Texture(desc, true), mSwapchain(true)

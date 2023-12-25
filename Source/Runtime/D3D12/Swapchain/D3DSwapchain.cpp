@@ -72,9 +72,9 @@ namespace Portakal
 		rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 		rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 
-		pDevice->GetDevice()->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&mRTVHeap));
+		pDevice->GetD3DDevice()->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&mRTVHeap));
 
-		mRTVDescriptorSize = pDevice->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+		mRTVDescriptorSize = pDevice->GetD3DDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 
 		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle(mRTVHeap->GetCPUDescriptorHandleForHeapStart());
 
@@ -84,7 +84,7 @@ namespace Portakal
 		{
 			ComPtr<ID3D12Resource> backBuffer;
 			DEV_SYSTEM(SUCCEEDED(mSwapchain->GetBuffer(i, IID_PPV_ARGS(&backBuffer))), "D3D12Swapchain", "Failed to get back buffer", "Get backbuffer successfully.");
-			pDevice->GetDevice()->CreateRenderTargetView(backBuffer.Get(), nullptr, rtvHandle);
+			pDevice->GetD3DDevice()->CreateRenderTargetView(backBuffer.Get(), nullptr, rtvHandle);
 			rtvHandle.ptr += mRTVDescriptorSize;
 
 			D3D12_RESOURCE_DESC bufferDesc = backBuffer->GetDesc();
