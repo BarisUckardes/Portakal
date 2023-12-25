@@ -25,6 +25,7 @@ namespace Portakal
 #define PENUM()
 #define PFIELD()
 #define PATTRIBUTE(target,...)
+#define GENERATE_OBJECT();
 
 }
 #define uint64_max 0xFFFFFFFFFFFFFFFF
