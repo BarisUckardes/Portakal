@@ -6,7 +6,7 @@ namespace Portakal
 {
 	D3DCommandList::D3DCommandList(const CommandListDesc& desc, D3DDevice* pDevice) : CommandList(desc)
 	{
-		DEV_ASSERT(SUCCEEDED(pDevice->GetDevice()->CreateCommandList(0, ((D3DCommandPool*)(desc.pPool.GetHeap()))->GetCmdListTypeType(), ((D3DCommandPool*)(desc.pPool.GetHeap()))->GetAllocator().Get(),
+		DEV_ASSERT(SUCCEEDED(pDevice->GetD3DDevice()->CreateCommandList(0, ((D3DCommandPool*)(desc.pPool.GetHeap()))->GetCommandPoolType(), ((D3DCommandPool*)(desc.pPool.GetHeap()))->GetAllocator().Get(),
 				   nullptr, IID_PPV_ARGS(&mCommandList))), "D3DCommandList", "Failed to create command list");
 	}
 	void D3DCommandList::BeginRecordingCore()

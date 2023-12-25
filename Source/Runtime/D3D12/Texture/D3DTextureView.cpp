@@ -15,7 +15,7 @@ namespace Portakal
 		srvDesc.Texture2D.MostDetailedMip = 0;
 
 		D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle = mShaderResourceView->GetCPUDescriptorHandleForHeapStart();
-		pDevice->GetDevice()->CreateShaderResourceView(((D3DTexture*)desc.pTexture.GetHeap())->GetTexture().Get(), &srvDesc, cpuHandle);
+		pDevice->GetD3DDevice()->CreateShaderResourceView(((D3DTexture*)desc.pTexture.GetHeap())->GetTexture().Get(), &srvDesc, cpuHandle);
 
 	}
 	D3DTextureView::D3DTextureView(const TextureViewDesc& desc, D3DDevice* pDevice, ComPtr<ID3D12DescriptorHeap> pRTVHeap) : TextureView(desc)

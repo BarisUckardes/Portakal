@@ -9,7 +9,7 @@ namespace Portakal
 	{
 		mType = D3DCommandUtils::GetCommandType(desc.Type);
 
-		DEV_ASSERT(SUCCEEDED(pDevice->GetDevice()->CreateCommandAllocator(mType, IID_PPV_ARGS(&mAllocator))), "D3DCommandPool", "Failed to create command pool/allocator");
+		DEV_ASSERT(SUCCEEDED(pDevice->GetD3DDevice()->CreateCommandAllocator(mType, IID_PPV_ARGS(&mAllocator))), "D3DCommandPool", "Failed to create command pool/allocator");
 	}
 
 	void D3DCommandPool::OnShutdown()

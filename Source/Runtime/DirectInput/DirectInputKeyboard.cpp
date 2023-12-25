@@ -15,7 +15,7 @@ namespace Portakal
 	{
 		//Get device state
 		bool cachedStates[256];
-		if (FAILED(GetDevice()->GetDeviceState(sizeof(cachedStates), cachedStates)))
+		if (FAILED(GetDirectInputDevice()->GetDeviceState(sizeof(cachedStates), cachedStates)))
 		{
 			DEV_LOG("DirectInputKeyboard", "Failed to get device state");
 			return;

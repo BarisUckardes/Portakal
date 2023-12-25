@@ -11,7 +11,7 @@ namespace Portakal
 		DirectInputDevice(const InputDeviceType type, IDirectInputDevice8* pDevice);
 		~DirectInputDevice();
 	protected:
-		FORCEINLINE IDirectInputDevice8* GetDevice() const noexcept { return mDevice; }
+		FORCEINLINE IDirectInputDevice8* GetDirectInputDevice() const noexcept { return mDevice; }
 	private:
 		IDirectInputDevice8* mDevice;
 	};
