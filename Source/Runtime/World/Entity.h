@@ -1,5 +1,6 @@
 #pragma once
 #include <Runtime/World/Component.h>
+#include <Runtime/Memory/SharedHeap.h>
 #include <Runtime/Containers/Array.h>
 
 namespace Portakal
@@ -7,6 +8,7 @@ namespace Portakal
 	class Scene;
 	class RUNTIME_API Entity final
 	{
+		friend class Scene;
 	public:
 		FORCEINLINE const Array<SharedHeap<Entity>>& GetEntities() const noexcept
 		{
@@ -42,7 +44,7 @@ namespace Portakal
 			//Register component
 			mComponents.Add(pRawComponent);
 
-			return pComponent
+			return pComponent;
 		}
 		template<typename T>
 		bool HasComponent() const noexcept
@@ -56,6 +58,8 @@ namespace Portakal
 
 			return false;
 		}
+	private:
+		void _SetOwnerScene(Scene* pScene);
 	private:
 		Array<SharedHeap<Entity>> mEntities;
 		Array<SharedHeap<Component>> mComponents;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ReflectionParser;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,7 @@ namespace Portakal
             Lines = new List<string>(content.Replace("\r", "").Split('\n'));
             _enumValues = new List<KeyValuePair<string, long>>();
             _fields = new List<FieldInfo>();
+            _attributes = new List<AttributeInfo>();
             BaseClass = string.Empty;
         }
 
@@ -28,6 +30,7 @@ namespace Portakal
         public string BaseClass { get;set; }
         public IReadOnlyCollection<KeyValuePair<string, long>> EnumValues => _enumValues;
         public IReadOnlyCollection<FieldInfo> Fields => _fields;
+        public IReadOnlyCollection<AttributeInfo> Attributes => _attributes;
         public void RegisterEnumValue(string name,long value)
         {
             _enumValues.Add(new KeyValuePair<string, long>(name, value));
@@ -40,8 +43,17 @@ namespace Portakal
                 VariableType = variableType,
             });
         }
+        public void RegisterAttribute(string typeName,string parameters)
+        {
+            _attributes.Add(new AttributeInfo()
+            {
+                TypeName = typeName,
+                Parameters = parameters
+            });
+        }
 
         private List<KeyValuePair<string, long>> _enumValues;
         private List<FieldInfo> _fields;
+        private List<AttributeInfo> _attributes;
     }
 }

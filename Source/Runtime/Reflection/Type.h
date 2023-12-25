@@ -6,11 +6,12 @@
 #include <Runtime/Reflection/EnumType.h>
 #include <Runtime/Reflection/EnumValue.h>
 #include <Runtime/Reflection/TypeCodes.h>
+#include <Runtime/Reflection/Attribute.h>
+#include "FieldMode.h"
 
 namespace Portakal
 {
 	class Field;
-	class Attribute;
 	typedef void* (*DefaultHeapObjectGenerator)(void);
 	class RUNTIME_API Type final
 	{
@@ -50,8 +51,9 @@ namespace Portakal
 		~Type();
 
 		void _RegisterEnum(const String& name, const int64 value);
-		void _RegisterField(const String& name, const uint32 offset, Type* pFieldType, Type* pTargetType);
+		void _RegisterField(Field* pField);
 		void _SetBaseType(Type* pType);
+		void _RegisterAttribute(Attribute* pAttribute);
 	private:
 		const String mName;
 		const uint32 mSize;

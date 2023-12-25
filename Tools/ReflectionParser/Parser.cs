@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ReflectionParser;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -184,13 +185,21 @@ namespace Portakal
             {
                 foreach(FieldInfo field in file.Fields)
                 {
-                    string line = $"\t\tPortakal::TypeDispatcher::RegisterField(\"{field.VariableName}\",offsetof(Portakal::{file.Name},{field.VariableName}),typeof(Portakal::{field.VariableType}),p{file.Name});{Environment.NewLine}";
+                    string line = $"\t\tPortakal::TypeDispatcher::RegisterField(\"{field.VariableName}\",offsetof(Portakal::{file.Name},{field.VariableName}),typeof(Portakal::{field.VariableType}),nullptr,Portakal::FieldMode::{field.Mode},p{file.Name});{Environment.NewLine}";
                     fieldLines += line;
                 }
             }
+
             //Register attributes
             string attributeLines = string.Empty;
-
+            foreach(FileInfo file in fileInfos)
+            {
+                foreach(AttributeInfo attribute in file.Attributes)
+                {
+                    string line = $"\t\tPortakal::TypeDispatcher::RegisterAttribute<Portakal::{attribute.TypeName}>(p{file.Name},{attribute.Parameters});{Environment.NewLine}";
+                    attributeLines += line;
+                }
+            }
             //Register basetypes
             string baseTypeLines = string.Empty;
             foreach(FileInfo file in fileInfos)
@@ -239,7 +248,7 @@ extern ""C""
             return true;
         }
 
-        internal static void EnumHandler(FileInfo file)
+        private static void EnumHandler(FileInfo file)
         {
             Message.Info($"File [{file.Name}] will be handled as enum!");
 
@@ -287,6 +296,9 @@ extern ""C""
                 file.RegisterEnumValue(pair.Key, pair.Value);
                 Message.Info($"Enum {pair.Key}->{pair.Value}");
             }
+
+            //Get attributes
+            AttributeHandler(file);
         }
         private static void ClassHandler(FileInfo file)
         {
@@ -330,9 +342,32 @@ extern ""C""
             }
 
             //Get attributes
-
+            AttributeHandler(file);
         }
 
+        private static void AttributeHandler(FileInfo file)
+        {
+            IReadOnlyCollection<uint> lineIndexes = GetLineIndexes(file.Lines, "PATTRIBUTE");
+            if (lineIndexes.Count == 0)
+                return;
+
+            foreach(uint lineIndex in lineIndexes)
+            {
+                string line = file.Lines[(int)lineIndex];
+                line = line.Replace("PATTRIBUTE(", "").Trim().Trim(';').Remove(line.LastIndexOf(")"));
+                string[] splits = line.Split(",");
+                string typeName = splits[0];
+                string parameters = string.Empty;
+                for(int i = 1;i<splits.Length;i++)
+                {
+                    string split = splits[i];
+                    parameters += split + (i == splits.Length - 1 ? string.Empty : ",");
+                    Message.Info(split);
+                }
+
+                file.RegisterAttribute(typeName, parameters);
+            }
+        }
         private static int GetLine(List<string> lines,string target)
         {
             for(int i = 0; i < lines.Count; i++)

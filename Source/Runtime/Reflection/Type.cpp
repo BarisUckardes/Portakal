@@ -1,10 +1,12 @@
 #include "Type.h"
+#include <Runtime/Reflection/Field.h>
 
 namespace Portakal
 {
     Type::Type(const String& name, const uint32 size, const TypeModes mode, const TypeCodes code, DefaultHeapObjectGenerator defaultObjectGenerator,Type** ppModuleAddress) :
         mName(name), mSize(size), mMode(mode), mCode(code), mDefaultObjectGenerator(defaultObjectGenerator),mBaseType(nullptr),mModuleAddress(ppModuleAddress)
     {
+
     }
     Type::~Type()
     {
@@ -14,12 +16,16 @@ namespace Portakal
     {
         mEnums.Add({ name,value });
     }
-    void Type::_RegisterField(const String& name, const uint32 offset, Type* pFieldType, Type* pTargetType)
+    void Type::_RegisterField(Field* pField)
     {
-
+        mFields.Add(pField);
     }
     void Type::_SetBaseType(Type* pType)
     {
         mBaseType = pType;
+    }
+    void Type::_RegisterAttribute(Attribute* pAttribute)
+    {
+        mAttributes.Add(pAttribute);
     }
 }

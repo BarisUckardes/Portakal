@@ -1,20 +1,51 @@
 #pragma once
 #include <Runtime/Core/Core.h>
+#include <Runtime/Memory/SharedHeap.h>
+#include "SceneAspect.reflected.h"
 
 namespace Portakal
 {
-	class RUNTIME_API SceneAspect
+	class Scene;
+	PCLASS();
+	class RUNTIME_API SceneAspect : public Object
 	{
+		GENERATE_OBJECT;
+		friend class Scene;
 	public:
-		FORCEINLINE SharedHeap<Scene> GetOwnerScene() const noexcept
-		{
-			return mOwnerScene;
-		}
-
 		virtual void OnInitialize() = 0;
 		virtual void OnExecute() = 0;
 		virtual void OnFinalize() = 0;
+	protected:
+		FORCEINLINE Scene* GetOwnerScene() const noexcept
+		{
+			return mOwnerScene;
+		}
 	private:
-		SharedHeap<Scene> mOwnerScene;
+		void _SetOwnerScene(Scene* pScene);
+	private:
+		Scene* mOwnerScene;
 	};
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

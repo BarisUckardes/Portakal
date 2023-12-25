@@ -44,6 +44,11 @@
 #include <RuntimeTest/VulkanWindowCreateModule.h>
 #include <RuntimeTest/VulkanGraphicsModule.h>
 #include <Runtime/Reflection/ReflectionModule.h>
+#include <Runtime/Reflection/ReflectionAPI.h>
+#include <RUntime/World/Component.h>
+#include <Runtime/World/Entity.h>
+#include <Runtime/World/Scene.h>
+#include <Runtime/World/SceneAspect.h>
 
 namespace Portakal
 {
@@ -60,7 +65,7 @@ namespace Portakal
 		pApplication->RegisterModule<ReflectionModule>(0);
 		pApplication->RegisterModule<WindowModule>(1);
 		pApplication->RegisterModule<VulkanWindowCreateModule>(2);
-		//pApplication->RegisterModule<VulkanGraphicsModule>(2);
+		pApplication->RegisterModule<VulkanGraphicsModule>(3);
 
 		//Run application
 		pApplication->Run();
