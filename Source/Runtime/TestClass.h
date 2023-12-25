@@ -8,6 +8,7 @@ namespace Portakal
 	PCLASS();
 	class RUNTIME_API TestClass : public Object
 	{
+		GENERATE_OBJECT;
 	public:
 
 	public:
@@ -17,6 +18,16 @@ namespace Portakal
 		String mMahString;
 	};
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

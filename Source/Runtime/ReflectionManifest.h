@@ -8,6 +8,7 @@
 #include "Containers\String.h"
 #include "Object\Object.h"
 #include "Platform\PlatformType.h"
+#include "World\Component.h"
 
 extern "C"
 {
@@ -26,6 +27,8 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::Object>(pObject);
 ;		Portakal::Type* pPlatformType = Portakal::TypeDispatcher::CreateType("PlatformType",sizeof(Portakal::PlatformType),Portakal::TypeModes::Enum,Portakal::TypeCodes::Composed,nullptr,Portakal::TypeDispatcher::GetTypeAddress<Portakal::PlatformType>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::PlatformType>(pPlatformType);
+;		Portakal::Type* pComponent = Portakal::TypeDispatcher::CreateType("Component",sizeof(Portakal::Component),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,nullptr,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Component>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::Component>(pComponent);
 ;
         //Register enums here
 		Portakal::TypeDispatcher::RegisterEnum("Windows",112,pPlatformType);
@@ -42,9 +45,10 @@ extern "C"
 
         //Register base types here
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TestClass),typeof(Portakal::Object));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::Component),typeof(Portakal::Object));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {pTestClass,pApplicationModule,pString,pObject,pPlatformType,};
+		Portakal::Array<Portakal::Type*> types = {pTestClass,pApplicationModule,pString,pObject,pPlatformType,pComponent,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;

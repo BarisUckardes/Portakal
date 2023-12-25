@@ -43,6 +43,7 @@
 #include <Runtime/Window/WindowModule.h>
 #include <RuntimeTest/VulkanWindowCreateModule.h>
 #include <RuntimeTest/VulkanGraphicsModule.h>
+#include <Runtime/Reflection/ReflectionModule.h>
 
 namespace Portakal
 {
@@ -56,9 +57,10 @@ namespace Portakal
 		VulkanApplication* pApplication = new VulkanApplication();
 
 		//Add modules
-		pApplication->RegisterModule<WindowModule>(0);
-		pApplication->RegisterModule<VulkanWindowCreateModule>(1);
-		pApplication->RegisterModule<VulkanGraphicsModule>(2);
+		pApplication->RegisterModule<ReflectionModule>(0);
+		pApplication->RegisterModule<WindowModule>(1);
+		pApplication->RegisterModule<VulkanWindowCreateModule>(2);
+		//pApplication->RegisterModule<VulkanGraphicsModule>(2);
 
 		//Run application
 		pApplication->Run();
@@ -108,7 +110,7 @@ namespace Portakal
 
 int main(const unsigned int argumentCount, const char** ppArguments)
 {
-	Portakal::RunD3DTest();
-	//Portakal::RunVulkanTest();
+	//Portakal::RunD3DTest();
+	Portakal::RunVulkanTest();
 	return 0;
 }

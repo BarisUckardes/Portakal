@@ -11,7 +11,7 @@ namespace Portakal
 		Texture(const TextureDesc& desc,const bool bSwapchain);
 		~Texture() = default;
 
-		FORCEINLINE TextureType GetType() const noexcept
+		FORCEINLINE TextureType GetTextureType() const noexcept
 		{
 			return mType;
 		}

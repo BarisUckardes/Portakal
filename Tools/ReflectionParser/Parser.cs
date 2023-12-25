@@ -127,7 +127,10 @@ namespace Portakal
 		}}\
 	private:\
 		static inline Type* sType = nullptr;\
-	}};";
+	}};
+    #undef GENERATE_OBJECT;
+    #define GENERATE_OBJECT virtual Type* GetType() const noexcept override {{return typeof({file.Name});}}
+";
 
                 File.WriteAllText(filePath, reflectedFileContent);
             }

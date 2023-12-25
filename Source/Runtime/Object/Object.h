@@ -14,47 +14,36 @@ namespace Portakal
 	class RUNTIME_API Object
 	{
 	public:
-		Object() : mShutdown(false), mID(Guid::Create())
-		{
-		}
-
+		Object() : mShutdown(false), mID(Guid::Create()) {}
 		virtual ~Object() = default;
 
 		FORCEINLINE bool IsShutdown() const noexcept { return mShutdown; }
 		FORCEINLINE String GetName() const noexcept { return mName; }
 		FORCEINLINE Guid GetID() const noexcept { return mID; }
 
-		void SetName(const String& name)
-		{
-			OnNameChange(name);
-			mName = name;
-		}
-
+		void SetName(const String& name);
 		void OverrideID(const Guid& id) { mID = id; }
-
-		void Shutdown()
-		{
-			if (IsShutdown())
-				return;
-
-			OnShutdown();
-
-			mShutdown = true;
-		}
-
+		void Shutdown();
+		virtual Type* GetType() const noexcept { return nullptr; }
 	protected:
 		virtual void OnShutdown() = 0;
-		virtual void OnNameChange(const String& name)
-		{
-
-		}
-
+		virtual void OnNameChange(const String& name) {}
 	private:
 		String mName;
 		Guid mID;
 		bool mShutdown;
 	};
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

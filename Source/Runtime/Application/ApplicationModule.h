@@ -5,7 +5,6 @@
 
 namespace Portakal
 {
-
 	class Application;
 	PCLASS();
 	class RUNTIME_API ApplicationModule
@@ -32,6 +31,16 @@ namespace Portakal
 		Application* mOwnerApplication;
 	};
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

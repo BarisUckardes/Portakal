@@ -1,9 +1,9 @@
 
 #undef PCLASS()
 #define PCLASS()\
- class TestClass;\
+ class Component;\
 	template<>\
-	class TypeAccessor<TestClass>\
+	class TypeAccessor<Component>\
 	{\
 		friend class TypeDispatcher;\
 	public:\
@@ -24,4 +24,4 @@
 		static inline Type* sType = nullptr;\
 	};
     #undef GENERATE_OBJECT;
-    #define GENERATE_OBJECT virtual Type* GetType() const noexcept override {return typeof(TestClass);}
+    #define GENERATE_OBJECT virtual Type* GetType() const noexcept override {return typeof(Component);}

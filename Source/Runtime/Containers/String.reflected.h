@@ -23,3 +23,5 @@
 	private:\
 		static inline Type* sType = nullptr;\
 	};
+    #undef GENERATE_OBJECT;
+    #define GENERATE_OBJECT virtual Type* GetType() const noexcept override {return typeof(String);}
