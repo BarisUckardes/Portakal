@@ -18,4 +18,11 @@ namespace Portakal
 		pDevice->GetDevice()->CreateShaderResourceView(((D3DTexture*)desc.pTexture.GetHeap())->GetTexture().Get(), &srvDesc, cpuHandle);
 
 	}
+	D3DTextureView::D3DTextureView(const TextureViewDesc& desc, D3DDevice* pDevice, ComPtr<ID3D12DescriptorHeap> pRTVHeap) : TextureView(desc)
+	{
+		mShaderResourceView = pRTVHeap;
+	}
+	void D3DTextureView::OnShutdown()
+	{
+	}
 }

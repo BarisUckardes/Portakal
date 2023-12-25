@@ -96,16 +96,15 @@ namespace Portakal
 		//Create device
 		SharedHeap<GraphicsDevice> pDevice = pAdapter->CreateDevice();
 
-		//Create swapchain
 		SwapchainDesc swapchainDesc = {};
-		swapchainDesc.ColorFormat = TextureFormat::R8_G8_B8_A8_UNorm;
-		swapchainDesc.BufferCount = 2;
-		swapchainDesc.DepthStencilFormat = TextureFormat::None;
 		swapchainDesc.pWindow = pWindow;
+		swapchainDesc.BufferCount = 2;
+		swapchainDesc.ColorFormat = TextureFormat::R8_G8_B8_A8_UNorm;
+		swapchainDesc.DepthStencilFormat = TextureFormat::None;
 		swapchainDesc.pDevice = pDevice;
 		swapchainDesc.PresentMode = PresentMode::VsyncQueued;
 
-		SharedHeap<Portakal::Swapchain> pSwapchain = pDevice->CreateSwapchain(swapchainDesc);
+		SharedHeap<Swapchain> pSwapchain = pDevice->CreateSwapchain(swapchainDesc);
 	}
 }
 
