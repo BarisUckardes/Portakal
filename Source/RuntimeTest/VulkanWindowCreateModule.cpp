@@ -14,8 +14,8 @@ namespace Portakal
 		windowDesc.Position = { 100,100 };
 		windowDesc.Size = { 1024,1024 };
 
-		windowDesc.pMonitor = monitors[0];
-		windowDesc.Mode = WindowMode::Windowed;
+		windowDesc.pMonitor = monitors[1];
+		windowDesc.Mode = WindowMode::Fullscreen;
 
 		mWindow = PlatformWindow::Create(windowDesc);
 		mWindow->Show();

@@ -9,6 +9,7 @@
 #include "Object\Object.h"
 #include "Platform\PlatformType.h"
 #include "World\Component.h"
+#include "World\SceneAspect.h"
 
 extern "C"
 {
@@ -29,6 +30,8 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::PlatformType>(pPlatformType);
 ;		Portakal::Type* pComponent = Portakal::TypeDispatcher::CreateType("Component",sizeof(Portakal::Component),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,nullptr,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Component>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::Component>(pComponent);
+;		Portakal::Type* pSceneAspect = Portakal::TypeDispatcher::CreateType("SceneAspect",sizeof(Portakal::SceneAspect),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,nullptr,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneAspect>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneAspect>(pSceneAspect);
 ;
         //Register enums here
 		Portakal::TypeDispatcher::RegisterEnum("Windows",112,pPlatformType);
@@ -38,17 +41,19 @@ extern "C"
 		Portakal::TypeDispatcher::RegisterEnum("Switch",157,pPlatformType);
 
         //Register fields here
-		Portakal::TypeDispatcher::RegisterField("mMyType",offsetof(Portakal::TestClass,mMyType),typeof(Portakal::uint32),pTestClass);
-		Portakal::TypeDispatcher::RegisterField("mMahString",offsetof(Portakal::TestClass,mMahString),typeof(Portakal::String),pTestClass);
+		Portakal::TypeDispatcher::RegisterField("mMyType",offsetof(Portakal::TestClass,mMyType),typeof(Portakal::uint32),nullptr,Portakal::FieldMode::Normal,pTestClass);
+		Portakal::TypeDispatcher::RegisterField("mMahString",offsetof(Portakal::TestClass,mMahString),typeof(Portakal::String),nullptr,Portakal::FieldMode::Normal,pTestClass);
 
         //Register attributes here
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::MyAttribute>(pTestClass, 1, 2, 3);
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::MyAttribute>(pTestClass, 2, 5, 7);
 
         //Register base types here
-		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TestClass),typeof(Portakal::Object));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::Component),typeof(Portakal::Object));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::SceneAspect),typeof(Portakal::Object));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {pTestClass,pApplicationModule,pString,pObject,pPlatformType,pComponent,};
+		Portakal::Array<Portakal::Type*> types = {pTestClass,pApplicationModule,pString,pObject,pPlatformType,pComponent,pSceneAspect,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;

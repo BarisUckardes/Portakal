@@ -24,15 +24,24 @@ namespace Portakal
 		if (pAPI == nullptr)
 			return;
 
+		//Add for both map and the array
 		pAPI->mWindows.Add(pWindow);
+		pAPI->mMap.Insert(pWindow.GetHeap(), pWindow);
 	}
-	void WindowAPI::_RemoveWindow(const SharedHeap<PlatformWindow>& pWindow)
+	void WindowAPI::_RemoveWindow(PlatformWindow* pWindow)
 	{
 		WindowAPI* pAPI = GetUnderlyingAPI();
 		if (pAPI == nullptr)
 			return;
 
-		pAPI->mWindows.Remove(pWindow);
+		//Get index
+		const int32 index = pAPI->mMap.FindIndex(pWindow);
+		if (index == -1)
+			return;
+
+		//Remove from both map and the array
+		pAPI->mMap.Remove(pWindow);
+		pAPI->mWindows.RemoveAt(index);
 	}
 	void WindowAPI::_PollEvents()
 	{
@@ -45,10 +54,6 @@ namespace Portakal
 	}
 	WindowAPI::~WindowAPI()
 	{
-		for (int32 i = 0; i < mWindows.GetSize(); i++)
-		{
-			mWindows[i].Shutdown();
-			i--;
-		}
+
 	}
 }

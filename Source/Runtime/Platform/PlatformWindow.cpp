@@ -18,7 +18,7 @@ namespace Portakal
 		pWindow->SetMode(desc.Mode);
 
 		//Register to the API
-		WindowAPI::_RegisterWindow(pWindow);
+		WindowAPI::_RegisterWindow(pWindow.GetHeap());
 
 		return pWindow;
 	}
@@ -154,8 +154,7 @@ namespace Portakal
 	}
 	void PlatformWindow::OnShutdown()
 	{
-		SharedHeap<PlatformWindow> self = *((SharedHeap<PlatformWindow>*)this);
-		WindowAPI::_RemoveWindow(self);
+		WindowAPI::_RemoveWindow(this);
 
 		DEV_LOG("PlatformWindow", "Window shutdown");
 	}

@@ -1,7 +1,7 @@
 #pragma once
 #include <Runtime/Object/API.h>
 #include <Runtime/Platform/PlatformWindow.h>
-#include <Runtime/Containers/Array.h>
+#include <Runtime/Containers/HashMap.h>
 #include <Runtime/Memory/SharedHeap.h>
 
 namespace Portakal
@@ -15,7 +15,7 @@ namespace Portakal
 		static Array<SharedHeap<PlatformWindow>> GetWindows();
 	private:
 		static void _RegisterWindow(const SharedHeap<PlatformWindow>& pWindow);
-		static void _RemoveWindow(const SharedHeap<PlatformWindow>& pWindow);
+		static void _RemoveWindow(PlatformWindow* pWindow);
 	public:
 		WindowAPI();
 		~WindowAPI();
@@ -23,5 +23,6 @@ namespace Portakal
 		void _PollEvents();
 	private:
 		Array<SharedHeap<PlatformWindow>> mWindows;
+		HashMap<PlatformWindow*, SharedHeap<PlatformWindow>> mMap;
 	};
 }

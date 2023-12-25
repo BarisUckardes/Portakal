@@ -27,3 +27,5 @@ endif ()
 # ------------------ SUBDIRECTORIES ----------------
 add_subdirectory("Source/Runtime")
 add_subdirectory("Source/RuntimeTest")
+add_subdirectory("Source/Editor")
+add_subdirectory("Source/EditorPlayer")

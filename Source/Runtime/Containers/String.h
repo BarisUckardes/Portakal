@@ -8,6 +8,7 @@ namespace Portakal
 	 * @class String
 	 * @brief String class with basic string operations
 	 */
+	class Type;
 	PCLASS();
 	class RUNTIME_API String final
 	{
@@ -30,6 +31,10 @@ namespace Portakal
 		FORCEINLINE uint64 FindLastIndex(const String& target, const uint64 startIndex) const;
 		FORCEINLINE uint64 GetCount(const char target) const;
 		FORCEINLINE String GetSubset(const uint64 startIndex, const uint64 length) const;
+		FORCEINLINE Type* GetType() const noexcept
+		{
+			return typeof(String);
+		}
 		String GetCopy() const;
 		const char* GetCopyRaw() const;
 		void Clear();
@@ -57,6 +62,38 @@ namespace Portakal
 	bool operator==(const String& target0, const String& target1);
 	bool operator!=(const String& target0, const String& target1);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

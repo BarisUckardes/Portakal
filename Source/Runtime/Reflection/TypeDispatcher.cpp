@@ -1,5 +1,5 @@
 #include "TypeDispatcher.h"
-
+#include <RUntime/Reflection/Field.h>
 namespace Portakal
 {
 	Type* TypeDispatcher::CreateType(const String& name, const uint32 size, const TypeModes mode, const TypeCodes code, const DefaultHeapObjectGenerator generator,Type** ppAddress)
@@ -10,8 +10,10 @@ namespace Portakal
 	{
 		pTargetType->_RegisterEnum(name, value);
 	}
-	void TypeDispatcher::RegisterField(const String& name, const uint32 offset, Type* pFieldType, Type* pTargetType)
+	void TypeDispatcher::RegisterField(const String& name, const uint32 offset, Type* pFieldType, const Type* pArrayElementType, const FieldMode mode, Type* pTargetType)
 	{
+		Field* pField = new Field(name, pFieldType, pArrayElementType, mode, offset);
+		pTargetType->_RegisterField(pField);
 	}
 	void TypeDispatcher::SetBaseType(Type* pTargetType, Type* pBaseType)
 	{
