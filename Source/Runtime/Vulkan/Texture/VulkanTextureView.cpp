@@ -20,7 +20,7 @@ namespace Portakal
         info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
         info.image = pTexture->GetVkImage();
         info.format = VulkanTextureUtils::GetTextureFormat(pTexture->GetFormat());
-        info.viewType = VulkanTextureUtils::GetImageViewType(pTexture->GetType());
+        info.viewType = VulkanTextureUtils::GetImageViewType(pTexture->GetTextureType());
         info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
         info.subresourceRange.baseArrayLayer = 0;
         info.subresourceRange.baseMipLevel = 0;

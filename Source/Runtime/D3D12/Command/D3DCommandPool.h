@@ -18,7 +18,7 @@ namespace Portakal
 			return mAllocator;
 		}
 
-		FORCEINLINE D3D12_COMMAND_LIST_TYPE GetType() const noexcept
+		FORCEINLINE D3D12_COMMAND_LIST_TYPE GetCmdListTypeType() const noexcept
 		{
 			return mType;
 		}

@@ -1,4 +1,5 @@
 #pragma once
+#include <Runtime/Graphics/Memory/GraphicsMemoryHeap.h>
 
 namespace Portakal
 {
