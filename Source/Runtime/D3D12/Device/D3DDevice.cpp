@@ -48,6 +48,12 @@ namespace Portakal
 		RegisterChild(texture.QueryAs<GraphicsDeviceObject>());
 		return texture;
 	}
+	SharedHeap<TextureView> D3DDevice::CreateD3DSwapchainTextureView(const TextureViewDesc& desc, ComPtr<ID3D12DescriptorHeap> pDescriptorHeap)
+	{
+		SharedHeap<TextureView> textureView = new D3DTextureView(desc, this, pDescriptorHeap);
+		RegisterChild(textureView.QueryAs<GraphicsDeviceObject>());
+		return textureView;
+	}
 	Texture* D3DDevice::CreateTextureCore(const TextureDesc& desc)
 	{
 		return new D3DTexture(desc, this);

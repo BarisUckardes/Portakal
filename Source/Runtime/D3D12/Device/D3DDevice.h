@@ -20,6 +20,7 @@ namespace Portakal
 		FORCEINLINE ComPtr<ID3D12CommandQueue> GetTransferQueue() const noexcept { return mTransferQueue; }
 
 		SharedHeap<Texture> CreateD3DSwapchainTexture(const TextureDesc& desc, ComPtr<ID3D12Resource> pResource);
+		SharedHeap<TextureView> CreateD3DSwapchainTextureView(const TextureViewDesc& desc, ComPtr<ID3D12DescriptorHeap> pDescriptorHeap);
 	protected:
 		// Inherited via GraphicsDevice
 		virtual Texture* CreateTextureCore(const TextureDesc& desc) override;
@@ -39,12 +40,12 @@ namespace Portakal
 		virtual Swapchain* CreateSwapchainCore(const SwapchainDesc& desc) override;
 		virtual RenderPass* CreateRenderPassCore(const RenderPassDesc& desc) override { return nullptr; }
 
-		virtual void WaitFencesCore(Fence** ppFences, const byte count) override { }
-		virtual void WaitDeviceIdleCore() override {  }
-		virtual void WaitQueueDefaultCore(const GraphicsQueueType type) override { }
-		virtual void UpdateHostBufferCore(GraphicsBuffer* pBuffer, const GraphicsBufferHostUpdateDesc& desc) override {  }
-		virtual void UpdateResourceTableCore(ResourceTable* pTable, const ResourceTableUpdateDesc& desc) override {  }
-		virtual void SubmitCommandListsCore(CommandList** ppCmdLists, const byte cmdListCount, const GraphicsQueueType type, const Fence* pFence) override {  }
+		virtual void WaitFencesCore(Fence** ppFences, const byte count) override {}
+		virtual void WaitDeviceIdleCore() override {}
+		virtual void WaitQueueDefaultCore(const GraphicsQueueType type) override {}
+		virtual void UpdateHostBufferCore(GraphicsBuffer* pBuffer, const GraphicsBufferHostUpdateDesc& desc) override {}
+		virtual void UpdateResourceTableCore(ResourceTable* pTable, const ResourceTableUpdateDesc& desc) override {}
+		virtual void SubmitCommandListsCore(CommandList** ppCmdLists, const byte cmdListCount, const GraphicsQueueType type, const Fence* pFence) override {}
 
 		virtual void OnShutdown() override {};
 	private:

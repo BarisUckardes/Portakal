@@ -7,9 +7,11 @@
 #include <Runtime/Platform/PlatformMonitor.h>
 
 #include <Runtime/D3D12/Texture/D3DTextureUtils.h>
+#include <Runtime/D3D12/Texture/D3DTexture.h>
+
 namespace Portakal
 {
-	D3DSwapchain::D3DSwapchain(const SwapchainDesc& desc, D3DDevice* pDevice) : Swapchain(desc)
+	D3DSwapchain::D3DSwapchain(const SwapchainDesc& desc, D3DDevice* pDevice) : Swapchain(desc), mD3DDevice(pDevice)
 	{
 		IDXGIFactory4* factory = ((D3DInstance*)pDevice->GetOwnerAdapter()->GetOwnerInstance())->GetFactory().Get();
 		Win32Window* pWindow = (Win32Window*)desc.pWindow.GetHeap();
@@ -28,7 +30,7 @@ namespace Portakal
 		swapChainDesc.Flags = 0;
 		swapChainDesc.Width = pWindow->GetSize().X;
 		swapChainDesc.Height = pWindow->GetSize().Y;
-		swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		swapChainDesc.Format = D3DTextureUtils::GetD3DTextureFormat(desc.ColorFormat);
 		swapChainDesc.AlphaMode = DXGI_ALPHA_MODE_IGNORE;
 		swapChainDesc.Scaling = DXGI_SCALING_NONE;
 		swapChainDesc.Stereo = false;
@@ -67,59 +69,69 @@ namespace Portakal
 			&mSwapchain)),
 			"DirectXSwapchain", "Failed to create DXGISwapchain", "DXGISwapchain has been created succesfully.");
 
-		D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-		rtvHeapDesc.NumDescriptors = desc.BufferCount;
-		rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-		rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	}
+	void D3DSwapchain::CreateRenderTargetViews()
+	{
+		// Resize RTVHandles
+		mRTVHandles.Resize(GetBufferCount());
 
-		pDevice->GetD3DDevice()->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&mRTVHeap));
+		// Get RTV descriptor size
+		mRTVDescriptorSize = mD3DDevice->GetD3DDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 
-		mRTVDescriptorSize = pDevice->GetD3DDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-
-		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle(mRTVHeap->GetCPUDescriptorHandleForHeapStart());
-
-		Array<SharedHeap<Texture>> textures;
-		Array<SharedHeap<TextureView>> textureViews;
-		for (uint32 i = 0; i < desc.BufferCount; i++)
+		// Get Swapchain buffers
+		Array<ComPtr<ID3D12Resource>> swapchainBuffers(GetBufferCount());
+		for (uint32 i = 0; i < GetBufferCount(); i++)
 		{
-			ComPtr<ID3D12Resource> backBuffer;
-			DEV_SYSTEM(SUCCEEDED(mSwapchain->GetBuffer(i, IID_PPV_ARGS(&backBuffer))), "D3D12Swapchain", "Failed to get back buffer", "Get backbuffer successfully.");
-			pDevice->GetD3DDevice()->CreateRenderTargetView(backBuffer.Get(), nullptr, rtvHandle);
-			rtvHandle.ptr += mRTVDescriptorSize;
-
-			D3D12_RESOURCE_DESC bufferDesc = backBuffer->GetDesc();
-
-			TextureDesc textureDesc = {};
-			textureDesc.Type = TextureType::Texture2D;
-			textureDesc.Format = GetColorFormat();
-			textureDesc.Usage = TextureUsage::ColorAttachment;
-			textureDesc.Size = { (uint16)bufferDesc.Width,(uint16)bufferDesc.Height, 1 };
-			textureDesc.MipLevels = 1;
-			textureDesc.ArrayLevels = 1;
-			textureDesc.SampleCount = TextureSampleCount::SAMPLE_COUNT_1;
-			textureDesc.pHeap = nullptr;
-
-			SharedHeap<Texture> pTexture = pDevice->CreateD3DSwapchainTexture(textureDesc, backBuffer.Get());
-			textures.Add(pTexture);
-
-			// Create texture view
-
-			TextureViewDesc textureViewDesc = {};
-			textureViewDesc.pTexture = pTexture.GetHeap();
-			textureViewDesc.ArrayLevel = 1;
-			textureViewDesc.MipLevel = 1;
-
-			SharedHeap<TextureView> pTextureView = pDevice->CreateTextureView(textureViewDesc);
-			textureViews.Add(pTextureView);
+			DEV_SYSTEM(SUCCEEDED(mSwapchain->GetBuffer(i, IID_PPV_ARGS(&swapchainBuffers[i]))),
+					   "DirectXSwapchain", "Failed to get swapchain buffer", "Swapchain buffer has been gotten succesfully.");
 		}
-		
-		SetTextures(textures, textureViews);
 
-		ResizeCore(pWindow->GetSize().X, pWindow->GetSize().Y);
+		// Create Render Target Views
+		for (uint32 i = 0; i < GetBufferCount(); i++)
+		{
+			D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
+			rtvDesc.Format = D3DTextureUtils::GetD3DTextureFormat(GetColorFormat());
+			rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+			rtvDesc.Texture2D.MipSlice = 0;
+			rtvDesc.Texture2D.PlaneSlice = 0;
+
+			mRTVHandles[i] = mRenderTargetView->GetCPUDescriptorHandleForHeapStart();
+			mRTVHandles[i].ptr += i * mRTVDescriptorSize;
+
+			mD3DDevice->GetD3DDevice()->CreateRenderTargetView(swapchainBuffers[i].Get(), &rtvDesc, mRTVHandles[i]);
+		}
+
+		// Store swapchain textures and texture views
+		Array<SharedHeap<Texture>> swapchainTextures;
+		Array< SharedHeap<TextureView>> swapchainTextureViews;
+		for (uint32 i = 0; i < GetBufferCount(); i++)
+		{
+			D3D12_RESOURCE_DESC swapchainResourceDesc = swapchainBuffers[i]->GetDesc();
+
+			TextureDesc swapchainBufferDesc = {};
+			swapchainBufferDesc.ArrayLevels = swapchainResourceDesc.DepthOrArraySize;
+			swapchainBufferDesc.Format = GetColorFormat();
+			swapchainBufferDesc.MipLevels = swapchainResourceDesc.MipLevels;
+			swapchainBufferDesc.SampleCount = TextureSampleCount::SAMPLE_COUNT_1;
+			swapchainBufferDesc.Size = { (uint16)swapchainResourceDesc.Width, (uint16)swapchainResourceDesc.Height, 1 };
+			swapchainBufferDesc.Type = TextureType::Texture2D;
+			swapchainBufferDesc.Usage = TextureUsage::ColorAttachment;
+
+			SharedHeap<Texture> scTexture = mD3DDevice->CreateD3DSwapchainTexture(swapchainBufferDesc, swapchainBuffers[i]);
+			swapchainTextures.Add(scTexture);
+
+			TextureViewDesc swapchainBufferViewDesc = {};
+			swapchainBufferViewDesc.ArrayLevel = swapchainBufferDesc.ArrayLevels;
+			swapchainBufferViewDesc.MipLevel = swapchainBufferDesc.MipLevels;
+			swapchainBufferViewDesc.pTexture = scTexture;
+
+		}
+	}
+	void D3DSwapchain::CreateDepthStencilView()
+	{
 	}
 	void D3DSwapchain::ResizeCore(const uint16 width, const uint16 height)
 	{
-		mSwapchain->ResizeBuffers(GetBufferCount(), width, height, D3DTextureUtils::GetD3DTextureFormat(GetColorFormat()), 0);
 	}
 	void D3DSwapchain::OnShutdown()
 	{

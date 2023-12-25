@@ -13,6 +13,10 @@ namespace Portakal
 	public:
 		D3DSwapchain(const SwapchainDesc& desc, D3DDevice* pDevice);
 		~D3DSwapchain() override = default;
+
+		void CreateRenderTargetViews();
+		void CreateDepthStencilView();
+
 	private:
 		virtual void ResizeCore(const uint16 width, const uint16 height) override;
 		virtual void OnShutdown() override;
@@ -21,13 +25,10 @@ namespace Portakal
 		virtual bool SetWindowed() override;
 
 	private:
+		D3DDevice* mD3DDevice;
 		ComPtr<IDXGISwapChain1> mSwapchain;
-		ComPtr<ID3D12DescriptorHeap> mRTVHeap;
-		ComPtr<ID3D12DescriptorHeap> mDSVHeap;
-
+		ComPtr<ID3D12DescriptorHeap> mRenderTargetView;
+		Array<D3D12_CPU_DESCRIPTOR_HANDLE> mRTVHandles;
 		uint32 mRTVDescriptorSize;
-		uint32 mDSVDescriptorSize;
-		uint32 mRTVDescriptorOffset;
-		uint32 mDSVDescriptorOffset;
 	};
 }

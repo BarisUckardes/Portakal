@@ -20,13 +20,13 @@ namespace Portakal
 
 		FORCEINLINE D3D12_COMMAND_LIST_TYPE GetCommandPoolType() const noexcept
 		{
-			return mType;
+			return mCommandPoolType;
 		}
 
 		virtual void OnShutdown() override;
 
 	private:
 		ComPtr<ID3D12CommandAllocator> mAllocator;
-		D3D12_COMMAND_LIST_TYPE mType;
+		D3D12_COMMAND_LIST_TYPE mCommandPoolType;
 	};
 }
