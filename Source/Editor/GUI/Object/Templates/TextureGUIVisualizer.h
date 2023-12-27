@@ -2,7 +2,7 @@
 
 #include <Editor/GUI/Object/GUIObjectVisualizer.h>
 
-namespace Roveldo
+namespace Portakal
 {
 	class EDITOR_API TextureGUIVisualizer : public GUIObjectVisualizer
 	{
