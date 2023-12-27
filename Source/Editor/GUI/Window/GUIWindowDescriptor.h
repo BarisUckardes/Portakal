@@ -1,12 +1,12 @@
 #pragma once
 
 #include <Runtime/Containers/String.h>
-#include <Runtime/Math/Vector/Vectors.h>
+#include <Runtime/Math/Vector2.h>
 #include <Runtime/Containers/Guid.h>
 
 #include <Editor/GUI/GUIDirection.h>
 
-namespace Roveldo
+namespace Portakal
 {
 	struct EDITOR_API GUIWindowDescriptor
 	{
