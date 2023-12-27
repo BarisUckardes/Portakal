@@ -54,6 +54,6 @@ namespace Portakal
 		~GUIRenderingContext() override = default;
 
 	private:
-		SharedHeap<ImGuiRenderer> mRenderer;
+		SharedHeap<ImGuiRenderer> mImGuiRenderer;
 	};
 }

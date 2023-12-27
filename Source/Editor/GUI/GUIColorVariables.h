@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Roveldo
+namespace Portakal
 {
 	enum class EDITOR_API GUIColorVariables : unsigned char
 	{

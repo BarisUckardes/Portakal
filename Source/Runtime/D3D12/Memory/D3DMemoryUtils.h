@@ -16,6 +16,8 @@ namespace Portakal
 				return D3D12_HEAP_TYPE_DEFAULT;
 			case GraphicsMemoryType::Host:
 				return D3D12_HEAP_TYPE_UPLOAD;
+			default:
+				return D3D12_HEAP_TYPE_DEFAULT;
 			}
 		}
 

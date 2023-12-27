@@ -62,7 +62,7 @@ namespace Portakal
         OnFinalize();
 
         //Clear modules
-        for (uint32 i = mModules.GetSize() - 1; i--; i >= 0)
+        for (uint32 i = mModules.GetSize() - 1; i--;)
             mModules[i]->OnFinalize();
         mModules.Clear();
 

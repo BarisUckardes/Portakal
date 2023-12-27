@@ -8,7 +8,7 @@ namespace Portakal
 	}
 	void GUIRenderingContextCreateModule::OnFinalize()
 	{
-		mContext.Shutdown();
+		mGUIRenderingContext.Shutdown();
 	}
 	void GUIRenderingContextCreateModule::OnTick()
 	{

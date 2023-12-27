@@ -4,7 +4,7 @@
 
 namespace Portakal
 {
-	enum class EDITOR_API GUIWindowFlags : uint32
+	enum class EDITOR_API GUIWindowFlags : int32
 	{
 		None = 0,
 		NoTitleBar = 1 << 0,
