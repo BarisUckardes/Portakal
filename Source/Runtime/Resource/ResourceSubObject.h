@@ -1,11 +1,14 @@
 #pragma once
 #include <Runtime/Memory/SharedHeap.h>
+#include "ResourceSubObject.reflected.h"
 
 namespace Portakal
 {
 	class Resource;
+	PCLASS();
 	class ResourceSubObject : public Object
 	{
+		GENERATE_OBJECT;
 		friend class Resource;
 	public:
 		ResourceSubObject() = default;
@@ -25,3 +28,10 @@ namespace Portakal
 		SharedHeap<Resource> mOwnerResource;
 	};
 }
+
+
+
+
+
+
+

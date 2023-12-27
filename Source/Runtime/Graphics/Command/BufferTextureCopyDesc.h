@@ -12,8 +12,8 @@ namespace Portakal
 	struct RUNTIME_API BufferTextureCopyDesc
 	{
 		uint64 BufferOffsetInBytes;
-		Vector3UI TextureOffsetInPixels;
-		Vector3UI TextureSize;
+		Vector3US TextureOffsetInPixels;
+		Vector3US TextureSize;
 		byte TextureMipIndex;
 		byte TextureArrayIndex;
 	};

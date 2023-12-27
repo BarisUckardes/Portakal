@@ -5,25 +5,7 @@
 
 namespace Portakal
 {
-	class MyAttribute : public Attribute
-	{
-	public:
-		MyAttribute(uint32 a,uint32 b,uint32 c)
-		{
-			a = a;
-			b = b;
-			c = c;
-		}
-
-	private:
-		uint32 a;
-		uint32 b;
-		uint32 c;
-	};
-
 	PCLASS();
-	PATTRIBUTE(MyAttribute, 1, 2, 3);
-	PATTRIBUTE(MyAttribute, 2, 5, 7);
 	class RUNTIME_API TestClass : public Object
 	{
 		GENERATE_OBJECT;
@@ -36,6 +18,13 @@ namespace Portakal
 		String mMahString;
 	};
 }
+
+
+
+
+
+
+
 
 
 

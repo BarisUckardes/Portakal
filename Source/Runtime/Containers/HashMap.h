@@ -103,7 +103,7 @@ namespace Portakal
 			{
 				if (mData[i].GetKey() == key)
 				{
-					return mData[i].GetRefValue();
+					return &mData[i].GetRefValue();
 				}
 			}
 
