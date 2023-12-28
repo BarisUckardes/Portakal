@@ -29,7 +29,7 @@ namespace Portakal
 
 		void RemoveModule(const uint32 index);
 		void Run();
-		void PostQuitRequest(const String& reason);
+		void PostQuitRequest(const String reason);
 	protected:
 		virtual void OnInitialize() {}
 		virtual void OnFinalize() {}

@@ -47,7 +47,7 @@ namespace Portakal
 		String operator-=(const char* other);
 		String operator-=(const String& other);
 
-		String operator=(const String& other);
+		String operator=(const String other);
 		String operator=(const char* other);
 		String operator=(const wchar_t* other);
 

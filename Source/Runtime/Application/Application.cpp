@@ -69,7 +69,7 @@ namespace Portakal
         //Post quit reason
         DEV_LOG("Application", "Quit reason-> %s", *mQuitReason);
     }
-    void Application::PostQuitRequest(const String& reason)
+    void Application::PostQuitRequest(const String reason)
     {
         mQuitRequest = true;
         mQuitReason = reason;

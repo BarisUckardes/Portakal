@@ -253,11 +253,11 @@ namespace Portakal
 		mSize = 0;
 	}
 
-	String String::operator=(const String& other)
+	String String::operator=(const String other)
 	{
 		mSize = other.GetSize();
 		mSource = new char[mSize + 1];
-		Memory::Copy(other.GetSource(), mSource, mSize);
+		Memory::Copy(mSource, other.GetSource(), mSize);
 		mSource[mSize] = '\0';
 
 		return String(mSource);
