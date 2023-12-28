@@ -1,7 +1,10 @@
 #include "GraphicsInstance.h"
 
+#ifdef PORTAKAL_PLATFORM_WINDOWS
 #include <Runtime/Vulkan/Instance/VulkanInstance.h>
 #include <Runtime/D3D12/Instance/D3DInstance.h>
+#endif
+
 namespace Portakal
 {
     SharedHeap<GraphicsInstance> GraphicsInstance::Create(const GraphicsInstanceDesc& desc)
@@ -17,7 +20,9 @@ namespace Portakal
             }
             case Portakal::GraphicsBackend::DirectX12:
             {
+#ifdef PORTAKAL_PLATFORM_WINDOWS
                 pInstance = (GraphicsInstance*)new D3DInstance(desc);
+#endif
                 break;
             }
             case Portakal::GraphicsBackend::GNMX:
