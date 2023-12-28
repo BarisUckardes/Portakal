@@ -46,10 +46,11 @@
 #include <Runtime/World/Scene.h>
 #include <Runtime/World/SceneAspect.h>
 #include <EditorPlayer/EditorPlayerApplication.h>
+#include <EditorPlayer/EditorPlayerWindowModule.h>
 
 namespace Portakal
 {
-	void Run()
+	void Run(const Array<String>& cmdArguments)
 	{
 		//Initialize platform
 		Platform::InitializePlatformDependencies();
@@ -60,6 +61,7 @@ namespace Portakal
 		//Add modules
 		pApplication->RegisterModule<ReflectionModule>(0);
 		pApplication->RegisterModule<WindowModule>(1);
+		pApplication->RegisterModule<EditorPlayerWindowModule>(2);
 
 		//Run
 		pApplication->Run();
@@ -68,6 +70,10 @@ namespace Portakal
 	
 int main(const unsigned int argumentCount, const char** ppArguments)
 {
-	Portakal::Run();
+	Portakal::Array<Portakal::String> cmdArguments;
+	for (Portakal::uint32 i = 0; i < argumentCount; i++)
+		cmdArguments.Add(ppArguments[i]);
+
+	Portakal::Run(cmdArguments);
 	return 0;
 }
