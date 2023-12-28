@@ -1,10 +1,12 @@
 #include "GraphicsDevice.h"
 #include <Runtime/Graphics/Swapchain/Swapchain.h>
+#include <Runtime/Graphics/GraphicsAPI.h>
 
 namespace Portakal
 {
-    GraphicsDevice::GraphicsDevice(const GraphicsDeviceDesc& desc) : mOwnerAdapter(desc.pAdapter)
+    GraphicsDevice::GraphicsDevice(const GraphicsDeviceDesc& desc) : mOwnerAdapter(desc.pAdapter),mBackend(desc.Backend)
     {
+
     }
   
     SharedHeap<Texture> GraphicsDevice::CreateTexture(const TextureDesc& desc)
@@ -187,5 +189,12 @@ namespace Portakal
     void GraphicsDevice::RemoveChild(const SharedHeap<GraphicsDeviceObject>& pObject)
     {
         mChilds.Remove(pObject);
+    }
+    void GraphicsDevice::OnShutdown()
+    {
+        //Unregister
+        GraphicsAPI::_RemoveDevice(this);
+
+        //Delete all device objects
     }
 }

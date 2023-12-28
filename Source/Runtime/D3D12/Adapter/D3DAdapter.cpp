@@ -5,7 +5,7 @@ namespace Portakal
 {
 	GraphicsDevice* D3DAdapter::CreateDeviceCore()
 	{
-		return new D3DDevice({ this });
+		return new D3DDevice({ GraphicsBackend::DirectX12,this });
 	}
 	void D3DAdapter::OnShutdown()
 	{

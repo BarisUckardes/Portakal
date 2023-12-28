@@ -72,7 +72,6 @@ namespace Portakal
 	private:
 		// Inherited via GraphicsDevice
 		void OnShutdown() override;
-		GraphicsBackend GetBackend() const noexcept override { return GraphicsBackend::Vulkan; }
 		Texture* CreateTextureCore(const TextureDesc& desc) override;
 		TextureView* CreateTextureViewCore(const TextureViewDesc& desc) override;
 		CommandList* CreateCommandListCore(const CommandListDesc& desc) override;
