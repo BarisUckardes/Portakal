@@ -1,4 +1,5 @@
-﻿using ReflectionParser;
+﻿using Microsoft.VisualBasic.FileIO;
+using ReflectionParser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Portakal
 {
     public sealed class FileInfo
     {
-        public FileInfo(FileType type, string name,string path, string content)
+        public FileInfo(FileType type, string name,string path, string content, bool isVirtual)
         {
             Type = type;
             Name = name;
@@ -20,6 +21,7 @@ namespace Portakal
             _fields = new List<FieldInfo>();
             _attributes = new List<AttributeInfo>();
             BaseClass = string.Empty;
+            IsVirtual = isVirtual;
         }
 
         public FileType Type { get; private init; }
@@ -28,6 +30,7 @@ namespace Portakal
         public string Content { get; private init; }
         public List<string> Lines { get; private init; }
         public string BaseClass { get;set; }
+        public bool IsVirtual { get; private init; }
         public IReadOnlyCollection<KeyValuePair<string, long>> EnumValues => _enumValues;
         public IReadOnlyCollection<FieldInfo> Fields => _fields;
         public IReadOnlyCollection<AttributeInfo> Attributes => _attributes;
@@ -35,12 +38,13 @@ namespace Portakal
         {
             _enumValues.Add(new KeyValuePair<string, long>(name, value));
         }
-        public void RegisterField(string variableName,string variableType)
+        public void RegisterField(string variableName,string variableType,FieldMode type)
         {
             _fields.Add(new FieldInfo()
             {
                 VariableName = variableName,
                 VariableType = variableType,
+                Mode = type
             });
         }
         public void RegisterAttribute(string typeName,string parameters)

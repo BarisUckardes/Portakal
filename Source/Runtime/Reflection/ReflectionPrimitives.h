@@ -3,6 +3,7 @@
 
 namespace Portakal
 {
+	GENERATE_PRIMITIVE(char);
 	GENERATE_PRIMITIVE(byte);
 	GENERATE_PRIMITIVE(uint16);
 	GENERATE_PRIMITIVE(uint32);

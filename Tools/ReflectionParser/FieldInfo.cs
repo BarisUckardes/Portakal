@@ -16,7 +16,6 @@ namespace Portakal
     {
         public string VariableType;
         public string VariableName;
-        public string ElementType;
         public FieldMode Mode;
     }
 }

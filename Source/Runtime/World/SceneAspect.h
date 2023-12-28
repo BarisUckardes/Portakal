@@ -6,7 +6,7 @@
 namespace Portakal
 {
 	class Scene;
-	PCLASS();
+	PCLASS(Virtual);
 	class RUNTIME_API SceneAspect : public Object
 	{
 		GENERATE_OBJECT;
@@ -26,6 +26,24 @@ namespace Portakal
 		Scene* mOwnerScene;
 	};
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

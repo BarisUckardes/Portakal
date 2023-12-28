@@ -49,7 +49,7 @@ namespace Portakal
 			return (TAddress*)pObjectByte;
 		}
 	private:
-		Field(const String& name,const Type* pFieldType,const Type* pArrayElementType,const FieldMode mode,const uint32 offset);
+		Field(const String& name,const Type* pFieldType,const FieldMode mode,const uint32 offset);
 		~Field();
 	private:
 		const String mName;

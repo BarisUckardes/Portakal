@@ -3,6 +3,15 @@
 
 namespace Portakal
 {
+    bool Type::IsSubClassOf(Type* pType)
+    {
+        if (pType->mBaseType == this)
+            return true;
+        if (mBaseType == nullptr)
+            return false;
+
+        return mBaseType->IsSubClassOf(pType);
+    }
     Type::Type(const String& name, const uint32 size, const TypeModes mode, const TypeCodes code, DefaultHeapObjectGenerator defaultObjectGenerator,Type** ppModuleAddress) :
         mName(name), mSize(size), mMode(mode), mCode(code), mDefaultObjectGenerator(defaultObjectGenerator),mBaseType(nullptr),mModuleAddress(ppModuleAddress)
     {

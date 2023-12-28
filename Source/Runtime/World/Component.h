@@ -6,7 +6,7 @@
 namespace Portakal
 {
 	class Entity;
-	PCLASS();
+	PCLASS(Virtual);
 	class RUNTIME_API Component : public Object
 	{
 		friend class Entity;
@@ -24,6 +24,24 @@ namespace Portakal
 		Entity* mOwnerEntity;
 	};
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

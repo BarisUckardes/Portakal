@@ -9,7 +9,7 @@
 
 namespace Portakal
 {
-	PCLASS();
+	PCLASS(Virtual);
 	class RUNTIME_API RenderOperation : public Object
 	{
 		GENERATE_OBJECT;
@@ -49,6 +49,24 @@ namespace Portakal
 		Array<RenderOperation*> mOutputs;
 	};
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

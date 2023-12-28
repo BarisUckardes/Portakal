@@ -10,7 +10,7 @@ namespace Portakal
 	 * @class Object
 	 * @brief Base class for all objects in the whole system.
 	 */
-	PCLASS();
+	PCLASS(Virtual);
 	class RUNTIME_API Object
 	{
 	public:
@@ -34,6 +34,24 @@ namespace Portakal
 		bool mShutdown;
 	};
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

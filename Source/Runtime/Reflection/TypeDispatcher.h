@@ -9,7 +9,7 @@ namespace Portakal
 	public:
 		static Type* CreateType(const String& name, const uint32, const TypeModes mode, const TypeCodes code, const DefaultHeapObjectGenerator generator,Type** ppAddress);
 		static void RegisterEnum(const String& name, const int64 value, Type* pTargetType);
-		static void RegisterField(const String& name, const uint32 offset, Type* pFieldType,const Type* pArrayElementType,const FieldMode mode, Type* pTargetType);
+		static void RegisterField(const String& name, const uint32 offset, Type* pFieldType,const FieldMode mode, Type* pTargetType);
 		static void SetBaseType(Type* pTargetType, Type* pBaseType);
 		static Type** GetTypeAddress(Type* pType);
 

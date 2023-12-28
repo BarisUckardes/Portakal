@@ -46,6 +46,8 @@ namespace Portakal
 		{
 			return mEnums;
 		}
+
+		bool IsSubClassOf(Type* pType);
 	private:
 		Type(const String& name, const uint32 size, const TypeModes mode, const TypeCodes code, DefaultHeapObjectGenerator defaultObjectGenerator,Type** ppModuleAddress);
 		~Type();

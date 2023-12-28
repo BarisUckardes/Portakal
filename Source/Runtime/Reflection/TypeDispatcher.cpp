@@ -10,9 +10,9 @@ namespace Portakal
 	{
 		pTargetType->_RegisterEnum(name, value);
 	}
-	void TypeDispatcher::RegisterField(const String& name, const uint32 offset, Type* pFieldType, const Type* pArrayElementType, const FieldMode mode, Type* pTargetType)
+	void TypeDispatcher::RegisterField(const String& name, const uint32 offset, Type* pFieldType, const FieldMode mode, Type* pTargetType)
 	{
-		Field* pField = new Field(name, pFieldType, pArrayElementType, mode, offset);
+		Field* pField = new Field(name, pFieldType, mode, offset);
 		pTargetType->_RegisterField(pField);
 	}
 	void TypeDispatcher::SetBaseType(Type* pTargetType, Type* pBaseType)

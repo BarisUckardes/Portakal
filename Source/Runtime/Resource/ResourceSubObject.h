@@ -5,7 +5,7 @@
 namespace Portakal
 {
 	class Resource;
-	PCLASS();
+	PCLASS(Virtual);
 	class ResourceSubObject : public Object
 	{
 		GENERATE_OBJECT;
@@ -28,6 +28,24 @@ namespace Portakal
 		SharedHeap<Resource> mOwnerResource;
 	};
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

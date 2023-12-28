@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -51,7 +52,7 @@ namespace Portakal
                     continue;
                 }
 
-                fileInfos.Add(new FileInfo(type, fileName, files[i],fileContent));
+                fileInfos.Add(new FileInfo(type, fileName, files[i],fileContent,fileContent.Contains("PCLASS(Virtual)")));
             }
 
             //Handle file data
@@ -160,11 +161,23 @@ namespace Portakal
                 typeArrayContent += $"p{file.Name},";
             }
 
-            //First write all the types
+            //Write all primitive types first
             string typeLines = string.Empty;
+            typeLines += $"\t\tPortakal::Type* pchar = Portakal::TypeDispatcher::CreateType(\"char\",sizeof(char),Portakal::TypeModes::Class,Portakal::TypeCodes::Char,CreateChar,Portakal::TypeDispatcher::GetTypeAddress<char>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* pbyte = Portakal::TypeDispatcher::CreateType(\"byte\",sizeof(Portakal::byte),Portakal::TypeModes::Class,Portakal::TypeCodes::Byte,CreateByte,Portakal::TypeDispatcher::GetTypeAddress<Portakal::byte>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* puint16 = Portakal::TypeDispatcher::CreateType(\"uint16\",sizeof(Portakal::uint16),Portakal::TypeModes::Class,Portakal::TypeCodes::UInt16,CreateUInt16,Portakal::TypeDispatcher::GetTypeAddress<Portakal::uint16>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* puint32 = Portakal::TypeDispatcher::CreateType(\"uint32\",sizeof(Portakal::uint32),Portakal::TypeModes::Class,Portakal::TypeCodes::UInt32,CreateUInt32,Portakal::TypeDispatcher::GetTypeAddress<Portakal::uint32>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* puint64 = Portakal::TypeDispatcher::CreateType(\"uint64\",sizeof(Portakal::uint64),Portakal::TypeModes::Class,Portakal::TypeCodes::UInt64,CreateUInt64,Portakal::TypeDispatcher::GetTypeAddress<Portakal::uint64>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* pint16 = Portakal::TypeDispatcher::CreateType(\"int16\",sizeof(Portakal::int16),Portakal::TypeModes::Class,Portakal::TypeCodes::Int16,CreateInt16,Portakal::TypeDispatcher::GetTypeAddress<Portakal::int16>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* pint32 = Portakal::TypeDispatcher::CreateType(\"int32\",sizeof(Portakal::int32),Portakal::TypeModes::Class,Portakal::TypeCodes::Int32,CreateInt32,Portakal::TypeDispatcher::GetTypeAddress<Portakal::int32>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* pint64 = Portakal::TypeDispatcher::CreateType(\"int64\",sizeof(Portakal::int64),Portakal::TypeModes::Class,Portakal::TypeCodes::Int64,CreateInt64,Portakal::TypeDispatcher::GetTypeAddress<Portakal::int64>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* pfloat = Portakal::TypeDispatcher::CreateType(\"float\",sizeof(float),Portakal::TypeModes::Class,Portakal::TypeCodes::Float,CreateFloat,Portakal::TypeDispatcher::GetTypeAddress<float>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* pdouble = Portakal::TypeDispatcher::CreateType(\"double\",sizeof(double),Portakal::TypeModes::Class,Portakal::TypeCodes::Double,CreateDouble,Portakal::TypeDispatcher::GetTypeAddress<double>());{Environment.NewLine}";
+
+            //Write all the types
             foreach (FileInfo file in fileInfos)
             {
-                string lineContent = $"\t\tPortakal::Type* p{file.Name} = Portakal::TypeDispatcher::CreateType(\"{file.Name}\",sizeof(Portakal::{file.Name}),Portakal::TypeModes::{file.Type},Portakal::TypeCodes::Composed,nullptr,Portakal::TypeDispatcher::GetTypeAddress<Portakal::{file.Name}>());{Environment.NewLine}\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::{file.Name}>(p{file.Name});{Environment.NewLine};";
+                string lineContent = $"\t\tPortakal::Type* p{file.Name} = Portakal::TypeDispatcher::CreateType(\"{file.Name}\",sizeof(Portakal::{file.Name}),Portakal::TypeModes::{file.Type},Portakal::TypeCodes::Composed,Create{file.Name},Portakal::TypeDispatcher::GetTypeAddress<Portakal::{file.Name}>());{Environment.NewLine}\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::{file.Name}>(p{file.Name});{Environment.NewLine};";
                 typeLines += lineContent;
             }
 
@@ -185,7 +198,7 @@ namespace Portakal
             {
                 foreach(FieldInfo field in file.Fields)
                 {
-                    string line = $"\t\tPortakal::TypeDispatcher::RegisterField(\"{field.VariableName}\",offsetof(Portakal::{file.Name},{field.VariableName}),typeof(Portakal::{field.VariableType}),nullptr,Portakal::FieldMode::{field.Mode},p{file.Name});{Environment.NewLine}";
+                    string line = $"\t\tPortakal::TypeDispatcher::RegisterField(\"{field.VariableName}\",offsetof(Portakal::{file.Name},{field.VariableName}),typeof(Portakal::{field.VariableType}),Portakal::FieldMode::{field.Mode},p{file.Name});{Environment.NewLine}";
                     fieldLines += line;
                 }
             }
@@ -196,8 +209,16 @@ namespace Portakal
             {
                 foreach(AttributeInfo attribute in file.Attributes)
                 {
-                    string line = $"\t\tPortakal::TypeDispatcher::RegisterAttribute<Portakal::{attribute.TypeName}>(p{file.Name},{attribute.Parameters});{Environment.NewLine}";
-                    attributeLines += line;
+                    if (attribute.Parameters.Length > 0)
+                    {
+                        string line = $"\t\tPortakal::TypeDispatcher::RegisterAttribute<Portakal::{attribute.TypeName}>(p{file.Name},{attribute.Parameters});{Environment.NewLine}";
+                        attributeLines += line;
+                    }
+                    else
+                    {
+                        string line = $"\t\tPortakal::TypeDispatcher::RegisterAttribute<Portakal::{attribute.TypeName}>(p{file.Name});{Environment.NewLine}";
+                        attributeLines += line;
+                    }
                 }
             }
             //Register basetypes
@@ -212,6 +233,24 @@ namespace Portakal
                 baseTypeLines += line;
             }
 
+            //Register default object generators
+            string objectGenerators = string.Empty;
+            objectGenerators += $"\t\tvoid* CreateChar() {{return new char();}}{Environment.NewLine}";
+            objectGenerators += $"\t\tvoid* CreateByte() {{return new Portakal::byte();}}{Environment.NewLine}";
+            objectGenerators += $"\t\tvoid* CreateUInt16() {{return new Portakal::uint16();}}{Environment.NewLine}";
+            objectGenerators += $"\t\tvoid* CreateUInt32() {{return new Portakal::uint32();}}{Environment.NewLine}";
+            objectGenerators += $"\t\tvoid* CreateUInt64() {{return new Portakal::uint64();}}{Environment.NewLine}";
+            objectGenerators += $"\t\tvoid* CreateInt16() {{return new Portakal::int16();}}{Environment.NewLine}";
+            objectGenerators += $"\t\tvoid* CreateInt32() {{return new Portakal::int32();}}{Environment.NewLine}";
+            objectGenerators += $"\t\tvoid* CreateInt64() {{return new Portakal::int64();}}{Environment.NewLine}";
+            objectGenerators += $"\t\tvoid* CreateFloat() {{return new float();}}{Environment.NewLine}";
+            objectGenerators += $"\t\tvoid* CreateDouble() {{return new double();}}{Environment.NewLine}";
+            foreach (FileInfo file in fileInfos)
+            {
+                string line = $"\t\tvoid* Create{file.Name}() {{return {(file.IsVirtual ? "nullptr" : $"new Portakal::{file.Name}()")};}}{Environment.NewLine}";
+                objectGenerators += line;
+            }
+
             //Create manifest file string
             string manifestFileContent = $@"
 #pragma once
@@ -219,6 +258,8 @@ namespace Portakal
 #include <Runtime/Reflection/ReflectionManifest.h>
 #include <Runtime/Reflection/TypeDispatcher.h>
 {includeLines}
+
+{objectGenerators}
 extern ""C""
 {{
 	__declspec(dllexport) Portakal::ReflectionManifest* GenerateModuleManifest()
@@ -334,11 +375,33 @@ extern ""C""
             IReadOnlyCollection<uint> fieldIndexes = GetLineIndexes(file.Lines, "PFIELD()");
             foreach(uint lineIndex in fieldIndexes)
             {
-                string lineContent = file.Lines[(int)(lineIndex + 1)].Trim().Trim('\t').Trim(';');
-                string[] splits = lineContent.Split(" ");
-                string valueType = splits[0];
-                string name = splits[1];
-                file.RegisterField(name, valueType);
+                string lineContent = file.Lines[(int)(lineIndex + 1)];
+
+                if(lineContent.Contains("SharedHeap<"))
+                {
+                    lineContent = lineContent.Trim().Trim('\t').Trim(';');
+                    string[] splits = lineContent.Split(" ");
+                    string objectType = splits[0].Replace("SharedHeap<","").Replace(">","");
+                    string name = splits[1];
+                    file.RegisterField(name, objectType,FieldMode.Object);
+                }
+                else if(lineContent.Contains("Array<"))
+                {
+                    lineContent = lineContent.Trim().Trim('\t').Trim(';');
+                    string[] splits = lineContent.Split(" ");
+                    string arrayElemenType = splits[0].Replace("Array<", "").Replace(">", "");
+                    string name = splits[1];
+                    file.RegisterField(name, arrayElemenType, FieldMode.Array);
+                }
+                else
+                {
+                    lineContent = lineContent.Trim().Trim('\t').Trim(';');
+                    string[] splits = lineContent.Split(" ");
+                    string valueType = splits[0];
+                    string name = splits[1];
+                    file.RegisterField(name, valueType,FieldMode.Normal);
+                }
+                
             }
 
             //Get attributes
@@ -354,7 +417,8 @@ extern ""C""
             foreach(uint lineIndex in lineIndexes)
             {
                 string line = file.Lines[(int)lineIndex];
-                line = line.Replace("PATTRIBUTE(", "").Trim().Trim(';').Remove(line.LastIndexOf(")"));
+                line = line.Replace("PATTRIBUTE(", "").Trim().Trim(';');
+                line = line.Remove(line.LastIndexOf(")"));
                 string[] splits = line.Split(",");
                 string typeName = splits[0];
                 string parameters = string.Empty;
