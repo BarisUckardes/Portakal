@@ -1,6 +1,7 @@
 #include "EditorPlayerGDeviceModule.h"
 #include <Runtime/Platform/PlatformWindow.h>
 #include <Runtime/Window/WindowAPI.h>
+#include <Runtime/TestClass.h>
 
 namespace Portakal
 {
