@@ -2,6 +2,10 @@
 
 namespace Portakal
 {
+    RenderGraph::RenderGraph() : mBeginOperation(nullptr),mEndOperation(nullptr)
+    {
+
+    }
     void RenderGraph::RegisterTexture(const String& name, const SharedHeap<TextureResource>& pTexture)
     {
         //Check if already exists

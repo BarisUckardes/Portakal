@@ -15,7 +15,7 @@ namespace Portakal
 	{
 		GENERATE_OBJECT;
 	public:
-		RenderGraph() = default;
+		RenderGraph();
 		~RenderGraph() = default;
 
 		void RegisterTexture(const String& name, const SharedHeap<TextureResource>& pTexture);
@@ -34,11 +34,13 @@ namespace Portakal
 	private:
 		HashMap<String, SharedHeap<TextureResource>> mTextures;
 		Array<RenderOperation*> mOperations;
+		Array<Array<RenderOperation*>> mRenderPath;
 		RenderOperation* mBeginOperation;
 		RenderOperation* mEndOperation;
-		Array<Array<RenderOperation*>> mRenderPath;
 	};
 }
+
+
 
 
 
