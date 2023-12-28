@@ -1,17 +1,21 @@
 #include "EditorPlayerWindowModule.h"
 #include <Runtime/Application/Application.h>
+#include <Runtime/Platform/PlatformMonitor.h>
 
 namespace Portakal
 {
     void EditorPlayerWindowModule::OnInitialize()
     {
+        //Get primary monitor
+        SharedHeap<PlatformMonitor> pMonitor = PlatformMonitor::GetPrimaryMonitor();
+
         //Create window
         WindowDesc desc = {};
-        desc.Size = { 1024,1024 };
-        desc.Position = { 100,100 };
+        desc.Size = pMonitor->GetSize();
+        desc.Position = { 0,0 };
         desc.Title = "Portakal Editor Player";
         desc.Mode = WindowMode::Windowed;
-        desc.pMonitor = nullptr;
+        desc.pMonitor = pMonitor;
         mWindow = PlatformWindow::Create(desc);
     }
     void EditorPlayerWindowModule::OnFinalize()
@@ -21,6 +25,10 @@ namespace Portakal
     void EditorPlayerWindowModule::OnTick()
     {
         if (mWindow.IsShutdown())
+        {
             GetOwnerApplication()->PostQuitRequest("Editor player window is closed!");
+            return;
+        }
+        mWindow->PollMessages();
     }
 }

@@ -1,4 +1,5 @@
 #include "GraphicsAdapter.h"
+#include <Runtime/Graphics/GraphicsAPI.h>
 
 namespace Portakal
 {
@@ -7,8 +8,9 @@ namespace Portakal
         //Create device
         SharedHeap<GraphicsDevice> pDevice = CreateDeviceCore();
 
-        //TODO: Try register to api
-        
+        //Try register to api
+        GraphicsAPI::_RegisterDevice(pDevice);
+
         //Register
         mDevices.Add(pDevice);
 

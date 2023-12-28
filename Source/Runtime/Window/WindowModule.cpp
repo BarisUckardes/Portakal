@@ -10,7 +10,7 @@ namespace Portakal
 	}
 	void WindowModule::OnTick()
 	{
-		mAPI->_PollEvents();
+
 	}
 	void WindowModule::OnFinalize()
 	{

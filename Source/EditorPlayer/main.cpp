@@ -47,6 +47,7 @@
 #include <Runtime/World/SceneAspect.h>
 #include <EditorPlayer/EditorPlayerApplication.h>
 #include <EditorPlayer/EditorPlayerWindowModule.h>
+#include <EditorPlayer/EditorPlayerGDeviceModule.h>
 
 namespace Portakal
 {
@@ -62,6 +63,7 @@ namespace Portakal
 		pApplication->RegisterModule<ReflectionModule>(0);
 		pApplication->RegisterModule<WindowModule>(1);
 		pApplication->RegisterModule<EditorPlayerWindowModule>(2);
+		//pApplication->RegisterModule<EditorPlayerGDeviceModule>(3);
 
 		//Run
 		pApplication->Run();

@@ -37,7 +37,7 @@ namespace Portakal
 		SetPositionCore(position);
 		mPosition = position;
 	}
-	void PlatformWindow::SetMode( WindowMode mode)
+	void PlatformWindow::SetMode(const WindowMode mode)
 	{
 		//Call implementation
 		SetModeCore(mode);
@@ -58,12 +58,12 @@ namespace Portakal
 			case Portakal::WindowMode::Windowed:
 			default:
 			{
-				SetSize(halfMonitorSize);
+				SetSize(monitorSize);
 				break;
 			}
 			case Portakal::WindowMode::WindowedBorderless:
 			{
-				SetSize(halfMonitorSize);
+				SetSize(monitorSize);
 				break;
 			}
 			case Portakal::WindowMode::Fullscreen:

@@ -58,6 +58,8 @@ namespace Portakal
 	class RUNTIME_API GraphicsDevice : public Object
 	{
 	public:
+		static SharedHeap<GraphicsDevice> Create(const GraphicsDeviceDesc& desc);
+	public:
 		GraphicsDevice(const GraphicsDeviceDesc& desc);
 		~GraphicsDevice() = default;
 
@@ -65,7 +67,14 @@ namespace Portakal
 		{
 			return mMainSwapchain;
 		}
-		FORCEINLINE virtual GraphicsBackend GetBackend() const noexcept = 0;
+		FORCEINLINE GraphicsAdapter* GetOwnerAdapter() const noexcept
+		{
+			return mOwnerAdapter;
+		}
+		FORCEINLINE GraphicsBackend GetBackend() const noexcept
+		{
+			return mBackend;
+		}
 
 		SharedHeap<Texture> CreateTexture(const TextureDesc& desc);
 		SharedHeap<TextureView> CreateTextureView(const TextureViewDesc& desc);
@@ -83,10 +92,6 @@ namespace Portakal
 		SharedHeap<Fence> CreateFence();
 		SharedHeap<Swapchain> CreateSwapchain(const SwapchainDesc& desc);
 		SharedHeap<RenderPass> CreateRenderPass(const RenderPassDesc& desc);
-		FORCEINLINE GraphicsAdapter* GetOwnerAdapter() const noexcept
-		{
-			return mOwnerAdapter;
-		}
 
 		void WaitFences(Fence** ppFences, const byte count);
 		void WaitDeviceIdle();
@@ -98,6 +103,7 @@ namespace Portakal
 		void RegisterChild(const SharedHeap<GraphicsDeviceObject>& pObject);
 		void RemoveChild(const SharedHeap<GraphicsDeviceObject>& pObject);
 
+		virtual void OnShutdown() override;
 		virtual Texture* CreateTextureCore(const TextureDesc& desc) = 0;
 		virtual TextureView* CreateTextureViewCore(const TextureViewDesc& desc) = 0;
 		virtual CommandList* CreateCommandListCore(const CommandListDesc& desc) = 0;
@@ -122,8 +128,9 @@ namespace Portakal
 		virtual void UpdateResourceTableCore(ResourceTable* pTable, const ResourceTableUpdateDesc& desc) = 0;
 		virtual void SubmitCommandListsCore(CommandList** ppCmdLists, const byte cmdListCount, const GraphicsQueueType type, const Fence* pFence) = 0;
 	private:
+		GraphicsAdapter* mOwnerAdapter;
+		const GraphicsBackend mBackend;
 		Array<SharedHeap<GraphicsDeviceObject>> mChilds;
 		SharedHeap<Swapchain> mMainSwapchain;
-		GraphicsAdapter* mOwnerAdapter;
 	};
 }

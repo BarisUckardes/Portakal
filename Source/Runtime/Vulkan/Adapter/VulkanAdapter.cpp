@@ -10,6 +10,6 @@ namespace Portakal
 
     GraphicsDevice* VulkanAdapter::CreateDeviceCore()
     {
-        return new VulkanDevice({ this });
+        return new VulkanDevice({ GraphicsBackend::Vulkan,this });
     }
 }
