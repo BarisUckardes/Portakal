@@ -1,5 +1,7 @@
 #pragma once
 #include <Runtime/Containers/String.h>
+#include <Runtime/Reflection/Reflection.h>
+#include "Guid.reflected.h"
 
 namespace Portakal
 {
@@ -7,8 +9,10 @@ namespace Portakal
 	 * @class Guid
 	 * @brief 32-bit globally unique identifier.
 	 */
-	class RUNTIME_API Guid final
+	PCLASS();
+	class RUNTIME_API Guid : public Class
 	{
+		GENERATE_OBJECT;
 	public:
 		static Guid Create();
 		static Guid Create(const uint32 a, const uint32 b, const uint32 c, const uint32 d);
@@ -36,3 +40,6 @@ namespace Portakal
 		uint32 D;
 	};
 }
+
+
+

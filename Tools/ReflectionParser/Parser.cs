@@ -37,7 +37,7 @@ namespace Portakal
                 string fileName = fileNames[i];
 
                 //Leave Type out
-                if (fileName == "Type" || fileName == "Core")
+                if (fileName == "Type" || fileName == "Core" || fileName == "Class")
                     continue;
                 if (fileName.Contains(".reflected"))
                     continue;
@@ -378,7 +378,8 @@ extern ""C""
                 }
                 int baseClassStartIndex = publicIndex + "public".Length + 1;
                 string baseClass = enumClassLine.Substring(baseClassStartIndex,enumClassLine.Length - baseClassStartIndex);
-                file.BaseClass = baseClass;
+                if(baseClass != "Class")
+                    file.BaseClass = baseClass;
             }
 
             //Get fields

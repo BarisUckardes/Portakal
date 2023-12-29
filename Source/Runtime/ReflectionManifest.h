@@ -6,6 +6,7 @@
 #include "MyAttribute.h"
 #include "TestClass.h"
 #include "Application\ApplicationModule.h"
+#include "Containers\Guid.h"
 #include "Containers\String.h"
 #include "Object\Object.h"
 #include "Platform\PlatformType.h"
@@ -33,6 +34,7 @@
 		void* CreateMyAttribute() {return new Portakal::MyAttribute();}
 		void* CreateTestClass() {return new Portakal::TestClass();}
 		void* CreateApplicationModule() {return nullptr;}
+		void* CreateGuid() {return new Portakal::Guid();}
 		void* CreateString() {return new Portakal::String();}
 		void* CreateObject() {return nullptr;}
 		void* CreatePlatformType() {return new Portakal::PlatformType();}
@@ -79,6 +81,8 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::TestClass>(pTestClass);
 ;		Portakal::Type* pApplicationModule = Portakal::TypeDispatcher::CreateType("ApplicationModule",sizeof(Portakal::ApplicationModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateApplicationModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ApplicationModule>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ApplicationModule>(pApplicationModule);
+;		Portakal::Type* pGuid = Portakal::TypeDispatcher::CreateType("Guid",sizeof(Portakal::Guid),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateGuid,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Guid>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::Guid>(pGuid);
 ;		Portakal::Type* pString = Portakal::TypeDispatcher::CreateType("String",sizeof(Portakal::String),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateString,Portakal::TypeDispatcher::GetTypeAddress<Portakal::String>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::String>(pString);
 ;		Portakal::Type* pObject = Portakal::TypeDispatcher::CreateType("Object",sizeof(Portakal::Object),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateObject,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Object>());
@@ -129,7 +133,7 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureResource),typeof(Portakal::ResourceSubObject));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {pMyAttribute,pTestClass,pApplicationModule,pString,pObject,pPlatformType,pAttribute,pRenderGraph,pRenderOperation,pIResourceDeserializer,pResourceSubObject,pComponent,pSceneAspect,pMeshResource,pTextureResource,};
+		Portakal::Array<Portakal::Type*> types = {pMyAttribute,pTestClass,pApplicationModule,pGuid,pString,pObject,pPlatformType,pAttribute,pRenderGraph,pRenderOperation,pIResourceDeserializer,pResourceSubObject,pComponent,pSceneAspect,pMeshResource,pTextureResource,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;

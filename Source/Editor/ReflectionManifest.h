@@ -3,6 +3,8 @@
 #include <Runtime/Reflection/Reflection.h>
 #include <Runtime/Reflection/ReflectionManifest.h>
 #include <Runtime/Reflection/TypeDispatcher.h>
+#include "Domain\DomainModule.h"
+#include "Project\ProjectDescriptor.h"
 
 
 		void* CreateChar() {return new char();}
@@ -15,6 +17,8 @@
 		void* CreateInt64() {return new Portakal::int64();}
 		void* CreateFloat() {return new float();}
 		void* CreateDouble() {return new double();}
+		void* CreateDomainModule() {return new Portakal::DomainModule();}
+		void* CreateProjectDescriptor() {return new Portakal::ProjectDescriptor();}
 
 extern "C"
 {
@@ -43,17 +47,27 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<float>(pfloat);
 		Portakal::Type* pdouble = Portakal::TypeDispatcher::CreateType("double",sizeof(double),Portakal::TypeModes::Class,Portakal::TypeCodes::Double,CreateDouble,Portakal::TypeDispatcher::GetTypeAddress<double>());
 		Portakal::TypeDispatcher::SetTypeAddress<double>(pdouble);
-
+		Portakal::Type* pDomainModule = Portakal::TypeDispatcher::CreateType("DomainModule",sizeof(Portakal::DomainModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateDomainModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::DomainModule>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::DomainModule>(pDomainModule);
+;		Portakal::Type* pProjectDescriptor = Portakal::TypeDispatcher::CreateType("ProjectDescriptor",sizeof(Portakal::ProjectDescriptor),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateProjectDescriptor,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ProjectDescriptor>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ProjectDescriptor>(pProjectDescriptor);
+;
         //Register enums here
 
         //Register fields here
+		Portakal::TypeDispatcher::RegisterField("Name",offsetof(Portakal::ProjectDescriptor,Name),typeof(Portakal::String),Portakal::FieldMode::Normal,pProjectDescriptor);
+		Portakal::TypeDispatcher::RegisterField("ID",offsetof(Portakal::ProjectDescriptor,ID),typeof(Portakal::Guid),Portakal::FieldMode::Normal,pProjectDescriptor);
+		Portakal::TypeDispatcher::RegisterField("VersionMajor",offsetof(Portakal::ProjectDescriptor,VersionMajor),typeof(Portakal::uint32),Portakal::FieldMode::Normal,pProjectDescriptor);
+		Portakal::TypeDispatcher::RegisterField("VersionMinor",offsetof(Portakal::ProjectDescriptor,VersionMinor),typeof(Portakal::uint32),Portakal::FieldMode::Normal,pProjectDescriptor);
+		Portakal::TypeDispatcher::RegisterField("VersionPatch",offsetof(Portakal::ProjectDescriptor,VersionPatch),typeof(Portakal::uint32),Portakal::FieldMode::Normal,pProjectDescriptor);
 
         //Register attributes here
 
         //Register base types here
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::DomainModule),typeof(Portakal::ApplicationModule));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {};
+		Portakal::Array<Portakal::Type*> types = {pDomainModule,pProjectDescriptor,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;

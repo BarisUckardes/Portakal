@@ -7,7 +7,7 @@ namespace Portakal
 {
 	class Application;
 	PCLASS(Virtual);
-	class RUNTIME_API ApplicationModule
+	class RUNTIME_API ApplicationModule : public Class
 	{
 		friend class Application;
 	public:
@@ -31,6 +31,13 @@ namespace Portakal
 		Application* mOwnerApplication;
 	};
 }
+
+
+
+
+
+
+
 
 
 
