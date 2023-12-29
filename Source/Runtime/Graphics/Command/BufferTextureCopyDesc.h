@@ -5,7 +5,7 @@
 namespace Portakal
 {
 	/**
-	 * @struct BufferTextureCopyDescriptor
+	 * @class BufferTextureCopyDesc
 	 *
 	 * @brief It is used to update a texture from another buffer or (vice versa?).
 	 */

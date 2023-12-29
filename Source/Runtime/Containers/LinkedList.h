@@ -34,9 +34,7 @@ namespace Portakal
 
         void Add(const T& value)
         {
-            /**
-            * Root empty case
-            */
+            // Root empty case
             if (mRoot == nullptr)
             {
                 mRoot = new Node();
@@ -44,9 +42,8 @@ namespace Portakal
                 return;
             }
 
-            /**
-            * Default case
-            */
+           
+            // Default case
             Node* pNode = mRoot;
             while (pNode != nullptr)
             {
@@ -66,9 +63,7 @@ namespace Portakal
             Node* pFormerNode = nullptr;
             Node* pNode = mRoot;
 
-            /**
-            * Special case for item count 0
-            */
+            // Special case for item count 0
             if (pNode == nullptr)
             {
                 Node* pNewNode = new Node();
@@ -78,19 +73,13 @@ namespace Portakal
                 return;
             }
 
-            /**
-            * Iterate and find insert location
-            */
+            // Iterate and find insert location
             while (pNode != nullptr)
             {
-                /**
-                * Check for index match
-                */
+                // Check for index match
                 if (index == counter)
                 {
-                    /**
-                    * Create new node
-                    */
+                    // Create new node
                     Node* pNewNode = new Node();
                     pNewNode->Data = value;
                     pNewNode->Next = pNode;

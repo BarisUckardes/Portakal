@@ -6,7 +6,7 @@
 namespace Portakal
 {
 	/**
-	 * @class DirectXInstance
+	 * @class D3DInstance
 	 * @brief VkInstance is kinda acceptable for equivalent of DirectX Factory.
 	 */
 	class RUNTIME_API D3DInstance : public GraphicsInstance

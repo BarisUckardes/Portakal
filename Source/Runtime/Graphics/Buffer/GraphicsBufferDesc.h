@@ -7,7 +7,7 @@
 namespace Portakal
 {
 	/**
-	 * @struct GraphicsBufferDescriptor
+	 * @struct GraphicsBufferDesc
 	 * 
 	 * @brief All the necessary information to create a graphics related buffer.
 	 */
