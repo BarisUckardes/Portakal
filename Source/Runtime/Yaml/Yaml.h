@@ -15,7 +15,7 @@ namespace Portakal
 		template<typename T>
 		static String ToYaml(const void* pObject)
 		{
-
+			return "";
 		}
 
 		static bool IsYaml(const String& yaml)
