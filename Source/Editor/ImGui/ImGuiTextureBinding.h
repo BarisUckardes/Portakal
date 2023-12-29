@@ -2,7 +2,7 @@
 
 #include <Runtime/Memory/SharedHeap.h>
 
-namespace Roveldo
+namespace Portakal
 {
 
 	class Texture;
@@ -13,7 +13,7 @@ namespace Roveldo
 	class EDITOR_API ImGuiTextureBinding
 	{
 	public:
-		ImGuiTextureBinding(const SharedHeap<Texture>& Texture, const SharedHeap<ResourceTableLayout>& pLayout, const SharedHeap<ResourceTablePool>& pPool);
+		ImGuiTextureBinding(const SharedHeap<Texture>& pTexture, const SharedHeap<ResourceTableLayout>& pLayout, const SharedHeap<ResourceTablePool>& pPool);
 		~ImGuiTextureBinding();
 
 		FORCEINLINE Texture* GetTexture() const { return mTargetTexture.GetHeap(); }

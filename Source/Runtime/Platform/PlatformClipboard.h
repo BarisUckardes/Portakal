@@ -3,14 +3,14 @@
 
 namespace Portakal
 {
-	class RUNTIME_API PlatformCipboard final
+	class RUNTIME_API PlatformClipboard final
 	{
 	public:
 		static void SetClipboardText(const String& text);
 		static String GetClipboardText();
 	public:
-		PlatformCipboard() = delete;
-		~PlatformCipboard() = delete;
+		PlatformClipboard() = delete;
+		~PlatformClipboard() = delete;
 
 	};
 }

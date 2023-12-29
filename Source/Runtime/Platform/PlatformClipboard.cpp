@@ -7,11 +7,11 @@ typedef Portakal::Win32Clipboard PlatformAbstraction;
 
 namespace Portakal
 {
-	void PlatformCipboard::SetClipboardText(const String& text)
+	void PlatformClipboard::SetClipboardText(const String& text)
 	{
 		PlatformAbstraction::SetClipboardText(text);
 	}
-	String PlatformCipboard::GetClipboardText()
+	String PlatformClipboard::GetClipboardText()
 	{
 		return PlatformAbstraction::GetClipboardText();
 	}

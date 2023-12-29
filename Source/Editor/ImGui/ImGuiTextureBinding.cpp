@@ -10,7 +10,7 @@ namespace Portakal
 {
 	ImGuiTextureBinding::ImGuiTextureBinding(const SharedHeap<Texture>& pTexture, const SharedHeap<ResourceTableLayout>& pLayout, const SharedHeap<ResourceTablePool>& pPool)
 	{
-		if (Texture.IsShutdown() || !Texture.IsValid())
+		if (pTexture.IsShutdown() || !pTexture.IsValid())
 		{
 			DEV_LOG("ImGuiTextureBinding", "The Texture is not valid!");
 			return;
@@ -39,7 +39,7 @@ namespace Portakal
 		ResourceTableUpdateDesc updateDesc = {};
 		updateDesc.Entries.Add(
 			{
-				.pResource = Texture.GetHeap(),
+				.pResource = pTexture.GetHeap(),
 				.Type = GraphicsResourceType::SampledTexture,
 				.Count = 1,
 				.ArrayElement = 0,
