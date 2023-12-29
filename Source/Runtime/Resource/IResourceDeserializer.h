@@ -1,7 +1,6 @@
 #pragma once
 #include <Runtime/Memory/MemoryView.h>
 #include <Runtime/Reflection/Reflection.h>
-#include <Runtime/Object/Object.h>
 #include "IResourceDeserializer.reflected.h"
 
 namespace Portakal
@@ -9,7 +8,7 @@ namespace Portakal
 	class ResourceSubObject;
 
 	PCLASS(Virtual);
-	class RUNTIME_API IResourceDeserializer : public Object
+	class RUNTIME_API IResourceDeserializer : public Class
 	{
 		GENERATE_OBJECT;
 	public:

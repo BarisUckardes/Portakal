@@ -3,6 +3,10 @@
 
 namespace Portakal
 {
+    void* Type::CreateDefaultHeapObject() const noexcept
+    {
+        return mDefaultObjectGenerator();
+    }
     bool Type::IsSubClassOf(Type* pType)
     {
         if (pType->mBaseType == this)

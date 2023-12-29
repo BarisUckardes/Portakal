@@ -47,6 +47,16 @@ namespace Portakal
 			return mEnums;
 		}
 
+		template<typename T>
+		T* GetAttribute() const noexcept
+		{
+			Type* pType = typeof(T);
+			for (Attribute* pAttribute : mAttributes)
+				if (pType == pAttribute->GetType())
+					return (T*)pAttribute;
+			return nullptr;
+		}
+		void* CreateDefaultHeapObject() const noexcept;
 		bool IsSubClassOf(Type* pType);
 	private:
 		Type(const String& name, const uint32 size, const TypeModes mode, const TypeCodes code, DefaultHeapObjectGenerator defaultObjectGenerator,Type** ppModuleAddress);

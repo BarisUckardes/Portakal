@@ -11,7 +11,7 @@ namespace Portakal
 	 * @brief Base class for all objects in the whole system.
 	 */
 	PCLASS(Virtual);
-	class RUNTIME_API Object
+	class RUNTIME_API Object : public Class
 	{
 	public:
 		Object() : mShutdown(false), mID(Guid::Create()) {}
@@ -24,7 +24,6 @@ namespace Portakal
 		void SetName(const String& name);
 		void OverrideID(const Guid& id) { mID = id; }
 		void Shutdown();
-		virtual Type* GetType() const noexcept { return nullptr; }
 	protected:
 		virtual void OnShutdown() = 0;
 		virtual void OnNameChange(const String& name) {}
