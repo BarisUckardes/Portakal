@@ -133,6 +133,7 @@ namespace Portakal
     {
         //Check if window has already a swapchain
         DEV_ASSERT(desc.pWindow->GetSwapchain().IsShutdown(), "GraphicsDevice", "Given window has already a swapchain");
+
         //Create swapchain
         SharedHeap<Swapchain> pSwapchain = CreateSwapchainCore(desc);
 

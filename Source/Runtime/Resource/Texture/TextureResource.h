@@ -4,10 +4,12 @@
 #include <Runtime/Graphics/Texture/TextureView.h>
 #include <Runtime/Graphics/Device/GraphicsDevice.h>
 #include <Runtime/Memory/SharedHeap.h>
+#include <Runtime/Resource/ResourceAttribute.h>
 #include "TextureResource.reflected.h"
 
 namespace Portakal
 {
+	PATTRIBUTE(ResourceAttribute, "texture");
 	PCLASS();
 	class RUNTIME_API TextureResource : public ResourceSubObject
 	{
@@ -50,6 +52,9 @@ namespace Portakal
 		TextureDesc mDesc;
 	};
 }
+
+
+
 
 
 
