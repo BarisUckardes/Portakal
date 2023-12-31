@@ -11,7 +11,7 @@ FetchContent_MakeAvailable(imgui)
 # ---------------------- IMGUI FILES -------------------------
 file(GLOB IMGUI_FILES "${imgui_SOURCE_DIR}/*.cpp" "${imgui_SOURCE_DIR}/*.h")
 source_group(TREE "${imgui_SOURCE_DIR}" FILES ${IMGUI_FILES})
-add_library(imgui STATIC ${IMGUI_FILES} "Domain/DomainFolder.h")
+add_library(imgui STATIC ${IMGUI_FILES})
 # ------------------------------------------------------------
 
 # ---------------------- FILE ADDITION -----------------------

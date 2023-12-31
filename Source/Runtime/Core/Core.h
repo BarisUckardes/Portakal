@@ -32,7 +32,7 @@ namespace Portakal
 #endif
 
 #if defined(__MSC_VERSION__) || defined(_MSC_VER)
-#define NODISCARD_MSG(_Msg) [[nodiscard()]]
+#define NODISCARD_MSG(_Msg) [[nodiscard]]
 #elif defined(__GNUC__) || defined(__GNUG__)
 #define NODISCARD_INLINE __attribute__((warn_unused_result)) __attribute__((always_inline))
 #define _NODISCARD_MSG(_Msg) [[nodiscard(_Msg)]]
