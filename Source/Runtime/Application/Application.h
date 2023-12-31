@@ -4,6 +4,7 @@
 #include <Runtime/Application/ApplicationModuleState.h>
 #include <Runtime/Application/ApplicationModule.h>
 
+
 namespace Portakal
 {
 	class RUNTIME_API Application
@@ -23,7 +24,11 @@ namespace Portakal
 		template<typename T>
 		T* GetModule() const noexcept
 		{
-			//NEEDS REFLECTION
+			const Type* pTargetType = typeof(T);
+			for (ApplicationModule* pModule : mModules)
+				if (pModule->GetType() == pTargetType)
+					return pModule;
+
 			return nullptr;
 		}
 
