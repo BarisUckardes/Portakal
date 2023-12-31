@@ -11,13 +11,13 @@ FetchContent_MakeAvailable(imgui)
 # ---------------------- IMGUI FILES -------------------------
 file(GLOB IMGUI_FILES "${imgui_SOURCE_DIR}/*.cpp" "${imgui_SOURCE_DIR}/*.h")
 source_group(TREE "${imgui_SOURCE_DIR}" FILES ${IMGUI_FILES})
-add_library(imgui STATIC ${IMGUI_FILES})
+add_library(imgui STATIC ${IMGUI_FILES} "Domain/DomainFolder.h")
 # ------------------------------------------------------------
 
 # ---------------------- FILE ADDITION -----------------------
 file(GLOB_RECURSE SUBDIRECTORIES "${CMAKE_SOURCE_DIR}/Source/Editor/*.cpp" "${CMAKE_SOURCE_DIR}/Source/Editor/*.h")
 source_group(TREE "${CMAKE_SOURCE_DIR}/Source/Editor" FILES ${SUBDIRECTORIES})
-add_library(Editor STATIC main.cpp ${SUBDIRECTORIES})
+add_library(Editor STATIC main.cpp ${SUBDIRECTORIES} )
 # ------------------------------------------------------------
 
 # ---------------------- INCLUDE DIRECTORIES -----------------
