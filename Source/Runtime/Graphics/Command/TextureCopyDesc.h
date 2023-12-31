@@ -7,7 +7,7 @@
 namespace Portakal
 {
 	/**
-	 * @struct TextureToTextureCopyDescriptor
+	 * @struct TextureCopyDesc
 	 *
 	 * @brief It is used to update a texture from another texture.
 	 */

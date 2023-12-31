@@ -4,7 +4,7 @@
 namespace Portakal
 {
 	/**
-	 * @class ViewportDescriptor
+	 * @class ViewportDesc
 	 * 
 	 * @brief It helps the gpu to do the transformation from normalized 
 	 * device coordinates to window coordinates. As basic explanation, it tells 

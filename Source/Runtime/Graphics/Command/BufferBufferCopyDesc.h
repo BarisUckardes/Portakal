@@ -4,7 +4,7 @@
 namespace Portakal
 {
 	/**
-	 * @struct BufferToBufferCopyDescriptor
+	 * @struct BufferBufferCopyDesc
 	 * 
 	 * @brief It is used to update a buffer from another buffer.
 	 */
