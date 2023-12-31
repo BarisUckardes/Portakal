@@ -14,9 +14,9 @@ namespace Portakal
         {
             //First get all the files
             List<string> filesTemp = new List<string>();
-            filesTemp.AddRange(Directory.GetFiles(targetFolderPath, "*.h", SearchOption.AllDirectories));
             foreach (string dependency in dependencies)
                 filesTemp.AddRange(Directory.GetFiles(dependency, "*.h", SearchOption.AllDirectories));
+            filesTemp.AddRange(Directory.GetFiles(targetFolderPath, "*.h", SearchOption.AllDirectories));
 
             string[] files = filesTemp.ToArray();
             if(files.Length == 0)
