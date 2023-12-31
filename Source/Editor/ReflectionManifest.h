@@ -5,6 +5,7 @@
 #include <Runtime/Reflection/TypeDispatcher.h>
 #include "Domain\DomainModule.h"
 #include "Project\ProjectDescriptor.h"
+#include "Project\ProjectModule.h"
 
 
 		void* CreateChar() {return new char();}
@@ -19,6 +20,7 @@
 		void* CreateDouble() {return new double();}
 		void* CreateDomainModule() {return new Portakal::DomainModule();}
 		void* CreateProjectDescriptor() {return new Portakal::ProjectDescriptor();}
+		void* CreateProjectModule() {return new Portakal::ProjectModule();}
 
 extern "C"
 {
@@ -51,6 +53,8 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::DomainModule>(pDomainModule);
 ;		Portakal::Type* pProjectDescriptor = Portakal::TypeDispatcher::CreateType("ProjectDescriptor",sizeof(Portakal::ProjectDescriptor),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateProjectDescriptor,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ProjectDescriptor>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ProjectDescriptor>(pProjectDescriptor);
+;		Portakal::Type* pProjectModule = Portakal::TypeDispatcher::CreateType("ProjectModule",sizeof(Portakal::ProjectModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateProjectModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ProjectModule>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ProjectModule>(pProjectModule);
 ;
         //Register enums here
 
@@ -65,9 +69,10 @@ extern "C"
 
         //Register base types here
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::DomainModule),typeof(Portakal::ApplicationModule));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ProjectModule),typeof(Portakal::ApplicationModule));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {pDomainModule,pProjectDescriptor,};
+		Portakal::Array<Portakal::Type*> types = {pDomainModule,pProjectDescriptor,pProjectModule,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;

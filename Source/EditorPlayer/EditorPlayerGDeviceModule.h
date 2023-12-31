@@ -4,11 +4,14 @@
 #include <Runtime/Graphics/Adapter/GraphicsAdapter.h>
 #include <Runtime/Graphics/Instance/GraphicsInstance.h>
 #include <Runtime/Graphics/Swapchain/Swapchain.h>
+#include "EditorPlayerGDeviceModule.reflected.h"
 
 namespace Portakal
 {
+	PCLASS();
 	class RUNTIME_API EditorPlayerGDeviceModule : public ApplicationModule
 	{
+		GENERATE_OBJECT;
 	public:
 		EditorPlayerGDeviceModule() = default;
 		~EditorPlayerGDeviceModule() = default;
@@ -25,3 +28,6 @@ namespace Portakal
 		SharedHeap<Swapchain> mSwapchain;
 	};
 }
+
+
+

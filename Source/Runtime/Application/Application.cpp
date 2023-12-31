@@ -62,8 +62,15 @@ namespace Portakal
         OnFinalize();
 
         //Clear modules
-        for (uint32 i = mModules.GetSize() - 1; i--;)
+        for (int32 i = mModules.GetSize() - 1;i>=0; i--)
+        {
+            ApplicationModule* pModule = mModules[i];
+            Type* pType = pModule->GetType();
+
+            DEV_LOG("Application","Finalizing module %s..", *pType->GetName());
             mModules[i]->OnFinalize();
+            DEV_LOG("Application","Finalized module %s!", *pType->GetName());
+        }
         mModules.Clear();
 
         //Post quit reason

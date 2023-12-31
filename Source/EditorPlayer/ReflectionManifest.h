@@ -3,24 +3,29 @@
 #include <Runtime/Reflection/Reflection.h>
 #include <Runtime/Reflection/ReflectionManifest.h>
 #include <Runtime/Reflection/TypeDispatcher.h>
-#include "MyAttribute.h"
-#include "TestClass.h"
-#include "Application\ApplicationModule.h"
-#include "Containers\Guid.h"
-#include "Containers\String.h"
-#include "Object\Object.h"
-#include "Platform\PlatformType.h"
-#include "Reflection\Attribute.h"
-#include "Reflection\ReflectionModule.h"
-#include "Rendering\RenderGraph.h"
-#include "Rendering\RenderOperation.h"
-#include "Resource\IResourceDeserializer.h"
-#include "Resource\ResourceSubObject.h"
-#include "Window\WindowModule.h"
-#include "World\Component.h"
-#include "World\SceneAspect.h"
-#include "Resource\Mesh\MeshResource.h"
-#include "Resource\Texture\TextureResource.h"
+#include "EditorPlayerGDeviceModule.h"
+#include "EditorPlayerWindowModule.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\MyAttribute.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\TestClass.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Application\ApplicationModule.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Containers\Guid.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Containers\String.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Object\Object.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Platform\PlatformType.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Reflection\Attribute.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Reflection\ReflectionModule.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Rendering\RenderGraph.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Rendering\RenderOperation.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\IResourceDeserializer.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\ResourceSubObject.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Window\WindowModule.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\World\Component.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\World\SceneAspect.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Mesh\MeshResource.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Texture\TextureResource.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Domain\DomainModule.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Project\ProjectDescriptor.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Project\ProjectModule.h"
 
 
 		void* CreateChar() {return new char();}
@@ -33,6 +38,8 @@
 		void* CreateInt64() {return new Portakal::int64();}
 		void* CreateFloat() {return new float();}
 		void* CreateDouble() {return new double();}
+		void* CreateEditorPlayerGDeviceModule() {return new Portakal::EditorPlayerGDeviceModule();}
+		void* CreateEditorPlayerWindowModule() {return new Portakal::EditorPlayerWindowModule();}
 		void* CreateMyAttribute() {return new Portakal::MyAttribute();}
 		void* CreateTestClass() {return new Portakal::TestClass();}
 		void* CreateApplicationModule() {return nullptr;}
@@ -51,6 +58,9 @@
 		void* CreateSceneAspect() {return nullptr;}
 		void* CreateMeshResource() {return new Portakal::MeshResource();}
 		void* CreateTextureResource() {return new Portakal::TextureResource();}
+		void* CreateDomainModule() {return new Portakal::DomainModule();}
+		void* CreateProjectDescriptor() {return new Portakal::ProjectDescriptor();}
+		void* CreateProjectModule() {return new Portakal::ProjectModule();}
 
 extern "C"
 {
@@ -79,7 +89,11 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<float>(pfloat);
 		Portakal::Type* pdouble = Portakal::TypeDispatcher::CreateType("double",sizeof(double),Portakal::TypeModes::Class,Portakal::TypeCodes::Double,CreateDouble,Portakal::TypeDispatcher::GetTypeAddress<double>());
 		Portakal::TypeDispatcher::SetTypeAddress<double>(pdouble);
-		Portakal::Type* pMyAttribute = Portakal::TypeDispatcher::CreateType("MyAttribute",sizeof(Portakal::MyAttribute),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateMyAttribute,Portakal::TypeDispatcher::GetTypeAddress<Portakal::MyAttribute>());
+		Portakal::Type* pEditorPlayerGDeviceModule = Portakal::TypeDispatcher::CreateType("EditorPlayerGDeviceModule",sizeof(Portakal::EditorPlayerGDeviceModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateEditorPlayerGDeviceModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::EditorPlayerGDeviceModule>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::EditorPlayerGDeviceModule>(pEditorPlayerGDeviceModule);
+;		Portakal::Type* pEditorPlayerWindowModule = Portakal::TypeDispatcher::CreateType("EditorPlayerWindowModule",sizeof(Portakal::EditorPlayerWindowModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateEditorPlayerWindowModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::EditorPlayerWindowModule>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::EditorPlayerWindowModule>(pEditorPlayerWindowModule);
+;		Portakal::Type* pMyAttribute = Portakal::TypeDispatcher::CreateType("MyAttribute",sizeof(Portakal::MyAttribute),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateMyAttribute,Portakal::TypeDispatcher::GetTypeAddress<Portakal::MyAttribute>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::MyAttribute>(pMyAttribute);
 ;		Portakal::Type* pTestClass = Portakal::TypeDispatcher::CreateType("TestClass",sizeof(Portakal::TestClass),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateTestClass,Portakal::TypeDispatcher::GetTypeAddress<Portakal::TestClass>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::TestClass>(pTestClass);
@@ -115,6 +129,12 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::MeshResource>(pMeshResource);
 ;		Portakal::Type* pTextureResource = Portakal::TypeDispatcher::CreateType("TextureResource",sizeof(Portakal::TextureResource),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateTextureResource,Portakal::TypeDispatcher::GetTypeAddress<Portakal::TextureResource>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::TextureResource>(pTextureResource);
+;		Portakal::Type* pDomainModule = Portakal::TypeDispatcher::CreateType("DomainModule",sizeof(Portakal::DomainModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateDomainModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::DomainModule>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::DomainModule>(pDomainModule);
+;		Portakal::Type* pProjectDescriptor = Portakal::TypeDispatcher::CreateType("ProjectDescriptor",sizeof(Portakal::ProjectDescriptor),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateProjectDescriptor,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ProjectDescriptor>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ProjectDescriptor>(pProjectDescriptor);
+;		Portakal::Type* pProjectModule = Portakal::TypeDispatcher::CreateType("ProjectModule",sizeof(Portakal::ProjectModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateProjectModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ProjectModule>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ProjectModule>(pProjectModule);
 ;
         //Register enums here
 		Portakal::TypeDispatcher::RegisterEnum("Windows",112,pPlatformType);
@@ -128,12 +148,19 @@ extern "C"
 		Portakal::TypeDispatcher::RegisterField("mMahString",offsetof(Portakal::TestClass,mMahString),typeof(Portakal::String),Portakal::FieldMode::Normal,pTestClass);
 		Portakal::TypeDispatcher::RegisterField("mMahObjectString",offsetof(Portakal::TestClass,mMahObjectString),typeof(Portakal::String),Portakal::FieldMode::Object,pTestClass);
 		Portakal::TypeDispatcher::RegisterField("mMahArray",offsetof(Portakal::TestClass,mMahArray),typeof(Portakal::String),Portakal::FieldMode::Array,pTestClass);
+		Portakal::TypeDispatcher::RegisterField("Name",offsetof(Portakal::ProjectDescriptor,Name),typeof(Portakal::String),Portakal::FieldMode::Normal,pProjectDescriptor);
+		Portakal::TypeDispatcher::RegisterField("ID",offsetof(Portakal::ProjectDescriptor,ID),typeof(Portakal::Guid),Portakal::FieldMode::Normal,pProjectDescriptor);
+		Portakal::TypeDispatcher::RegisterField("VersionMajor",offsetof(Portakal::ProjectDescriptor,VersionMajor),typeof(Portakal::uint32),Portakal::FieldMode::Normal,pProjectDescriptor);
+		Portakal::TypeDispatcher::RegisterField("VersionMinor",offsetof(Portakal::ProjectDescriptor,VersionMinor),typeof(Portakal::uint32),Portakal::FieldMode::Normal,pProjectDescriptor);
+		Portakal::TypeDispatcher::RegisterField("VersionPatch",offsetof(Portakal::ProjectDescriptor,VersionPatch),typeof(Portakal::uint32),Portakal::FieldMode::Normal,pProjectDescriptor);
 
         //Register attributes here
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::MyAttribute>(pTestClass);
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::ResourceAttribute>(pTextureResource, "texture");
 
         //Register base types here
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::EditorPlayerGDeviceModule),typeof(Portakal::ApplicationModule));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::EditorPlayerWindowModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::MyAttribute),typeof(Portakal::Attribute));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TestClass),typeof(Portakal::Object));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ReflectionModule),typeof(Portakal::ApplicationModule));
@@ -141,9 +168,11 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::WindowModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::MeshResource),typeof(Portakal::ResourceSubObject));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureResource),typeof(Portakal::ResourceSubObject));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::DomainModule),typeof(Portakal::ApplicationModule));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ProjectModule),typeof(Portakal::ApplicationModule));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {pMyAttribute,pTestClass,pApplicationModule,pGuid,pString,pObject,pPlatformType,pAttribute,pReflectionModule,pRenderGraph,pRenderOperation,pIResourceDeserializer,pResourceSubObject,pWindowModule,pComponent,pSceneAspect,pMeshResource,pTextureResource,};
+		Portakal::Array<Portakal::Type*> types = {pEditorPlayerGDeviceModule,pEditorPlayerWindowModule,pMyAttribute,pTestClass,pApplicationModule,pGuid,pString,pObject,pPlatformType,pAttribute,pReflectionModule,pRenderGraph,pRenderOperation,pIResourceDeserializer,pResourceSubObject,pWindowModule,pComponent,pSceneAspect,pMeshResource,pTextureResource,pDomainModule,pProjectDescriptor,pProjectModule,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;

@@ -1,11 +1,14 @@
 #pragma once
 #include <Runtime/Application/ApplicationModule.h>
 #include <Runtime/Platform/PlatformWindow.h>
+#include "EditorPlayerWindowModule.reflected.h"
 
 namespace Portakal
 {
+	PCLASS();
 	class RUNTIME_API EditorPlayerWindowModule : public ApplicationModule
 	{
+		GENERATE_OBJECT;
 	public:
 		EditorPlayerWindowModule() = default;
 		~EditorPlayerWindowModule() = default;
@@ -16,6 +19,8 @@ namespace Portakal
 		void OnTick() override;
 	private:
 		SharedHeap<PlatformWindow> mWindow;
-
 	};
 }
+
+
+

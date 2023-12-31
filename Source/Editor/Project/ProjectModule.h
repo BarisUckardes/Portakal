@@ -1,11 +1,14 @@
 #pragma once
 #include <Runtime/Application/ApplicationModule.h>
+#include "ProjectModule.reflected.h"
 
 namespace Portakal
 {
 	class ProjectAPI;
+	PCLASS();
 	class EDITOR_API ProjectModule : public ApplicationModule
 	{
+		GENERATE_OBJECT;
 	public:
 		ProjectModule() : mAPI(nullptr)
 		{
@@ -21,3 +24,9 @@ namespace Portakal
 		ProjectAPI* mAPI;
 	};
 }
+
+
+
+
+
+

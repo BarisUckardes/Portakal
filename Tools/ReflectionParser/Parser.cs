@@ -10,10 +10,15 @@ namespace Portakal
 {
     internal static class Parser
     {
-        internal static bool Parse(string targetFolderPath)
+        internal static bool Parse(string targetFolderPath,IReadOnlyCollection<string> dependencies)
         {
             //First get all the files
-            string[] files = Directory.GetFiles(targetFolderPath,"*.h",SearchOption.AllDirectories);
+            List<string> filesTemp = new List<string>();
+            filesTemp.AddRange(Directory.GetFiles(targetFolderPath, "*.h", SearchOption.AllDirectories));
+            foreach (string dependency in dependencies)
+                filesTemp.AddRange(Directory.GetFiles(dependency, "*.h", SearchOption.AllDirectories));
+
+            string[] files = filesTemp.ToArray();
             if(files.Length == 0)
             {
                 Message.Warning("No .h files found at the given folder path");

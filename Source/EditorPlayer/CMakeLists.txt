@@ -44,3 +44,7 @@ endif()
 # -------------------- REFLECTION PARSER ---------------------
 ###SetReflectionParser(EditorPlayer)
 # ------------------------------------------------------------
+
+# ---------------------- EXECUTES ----------------------------
+execute_process(COMMAND "C:/Users/Roveldo/Documents/GitHub/Portakal/Tools/ReflectionParser/bin/Debug/net8.0/ReflectionParser.exe" ${PROJECT_SOURCE_DIR}/Source/EditorPlayer ${PROJECT_SOURCE_DIR}/Source/Runtime ${PROJECT_SOURCE_DIR}/Source/Editor)
+# ------------------------------------------------------------

@@ -37,7 +37,6 @@
 #include <Runtime/Platform/PlatformProcess.h>
 #include <Runtime/Platform/PlatformRegistry.h>
 #include <Runtime/Reflection/ReflectionAPI.h>
-#include <Runtime/ReflectionManifest.h>
 #include <Runtime/Window/WindowModule.h>
 #include <Runtime/Reflection/ReflectionModule.h>
 #include <Runtime/Reflection/ReflectionAPI.h>
@@ -50,6 +49,7 @@
 #include <EditorPlayer/EditorPlayerGDeviceModule.h>
 #include <Editor/Project/ProjectModule.h>
 #include <Editor/Domain/DomainModule.h>
+#include <EditorPlayer/ReflectionManifest.h>
 
 namespace Portakal
 {

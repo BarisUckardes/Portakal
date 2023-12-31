@@ -9,6 +9,7 @@ namespace Portakal
 	PCLASS(Virtual);
 	class RUNTIME_API ApplicationModule : public Class
 	{
+		GENERATE_OBJECT;
 		friend class Application;
 	public:
 		FORCEINLINE ApplicationModuleState GetState() const noexcept
@@ -31,6 +32,13 @@ namespace Portakal
 		Application* mOwnerApplication;
 	};
 }
+
+
+
+
+
+
+
 
 
 
