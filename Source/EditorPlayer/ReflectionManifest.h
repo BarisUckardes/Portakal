@@ -25,6 +25,7 @@
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Project\ProjectDescriptor.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Project\ProjectModule.h"
 #include "EditorPlayerGDeviceModule.h"
+#include "EditorPlayerProjectModule.h"
 #include "EditorPlayerWindowModule.h"
 
 
@@ -60,6 +61,7 @@
 		void* CreateProjectDescriptor() {return new Portakal::ProjectDescriptor();}
 		void* CreateProjectModule() {return new Portakal::ProjectModule();}
 		void* CreateEditorPlayerGDeviceModule() {return new Portakal::EditorPlayerGDeviceModule();}
+		void* CreateEditorPlayerProjectModule() {return new Portakal::EditorPlayerProjectModule();}
 		void* CreateEditorPlayerWindowModule() {return new Portakal::EditorPlayerWindowModule();}
 
 extern "C"
@@ -133,6 +135,8 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ProjectModule>(pProjectModule);
 ;		Portakal::Type* pEditorPlayerGDeviceModule = Portakal::TypeDispatcher::CreateType("EditorPlayerGDeviceModule",sizeof(Portakal::EditorPlayerGDeviceModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateEditorPlayerGDeviceModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::EditorPlayerGDeviceModule>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::EditorPlayerGDeviceModule>(pEditorPlayerGDeviceModule);
+;		Portakal::Type* pEditorPlayerProjectModule = Portakal::TypeDispatcher::CreateType("EditorPlayerProjectModule",sizeof(Portakal::EditorPlayerProjectModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateEditorPlayerProjectModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::EditorPlayerProjectModule>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::EditorPlayerProjectModule>(pEditorPlayerProjectModule);
 ;		Portakal::Type* pEditorPlayerWindowModule = Portakal::TypeDispatcher::CreateType("EditorPlayerWindowModule",sizeof(Portakal::EditorPlayerWindowModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateEditorPlayerWindowModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::EditorPlayerWindowModule>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::EditorPlayerWindowModule>(pEditorPlayerWindowModule);
 ;
@@ -169,10 +173,11 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::DomainModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ProjectModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::EditorPlayerGDeviceModule),typeof(Portakal::ApplicationModule));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::EditorPlayerProjectModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::EditorPlayerWindowModule),typeof(Portakal::ApplicationModule));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {pMyAttribute,pTestClass,pApplicationModule,pGuid,pString,pObject,pPlatformType,pAttribute,pReflectionModule,pRenderGraph,pRenderOperation,pIResourceDeserializer,pResourceSubObject,pWindowModule,pComponent,pSceneAspect,pMeshResource,pTextureResource,pDomainModule,pProjectDescriptor,pProjectModule,pEditorPlayerGDeviceModule,pEditorPlayerWindowModule,};
+		Portakal::Array<Portakal::Type*> types = {pMyAttribute,pTestClass,pApplicationModule,pGuid,pString,pObject,pPlatformType,pAttribute,pReflectionModule,pRenderGraph,pRenderOperation,pIResourceDeserializer,pResourceSubObject,pWindowModule,pComponent,pSceneAspect,pMeshResource,pTextureResource,pDomainModule,pProjectDescriptor,pProjectModule,pEditorPlayerGDeviceModule,pEditorPlayerProjectModule,pEditorPlayerWindowModule,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;

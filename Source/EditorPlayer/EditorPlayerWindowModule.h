@@ -6,7 +6,7 @@
 namespace Portakal
 {
 	PCLASS();
-	class RUNTIME_API EditorPlayerWindowModule : public ApplicationModule
+	class EditorPlayerWindowModule : public ApplicationModule
 	{
 		GENERATE_OBJECT;
 	public:
@@ -21,6 +21,8 @@ namespace Portakal
 		SharedHeap<PlatformWindow> mWindow;
 	};
 }
+
+
 
 
 

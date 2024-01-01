@@ -49,6 +49,7 @@
 #include <EditorPlayer/EditorPlayerGDeviceModule.h>
 #include <Editor/Project/ProjectModule.h>
 #include <Editor/Domain/DomainModule.h>
+#include <EditorPlayer/EditorPlayerProjectModule.h>
 #include <EditorPlayer/ReflectionManifest.h>
 
 namespace Portakal
@@ -66,8 +67,9 @@ namespace Portakal
 		pApplication->RegisterModule<WindowModule>(1);
 		pApplication->RegisterModule<ProjectModule>(2);
 		pApplication->RegisterModule<DomainModule>(3);
-		pApplication->RegisterModule<EditorPlayerWindowModule>(4);
-		pApplication->RegisterModule<EditorPlayerGDeviceModule>(5);
+		pApplication->RegisterModule<EditorPlayerProjectModule>(4);
+		pApplication->RegisterModule<EditorPlayerWindowModule>(5);
+		pApplication->RegisterModule<EditorPlayerGDeviceModule>(6);
 
 		//Run
 		pApplication->Run();

@@ -9,7 +9,7 @@
 namespace Portakal
 {
 	PCLASS();
-	class RUNTIME_API EditorPlayerGDeviceModule : public ApplicationModule
+	class EditorPlayerGDeviceModule : public ApplicationModule
 	{
 		GENERATE_OBJECT;
 	public:
@@ -28,6 +28,8 @@ namespace Portakal
 		SharedHeap<Swapchain> mSwapchain;
 	};
 }
+
+
 
 
 

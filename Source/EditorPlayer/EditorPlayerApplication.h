@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	class RUNTIME_API EditorPlayerApplication : public Application
+	class EditorPlayerApplication : public Application
 	{
 	public:
 		EditorPlayerApplication() = default;
