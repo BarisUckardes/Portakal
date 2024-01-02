@@ -188,6 +188,9 @@ namespace Portakal
             typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<float>(pfloat);{Environment.NewLine}";
             typeLines += $"\t\tPortakal::Type* pdouble = Portakal::TypeDispatcher::CreateType(\"double\",sizeof(double),Portakal::TypeModes::Class,Portakal::TypeCodes::Double,CreateDouble,Portakal::TypeDispatcher::GetTypeAddress<double>());{Environment.NewLine}";
             typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<double>(pdouble);{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* pString = Portakal::TypeDispatcher::CreateType(\"String\",sizeof(Portakal::String),Portakal::TypeModes::Class,Portakal::TypeCodes::String,CreateString,Portakal::TypeDispatcher::GetTypeAddress<Portakal::String>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::String>(pString);{Environment.NewLine}";
+
 
             //Write all the types
             foreach (FileInfo file in fileInfos)
@@ -260,6 +263,7 @@ namespace Portakal
             objectGenerators += $"\t\tvoid* CreateInt64() {{return new Portakal::int64();}}{Environment.NewLine}";
             objectGenerators += $"\t\tvoid* CreateFloat() {{return new float();}}{Environment.NewLine}";
             objectGenerators += $"\t\tvoid* CreateDouble() {{return new double();}}{Environment.NewLine}";
+            objectGenerators += $"\t\tvoid* CreateString() {{return new Portakal::String();}}{Environment.NewLine}";
             foreach (FileInfo file in fileInfos)
             {
                 string line = $"\t\tvoid* Create{file.Name}() {{return {(file.IsVirtual ? "nullptr" : $"new Portakal::{file.Name}()")};}}{Environment.NewLine}";

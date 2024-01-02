@@ -105,6 +105,10 @@ namespace Portakal
 	}
 	void GenerateObjectYAML(YAML::Emitter& emitter, const void* pObject, const Type* pType)
 	{
+		//Check if type is nullptr	
+		if (pType == nullptr)
+			return;
+
 		emitter << YAML::BeginMap;
 
 		const Array<Field*> fields = pType->GetFields();

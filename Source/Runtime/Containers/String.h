@@ -1,15 +1,36 @@
 #pragma once
 #include <Runtime/Core/Core.h>
-#include "String.reflected.h"
 
 namespace Portakal
 {
+	class String;
+	template<>
+	class TypeAccessor<String>
+	{
+		friend class TypeDispatcher;
+	public:
+		static Type* GetType()
+		{
+			return sType;
+		}
+	private:
+		static void SetType(Type* pType)
+		{
+			sType = pType;
+		}
+		static Type** GetTypeAddress()
+		{
+			return &sType;
+		}
+	private:
+		static inline Type* sType = nullptr;
+	};
+
 	/**
 	 * @class String
 	 * @brief String class with basic string operations
 	 */
 	class Type;
-	PCLASS();
 	class RUNTIME_API String final
 	{
 	public:
