@@ -2,6 +2,7 @@
 #include <Editor/Project/ProjectAPI.h>
 #include <Runtime/Platform/PlatformDirectory.h>
 #include <Runtime/Platform/PlatformFile.h>
+#include <Runtime/Yaml/Yaml.h>
 
 namespace Portakal
 {
@@ -37,8 +38,9 @@ namespace Portakal
 			return;
 		}
 
-		//Load project descriptor
+		//Deserialize descriptor
 		ProjectDescriptor descriptor = {};
+		Yaml::ToObject<ProjectDescriptor>(content, &descriptor);
 		mAPI->_SetProject(descriptor, mProjectFolderPath);
 	}
 	void ProjectModule::OnFinalize()

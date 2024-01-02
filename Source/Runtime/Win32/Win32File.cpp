@@ -125,13 +125,7 @@ namespace Portakal
             return false;
 
         //Open file
-        const HANDLE fileHandle = CreateFile(*path,               // file to open
-            GENERIC_READ,          // open for reading
-            FILE_SHARE_READ,       // share for reading
-            NULL,                  // default security
-            OPEN_EXISTING,         // existing file only
-            FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, // normal file
-            NULL);                 // no attr. template
+        const HANDLE fileHandle = CreateFileA(*path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
         if (fileHandle == NULL || fileHandle == INVALID_HANDLE_VALUE)
             return false;
 
@@ -139,7 +133,7 @@ namespace Portakal
         DWORD bytesRead = 0;
         OVERLAPPED overlappedData = { 0 };
         byte* pBuffer = new byte[expectedReadRange];
-        if (!ReadFile(fileHandle, pBuffer, expectedReadRange, &bytesRead, NULL))
+        if (ReadFile(fileHandle, pBuffer, expectedReadRange, &bytesRead, NULL) == 0)
         {
             CloseHandle(fileHandle);
             return false;
@@ -171,7 +165,7 @@ namespace Portakal
             return false;
 
         //Open file
-        const HANDLE fileHandle = CreateFileA(*path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
+        const HANDLE fileHandle = CreateFileA(*path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
         if (fileHandle == NULL || fileHandle == INVALID_HANDLE_VALUE)
             return false;
 
