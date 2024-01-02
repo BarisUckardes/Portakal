@@ -7,7 +7,7 @@ namespace Portakal
 	{
 	public:
 		static PlatformType GetCurrentPlatform();
-		static bool InitializePlatformDependencies();
+		static bool InitializePlatformDependencies(const String& executablePath);
 	public:
 		Platform() = delete;
 		~Platform() = delete;

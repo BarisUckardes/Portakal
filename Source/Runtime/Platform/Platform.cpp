@@ -1,5 +1,6 @@
 #include "Platform.h"
 #include <Runtime/Platform/PlatformInput.h>
+#include <Runtime/Platform/PlatformPaths.h>
 
 #ifdef PORTAKAL_PLATFORM_WINDOWS
 
@@ -18,8 +19,12 @@ namespace Portakal
 #error ("Invalid platform detected!")
 #endif
 	}
-	bool Platform::InitializePlatformDependencies()
+	bool Platform::InitializePlatformDependencies(const String& executablePath)
 	{
+		//First set executable path
+		PlatformPaths::_SetExecutablePath(executablePath);
+
+		//Initialize
 		bool bState = PlatformInput::Initialize();
 
 		if (bState)

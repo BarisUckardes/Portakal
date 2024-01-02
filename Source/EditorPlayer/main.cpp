@@ -51,13 +51,14 @@
 #include <Editor/Domain/DomainModule.h>
 #include <EditorPlayer/EditorPlayerProjectModule.h>
 #include <EditorPlayer/ReflectionManifest.h>
+#include <Runtime/Platform/PlatformPaths.h>
 
 namespace Portakal
 {
 	void Run(const Array<String>& cmdArguments)
 	{
 		//Initialize platform
-		Platform::InitializePlatformDependencies();
+		Platform::InitializePlatformDependencies(cmdArguments[0]);
 
 		//Create application
 		EditorPlayerApplication* pApplication = new EditorPlayerApplication();
