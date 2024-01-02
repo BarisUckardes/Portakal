@@ -10,6 +10,10 @@ namespace Portakal
 	{
 		GENERATE_OBJECT;
 	public:
+		ProjectModule(const String& projectFolderPath) : mProjectFolderPath(projectFolderPath),mAPI(nullptr)
+		{
+
+		}
 		ProjectModule() : mAPI(nullptr)
 		{
 
@@ -21,6 +25,7 @@ namespace Portakal
 		void OnFinalize() override;
 		void OnTick() override;
 	private:
+		const String mProjectFolderPath;
 		ProjectAPI* mAPI;
 	};
 }

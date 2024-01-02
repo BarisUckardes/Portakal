@@ -2,14 +2,10 @@
 
 namespace Portakal
 {
-	bool ProjectAPI::SetProject(const ProjectDescriptor& descriptor, const String& folderPath)
+	bool ProjectAPI::_SetProject(const ProjectDescriptor& descriptor, const String& folderPath)
 	{
-		ProjectAPI* pAPI = GetUnderlyingAPI();
-		if (pAPI == nullptr)
-			return false;
-
-		pAPI->mDescriptor = descriptor;
-		pAPI->mFolderPath = folderPath;
+		mDescriptor = descriptor;
+		mFolderPath = folderPath;
 		
 		return true;
 	}

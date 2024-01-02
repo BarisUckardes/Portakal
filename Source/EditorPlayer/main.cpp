@@ -66,7 +66,7 @@ namespace Portakal
 		//Add modules
 		pApplication->RegisterModule<ReflectionModule>(0);
 		pApplication->RegisterModule<WindowModule>(1);
-		pApplication->RegisterModule<ProjectModule>(2);
+		pApplication->RegisterModule<ProjectModule>(2, cmdArguments[1]);
 		pApplication->RegisterModule<DomainModule>(3);
 		pApplication->RegisterModule<EditorPlayerProjectModule>(4);
 		pApplication->RegisterModule<EditorPlayerWindowModule>(5);

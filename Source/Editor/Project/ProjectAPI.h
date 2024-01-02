@@ -9,9 +9,10 @@ namespace Portakal
 	{
 		friend class ProjectModule;
 	public:
-		static bool SetProject(const ProjectDescriptor& descriptor, const String& folderPath);
 		static ProjectDescriptor GetProjectDetails();
 		static String GetFolderPath();
+	private:
+		bool _SetProject(const ProjectDescriptor& descriptor, const String& folderPath);
 	private:
 		ProjectAPI() = default;
 		~ProjectAPI() = default;

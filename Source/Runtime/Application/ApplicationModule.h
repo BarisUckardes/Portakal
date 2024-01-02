@@ -24,6 +24,8 @@ namespace Portakal
 		virtual void OnInitialize() = 0;
 		virtual void OnFinalize() = 0;
 		virtual void OnTick() = 0;
+	protected:
+		void PostQuitRequest(const String& reason);
 	private:
 		void _SetState(const ApplicationModuleState state);
 		void _SetOwnerApplication(Application* pApplication);
