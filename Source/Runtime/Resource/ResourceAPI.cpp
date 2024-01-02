@@ -83,18 +83,75 @@ namespace Portakal
 	}
 	void ResourceAPI::RemoveResource(const String& name)
 	{
+		//Get and validate API
+		ResourceAPI* pAPI = GetUnderlyingAPI();
+		if (pAPI == nullptr)
+			return;
 
+		//Search for the name
+		for (uint32 i = 0;i< pAPI->mResources.GetSize();i++)
+		{
+			const SharedHeap<Resource>& resource = pAPI->mResources[i];
+			if (resource->GetName() == name)
+			{
+				resource.Shutdown();
+				pAPI->mResources.RemoveAt(i);
+				break;
+			}
+		}
 	}
 	void ResourceAPI::RemoveResource(const Guid& id)
 	{
+		//Get and validate API
+		ResourceAPI* pAPI = GetUnderlyingAPI();
+		if (pAPI == nullptr)
+			return;
+
+		//Search for the name
+		for (uint32 i = 0; i < pAPI->mResources.GetSize(); i++)
+		{
+			const SharedHeap<Resource>& resource = pAPI->mResources[i];
+			if (resource->GetID() == id)
+			{
+				resource.Shutdown();
+				pAPI->mResources.RemoveAt(i);
+				break;
+			}
+		}
 	}
 	SharedHeap<Resource> ResourceAPI::GetResource(const String& name)
 	{
-		return SharedHeap<Resource>();
+		//Get and validate API
+		ResourceAPI* pAPI = GetUnderlyingAPI();
+		if (pAPI == nullptr)
+			return nullptr;
+
+		//Search for the name
+		for (uint32 i = 0; i < pAPI->mResources.GetSize(); i++)
+		{
+			const SharedHeap<Resource>& resource = pAPI->mResources[i];
+			if (resource->GetName() == name)
+				return resource;
+		}
+
+		return nullptr;
 	}
 	SharedHeap<Resource> ResourceAPI::GetResource(const Guid& id)
 	{
-		return SharedHeap<Resource>();
+		//Get and validate API
+		ResourceAPI* pAPI = GetUnderlyingAPI();
+		if (pAPI == nullptr)
+			return nullptr;
+
+		//Search for the name
+		for (uint32 i = 0; i < pAPI->mResources.GetSize(); i++)
+		{
+			const SharedHeap<Resource>& resource = pAPI->mResources[i];
+			if (resource->GetID() == id)
+				return resource;
+		}
+
+		return nullptr;
 	}
 	ResourceAPI::ResourceAPI()
 	{
@@ -102,5 +159,7 @@ namespace Portakal
 	}
 	ResourceAPI::~ResourceAPI()
 	{
+		for (const SharedHeap<Resource>& resource : mResources)
+			resource.Shutdown();
 	}
 }
