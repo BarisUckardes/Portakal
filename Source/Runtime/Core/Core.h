@@ -3,6 +3,7 @@
 #if defined(_MSC_VER) && _MSC_VER >= 1910
 namespace Portakal
 {
+	typedef bool bool8;
 	typedef unsigned char uint8, byte;
 	typedef unsigned short uint16;
 	typedef unsigned int uint32;

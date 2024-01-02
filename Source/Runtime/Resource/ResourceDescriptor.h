@@ -24,9 +24,21 @@ namespace Portakal
 		PFIELD();
 		uint64 FileSize;
 		PFIELD();
-		bool bOptimized;
+		bool8 bOptimized;
 	};
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

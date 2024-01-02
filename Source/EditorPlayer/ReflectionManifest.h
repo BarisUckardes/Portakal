@@ -15,6 +15,7 @@
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Rendering\RenderOperation.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\IResourceDeserializer.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\ResourceDescriptor.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\ResourceDeserializerAttribute.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\ResourceSubObject.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Window\WindowModule.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\World\Component.h"
@@ -30,7 +31,7 @@
 #include "EditorPlayerWindowModule.h"
 
 
-		void* CreateBool() {return new bool();}
+		void* CreateBool8() {return new Portakal::bool8();}
 		void* CreateChar() {return new char();}
 		void* CreateByte() {return new Portakal::byte();}
 		void* CreateUInt16() {return new Portakal::uint16();}
@@ -54,6 +55,7 @@
 		void* CreateRenderOperation() {return nullptr;}
 		void* CreateIResourceDeserializer() {return nullptr;}
 		void* CreateResourceDescriptor() {return new Portakal::ResourceDescriptor();}
+		void* CreateResourceDeserializerAttribute() {return new Portakal::ResourceDeserializerAttribute();}
 		void* CreateResourceSubObject() {return nullptr;}
 		void* CreateWindowModule() {return new Portakal::WindowModule();}
 		void* CreateComponent() {return nullptr;}
@@ -75,8 +77,8 @@ extern "C"
 		Portakal::ReflectionManifest* pManifest = nullptr;
 
 		//Create types here
-		Portakal::Type* pbool = Portakal::TypeDispatcher::CreateType("bool",sizeof(bool),Portakal::TypeModes::Class,Portakal::TypeCodes::Bool,CreateBool,Portakal::TypeDispatcher::GetTypeAddress<bool>());
-		Portakal::TypeDispatcher::SetTypeAddress<bool>(pbool);
+		Portakal::Type* pbool8 = Portakal::TypeDispatcher::CreateType("bool8",sizeof(Portakal::bool8),Portakal::TypeModes::Class,Portakal::TypeCodes::Bool,CreateBool8,Portakal::TypeDispatcher::GetTypeAddress<Portakal::bool8>());
+		Portakal::TypeDispatcher::SetTypeAddress<bool>(pbool8);
 		Portakal::Type* pchar = Portakal::TypeDispatcher::CreateType("char",sizeof(char),Portakal::TypeModes::Class,Portakal::TypeCodes::Char,CreateChar,Portakal::TypeDispatcher::GetTypeAddress<char>());
 		Portakal::TypeDispatcher::SetTypeAddress<char>(pchar);
 		Portakal::Type* pbyte = Portakal::TypeDispatcher::CreateType("byte",sizeof(Portakal::byte),Portakal::TypeModes::Class,Portakal::TypeCodes::Byte,CreateByte,Portakal::TypeDispatcher::GetTypeAddress<Portakal::byte>());
@@ -123,6 +125,8 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::IResourceDeserializer>(pIResourceDeserializer);
 ;		Portakal::Type* pResourceDescriptor = Portakal::TypeDispatcher::CreateType("ResourceDescriptor",sizeof(Portakal::ResourceDescriptor),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateResourceDescriptor,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ResourceDescriptor>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ResourceDescriptor>(pResourceDescriptor);
+;		Portakal::Type* pResourceDeserializerAttribute = Portakal::TypeDispatcher::CreateType("ResourceDeserializerAttribute",sizeof(Portakal::ResourceDeserializerAttribute),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateResourceDeserializerAttribute,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ResourceDeserializerAttribute>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ResourceDeserializerAttribute>(pResourceDeserializerAttribute);
 ;		Portakal::Type* pResourceSubObject = Portakal::TypeDispatcher::CreateType("ResourceSubObject",sizeof(Portakal::ResourceSubObject),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateResourceSubObject,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ResourceSubObject>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ResourceSubObject>(pResourceSubObject);
 ;		Portakal::Type* pWindowModule = Portakal::TypeDispatcher::CreateType("WindowModule",sizeof(Portakal::WindowModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateWindowModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::WindowModule>());
@@ -172,7 +176,7 @@ extern "C"
 		Portakal::TypeDispatcher::RegisterField("ID",offsetof(Portakal::ResourceDescriptor,ID),typeof(Portakal::Guid),Portakal::FieldMode::Normal,pResourceDescriptor);
 		Portakal::TypeDispatcher::RegisterField("FileOffset",offsetof(Portakal::ResourceDescriptor,FileOffset),typeof(Portakal::uint64),Portakal::FieldMode::Normal,pResourceDescriptor);
 		Portakal::TypeDispatcher::RegisterField("FileSize",offsetof(Portakal::ResourceDescriptor,FileSize),typeof(Portakal::uint64),Portakal::FieldMode::Normal,pResourceDescriptor);
-		Portakal::TypeDispatcher::RegisterField("bOptimized",offsetof(Portakal::ResourceDescriptor,bOptimized),typeof(Portakal::bool),Portakal::FieldMode::Normal,pResourceDescriptor);
+		Portakal::TypeDispatcher::RegisterField("bOptimized",offsetof(Portakal::ResourceDescriptor,bOptimized),typeof(Portakal::bool8),Portakal::FieldMode::Normal,pResourceDescriptor);
 		Portakal::TypeDispatcher::RegisterField("Name",offsetof(Portakal::ProjectDescriptor,Name),typeof(Portakal::String),Portakal::FieldMode::Normal,pProjectDescriptor);
 		Portakal::TypeDispatcher::RegisterField("ID",offsetof(Portakal::ProjectDescriptor,ID),typeof(Portakal::Guid),Portakal::FieldMode::Normal,pProjectDescriptor);
 		Portakal::TypeDispatcher::RegisterField("VersionMajor",offsetof(Portakal::ProjectDescriptor,VersionMajor),typeof(Portakal::uint32),Portakal::FieldMode::Normal,pProjectDescriptor);
@@ -188,6 +192,7 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TestClass),typeof(Portakal::Object));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ReflectionModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::RenderGraph),typeof(Portakal::Object));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ResourceDeserializerAttribute),typeof(Portakal::Attribute));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::WindowModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::MeshResource),typeof(Portakal::ResourceSubObject));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureDeserializer),typeof(Portakal::IResourceDeserializer));
@@ -199,7 +204,7 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::EditorPlayerWindowModule),typeof(Portakal::ApplicationModule));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {pMyAttribute,pTestClass,pApplicationModule,pGuid,pObject,pPlatformType,pAttribute,pReflectionModule,pRenderGraph,pRenderOperation,pIResourceDeserializer,pResourceDescriptor,pResourceSubObject,pWindowModule,pComponent,pSceneAspect,pMeshResource,pTextureDeserializer,pTextureResource,pDomainModule,pProjectDescriptor,pProjectModule,pEditorPlayerGDeviceModule,pEditorPlayerProjectModule,pEditorPlayerWindowModule,};
+		Portakal::Array<Portakal::Type*> types = {pMyAttribute,pTestClass,pApplicationModule,pGuid,pObject,pPlatformType,pAttribute,pReflectionModule,pRenderGraph,pRenderOperation,pIResourceDeserializer,pResourceDescriptor,pResourceDeserializerAttribute,pResourceSubObject,pWindowModule,pComponent,pSceneAspect,pMeshResource,pTextureDeserializer,pTextureResource,pDomainModule,pProjectDescriptor,pProjectModule,pEditorPlayerGDeviceModule,pEditorPlayerProjectModule,pEditorPlayerWindowModule,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;

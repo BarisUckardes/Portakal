@@ -5,11 +5,13 @@
 #include <Runtime/Memory/MemoryOwnedView.h>
 #include <Runtime/Memory/MemoryView.h>
 #include <Runtime/Resource/ResourceDescriptor.h>
+#include <Runtime/Resource/IResourceDeserializer.h>
 
 namespace Portakal
 {
 	class RUNTIME_API Resource final
 	{
+		friend class ResourceAPI;
 	public:
 		FORCEINLINE SharedHeap<ResourceSubObject> GetSubObject() const noexcept
 		{
@@ -65,11 +67,12 @@ namespace Portakal
 		void FreeCacheSync();
 		void FreeCacheAsync();
 	private:
-		Resource(const ResourceDescriptor& descriptor);
+		Resource(const ResourceDescriptor& descriptor,IResourceDeserializer* pDeserializer);
 		~Resource();
 	private:
 		SharedHeap<ResourceSubObject> mSubObject;
 		MemoryOwnedView* mCachedData;
+		IResourceDeserializer* mDeserializer;
 		Guid mID;
 		String mName;
 		String mPath;

@@ -34,8 +34,8 @@ namespace Portakal
 	{
 
 	}
-	Resource::Resource(const ResourceDescriptor& descriptor) :
-		mID(descriptor.ID), mName(descriptor.Name), mPath(descriptor.Name), mType(descriptor.ResourceType), mFileOffset(descriptor.FileOffset), mFileSize(descriptor.FileSize), mOptimized(descriptor.bOptimized),
+	Resource::Resource(const ResourceDescriptor& descriptor,IResourceDeserializer* pDeserializer) :
+		mID(descriptor.ID), mName(descriptor.Name), mPath(descriptor.Name), mType(descriptor.ResourceType), mFileOffset(descriptor.FileOffset), mFileSize(descriptor.FileSize), mOptimized(descriptor.bOptimized),mDeserializer(pDeserializer),
 		mCached(false), mLoaded(false), mCachedData(nullptr)
 	{
 		//Find resource deserializer
