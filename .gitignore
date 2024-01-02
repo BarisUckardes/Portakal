@@ -21,8 +21,7 @@ Tools/ReflectionParserTool/obj
 Tools/ReflectionParserTool/out
 Tools/ReflectionParserTool/bin
 External
-launch.vs.json
-.reflected.h
-
+*.reflected.h
+ReflectionManifest.h
 # Every developer needs to generate their own reflected headers.
 ##**/*.reflected.h
