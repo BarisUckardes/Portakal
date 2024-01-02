@@ -92,11 +92,12 @@ namespace Portakal
 		mDeserializer = nullptr;
 	}
 	Resource::Resource(const ResourceDescriptor& descriptor,IResourceDeserializer* pDeserializer) :
-		mID(descriptor.ID), mName(descriptor.Name), mPath(descriptor.Name), mType(descriptor.ResourceType), mFileOffset(descriptor.FileOffset), mFileSize(descriptor.FileSize), mOptimized(descriptor.bOptimized),mDeserializer(pDeserializer),
+		mPath(descriptor.Name), mType(descriptor.ResourceType), mFileOffset(descriptor.FileOffset), mFileSize(descriptor.FileSize), mOptimized(descriptor.bOptimized),mDeserializer(pDeserializer),
 		mCached(false), mLoaded(false), mCachedData(nullptr)
 	{
 		//Find resource deserializer
-
+		OverrideID(descriptor.ID);
+		SetName(descriptor.Name);
 	}
 	Resource::~Resource()
 	{

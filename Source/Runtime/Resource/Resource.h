@@ -21,17 +21,9 @@ namespace Portakal
 		{
 			return mCachedData;
 		}
-		FORCEINLINE Guid GetID() const noexcept
-		{
-			return mID;
-		}
 		FORCEINLINE String GetPath() const noexcept
 		{
 			return mPath;
-		}
-		FORCEINLINE String GetName() const noexcept
-		{
-			return mName;
 		}
 		FORCEINLINE String GetResourceType() const noexcept
 		{
@@ -74,8 +66,6 @@ namespace Portakal
 		SharedHeap<ResourceSubObject> mSubObject;
 		MemoryOwnedView* mCachedData;
 		IResourceDeserializer* mDeserializer;
-		Guid mID;
-		String mName;
 		String mPath;
 		String mType;
 		uint64 mFileOffset;
