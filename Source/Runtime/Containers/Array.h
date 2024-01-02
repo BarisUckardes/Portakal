@@ -11,11 +11,40 @@
 
 namespace Portakal
 {
-
-	template<typename T>
-	class Array
+	class ArrayBase
 	{
 	public:
+		ArrayBase() = default;
+		~ArrayBase() = default;
+
+		virtual void AddIndirect() = 0;
+		virtual void CreateIndirect(const uint32 count) = 0;
+		virtual void ClearIndirect() = 0;
+	};
+
+	template<typename T>
+	class Array : public ArrayBase
+	{
+	public:
+		virtual void ClearIndirect() override
+		{
+			Clear();
+		}
+
+		virtual void AddIndirect() override
+		{
+			Add({});
+		}
+
+		virtual void CreateIndirect(const uint32 count) override
+		{
+			mSize = count;
+			mCapacity = count;
+
+			mData = new T[count];
+			Memory::Set(mData, 0, count);
+		}
+
 		Array()
 		{
 			mData = nullptr;
