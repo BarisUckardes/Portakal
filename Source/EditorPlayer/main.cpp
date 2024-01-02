@@ -52,11 +52,14 @@
 #include <EditorPlayer/EditorPlayerProjectModule.h>
 #include <EditorPlayer/ReflectionManifest.h>
 #include <Runtime/Platform/PlatformPaths.h>
+#include <Editor/Project/ProjectGenerator.h>
 
 namespace Portakal
 {
 	void Run(const Array<String>& cmdArguments)
 	{
+		ProjectGenerator::GenerateProject("PortakalTestProject",cmdArguments[1]);
+
 		//Initialize platform
 		Platform::InitializePlatformDependencies(cmdArguments[0]);
 
