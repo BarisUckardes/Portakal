@@ -9,7 +9,7 @@
 
 namespace Portakal
 {
-	class RUNTIME_API Resource final
+	class RUNTIME_API Resource : public Object
 	{
 		friend class ResourceAPI;
 	public:
@@ -66,6 +66,7 @@ namespace Portakal
 		void CacheAsync();
 		void FreeCacheSync();
 		void FreeCacheAsync();
+		virtual void OnShutdown() override;
 	private:
 		Resource(const ResourceDescriptor& descriptor,IResourceDeserializer* pDeserializer);
 		~Resource();

@@ -83,6 +83,7 @@ namespace Portakal
 	}
 	void ResourceAPI::RemoveResource(const String& name)
 	{
+
 	}
 	void ResourceAPI::RemoveResource(const Guid& id)
 	{
