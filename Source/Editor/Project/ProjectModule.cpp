@@ -1,6 +1,7 @@
 #include "ProjectModule.h"
 #include <Editor/Project/ProjectAPI.h>
 #include <Runtime/Platform/PlatformDirectory.h>
+#include <Runtime/Platform/PlatformFile.h>
 
 namespace Portakal
 {
@@ -17,7 +18,26 @@ namespace Portakal
 			return;
 		}
 
-		//Set project path
+		//Check project descriptor path
+		const String projectName = PlatformDirectory::GetName(mProjectFolderPath);
+		const String projectDescriptorPath = (mProjectFolderPath + "\\" + projectName + ".pproject");
+		if (!PlatformFile::Exists(projectDescriptorPath))
+		{
+			DEV_LOG("ProjectModule", "Target project file does not exists!");
+			PostQuitRequest("Target project file does not exists!");
+			return;
+		}
+
+		//Read project file
+		String content;
+		if (!PlatformFile::Read(projectDescriptorPath, content))
+		{
+			DEV_LOG("ProjectModule", "Target project file is corrupt");
+			PostQuitRequest("Target project file is corrupt");
+			return;
+		}
+
+		//Load project descriptor
 		ProjectDescriptor descriptor = {};
 		mAPI->_SetProject(descriptor, mProjectFolderPath);
 	}

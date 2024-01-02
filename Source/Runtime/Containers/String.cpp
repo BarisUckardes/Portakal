@@ -241,6 +241,7 @@ namespace Portakal
 	{
 		char* pTarget = new char[mSize];
 		Memory::Copy(pTarget, mSource, mSize);
+		pTarget[mSize] = '\0';
 		return pTarget;
 	}
 

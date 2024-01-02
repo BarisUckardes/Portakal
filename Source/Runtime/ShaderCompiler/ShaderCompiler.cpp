@@ -1,11 +1,8 @@
 #include "ShaderCompiler.h"
-
 #include <Runtime/Containers/Array.h>
-
 #include <Shaderc/Include/shaderc.hpp>
 #include <Spirv-Cross/Include/spirv_hlsl.hpp>
 #include <Spirv-Cross/Include/spirv_glsl.hpp>
-
 #include <Windows.h>
 #include <Dxc/Include/dxcapi.h>
 #include <wrl.h>

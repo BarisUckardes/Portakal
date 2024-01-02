@@ -2,6 +2,13 @@
 #include <Windows.h>
 #include <Shlwapi.h>
 #include <stdio.h>
+#include <fstream>
+#include <string>
+#include <strstream>
+#include <iostream> 
+#include <string> 
+#include <sstream> 
+#include <Runtime/Memory/Memory.h>
 
 namespace Portakal
 {
@@ -95,7 +102,7 @@ namespace Portakal
 
         //Write to file
         DWORD writtenBytes = 0;
-        const bool bIsWriteSuccess = WriteFile(fileHandle, view.GetMemory(), path.GetSize(), &writtenBytes, NULL);
+        const bool bIsWriteSuccess = WriteFile(fileHandle, view.GetMemory(), view.GetSize(), &writtenBytes, NULL);
 
         //Close handle
         CloseHandle(fileHandle);
@@ -118,7 +125,13 @@ namespace Portakal
             return false;
 
         //Open file
-        const HANDLE fileHandle = CreateFileA(*path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+        const HANDLE fileHandle = CreateFile(*path,               // file to open
+            GENERIC_READ,          // open for reading
+            FILE_SHARE_READ,       // share for reading
+            NULL,                  // default security
+            OPEN_EXISTING,         // existing file only
+            FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, // normal file
+            NULL);                 // no attr. template
         if (fileHandle == NULL || fileHandle == INVALID_HANDLE_VALUE)
             return false;
 
@@ -158,7 +171,7 @@ namespace Portakal
             return false;
 
         //Open file
-        const HANDLE fileHandle = CreateFileA(*path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+        const HANDLE fileHandle = CreateFileA(*path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
         if (fileHandle == NULL || fileHandle == INVALID_HANDLE_VALUE)
             return false;
 
@@ -203,6 +216,8 @@ namespace Portakal
             return false;
 
         sizeInBytesOut = GetFileSize(fileHandle, NULL);
+
+        CloseHandle(fileHandle);
 
         return true;
     }

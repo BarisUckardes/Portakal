@@ -7,7 +7,7 @@ namespace Portakal
     void EditorPlayerProjectModule::OnInitialize()
     {
         const String projectFolderPath = ProjectAPI::GetFolderPath();
-        ProjectGenerator::GenerateProject("PortakalTestProject", projectFolderPath);
+        //ProjectGenerator::GenerateProject("PortakalTestProject", projectFolderPath);
     }
     void EditorPlayerProjectModule::OnFinalize()
     {
