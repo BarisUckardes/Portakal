@@ -7,9 +7,9 @@ namespace Portakal
     {
         return mDefaultObjectGenerator();
     }
-    bool Type::IsSubClassOf(Type* pType)
+    bool Type::IsSubClassOf(const Type* pType) const noexcept
     {
-        if (pType->mBaseType == this)
+        if (pType == mBaseType)
             return true;
         if (mBaseType == nullptr)
             return false;

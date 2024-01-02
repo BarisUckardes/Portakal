@@ -11,6 +11,7 @@ namespace Portakal
 	{
 		switch (pType->GetCode())
 		{
+
 			case TypeCodes::Composed:
 			{
 				break;
@@ -22,6 +23,12 @@ namespace Portakal
 					emitter << YAML::Value << **((String*)pObject);
 				else
 					emitter << YAML::Value << '\0';
+				break;
+			}
+			case TypeCodes::Bool:
+			{
+				bool* pValue = (bool*)pObject;
+				emitter << YAML::Value << *pValue;
 				break;
 			}
 			case TypeCodes::Char:
@@ -169,6 +176,12 @@ namespace Portakal
 			const std::string nodeStr = node.as<std::string>();
 			const String value = nodeStr.c_str();
 			*(String*)pObject = value;
+			break;
+		}
+		case TypeCodes::Bool:
+		{
+			const bool nodeValue = node.as<bool>();
+			*(bool*)pObject = nodeValue;
 			break;
 		}
 		case TypeCodes::Char:

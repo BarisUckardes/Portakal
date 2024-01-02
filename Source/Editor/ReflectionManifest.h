@@ -8,6 +8,7 @@
 #include "Project\ProjectModule.h"
 
 
+		void* CreateBool() {return new bool();}
 		void* CreateChar() {return new char();}
 		void* CreateByte() {return new Portakal::byte();}
 		void* CreateUInt16() {return new Portakal::uint16();}
@@ -30,6 +31,8 @@ extern "C"
 		Portakal::ReflectionManifest* pManifest = nullptr;
 
 		//Create types here
+		Portakal::Type* pbool = Portakal::TypeDispatcher::CreateType("bool",sizeof(bool),Portakal::TypeModes::Class,Portakal::TypeCodes::Bool,CreateBool,Portakal::TypeDispatcher::GetTypeAddress<bool>());
+		Portakal::TypeDispatcher::SetTypeAddress<bool>(pbool);
 		Portakal::Type* pchar = Portakal::TypeDispatcher::CreateType("char",sizeof(char),Portakal::TypeModes::Class,Portakal::TypeCodes::Char,CreateChar,Portakal::TypeDispatcher::GetTypeAddress<char>());
 		Portakal::TypeDispatcher::SetTypeAddress<char>(pchar);
 		Portakal::Type* pbyte = Portakal::TypeDispatcher::CreateType("byte",sizeof(Portakal::byte),Portakal::TypeModes::Class,Portakal::TypeCodes::Byte,CreateByte,Portakal::TypeDispatcher::GetTypeAddress<Portakal::byte>());

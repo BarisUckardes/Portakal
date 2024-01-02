@@ -14,14 +14,17 @@
 #include "Rendering\RenderGraph.h"
 #include "Rendering\RenderOperation.h"
 #include "Resource\IResourceDeserializer.h"
+#include "Resource\ResourceDescriptor.h"
 #include "Resource\ResourceSubObject.h"
 #include "Window\WindowModule.h"
 #include "World\Component.h"
 #include "World\SceneAspect.h"
 #include "Resource\Mesh\MeshResource.h"
+#include "Resource\Texture\TextureDeserializer.h"
 #include "Resource\Texture\TextureResource.h"
 
 
+		void* CreateBool() {return new bool();}
 		void* CreateChar() {return new char();}
 		void* CreateByte() {return new Portakal::byte();}
 		void* CreateUInt16() {return new Portakal::uint16();}
@@ -44,11 +47,13 @@
 		void* CreateRenderGraph() {return new Portakal::RenderGraph();}
 		void* CreateRenderOperation() {return nullptr;}
 		void* CreateIResourceDeserializer() {return nullptr;}
+		void* CreateResourceDescriptor() {return new Portakal::ResourceDescriptor();}
 		void* CreateResourceSubObject() {return nullptr;}
 		void* CreateWindowModule() {return new Portakal::WindowModule();}
 		void* CreateComponent() {return nullptr;}
 		void* CreateSceneAspect() {return nullptr;}
 		void* CreateMeshResource() {return new Portakal::MeshResource();}
+		void* CreateTextureDeserializer() {return new Portakal::TextureDeserializer();}
 		void* CreateTextureResource() {return new Portakal::TextureResource();}
 
 extern "C"
@@ -58,6 +63,8 @@ extern "C"
 		Portakal::ReflectionManifest* pManifest = nullptr;
 
 		//Create types here
+		Portakal::Type* pbool = Portakal::TypeDispatcher::CreateType("bool",sizeof(bool),Portakal::TypeModes::Class,Portakal::TypeCodes::Bool,CreateBool,Portakal::TypeDispatcher::GetTypeAddress<bool>());
+		Portakal::TypeDispatcher::SetTypeAddress<bool>(pbool);
 		Portakal::Type* pchar = Portakal::TypeDispatcher::CreateType("char",sizeof(char),Portakal::TypeModes::Class,Portakal::TypeCodes::Char,CreateChar,Portakal::TypeDispatcher::GetTypeAddress<char>());
 		Portakal::TypeDispatcher::SetTypeAddress<char>(pchar);
 		Portakal::Type* pbyte = Portakal::TypeDispatcher::CreateType("byte",sizeof(Portakal::byte),Portakal::TypeModes::Class,Portakal::TypeCodes::Byte,CreateByte,Portakal::TypeDispatcher::GetTypeAddress<Portakal::byte>());
@@ -102,6 +109,8 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::RenderOperation>(pRenderOperation);
 ;		Portakal::Type* pIResourceDeserializer = Portakal::TypeDispatcher::CreateType("IResourceDeserializer",sizeof(Portakal::IResourceDeserializer),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateIResourceDeserializer,Portakal::TypeDispatcher::GetTypeAddress<Portakal::IResourceDeserializer>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::IResourceDeserializer>(pIResourceDeserializer);
+;		Portakal::Type* pResourceDescriptor = Portakal::TypeDispatcher::CreateType("ResourceDescriptor",sizeof(Portakal::ResourceDescriptor),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateResourceDescriptor,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ResourceDescriptor>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ResourceDescriptor>(pResourceDescriptor);
 ;		Portakal::Type* pResourceSubObject = Portakal::TypeDispatcher::CreateType("ResourceSubObject",sizeof(Portakal::ResourceSubObject),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateResourceSubObject,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ResourceSubObject>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ResourceSubObject>(pResourceSubObject);
 ;		Portakal::Type* pWindowModule = Portakal::TypeDispatcher::CreateType("WindowModule",sizeof(Portakal::WindowModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateWindowModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::WindowModule>());
@@ -112,6 +121,8 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneAspect>(pSceneAspect);
 ;		Portakal::Type* pMeshResource = Portakal::TypeDispatcher::CreateType("MeshResource",sizeof(Portakal::MeshResource),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateMeshResource,Portakal::TypeDispatcher::GetTypeAddress<Portakal::MeshResource>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::MeshResource>(pMeshResource);
+;		Portakal::Type* pTextureDeserializer = Portakal::TypeDispatcher::CreateType("TextureDeserializer",sizeof(Portakal::TextureDeserializer),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateTextureDeserializer,Portakal::TypeDispatcher::GetTypeAddress<Portakal::TextureDeserializer>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::TextureDeserializer>(pTextureDeserializer);
 ;		Portakal::Type* pTextureResource = Portakal::TypeDispatcher::CreateType("TextureResource",sizeof(Portakal::TextureResource),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateTextureResource,Portakal::TypeDispatcher::GetTypeAddress<Portakal::TextureResource>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::TextureResource>(pTextureResource);
 ;
@@ -131,6 +142,13 @@ extern "C"
 		Portakal::TypeDispatcher::RegisterField("B",offsetof(Portakal::Guid,B),typeof(Portakal::uint32),Portakal::FieldMode::Normal,pGuid);
 		Portakal::TypeDispatcher::RegisterField("C",offsetof(Portakal::Guid,C),typeof(Portakal::uint32),Portakal::FieldMode::Normal,pGuid);
 		Portakal::TypeDispatcher::RegisterField("D",offsetof(Portakal::Guid,D),typeof(Portakal::uint32),Portakal::FieldMode::Normal,pGuid);
+		Portakal::TypeDispatcher::RegisterField("Path",offsetof(Portakal::ResourceDescriptor,Path),typeof(Portakal::String),Portakal::FieldMode::Normal,pResourceDescriptor);
+		Portakal::TypeDispatcher::RegisterField("ResourceType",offsetof(Portakal::ResourceDescriptor,ResourceType),typeof(Portakal::String),Portakal::FieldMode::Normal,pResourceDescriptor);
+		Portakal::TypeDispatcher::RegisterField("Name",offsetof(Portakal::ResourceDescriptor,Name),typeof(Portakal::String),Portakal::FieldMode::Normal,pResourceDescriptor);
+		Portakal::TypeDispatcher::RegisterField("ID",offsetof(Portakal::ResourceDescriptor,ID),typeof(Portakal::Guid),Portakal::FieldMode::Normal,pResourceDescriptor);
+		Portakal::TypeDispatcher::RegisterField("FileOffset",offsetof(Portakal::ResourceDescriptor,FileOffset),typeof(Portakal::uint64),Portakal::FieldMode::Normal,pResourceDescriptor);
+		Portakal::TypeDispatcher::RegisterField("FileSize",offsetof(Portakal::ResourceDescriptor,FileSize),typeof(Portakal::uint64),Portakal::FieldMode::Normal,pResourceDescriptor);
+		Portakal::TypeDispatcher::RegisterField("bOptimized",offsetof(Portakal::ResourceDescriptor,bOptimized),typeof(Portakal::bool),Portakal::FieldMode::Normal,pResourceDescriptor);
 
         //Register attributes here
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::MyAttribute>(pTestClass);
@@ -143,10 +161,11 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::RenderGraph),typeof(Portakal::Object));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::WindowModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::MeshResource),typeof(Portakal::ResourceSubObject));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureDeserializer),typeof(Portakal::IResourceDeserializer));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureResource),typeof(Portakal::ResourceSubObject));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {pMyAttribute,pTestClass,pApplicationModule,pGuid,pObject,pPlatformType,pAttribute,pReflectionModule,pRenderGraph,pRenderOperation,pIResourceDeserializer,pResourceSubObject,pWindowModule,pComponent,pSceneAspect,pMeshResource,pTextureResource,};
+		Portakal::Array<Portakal::Type*> types = {pMyAttribute,pTestClass,pApplicationModule,pGuid,pObject,pPlatformType,pAttribute,pReflectionModule,pRenderGraph,pRenderOperation,pIResourceDeserializer,pResourceDescriptor,pResourceSubObject,pWindowModule,pComponent,pSceneAspect,pMeshResource,pTextureDeserializer,pTextureResource,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;

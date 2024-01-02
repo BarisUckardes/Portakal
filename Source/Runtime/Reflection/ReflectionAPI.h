@@ -22,6 +22,7 @@ namespace Portakal
 		static Assembly* LoadLibraryReflection(const SharedHeap<PlatformLibrary>& pLibrary);
 		static const Assembly* GetMainAssembly();
 		static Array<const Assembly*> GetAssemblies();
+		static Array<Type*> GetSubTypes(const Type* pTargetType);
 	private:
 		ReflectionAPI();
 		~ReflectionAPI();

@@ -57,7 +57,7 @@ namespace Portakal
 			return nullptr;
 		}
 		void* CreateDefaultHeapObject() const noexcept;
-		bool IsSubClassOf(Type* pType);
+		bool IsSubClassOf(const Type* pType) const noexcept;
 	private:
 		Type(const String& name, const uint32 size, const TypeModes mode, const TypeCodes code, DefaultHeapObjectGenerator defaultObjectGenerator,Type** ppModuleAddress);
 		~Type();

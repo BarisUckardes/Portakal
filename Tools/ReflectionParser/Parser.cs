@@ -168,6 +168,8 @@ namespace Portakal
 
             //Write all primitive types first
             string typeLines = string.Empty;
+            typeLines += $"\t\tPortakal::Type* pbool = Portakal::TypeDispatcher::CreateType(\"bool\",sizeof(bool),Portakal::TypeModes::Class,Portakal::TypeCodes::Bool,CreateBool,Portakal::TypeDispatcher::GetTypeAddress<bool>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<bool>(pbool);{Environment.NewLine}";
             typeLines += $"\t\tPortakal::Type* pchar = Portakal::TypeDispatcher::CreateType(\"char\",sizeof(char),Portakal::TypeModes::Class,Portakal::TypeCodes::Char,CreateChar,Portakal::TypeDispatcher::GetTypeAddress<char>());{Environment.NewLine}";
             typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<char>(pchar);{Environment.NewLine}";
             typeLines += $"\t\tPortakal::Type* pbyte = Portakal::TypeDispatcher::CreateType(\"byte\",sizeof(Portakal::byte),Portakal::TypeModes::Class,Portakal::TypeCodes::Byte,CreateByte,Portakal::TypeDispatcher::GetTypeAddress<Portakal::byte>());{Environment.NewLine}";
@@ -253,6 +255,7 @@ namespace Portakal
 
             //Register default object generators
             string objectGenerators = string.Empty;
+            objectGenerators += $"\t\tvoid* CreateBool() {{return new bool();}}{Environment.NewLine}";
             objectGenerators += $"\t\tvoid* CreateChar() {{return new char();}}{Environment.NewLine}";
             objectGenerators += $"\t\tvoid* CreateByte() {{return new Portakal::byte();}}{Environment.NewLine}";
             objectGenerators += $"\t\tvoid* CreateUInt16() {{return new Portakal::uint16();}}{Environment.NewLine}";

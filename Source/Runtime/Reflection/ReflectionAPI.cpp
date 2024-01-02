@@ -43,6 +43,25 @@ namespace Portakal
 
         return assemblies;
     }
+    Array<Type*> ReflectionAPI::GetSubTypes(const Type* pTargetType)
+    {
+        Array<Type*> subTypes;
+        Array<const Assembly*> assemblies = GetAssemblies();
+        if (assemblies.GetSize() == 0)
+            return subTypes;
+
+        for (const Assembly* pAssembly : assemblies)
+        {
+            const Array<Type*>& types = pAssembly->GetTypes();
+            for (Type* pType : types)
+            {
+                if (pType->IsSubClassOf(pTargetType))
+                    subTypes.Add(pType);
+            }
+        }
+
+        return subTypes;
+    }
     ReflectionAPI::ReflectionAPI()
     {
         Invalidate();

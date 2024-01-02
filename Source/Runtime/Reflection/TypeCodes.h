@@ -10,6 +10,7 @@ namespace Portakal
 		String,
 		Char,
 		Byte,
+		Bool,
 		Int16,
 		UInt16,
 		Int32,
