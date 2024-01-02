@@ -54,9 +54,13 @@ namespace Portakal
                 NULL);
         }
 
+        //Check the handle
+        if (fileHandle == NULL || fileHandle == INVALID_HANDLE_VALUE)
+            return false;
+
         //Write to file
         DWORD writtenBytes = 0;
-        const bool bIsWriteSuccess = WriteFile(fileHandle, *content, path.GetSize(), &writtenBytes, NULL);
+        const bool bIsWriteSuccess = WriteFile(fileHandle, *content, content.GetSize(), &writtenBytes, NULL);
 
         //Close handle
         CloseHandle(fileHandle);

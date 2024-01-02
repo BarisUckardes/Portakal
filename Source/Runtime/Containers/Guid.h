@@ -34,12 +34,18 @@ namespace Portakal
 		bool operator==(const Guid& other) const;
 		bool operator!=(const Guid& other) const;
 
+		PFIELD();
 		uint32 A;
+		PFIELD();
 		uint32 B;
+		PFIELD();
 		uint32 C;
+		PFIELD();
 		uint32 D;
 	};
 }
+
+
 
 
 

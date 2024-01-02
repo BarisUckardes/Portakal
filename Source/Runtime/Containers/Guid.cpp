@@ -1,4 +1,5 @@
 #include "Guid.h"
+#include <Runtime\Platform\PlatformGuid.h>
 
 namespace Portakal
 {
@@ -6,7 +7,7 @@ namespace Portakal
     Guid Guid::Create()
     {
         Guid id = {};
-       // PlatformGuid::Create(id);
+        PlatformGuid::Create(id);
         return id;
     }
 
