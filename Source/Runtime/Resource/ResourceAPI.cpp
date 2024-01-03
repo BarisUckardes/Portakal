@@ -7,21 +7,21 @@
 
 namespace Portakal
 {
-	void ResourceAPI::RegisterResource(const String& descriptorPath)
+	SharedHeap<Resource> ResourceAPI::RegisterResource(const String& descriptorPath)
 	{
 		//Check API
 		ResourceAPI* pAPI = GetUnderlyingAPI();
 		if (pAPI == nullptr)
 		{
 			DEV_LOG("ResourceAPI", "No resource API found!");
-			return;
+			return nullptr;
 		}
 
 		//Check file if exists
 		if (!PlatformFile::Exists(descriptorPath))
 		{
 			DEV_LOG("ResourceAPI", "Given descriptor file path does not exist");
-			return;
+			return nullptr;
 		}
 
 		//Load descriptor
@@ -29,7 +29,7 @@ namespace Portakal
 		if (!PlatformFile::Read(descriptorPath, fileContent))
 		{
 			DEV_LOG("ResourceAPI", "Failed to load the given descriptor file");
-			return;
+			return nullptr;
 		}
 
 		//Convert descriptor
@@ -40,14 +40,14 @@ namespace Portakal
 		if (descriptor.Name == "" || descriptor.ID == Guid::Zero())
 		{
 			DEV_LOG("ResourceAPI", "Descriptor name or ID is invalid!");
-			return;
+			return nullptr;
 		}
 
 		//Check resource file path
 		if (!PlatformFile::Exists(descriptor.Path))
 		{
 			DEV_LOG("ResourceAPI", "Given resource descriptor does not point to a valid resource!");
-			return;
+			return nullptr;
 		}
 
 		//Check resource type
@@ -55,7 +55,7 @@ namespace Portakal
 		if (types.IsEmpty())
 		{
 			DEV_LOG("ResourceAPI", "No IResourceDeserializer in this application!");
-			return;
+			return nullptr;
 		}
 		Type* pFoundDeserializer = nullptr;
 		for (Type* pType : types)
@@ -71,15 +71,17 @@ namespace Portakal
 		if (pFoundDeserializer == nullptr)
 		{
 			DEV_LOG("ResourceAPI", "No IResourceDeserializer found for the resource %s", descriptor.ResourceType);
-			return;
+			return nullptr;
 		}
 
 		//Create deserializer
 		IResourceDeserializer* pDeserializer = (IResourceDeserializer*)pFoundDeserializer->CreateDefaultHeapObject();
 
 		//Create resource
-		Resource* pResource = new Resource(descriptor,pDeserializer);
+		SharedHeap<Resource> pResource = new Resource(descriptor,pDeserializer);
 		pAPI->mResources.Add(pResource);
+
+		return pResource;
 	}
 	void ResourceAPI::RemoveResource(const String& name)
 	{

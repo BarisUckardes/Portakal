@@ -6,6 +6,8 @@
 #include "Domain\DomainModule.h"
 #include "Project\ProjectDescriptor.h"
 #include "Project\ProjectModule.h"
+#include "Resource\IResourceSerializer.h"
+#include "Resource\Texture\TextureSerializer.h"
 
 
 		void* CreateBool8() {return new Portakal::bool8();}
@@ -23,6 +25,8 @@
 		void* CreateDomainModule() {return new Portakal::DomainModule();}
 		void* CreateProjectDescriptor() {return new Portakal::ProjectDescriptor();}
 		void* CreateProjectModule() {return new Portakal::ProjectModule();}
+		void* CreateIResourceSerializer() {return nullptr;}
+		void* CreateTextureSerializer() {return new Portakal::TextureSerializer();}
 
 extern "C"
 {
@@ -61,6 +65,10 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ProjectDescriptor>(pProjectDescriptor);
 ;		Portakal::Type* pProjectModule = Portakal::TypeDispatcher::CreateType("ProjectModule",sizeof(Portakal::ProjectModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateProjectModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ProjectModule>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ProjectModule>(pProjectModule);
+;		Portakal::Type* pIResourceSerializer = Portakal::TypeDispatcher::CreateType("IResourceSerializer",sizeof(Portakal::IResourceSerializer),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateIResourceSerializer,Portakal::TypeDispatcher::GetTypeAddress<Portakal::IResourceSerializer>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::IResourceSerializer>(pIResourceSerializer);
+;		Portakal::Type* pTextureSerializer = Portakal::TypeDispatcher::CreateType("TextureSerializer",sizeof(Portakal::TextureSerializer),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateTextureSerializer,Portakal::TypeDispatcher::GetTypeAddress<Portakal::TextureSerializer>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::TextureSerializer>(pTextureSerializer);
 ;
         //Register enums here
 
@@ -72,13 +80,15 @@ extern "C"
 		Portakal::TypeDispatcher::RegisterField("VersionPatch",offsetof(Portakal::ProjectDescriptor,VersionPatch),typeof(Portakal::uint32),Portakal::FieldMode::Normal,pProjectDescriptor);
 
         //Register attributes here
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::ResourceSerializerAttribute>(pTextureSerializer, "texture");
 
         //Register base types here
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::DomainModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ProjectModule),typeof(Portakal::ApplicationModule));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureSerializer),typeof(Portakal::IResourceSerializer));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {pDomainModule,pProjectDescriptor,pProjectModule,};
+		Portakal::Array<Portakal::Type*> types = {pDomainModule,pProjectDescriptor,pProjectModule,pIResourceSerializer,pTextureSerializer,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;

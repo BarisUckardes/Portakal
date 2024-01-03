@@ -16,23 +16,23 @@ namespace Portakal
 		{
 			return mFiles;
 		}
-		FORCEINLINE SharedHeap<DomainFolder> GetOwnerFolder() const noexcept
+		FORCEINLINE DomainFolder* GetOwnerFolder() const noexcept
 		{
 			return mOwnerFolder;
 		}
 		FORCEINLINE bool IsRootFolder() const noexcept
 		{
-			return mOwnerFolder.GetHeap() == nullptr;
+			return mOwnerFolder == nullptr;
 		}
 	private:
-		DomainFolder(const SharedHeap<DomainFolder>& pOwnerFolder,const String& path);
+		DomainFolder(DomainFolder* pOwnerFolder,const String& path);
 		~DomainFolder() = default;
 
 		virtual void OnShutdown() override;
 	private:
 		Array<SharedHeap<DomainFolder>> mFolders;
 		Array<SharedHeap<DomainFile>> mFiles;
-		SharedHeap<DomainFolder> mOwnerFolder;
+		DomainFolder* mOwnerFolder;
 		String mPath;
 	};
 }
