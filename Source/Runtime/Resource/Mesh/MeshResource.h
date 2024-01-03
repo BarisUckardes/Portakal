@@ -17,6 +17,22 @@ namespace Portakal
 		MeshResource();
 		~MeshResource() = default;
 
+		FORCEINLINE uint32 GetVertexCount() const noexcept
+		{
+			return mVertexCount;
+		}
+		FORCEINLINE uint32 GetIndexCount() const noexcept
+		{
+			return mIndexCount;
+		}
+		FORCEINLINE SharedHeap<GraphicsBuffer> GetVertexBuffer() const noexcept
+		{
+			return mVertexDeviceBuffer;
+		}
+		FORCEINLINE SharedHeap<GraphicsBuffer> GetIndexBuffer() const noexcept
+		{
+			return mIndexDeviceBuffer;
+		}
 	public:
 		void AllocateVertexes(const uint32 count,const uint32 elementSize,const SharedHeap<GraphicsMemoryHeap>& pDeviceHeap,const SharedHeap<GraphicsMemoryHeap>& pHostHeap,const bool bAllocateStagebufferUpfront);
 		void AllocateIndexes(const uint32 count,const uint32 elementSize,const SharedHeap<GraphicsMemoryHeap>& pDeviceHeap,const SharedHeap<GraphicsMemoryHeap>& pHostHeap,const bool bAllocateStagebufferUpfront);
@@ -37,8 +53,12 @@ namespace Portakal
 		SharedHeap<GraphicsBuffer> mIndexStageBuffer;
 		SharedHeap<GraphicsMemoryHeap> mVertexHostHeap;
 		SharedHeap<GraphicsMemoryHeap> mIndexHostHeap;
+		uint32 mVertexCount;
+		uint32 mIndexCount;
 	};
 }
+
+
 
 
 

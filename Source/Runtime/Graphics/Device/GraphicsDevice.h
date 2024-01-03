@@ -87,7 +87,7 @@ namespace Portakal
 		SharedHeap<Shader> CreateShader(const ShaderDesc& desc);
 		SharedHeap<Sampler> CreateSampler(const SamplerDesc& desc);
 		SharedHeap<ResourceTableLayout> CreateResourceTableLayout(const ResourceTableLayoutDesc& desc);
-		SharedHeap<ResourceTablePool> CreateResourceTablePooLDesc(const ResourceTablePoolDesc& desc);
+		SharedHeap<ResourceTablePool> CreateResourceTablePool(const ResourceTablePoolDesc& desc);
 		SharedHeap<ResourceTable> CreateResourceTable(const ResourceTableDesc& desc);
 		SharedHeap<Fence> CreateFence();
 		SharedHeap<Swapchain> CreateSwapchain(const SwapchainDesc& desc);

@@ -27,7 +27,7 @@ namespace Portakal
 		~ImGuiRenderer();
 
 		void StartRendering(float deltaTimeInMilliSeconds);
-		void EndRendering(RenderPass* pRenderTarget, const Color4F clearColor);
+		void EndRendering(const SharedHeap<RenderPass>& pRenderPass, const Color4F clearColor);
 
 		ImGuiTextureBinding* CreateTextureBinding(Texture* pTexture);
 		ImGuiTextureBinding* GetTextureBinding(const Texture* pTexture);
@@ -56,15 +56,15 @@ namespace Portakal
 
 		SharedHeap<GraphicsDevice> mDevice;
 
-		SharedHeap<CommandList> mCommandList;
-		SharedHeap<CommandPool> mCommandPool;
+		SharedHeap<CommandList> mCmdList;
+		SharedHeap<CommandPool> mCmdPool;
 		SharedHeap<GraphicsMemoryHeap> mDeviceMemory;
 		SharedHeap<GraphicsMemoryHeap> mHostMemory;
 
 		SharedHeap<GraphicsBuffer> mStagingBuffer;
 		SharedHeap<GraphicsBuffer> mConstantBuffer;
 
-		SharedHeap<MeshResource> mMeshResource;
+		SharedHeap<MeshResource> mMesh;
 
 		SharedHeap<Shader> mVertexShader;
 		SharedHeap<Shader> mFragmentShader;
@@ -76,8 +76,8 @@ namespace Portakal
 		SharedHeap<ResourceTableLayout> mFontResourceLayout;
 
 		SharedHeap<ResourceTablePool> mResourcePool;
-		SharedHeap<ResourceTable> mStaticResourceSet;
-		SharedHeap<ResourceTable> mFontResourceSet;
+		SharedHeap<ResourceTable> mStaticResourceTable;
+		SharedHeap<ResourceTable> mFontResourceTable;
 
 		SharedHeap<Pipeline> mPipeline;
 		SharedHeap<Fence> mFence;

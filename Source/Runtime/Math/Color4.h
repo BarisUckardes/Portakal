@@ -10,6 +10,15 @@ namespace Portakal
 	template<typename T>
 	struct RUNTIME_API Color4
 	{
+		static Color4 Red() { return Color4(255, 0, 0, 255); }
+		static Color4 DarkRed() { return Color4(128, 0, 0, 255); }
+		static Color4 Black() { return Color4(0, 0, 0, 255); }
+		static Color4 Blue() { return Color4(0, 0, 256, 255); }
+		static Color4 DarkBlue() { return Color4(0, 0, 128, 255); }
+		static Color4 CornflowerBlue() { return Color4(100 / 255.0f, 149 / 255.0f, 237 / 255.0f, 255 / 255.0f); }
+		static Color4 Green() { return Color4(0, 255, 0, 255); }
+		static Color4 DarkGreen() { return Color4(0, 128, 0, 255); }
+
 		Color4(const T r, const T g, const T b, const T a) : R(r), G(g), B(b), A(a)
 		{
 

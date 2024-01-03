@@ -107,7 +107,7 @@ namespace Portakal
         RegisterChild(pDescriptorLayout.QueryAs<GraphicsDeviceObject>());
         return pDescriptorLayout;
     }
-    SharedHeap<ResourceTablePool> GraphicsDevice::CreateResourceTablePooLDesc(const ResourceTablePoolDesc& desc)
+    SharedHeap<ResourceTablePool> GraphicsDevice::CreateResourceTablePool(const ResourceTablePoolDesc& desc)
     {
         SharedHeap<ResourceTablePool> pPool = CreateResourceTablePoolCore(desc);
         RegisterChild(pPool.QueryAs<GraphicsDeviceObject>());
