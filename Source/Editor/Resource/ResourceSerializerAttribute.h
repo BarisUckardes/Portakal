@@ -1,10 +1,13 @@
 #pragma once
-#include <Runtime/Reflection/Attribute.h>
+#include <Runtime/Reflection/Reflection.h>
+#include "ResourceSerializerAttribute.reflected.h"
 
 namespace Portakal
 {
+	PCLASS();
 	class EDITOR_API ResourceSerializerAttribute : public Attribute
 	{
+		GENERATE_OBJECT;
 	public:
 		ResourceSerializerAttribute(const String& resource) : mResource(resource)
 		{
@@ -21,3 +24,5 @@ namespace Portakal
 		const String mResource;
 	};
 }
+
+
