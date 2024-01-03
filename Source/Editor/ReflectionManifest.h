@@ -4,6 +4,7 @@
 #include <Runtime/Reflection/ReflectionManifest.h>
 #include <Runtime/Reflection/TypeDispatcher.h>
 #include "Domain\DomainModule.h"
+#include "ImGui\ImGuiModule.h"
 #include "Project\ProjectDescriptor.h"
 #include "Project\ProjectModule.h"
 #include "Resource\IResourceSerializer.h"
@@ -24,6 +25,7 @@
 		void* CreateDouble() {return new double();}
 		void* CreateString() {return new Portakal::String();}
 		void* CreateDomainModule() {return new Portakal::DomainModule();}
+		void* CreateImGuiModule() {return new Portakal::ImGuiModule();}
 		void* CreateProjectDescriptor() {return new Portakal::ProjectDescriptor();}
 		void* CreateProjectModule() {return new Portakal::ProjectModule();}
 		void* CreateIResourceSerializer() {return nullptr;}
@@ -63,6 +65,8 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::String>(pString);
 		Portakal::Type* pDomainModule = Portakal::TypeDispatcher::CreateType("DomainModule",sizeof(Portakal::DomainModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateDomainModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::DomainModule>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::DomainModule>(pDomainModule);
+;		Portakal::Type* pImGuiModule = Portakal::TypeDispatcher::CreateType("ImGuiModule",sizeof(Portakal::ImGuiModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateImGuiModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ImGuiModule>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ImGuiModule>(pImGuiModule);
 ;		Portakal::Type* pProjectDescriptor = Portakal::TypeDispatcher::CreateType("ProjectDescriptor",sizeof(Portakal::ProjectDescriptor),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateProjectDescriptor,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ProjectDescriptor>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ProjectDescriptor>(pProjectDescriptor);
 ;		Portakal::Type* pProjectModule = Portakal::TypeDispatcher::CreateType("ProjectModule",sizeof(Portakal::ProjectModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateProjectModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ProjectModule>());
@@ -88,12 +92,13 @@ extern "C"
 
         //Register base types here
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::DomainModule),typeof(Portakal::ApplicationModule));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ImGuiModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ProjectModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ResourceSerializerAttribute),typeof(Portakal::Attribute));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureSerializer),typeof(Portakal::IResourceSerializer));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {pDomainModule,pProjectDescriptor,pProjectModule,pIResourceSerializer,pResourceSerializerAttribute,pTextureSerializer,};
+		Portakal::Array<Portakal::Type*> types = {pDomainModule,pImGuiModule,pProjectDescriptor,pProjectModule,pIResourceSerializer,pResourceSerializerAttribute,pTextureSerializer,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;

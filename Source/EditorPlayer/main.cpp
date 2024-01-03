@@ -52,6 +52,8 @@
 #include <EditorPlayer/EditorPlayerProjectModule.h>
 #include <EditorPlayer/ReflectionManifest.h>
 #include <Runtime/Platform/PlatformPaths.h>
+#include <Editor/ImGui/ImGuiModule.h>
+#include <Runtime/Graphics/GraphicsModule.h>
 
 namespace Portakal
 {
@@ -63,14 +65,20 @@ namespace Portakal
 		//Create application
 		EditorPlayerApplication* pApplication = new EditorPlayerApplication();
 
-		//Add modules
+		//Add core modules
 		pApplication->RegisterModule<ReflectionModule>(0);
 		pApplication->RegisterModule<WindowModule>(1);
-		pApplication->RegisterModule<ProjectModule>(2, cmdArguments[1]);
-		pApplication->RegisterModule<DomainModule>(3);
-		pApplication->RegisterModule<EditorPlayerProjectModule>(4);
-		pApplication->RegisterModule<EditorPlayerWindowModule>(5);
-		pApplication->RegisterModule<EditorPlayerGDeviceModule>(6);
+		pApplication->RegisterModule<GraphicsModule>(2);
+		pApplication->RegisterModule<ProjectModule>(3, cmdArguments[1]);
+		pApplication->RegisterModule<DomainModule>(4);
+
+		//Add create-only modules
+		pApplication->RegisterModule<EditorPlayerProjectModule>(5);
+		pApplication->RegisterModule<EditorPlayerWindowModule>(6);
+		pApplication->RegisterModule<EditorPlayerGDeviceModule>(7);
+		pApplication->RegisterModule<ImGuiModule>(8);
+
+		//Add routine modules
 
 		//Run
 		pApplication->Run();

@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    VulkanShader::VulkanShader(const ShaderDesc& desc, VulkanDevice* pDevice) : Shader(desc), mLogicalDevice(VK_NULL_HANDLE)
+    VulkanShader::VulkanShader(const ShaderDesc& desc, VulkanDevice* pDevice) : Shader(desc), mLogicalDevice(pDevice->GetVkLogicalDevice())
     {
         /**
         * Create module

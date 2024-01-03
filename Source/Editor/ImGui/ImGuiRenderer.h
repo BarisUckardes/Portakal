@@ -49,6 +49,7 @@ namespace Portakal
 		void OnKeyboardChar(const char value);
 
 	private:
+		void InvalidateRenderPass(const SharedHeap<RenderPass>& pRenderPass,const byte subpassIndex);
 		virtual void OnShutdown() override;
 
 	private:
@@ -81,6 +82,7 @@ namespace Portakal
 
 		SharedHeap<Pipeline> mPipeline;
 		SharedHeap<Fence> mFence;
+		SharedHeap<RenderPass> mLatestRenderPass;
 
 		HashMap<const Texture*, ImGuiTextureBinding*> mTextureBindings;
 	};

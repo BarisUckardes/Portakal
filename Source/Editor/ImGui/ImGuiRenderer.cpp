@@ -87,7 +87,6 @@ namespace Portakal
     ImGuiRenderer::~ImGuiRenderer()
     {
         mDevice->WaitFences(mFence.GetHeapAddress(), 1);
-
         mFence->Shutdown();
     }
 
@@ -97,6 +96,9 @@ namespace Portakal
     }
     void ImGuiRenderer::EndRendering(const SharedHeap<RenderPass>& pRenderPass, const Color4F clearColor)
     {
+        if (mLatestRenderPass.IsShutdown() || pRenderPass != mLatestRenderPass)
+            InvalidateRenderPass(pRenderPass, 0);
+
         //Get display size
         const Vector2US renderSize = pRenderPass->GetRenderRegion();
         ImGuiIO& io = ImGui::GetIO();
@@ -313,18 +315,18 @@ namespace Portakal
         //Compile HLSL to platform bytes
         MemoryOwnedView* pVertexShaderPlatformBytes = nullptr;
         MemoryOwnedView* pFragmentShaderPlatformBytes = nullptr;
-        ShaderCompiler::CompileFromSPIRV(pVertexShaderSpirv, ShaderLanguage::HLSL, &pVertexShaderPlatformBytes);
-        ShaderCompiler::CompileFromSPIRV(pFragmentShaderSpirv, ShaderLanguage::HLSL, &pFragmentShaderPlatformBytes);
+        ShaderCompiler::CompileFromSPIRV(pVertexShaderSpirv, mDevice->GetBackend(), &pVertexShaderPlatformBytes);
+        ShaderCompiler::CompileFromSPIRV(pFragmentShaderSpirv, mDevice->GetBackend(), &pFragmentShaderPlatformBytes);
 
         //Create shaders
         ShaderDesc vertexShaderDesc = {};
         vertexShaderDesc.Stage = ShaderStage::VertexStage;
-        vertexShaderDesc.ByteCode = pVertexShaderPlatformBytes;
+        vertexShaderDesc.ByteCode = pVertexShaderSpirv;
         vertexShaderDesc.EntryPoint = "main";
 
         ShaderDesc fragmentShaderDesc = {};
         fragmentShaderDesc.Stage = ShaderStage::FragmentStage;
-        fragmentShaderDesc.ByteCode = pFragmentShaderPlatformBytes;
+        fragmentShaderDesc.ByteCode = pFragmentShaderSpirv;
         fragmentShaderDesc.EntryPoint = "main";
 
         mVertexShader = mDevice->CreateShader(vertexShaderDesc);
@@ -346,52 +348,7 @@ namespace Portakal
 
         mSampler = mDevice->CreateSampler(samplerDesc);
 
-        //Create input layout
-        InputLayoutDesc inputStateDesc = {};
-        InputBinding vertexInputBinding = {};
-        vertexInputBinding.StepRate = InputBindingStepRate::Vertex;
-        vertexInputBinding.Elements =
-        {
-            {TextureFormat::R32_G32_Float, InputElementSemantic::Position},
-            {TextureFormat::R32_G32_Float, InputElementSemantic::TexCoord},
-            {TextureFormat::R8_G8_B8_A8_UNorm, InputElementSemantic::Color}
-        };
-        inputStateDesc.Bindings.Add(vertexInputBinding);
-        inputStateDesc.Topology = MeshTopology::TriangleList;
-
-        //Create blending state
-        BlendStateDesc blendingStateDesc = {};
-        blendingStateDesc.bLogicOperationEnabled = false;
-        blendingStateDesc.LogicOperation = LogicOperation::Clear;
-        BlendStateAttachment blendingAttachment = {};
-        blendingAttachment.Enabled = true;
-        blendingAttachment.SourceColorFactor = BlendFactor::SrcAlpha;
-        blendingAttachment.DestinationColorFactor = BlendFactor::OneMinusSrcAlpha;
-        blendingAttachment.ColorOperation = BlendOperation::Add;
-        blendingAttachment.SourceAlphaFactor = BlendFactor::One;
-        blendingAttachment.DestinationAlphaFactor = BlendFactor::OneMinusSrcAlpha;
-        blendingStateDesc.Attachments.Add(blendingAttachment);
-
-        //Create rasterizer state
-        RasterizerStateDesc rasterizerStateDesc = {};
-        rasterizerStateDesc.IsFrontCounterClockwise = false;
-        rasterizerStateDesc.CullFlags = FaceCullMode::None;
-        rasterizerStateDesc.FillMode = PolygonMode::Fill;
-        rasterizerStateDesc.DepthBiasEnabled = false;
-        rasterizerStateDesc.DepthBiasClamp = 0;
-        rasterizerStateDesc.DepthBiasFactor = 0;
-        rasterizerStateDesc.DepthBiasSlope = 0;
-
-        //Create depth stencil state
-        DepthStencilStateDesc depthStencilStateDesc = {};
-        depthStencilStateDesc.bDepthTestEnabled = false;
-        depthStencilStateDesc.bDepthWriteEnabled = false;
-        depthStencilStateDesc.bStencilTestEnabled = false;
-        depthStencilStateDesc.StencilBackFace = {};
-        depthStencilStateDesc.StencilFrontFace = {};
-
         //Create static resource layout
-        ResourceLayoutDesc resourceLayoutDesc = {};
         ResourceTableLayoutDesc staticResourceLayoutDesc = {};
         staticResourceLayoutDesc.Entries =
         {
@@ -399,7 +356,6 @@ namespace Portakal
             {GraphicsResourceType::Sampler,ShaderStage::FragmentStage,1}
         };
         mStaticResourceLayout = mDevice->CreateResourceTableLayout(staticResourceLayoutDesc);
-        resourceLayoutDesc.ResourceLayouts.Add(mStaticResourceLayout.GetHeap());
 
         //Create dynamic resource layout
         ResourceTableLayoutDesc dynamicResourceLayoutDesc = {};
@@ -408,28 +364,6 @@ namespace Portakal
             {GraphicsResourceType::SampledTexture,ShaderStage::FragmentStage,0}
         };
         mFontResourceLayout = mDevice->CreateResourceTableLayout(dynamicResourceLayoutDesc);
-        resourceLayoutDesc.ResourceLayouts.Add(mFontResourceLayout.GetHeap());
-
-        //Create multipsample state desc
-        MultisampleDesc multisampleDesc = {};
-        multisampleDesc.bSampleShadingEnabled = false;
-        multisampleDesc.Samples = TextureSampleCount::SAMPLE_COUNT_1;
-
-        //Create output desc
-        OutputMergerDesc outputState = {};
-        outputState.ColorFormats = { TextureFormat::R8_G8_B8_A8_UNorm };
-
-        //Create graphics device
-        GraphicsPipelineDesc pipelineDesc = {};
-        pipelineDesc.BlendState = blendingStateDesc;
-        pipelineDesc.DepthStencilState = depthStencilStateDesc;
-        pipelineDesc.InputLayout = inputStateDesc;
-        pipelineDesc.Multisample = multisampleDesc;
-        pipelineDesc.OutputMerger = outputState;
-        pipelineDesc.RasterizerState = rasterizerStateDesc;
-        pipelineDesc.ResourceLayout = resourceLayoutDesc;
-        pipelineDesc.GraphicsShaders = { mVertexShader,mFragmentShader };
-        mPipeline = mDevice->CreateGraphicsPipeline(pipelineDesc);
 
         //Create fence
         mFence = mDevice->CreateFence();
@@ -451,7 +385,6 @@ namespace Portakal
         io.Fonts->GetTexDataAsRGBA32(&pFontData, &width, &height, &channelCount);
 
         DEV_ASSERT(pFontData != nullptr && width != 0 && height != 0 && channelCount != 0, "ImGuiRenderer", "Failed to initialize, invalid default font texture!");
-
 
         //Create texture
         TextureDesc defaultFontTextureDesc = {};
@@ -590,5 +523,89 @@ namespace Portakal
         style.Colors[ImGuiCol_PlotHistogram] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);
         style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
         style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.43f);
+    }
+    void ImGuiRenderer::InvalidateRenderPass(const SharedHeap<RenderPass>& pRenderPass,const byte subpassIndex)
+    {
+        //Destroy the former pipeline
+        mPipeline.Shutdown();
+
+        //Create input layout
+        InputLayoutDesc inputStateDesc = {};
+        InputBinding vertexInputBinding = {};
+        vertexInputBinding.StepRate = InputBindingStepRate::Vertex;
+        vertexInputBinding.Elements =
+        {
+            {TextureFormat::R32_G32_Float, InputElementSemantic::Position},
+            {TextureFormat::R32_G32_Float, InputElementSemantic::TexCoord},
+            {TextureFormat::R8_G8_B8_A8_UNorm, InputElementSemantic::Color}
+        };
+        inputStateDesc.Bindings.Add(vertexInputBinding);
+        inputStateDesc.Topology = MeshTopology::TriangleList;
+
+        //Create blending state
+        BlendStateDesc blendingStateDesc = {};
+        blendingStateDesc.bLogicOperationEnabled = false;
+        blendingStateDesc.LogicOperation = LogicOperation::Clear;
+        BlendStateAttachment blendingAttachment = {};
+        blendingAttachment.Enabled = true;
+        blendingAttachment.SourceColorFactor = BlendFactor::SrcAlpha;
+        blendingAttachment.DestinationColorFactor = BlendFactor::OneMinusSrcAlpha;
+        blendingAttachment.ColorOperation = BlendOperation::Add;
+        blendingAttachment.SourceAlphaFactor = BlendFactor::One;
+        blendingAttachment.DestinationAlphaFactor = BlendFactor::OneMinusSrcAlpha;
+        blendingStateDesc.Attachments.Add(blendingAttachment);
+
+        //Create rasterizer state
+        RasterizerStateDesc rasterizerStateDesc = {};
+        rasterizerStateDesc.IsFrontCounterClockwise = false;
+        rasterizerStateDesc.CullFlags = FaceCullMode::None;
+        rasterizerStateDesc.FillMode = PolygonMode::Fill;
+        rasterizerStateDesc.DepthBiasEnabled = false;
+        rasterizerStateDesc.DepthBiasClamp = 0;
+        rasterizerStateDesc.DepthBiasFactor = 0;
+        rasterizerStateDesc.DepthBiasSlope = 0;
+
+        //Create depth stencil state
+        DepthStencilStateDesc depthStencilStateDesc = {};
+        depthStencilStateDesc.bDepthTestEnabled = false;
+        depthStencilStateDesc.bDepthWriteEnabled = false;
+        depthStencilStateDesc.bStencilTestEnabled = false;
+        depthStencilStateDesc.StencilBackFace = {};
+        depthStencilStateDesc.StencilFrontFace = {};
+
+        //Create multipsample state desc
+        MultisampleDesc multisampleDesc = {};
+        multisampleDesc.bSampleShadingEnabled = false;
+        multisampleDesc.Samples = TextureSampleCount::SAMPLE_COUNT_1;
+
+        //Create output desc
+        OutputMergerDesc outputState = {};
+        outputState.ColorFormats = { TextureFormat::R8_G8_B8_A8_UNorm };
+
+        //Create resource layout desc
+        ResourceLayoutDesc resourceLayoutDesc = {};
+        resourceLayoutDesc.ResourceLayouts.Add(mStaticResourceLayout.GetHeap());
+        resourceLayoutDesc.ResourceLayouts.Add(mFontResourceLayout.GetHeap());
+
+        //Create graphics device
+        GraphicsPipelineDesc pipelineDesc = {};
+        pipelineDesc.BlendState = blendingStateDesc;
+        pipelineDesc.DepthStencilState = depthStencilStateDesc;
+        pipelineDesc.InputLayout = inputStateDesc;
+        pipelineDesc.Multisample = multisampleDesc;
+        pipelineDesc.OutputMerger = outputState;
+        pipelineDesc.RasterizerState = rasterizerStateDesc;
+        pipelineDesc.ResourceLayout = resourceLayoutDesc;
+        pipelineDesc.GraphicsShaders = { mVertexShader,mFragmentShader };
+        pipelineDesc.pRenderPass = pRenderPass;
+        pipelineDesc.SubpassIndex = subpassIndex;
+        mPipeline = mDevice->CreateGraphicsPipeline(pipelineDesc);
+
+        //Set properties
+        mLatestRenderPass = pRenderPass;
+
+    }
+    void ImGuiRenderer::OnShutdown()
+    {
     }
 }
