@@ -22,6 +22,9 @@ namespace Portakal
 		//Check project descriptor path
 		const String projectName = PlatformDirectory::GetName(mProjectFolderPath);
 		const String projectDescriptorPath = (mProjectFolderPath + "\\" + projectName + ".pproject");
+
+		DEV_LOG("File", *projectDescriptorPath);
+
 		if (!PlatformFile::Exists(projectDescriptorPath))
 		{
 			DEV_LOG("ProjectModule", "Target project file does not exists!");
