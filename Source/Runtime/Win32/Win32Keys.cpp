@@ -44,6 +44,8 @@ namespace Portakal
             return KeyboardKeys::Menu;
         case VK_MENU:
             return KeyboardKeys::LeftAlt;
+        case VK_SNAPSHOT:
+            return KeyboardKeys::PrintScreen;
         default:
         {
             if (vk_key >= 0x30 && vk_key <= 0x39) // its numeric
