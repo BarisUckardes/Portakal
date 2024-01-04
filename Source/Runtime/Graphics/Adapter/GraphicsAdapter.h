@@ -22,11 +22,11 @@ namespace Portakal
 		FORCEINLINE String GetVendorName() const noexcept { return mVendorName; }
 		FORCEINLINE Bool8 DoesSupportGeometryShader() const noexcept { return mSupportGeometryShader; }
 		FORCEINLINE Bool8 DoesSupportComputeShader() const noexcept { return mSupportComputeShader; }
-		FORCEINLINE Uint8 GetColorAttachmentCount() const noexcept { return mColorAttachmentCount; }
-		FORCEINLINE Uint32 GetShaderTextureCount() const noexcept { return mShaderTextureCount; }
-		FORCEINLINE Uint32 GetShaderSamplerCount() const noexcept { return mShaderSamplerCount; }
-		FORCEINLINE Uint32 GetShaderBufferCount() const noexcept { return mShaderBufferCount; }
-		FORCEINLINE Uint64 GetVRam() const noexcept { return mVRam; }
+		FORCEINLINE UInt8 GetColorAttachmentCount() const noexcept { return mColorAttachmentCount; }
+		FORCEINLINE UInt32 GetShaderTextureCount() const noexcept { return mShaderTextureCount; }
+		FORCEINLINE UInt32 GetShaderSamplerCount() const noexcept { return mShaderSamplerCount; }
+		FORCEINLINE UInt32 GetShaderBufferCount() const noexcept { return mShaderBufferCount; }
+		FORCEINLINE UInt64 GetVRam() const noexcept { return mVRam; }
 		FORCEINLINE Vector3UI GetImageDimensions() const noexcept { return mImageDimensions; }
 		FORCEINLINE GraphicsInstance* GetOwnerInstance() const noexcept
 		{
@@ -42,11 +42,11 @@ namespace Portakal
 		const String mVendorName;
 		const Bool8 mSupportGeometryShader;
 		Bool8 mSupportComputeShader;
-		const Uint8 mColorAttachmentCount;
-		const Uint32 mShaderTextureCount;
-		const Uint32 mShaderSamplerCount;
-		const Uint32 mShaderBufferCount;
-		const Uint64 mVRam;
+		const UInt8 mColorAttachmentCount;
+		const UInt32 mShaderTextureCount;
+		const UInt32 mShaderSamplerCount;
+		const UInt32 mShaderBufferCount;
+		const UInt64 mVRam;
 		const Vector3UI mImageDimensions;
 		GraphicsInstance* mOwnerInstance;
 		Array<SharedHeap<GraphicsDevice>> mDevices;

@@ -14,7 +14,7 @@ namespace Portakal
 		virtual void OnShutdown() override;
 	private:
 		Bool8 PresentCore() override;
-		void ResizeCore(const Uint16 width, const Uint16 height) override;
+		void ResizeCore(const UInt16 width, const UInt16 height) override;
 		void Free();
 		// Inherited via Swapchain
 		Bool8 SetFullScreen() override;
@@ -25,6 +25,6 @@ namespace Portakal
 		VkSwapchainKHR mSwapchain;
 		VkDevice mLogicalDevice;
 		VkPhysicalDevice mPhysicalDevice;
-		Uint32 mPresentQueueFamilyIndex;
+		UInt32 mPresentQueueFamilyIndex;
 	};
 }

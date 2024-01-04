@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	MemoryOwnedView::MemoryOwnedView(void* pMemory, const Uint64 sizeInBytes) : mSize(sizeInBytes)
+	MemoryOwnedView::MemoryOwnedView(void* pMemory, const UInt64 sizeInBytes) : mSize(sizeInBytes)
 	{
 		mMemory = new Byte[sizeInBytes];
 		Memory::Copy(mMemory, pMemory, sizeInBytes);
@@ -11,7 +11,7 @@ namespace Portakal
 
 	MemoryOwnedView::MemoryOwnedView(void* pMemoryStart, void* pMemoryEnd)
 	{
-		const Uint64 sizeInBytes = ((Byte*)pMemoryEnd - (Byte*)pMemoryStart);
+		const UInt64 sizeInBytes = ((Byte*)pMemoryEnd - (Byte*)pMemoryStart);
 		mMemory = new Byte[sizeInBytes];
 		Memory::Copy(mMemory, pMemoryStart, sizeInBytes);
 		mSize = sizeInBytes;

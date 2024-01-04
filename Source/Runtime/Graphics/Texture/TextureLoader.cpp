@@ -15,7 +15,7 @@ namespace Portakal
 			return false;
 		}
 
-		resultOut.Size = { (Uint16)width,(Uint16)height };
+		resultOut.Size = { (UInt16)width,(UInt16)height };
 		resultOut.pView = new MemoryOwnedView(pData, width * height * 4);*/
 
 		return true;

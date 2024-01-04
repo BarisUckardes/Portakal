@@ -6,7 +6,7 @@
 namespace Portakal
 {
 
-    KeyboardKeys DirectInputKeys::GetKey(const Uint64 key)
+    KeyboardKeys DirectInputKeys::GetKey(const UInt64 key)
     {
         switch (key)
         {

@@ -6,8 +6,8 @@ namespace Portakal
 	class RUNTIME_API PlatformHardware final
 	{
 	public:
-		static Uint16 GetCpuThreadCount();
-		static Uint16 GetPageSize();
+		static UInt16 GetCpuThreadCount();
+		static UInt16 GetPageSize();
 	public:
 		PlatformHardware() = delete;
 		~PlatformHardware() = delete;

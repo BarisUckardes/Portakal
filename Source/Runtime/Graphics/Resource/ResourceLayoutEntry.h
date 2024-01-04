@@ -9,6 +9,6 @@ namespace Portakal
     {
         GraphicsResourceType Type;
         ShaderStage Stages;
-        Uint32 Binding;
+        UInt32 Binding;
     };
 }

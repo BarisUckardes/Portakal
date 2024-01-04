@@ -18,7 +18,7 @@ namespace Portakal
 		~ArrayBase() = default;
 
 		virtual void AddIndirect() = 0;
-		virtual void CreateIndirect(const Uint32 count) = 0;
+		virtual void CreateIndirect(const UInt32 count) = 0;
 		virtual void ClearIndirect() = 0;
 	};
 
@@ -36,7 +36,7 @@ namespace Portakal
 			Add({});
 		}
 
-		virtual void CreateIndirect(const Uint32 count) override
+		virtual void CreateIndirect(const UInt32 count) override
 		{
 			mSize = count;
 			mCapacity = count;

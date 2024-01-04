@@ -24,7 +24,7 @@ namespace Portakal
 		{
 			return mMode;
 		}
-		FORCEINLINE Uint32 GetOffset() const noexcept
+		FORCEINLINE UInt32 GetOffset() const noexcept
 		{
 			return mOffset;
 		}
@@ -49,14 +49,14 @@ namespace Portakal
 			return (TAddress*)pObjectByte;
 		}
 	private:
-		Field(const String& name,const Type* pFieldType,const FieldMode mode,const Uint32 offset);
+		Field(const String& name,const Type* pFieldType,const FieldMode mode,const UInt32 offset);
 		~Field();
 	private:
 		const String mName;
 		const Type* mFieldType;
 		const Type* mArrayElementType;
 		const FieldMode mMode;
-		const Uint32 mOffset;
+		const UInt32 mOffset;
 
 	};
 }

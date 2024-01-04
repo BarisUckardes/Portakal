@@ -20,13 +20,25 @@ namespace Portakal
 		PFIELD();
 		Guid ID;
 		PFIELD();
-		Uint64 FileOffset;
+		UInt64 FileOffset;
 		PFIELD();
-		Uint64 FileSize;
+		UInt64 FileSize;
 		PFIELD();
 		Bool8 bOptimized;
 	};
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

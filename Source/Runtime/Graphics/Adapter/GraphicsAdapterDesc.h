@@ -13,12 +13,12 @@ namespace Portakal
 		String VendorName;
 		Bool8 bSupportGeometryShader;
 		Bool8 bSupportComputeShader;
-		Uint8 ColorAttachmentCount;
-		Uint32 ShaderTextureCount;
-		Uint32 ShaderSamplerCount;
-		Uint32 ShaderBufferCount;
+		UInt8 ColorAttachmentCount;
+		UInt32 ShaderTextureCount;
+		UInt32 ShaderSamplerCount;
+		UInt32 ShaderBufferCount;
 		Vector3UI ImageDimensions;
-		Uint64 VRam;
+		UInt64 VRam;
 		GraphicsInstance* pInstance;
 	};
 }

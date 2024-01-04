@@ -42,14 +42,14 @@ namespace Portakal
 
 		mBoundIndexBuffer = pBuffer;
 	}
-	void CommandList::DrawIndexed(const Uint32 indexCount, const Uint32 indexOffset, const Uint32 vertexOffset, const Uint32 instanceCount, const Uint32 instanceOffset)
+	void CommandList::DrawIndexed(const UInt32 indexCount, const UInt32 indexOffset, const UInt32 vertexOffset, const UInt32 instanceCount, const UInt32 instanceOffset)
 	{
 		if (IsShutdown())
 			return;
 
 		DrawIndexedCore(indexCount, indexOffset, vertexOffset, instanceCount, instanceOffset);
 	}
-	void CommandList::DispatchCompute(const Uint32 groupX, const Uint32 groupY, const Uint32 groupZ)
+	void CommandList::DispatchCompute(const UInt32 groupX, const UInt32 groupY, const UInt32 groupZ)
 	{
 		if (IsShutdown())
 			return;

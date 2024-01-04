@@ -91,7 +91,7 @@ namespace Portakal
 			return;
 
 		//Search for the name
-		for (Uint32 i = 0;i< pAPI->mResources.GetSize();i++)
+		for (UInt32 i = 0;i< pAPI->mResources.GetSize();i++)
 		{
 			const SharedHeap<Resource>& resource = pAPI->mResources[i];
 			if (resource->GetName() == name)
@@ -110,7 +110,7 @@ namespace Portakal
 			return;
 
 		//Search for the name
-		for (Uint32 i = 0; i < pAPI->mResources.GetSize(); i++)
+		for (UInt32 i = 0; i < pAPI->mResources.GetSize(); i++)
 		{
 			const SharedHeap<Resource>& resource = pAPI->mResources[i];
 			if (resource->GetID() == id)
@@ -129,7 +129,7 @@ namespace Portakal
 			return nullptr;
 
 		//Search for the name
-		for (Uint32 i = 0; i < pAPI->mResources.GetSize(); i++)
+		for (UInt32 i = 0; i < pAPI->mResources.GetSize(); i++)
 		{
 			const SharedHeap<Resource>& resource = pAPI->mResources[i];
 			if (resource->GetName() == name)
@@ -146,7 +146,7 @@ namespace Portakal
 			return nullptr;
 
 		//Search for the name
-		for (Uint32 i = 0; i < pAPI->mResources.GetSize(); i++)
+		for (UInt32 i = 0; i < pAPI->mResources.GetSize(); i++)
 		{
 			const SharedHeap<Resource>& resource = pAPI->mResources[i];
 			if (resource->GetID() == id)

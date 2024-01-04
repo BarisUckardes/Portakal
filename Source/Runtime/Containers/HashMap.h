@@ -44,7 +44,7 @@ namespace Portakal
 			mData = other.mData;
 		}
 
-		HashMap(Uint32 size)
+		HashMap(UInt32 size)
 		{
 			mData.Reserve(size);
 		}
@@ -61,7 +61,7 @@ namespace Portakal
 
 		void Remove(TKey key)
 		{
-			for (Uint32 i = 0; i < mData.GetSize(); i++)
+			for (UInt32 i = 0; i < mData.GetSize(); i++)
 			{
 				if (mData[i].GetKey() == key)
 				{
@@ -73,7 +73,7 @@ namespace Portakal
 
 		FORCEINLINE TValue* operator[](TKey key)
 		{
-			for (Uint32 i = 0; i < mData.GetSize(); i++)
+			for (UInt32 i = 0; i < mData.GetSize(); i++)
 			{
 				if (mData[i].GetKey() == key)
 				{
@@ -86,7 +86,7 @@ namespace Portakal
 
 		FORCEINLINE Pair<TKey, TValue>& GetPair(TKey key)
 		{
-			for (Uint32 i = 0; i < mData.GetSize(); i++)
+			for (UInt32 i = 0; i < mData.GetSize(); i++)
 			{
 				if (mData[i].GetKey() == key)
 				{
@@ -99,7 +99,7 @@ namespace Portakal
 
 		FORCEINLINE TValue* Find(TKey key)
 		{
-			for (Uint32 i = 0; i < mData.GetSize(); i++)
+			for (UInt32 i = 0; i < mData.GetSize(); i++)
 			{
 				if (mData[i].GetKey() == key)
 				{
@@ -112,7 +112,7 @@ namespace Portakal
 
 		FORCEINLINE int FindIndex(TKey key)
 		{
-			for (Uint32 i = 0; i < mData.GetSize(); i++)
+			for (UInt32 i = 0; i < mData.GetSize(); i++)
 			{
 				if (mData[i].GetKey() == key)
 				{
@@ -125,7 +125,7 @@ namespace Portakal
 
 		FORCEINLINE Bool8 Contains(TKey key)
 		{
-			for (Uint32 i = 0; i < mData.GetSize(); i++)
+			for (UInt32 i = 0; i < mData.GetSize(); i++)
 			{
 				if (mData[i].GetKey() == key)
 				{
@@ -136,7 +136,7 @@ namespace Portakal
 			return false;
 		}
 
-		FORCEINLINE Pair<TKey, TValue>& operator[](Uint32 index)
+		FORCEINLINE Pair<TKey, TValue>& operator[](UInt32 index)
 		{
 			return mData[index];
 		}
@@ -144,8 +144,8 @@ namespace Portakal
 		FORCEINLINE Pair<TKey, TValue>* begin() { return mData.begin(); }
 		FORCEINLINE Pair<TKey, TValue>* end() { return mData.end(); }
 
-		FORCEINLINE Uint32 GetSize() const { return mData.GetSize(); }
-		FORCEINLINE Uint32 GetCapacity() const { return mData.GetCapacity(); }
+		FORCEINLINE UInt32 GetSize() const { return mData.GetSize(); }
+		FORCEINLINE UInt32 GetCapacity() const { return mData.GetCapacity(); }
 
 
 		void Clear() { mData.Clear(); }

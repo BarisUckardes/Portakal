@@ -11,8 +11,8 @@ namespace Portakal
         StencilOperation PassOperation;
         StencilOperation DepthFailOperation;
         CompareOperation CompareOperation;
-        Uint32 CompareMask;
-        Uint32 WriteMask;
-        Uint32 Reference;
+        UInt32 CompareMask;
+        UInt32 WriteMask;
+        UInt32 Reference;
     };
 }

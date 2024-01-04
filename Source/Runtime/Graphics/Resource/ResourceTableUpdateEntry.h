@@ -10,9 +10,9 @@ namespace Portakal
     {
         SharedHeap<GraphicsDeviceObject> pResource;
         GraphicsResourceType Type;
-        Uint32 Count;
-        Uint32 ArrayElement;
-        Uint64 BufferOffsetInBytes;
-        Uint32 Binding;
+        UInt32 Count;
+        UInt32 ArrayElement;
+        UInt64 BufferOffsetInBytes;
+        UInt32 Binding;
     };
 }

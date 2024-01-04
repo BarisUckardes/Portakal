@@ -5,10 +5,10 @@ namespace Portakal
 {
 	typedef char Char;
 	typedef bool Bool8;
-	typedef unsigned char Uint8, Byte;
-	typedef unsigned short Uint16;
-	typedef unsigned int Uint32;
-	typedef unsigned long long Uint64;
+	typedef unsigned char UInt8, Byte;
+	typedef unsigned short UInt16;
+	typedef unsigned int UInt32;
+	typedef unsigned long long UInt64;
 
 	typedef signed char Int8;
 	typedef signed short Int16;

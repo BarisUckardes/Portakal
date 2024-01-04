@@ -20,12 +20,12 @@ namespace Portakal
 			return mFence;
 		}
 		
-		FORCEINLINE Uint64 GetFenceValue() const noexcept
+		FORCEINLINE UInt64 GetFenceValue() const noexcept
 		{
 			return mFenceValue;
 		}
 	private:
 		ComPtr<ID3D12Fence> mFence;
-		Uint64 mFenceValue;
+		UInt64 mFenceValue;
 	};
 }

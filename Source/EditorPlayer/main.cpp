@@ -54,6 +54,7 @@
 #include <Runtime/Platform/PlatformPaths.h>
 #include <Editor/ImGui/ImGuiModule.h>
 #include <Runtime/Graphics/GraphicsModule.h>
+#include <Editor/GUI/Window/GUIWindowModule.h>
 
 namespace Portakal
 {
@@ -80,7 +81,8 @@ namespace Portakal
 		
 		//GUI modules
 		pApplication->RegisterModule<ImGuiRenderStartModule>(9);
-		pApplication->RegisterModule<ImGuiRenderEndModule>(10);
+		pApplication->RegisterModule<GUIWindowModule>(10);
+		pApplication->RegisterModule<ImGuiRenderEndModule>(11);
 
 		//Run
 		pApplication->Run();
@@ -90,7 +92,7 @@ namespace Portakal
 int main(const unsigned int argumentCount, const char** ppArguments)
 {
 	Portakal::Array<Portakal::String> cmdArguments;
-	for (Portakal::Uint32 i = 0; i < argumentCount; i++)
+	for (Portakal::UInt32 i = 0; i < argumentCount; i++)
 		cmdArguments.Add(ppArguments[i]);
 
 	Portakal::Run(cmdArguments);

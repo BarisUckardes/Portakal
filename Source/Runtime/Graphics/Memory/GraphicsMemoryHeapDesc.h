@@ -7,6 +7,6 @@ namespace Portakal
 	struct RUNTIME_API GraphicsMemoryHeapDesc
 	{
 		GraphicsMemoryType Type;
-		Uint64 SizeInBytes;
+		UInt64 SizeInBytes;
 	};
 }

@@ -27,11 +27,11 @@ namespace Portakal
         }
 
         FORCEINLINE const Array<ResourceTablePoolEntry>& GetEntries() const noexcept { return mEntries; }
-        FORCEINLINE Uint32 GetMaxTables() const noexcept { return mMaxTables; }
+        FORCEINLINE UInt32 GetMaxTables() const noexcept { return mMaxTables; }
 
         FORCEINLINE virtual GraphicsDeviceObjectType GetObjectType() const noexcept override final { return GraphicsDeviceObjectType::ResourceTablePool; }
     private:
         const Array<ResourceTablePoolEntry> mEntries;
-        const Uint32 mMaxTables;
+        const UInt32 mMaxTables;
     };
 }

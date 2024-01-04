@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	KeyboardKeys Win32Keys::GetKey(const Uint32 vk_key)
+	KeyboardKeys Win32Keys::GetKey(const UInt32 vk_key)
 	{
         switch (vk_key)
         {

@@ -5,9 +5,9 @@ namespace Portakal
 {
 	struct RUNTIME_API MonitorDisplayMode
 	{
-		Uint16 Width;
-		Uint16 Height;
-		Uint16 RefreshRate;
+		UInt16 Width;
+		UInt16 Height;
+		UInt16 RefreshRate;
 		Byte BitsPerPixel;
 	};
 }

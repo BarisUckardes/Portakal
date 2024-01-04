@@ -140,7 +140,7 @@ namespace Portakal
     Win32Monitor::Win32Monitor(const HMONITOR handle,
         const MonitorDisplayMode& currentDisplayMode,
         const Array<MonitorDisplayMode>& displayModes, const Int32 positionX,
-        const Int32 positionY,const Uint16 width,const Uint16 height) :
+        const Int32 positionY,const UInt16 width,const UInt16 height) :
         mHandle(handle), PlatformMonitor({ positionX, positionY }, {width,height}, currentDisplayMode, displayModes)
     {
        

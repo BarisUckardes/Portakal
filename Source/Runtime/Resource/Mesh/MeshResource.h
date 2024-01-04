@@ -17,11 +17,11 @@ namespace Portakal
 		MeshResource();
 		~MeshResource() = default;
 
-		FORCEINLINE Uint32 GetVertexCount() const noexcept
+		FORCEINLINE UInt32 GetVertexCount() const noexcept
 		{
 			return mVertexCount;
 		}
-		FORCEINLINE Uint32 GetIndexCount() const noexcept
+		FORCEINLINE UInt32 GetIndexCount() const noexcept
 		{
 			return mIndexCount;
 		}
@@ -34,10 +34,10 @@ namespace Portakal
 			return mIndexDeviceBuffer;
 		}
 	public:
-		void AllocateVertexes(const Uint32 count,const Uint32 elementSize,const SharedHeap<GraphicsMemoryHeap>& pDeviceHeap,const SharedHeap<GraphicsMemoryHeap>& pHostHeap,const Bool8 bAllocateStagebufferUpfront);
-		void AllocateIndexes(const Uint32 count,const Uint32 elementSize,const SharedHeap<GraphicsMemoryHeap>& pDeviceHeap,const SharedHeap<GraphicsMemoryHeap>& pHostHeap,const Bool8 bAllocateStagebufferUpfront);
-		void UpdateVertexes(const MemoryView memory,const Uint32 offset);
-		void UpdateIndexes(const MemoryView memory,const Uint32 offset);
+		void AllocateVertexes(const UInt32 count,const UInt32 elementSize,const SharedHeap<GraphicsMemoryHeap>& pDeviceHeap,const SharedHeap<GraphicsMemoryHeap>& pHostHeap,const Bool8 bAllocateStagebufferUpfront);
+		void AllocateIndexes(const UInt32 count,const UInt32 elementSize,const SharedHeap<GraphicsMemoryHeap>& pDeviceHeap,const SharedHeap<GraphicsMemoryHeap>& pHostHeap,const Bool8 bAllocateStagebufferUpfront);
+		void UpdateVertexes(const MemoryView memory,const UInt32 offset);
+		void UpdateIndexes(const MemoryView memory,const UInt32 offset);
 	private:
 		void Clear();
 		void CreateInternalResources();
@@ -53,10 +53,22 @@ namespace Portakal
 		SharedHeap<GraphicsBuffer> mIndexStageBuffer;
 		SharedHeap<GraphicsMemoryHeap> mVertexHostHeap;
 		SharedHeap<GraphicsMemoryHeap> mIndexHostHeap;
-		Uint32 mVertexCount;
-		Uint32 mIndexCount;
+		UInt32 mVertexCount;
+		UInt32 mIndexCount;
 	};
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

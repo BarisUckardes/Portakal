@@ -29,11 +29,11 @@ namespace Portakal
 		{
 			return mType;
 		}
-		FORCEINLINE Uint64 GetFileOffset() const noexcept
+		FORCEINLINE UInt64 GetFileOffset() const noexcept
 		{
 			return mFileOffset;
 		}
-		FORCEINLINE Uint64 GetFileSize() const noexcept
+		FORCEINLINE UInt64 GetFileSize() const noexcept
 		{
 			return mFileSize;
 		}
@@ -68,8 +68,8 @@ namespace Portakal
 		IResourceDeserializer* mDeserializer;
 		String mPath;
 		String mType;
-		Uint64 mFileOffset;
-		Uint64 mFileSize;
+		UInt64 mFileOffset;
+		UInt64 mFileSize;
 		Bool8 mLoaded;
 		Bool8 mCached;
 		Bool8 mOptimized;

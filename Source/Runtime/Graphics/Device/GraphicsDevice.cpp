@@ -21,8 +21,8 @@ namespace Portakal
         */
         DEV_ASSERT(desc.MipLevels > 0, "GraphicsDevice", "A texture should always have it's mip levels value higher than 0");
 
-        const Uint16 maxDimension = Math::Max(desc.Size.X, desc.Size.Y);
-        const Uint16 maxMipCount = Math::Log2(maxDimension) + 1;
+        const UInt16 maxDimension = Math::Max(desc.Size.X, desc.Size.Y);
+        const UInt16 maxMipCount = Math::Log2(maxDimension) + 1;
         DEV_ASSERT(maxMipCount > desc.MipLevels, "Texture", "Requested mip levels are not possible with this texture, considering the dimensions the max mip levels can be %d while you requested %d",
             maxMipCount, desc.MipLevels);
 

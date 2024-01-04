@@ -23,10 +23,10 @@ namespace Portakal
 
 		//Catch keys
 		Bool8 states[256];
-		for (Uint16 i = 0; i < 256; i++)
+		for (UInt16 i = 0; i < 256; i++)
 		{
 			const KeyboardKeys key = DirectInputKeys::GetKey(i);
-			states[(Uint16)key] = cachedStates[i];
+			states[(UInt16)key] = cachedStates[i];
 		}
 
 		//Update states

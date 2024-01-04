@@ -34,24 +34,24 @@ namespace Portakal
 	class RUNTIME_API String final
 	{
 	public:
-		String(const Char* pData, const Uint64 sizeInBytes);
-		String(const Byte* pData, const Uint64 sizeInBytes);
+		String(const Char* pData, const UInt64 sizeInBytes);
+		String(const Byte* pData, const UInt64 sizeInBytes);
 		String(const wchar_t* pData);
-		String(const Uint64 sizeInBytes);
+		String(const UInt64 sizeInBytes);
 		String(const Char* pData);
 		String(const String& other);
 		String();
 		~String();
 
-		FORCEINLINE Uint64 GetSize() const noexcept { return mSize; }
+		FORCEINLINE UInt64 GetSize() const noexcept { return mSize; }
 		FORCEINLINE Char* GetSource() const noexcept { return mSource; }
 
-		FORCEINLINE Uint64 FindIndex(const String& target, const Uint64 startIndex, const Uint64 count = 0)const;
-		FORCEINLINE Uint64 FindIndex(const Char target) const;
-		FORCEINLINE Uint64 FindIndex(const String& target) const;
-		FORCEINLINE Uint64 FindLastIndex(const String& target, const Uint64 startIndex) const;
-		FORCEINLINE Uint64 GetCount(const Char target) const;
-		FORCEINLINE String GetSubset(const Uint64 startIndex, const Uint64 length) const;
+		FORCEINLINE UInt64 FindIndex(const String& target, const UInt64 startIndex, const UInt64 count = 0)const;
+		FORCEINLINE UInt64 FindIndex(const Char target) const;
+		FORCEINLINE UInt64 FindIndex(const String& target) const;
+		FORCEINLINE UInt64 FindLastIndex(const String& target, const UInt64 startIndex) const;
+		FORCEINLINE UInt64 GetCount(const Char target) const;
+		FORCEINLINE String GetSubset(const UInt64 startIndex, const UInt64 length) const;
 		FORCEINLINE Type* GetType() const noexcept
 		{
 			return typeof(String);
@@ -76,7 +76,7 @@ namespace Portakal
 
 	private:
 		Char* mSource;
-		Uint64 mSize;
+		UInt64 mSize;
 	};
 
 	String operator+(const String& target0, const String& target1);

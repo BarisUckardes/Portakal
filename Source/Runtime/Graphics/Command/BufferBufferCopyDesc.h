@@ -10,8 +10,8 @@ namespace Portakal
 	 */
 	struct RUNTIME_API BufferBufferCopyDesc
 	{
-		Uint64 SourceOffsetInBytes;
-		Uint64 DestinationOffsetInBytes;
-		Uint64 SizeInBytes;
+		UInt64 SourceOffsetInBytes;
+		UInt64 DestinationOffsetInBytes;
+		UInt64 SizeInBytes;
 	};
 }

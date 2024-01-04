@@ -178,8 +178,8 @@ namespace Portakal
 	};
 
 	typedef Color4<Int32> Color4I;
-	typedef Color4<Uint32> Color4UI;
-	typedef Color4<Uint16> Color4US;
+	typedef Color4<UInt32> Color4UI;
+	typedef Color4<UInt16> Color4US;
 	typedef Color4<Byte> Color4B;
 	typedef Color4<float> Color4F;
 	typedef Color4<double> Color4D;

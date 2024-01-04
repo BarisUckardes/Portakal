@@ -71,16 +71,16 @@ namespace Portakal
 	
 		virtual GraphicsDeviceObjectType GetObjectType() const noexcept override final { return GraphicsDeviceObjectType::Swapchain; }
 	
-		void Resize(const Uint16 width, const Uint16 height);
+		void Resize(const UInt16 width, const UInt16 height);
 		Bool8 Present();
 		void WaitForPresent(const Byte index);
 		void TransitionToPresent();
 		Bool8 SetMode(const WindowMode mode);
 	protected:
 		void SetTextures(const Array<SharedHeap<Texture>>& textures, const Array<SharedHeap<TextureView>>& views);
-		void SetSize(const Uint16 width, const Uint16 height);
+		void SetSize(const UInt16 width, const UInt16 height);
 
-		virtual void ResizeCore(const Uint16 width, const Uint16 height) = 0;
+		virtual void ResizeCore(const UInt16 width, const UInt16 height) = 0;
 		virtual void OnShutdown() override;
 		virtual Bool8 PresentCore() = 0;
 		virtual Bool8 SetFullScreen() = 0;

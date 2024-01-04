@@ -7,11 +7,11 @@ typedef Portakal::Win32Hardware PlatformAbstraction;
 
 namespace Portakal
 {
-	Uint16 PlatformHardware::GetCpuThreadCount()
+	UInt16 PlatformHardware::GetCpuThreadCount()
 	{
 		return PlatformAbstraction::GetCpuThreadCount();
 	}
-	Uint16 PlatformHardware::GetPageSize()
+	UInt16 PlatformHardware::GetPageSize()
 	{
 		return PlatformAbstraction::GetPageSize();
 	}

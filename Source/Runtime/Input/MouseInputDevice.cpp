@@ -5,7 +5,7 @@ namespace Portakal
 {
 	MouseInputDevice::MouseInputDevice()
 	{
-		for (Uint16 i = 0; i < 256; i++)
+		for (UInt16 i = 0; i < 256; i++)
 		{
 			mLastState[i] = false;
 			mButtons[i] = {};
@@ -13,19 +13,19 @@ namespace Portakal
 	}
 	Bool8 MouseInputDevice::IsButtonDown(const MouseButtons button) const noexcept
 	{
-		return mButtons[(Uint16)button].bDown;
+		return mButtons[(UInt16)button].bDown;
 	}
 	Bool8 MouseInputDevice::IsButtonUp(const MouseButtons button) const noexcept
 	{
-		return !mButtons[(Uint16)button].bDown;
+		return !mButtons[(UInt16)button].bDown;
 	}
 	Bool8 MouseInputDevice::IsButtonPressed(const MouseButtons button) const noexcept
 	{
-		return mButtons[(Uint16)button].bPressed;
+		return mButtons[(UInt16)button].bPressed;
 	}
 	Bool8 MouseInputDevice::IsButtonReleased(const MouseButtons button) const noexcept
 	{
-		return mButtons[(Uint16)button].bReleased;
+		return mButtons[(UInt16)button].bReleased;
 	}
 	Bool8 MouseInputDevice::GetWheelDelta() const noexcept
 	{
@@ -34,7 +34,7 @@ namespace Portakal
 	void MouseInputDevice::UpdateButtons(const Bool8* pButtons)
 	{
 		//Set keys
-		for (Uint16 i = 0; i < 256; i++)
+		for (UInt16 i = 0; i < 256; i++)
 		{
 			const Bool8 bOldState = mLastState[i];
 			const Bool8 bNewState = pButtons[i];

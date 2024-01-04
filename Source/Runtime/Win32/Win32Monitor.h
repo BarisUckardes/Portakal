@@ -13,7 +13,7 @@ namespace Portakal
 		Win32Monitor(const HMONITOR handle,
 			const MonitorDisplayMode& currentDisplayMode,
 			const Array<MonitorDisplayMode>& displayModes, const Int32 positionX,
-			const Int32 positionY,const Uint16 width,const Uint16 height);
+			const Int32 positionY,const UInt16 width,const UInt16 height);
 		~Win32Monitor() = default;
 
 

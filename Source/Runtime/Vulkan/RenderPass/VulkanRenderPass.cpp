@@ -73,7 +73,7 @@ namespace Portakal
 			VkAttachmentReference colorAttachmentsReferences[16];
 			VkAttachmentReference inputAttachmentReferences[16];
 			VkAttachmentReference multiSampleAttachmentReferences[16];
-			Uint32 preserveAttachmentReferences[16];
+			UInt32 preserveAttachmentReferences[16];
 
 			VkSubpassDescription subpass = {};
 			subpass.pipelineBindPoint = subpassDesc.BindPoint == PipelineBindPoint::Graphics ? VK_PIPELINE_BIND_POINT_GRAPHICS : VK_PIPELINE_BIND_POINT_COMPUTE;

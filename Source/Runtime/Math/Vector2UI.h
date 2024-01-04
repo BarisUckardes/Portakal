@@ -9,23 +9,23 @@ namespace Portakal
 	struct RUNTIME_API Vector2UI
 	{
 	public:
-		static Uint32 Distance(const Vector2UI x, const Vector2UI y)
+		static UInt32 Distance(const Vector2UI x, const Vector2UI y)
 		{
 			const Vector2UI dir = y - x;
 			return dir.GetLength();
 		}
 
-		static Uint32 Dot(const Vector2UI x, const Vector2UI y)
+		static UInt32 Dot(const Vector2UI x, const Vector2UI y)
 		{
 			return x.X * y.X + x.Y * y.Y;
 		}
 
 	public:
-		Vector2UI(const Uint32 x, const Uint32 y) : X(x), Y(y)
+		Vector2UI(const UInt32 x, const UInt32 y) : X(x), Y(y)
 		{
 		}
 
-		Vector2UI(const Uint32 value) : X(value), Y(value)
+		Vector2UI(const UInt32 value) : X(value), Y(value)
 		{
 		}
 
@@ -39,13 +39,13 @@ namespace Portakal
 
 		~Vector2UI() = default;
 
-		FORCEINLINE Uint32 GetLength() const noexcept
+		FORCEINLINE UInt32 GetLength() const noexcept
 		{
 			return Math::Sqrt(X * X + Y * Y);
 		}
 		FORCEINLINE Vector2UI GetNormalized() const noexcept
 		{
-			const Uint32 length = GetLength();
+			const UInt32 length = GetLength();
 
 			return { X / length,Y / length };
 		}
@@ -70,22 +70,22 @@ namespace Portakal
 			return Vector2UI(X / other.X, Y / other.Y);
 		}
 
-		Vector2UI operator+(const Uint32& other) const
+		Vector2UI operator+(const UInt32& other) const
 		{
 			return Vector2UI(X + other, Y + other);
 		}
 
-		Vector2UI operator-(const Uint32& other) const
+		Vector2UI operator-(const UInt32& other) const
 		{
 			return Vector2UI(X - other, Y - other);
 		}
 
-		Vector2UI operator*(const Uint32& other) const
+		Vector2UI operator*(const UInt32& other) const
 		{
 			return Vector2UI(X * other, Y * other);
 		}
 
-		Vector2UI operator/(const Uint32& other) const
+		Vector2UI operator/(const UInt32& other) const
 		{
 			return Vector2UI(X / other, Y / other);
 		}
@@ -118,28 +118,28 @@ namespace Portakal
 			return *this;
 		}
 
-		Vector2UI& operator+=(const Uint32& other)
+		Vector2UI& operator+=(const UInt32& other)
 		{
 			X += other;
 			Y += other;
 			return *this;
 		}
 
-		Vector2UI& operator-=(const Uint32& other)
+		Vector2UI& operator-=(const UInt32& other)
 		{
 			X -= other;
 			Y -= other;
 			return *this;
 		}
 
-		Vector2UI& operator*=(const Uint32& other)
+		Vector2UI& operator*=(const UInt32& other)
 		{
 			X *= other;
 			Y *= other;
 			return *this;
 		}
 
-		Vector2UI& operator/=(const Uint32& other)
+		Vector2UI& operator/=(const UInt32& other)
 		{
 			X /= other;
 			Y /= other;
@@ -156,22 +156,34 @@ namespace Portakal
 			return X != other.X || Y != other.Y;
 		}
 
-		Bool8 operator==(const Uint32& other) const
+		Bool8 operator==(const UInt32& other) const
 		{
 			return X == other && Y == other;
 		}
 
-		Bool8 operator!=(const Uint32& other) const
+		Bool8 operator!=(const UInt32& other) const
 		{
 			return X != other || Y != other;
 		}
 
 		PFIELD();
-		Uint32 X;
+		UInt32 X;
 		PFIELD();
-		Uint32 Y;
+		UInt32 Y;
 	};
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

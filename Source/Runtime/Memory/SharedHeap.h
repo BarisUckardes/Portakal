@@ -27,7 +27,7 @@ namespace Portakal
         {
             mData = (Object*)pObject;
             if (pObject != nullptr)
-                mReferenceCount = new Uint32(1);
+                mReferenceCount = new UInt32(1);
             else
                 mReferenceCount = nullptr;
 
@@ -108,7 +108,7 @@ namespace Portakal
             Deference();
 
             mData = (Object*)pData;
-            mReferenceCount = new Uint32(1);
+            mReferenceCount = new UInt32(1);
         }
         void operator=(T* pData)
         {
@@ -122,7 +122,7 @@ namespace Portakal
             }
 
             mData = (Object*)pData;
-            mReferenceCount = new Uint32(1);
+            mReferenceCount = new UInt32(1);
         }
         Bool8 operator ==(const SharedHeap& other)
         {
@@ -163,6 +163,6 @@ namespace Portakal
         }
     private:
         Object* mData;
-        Uint32* mReferenceCount;
+        UInt32* mReferenceCount;
     };
 }

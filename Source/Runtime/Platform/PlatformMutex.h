@@ -12,7 +12,7 @@ namespace Portakal
 		PlatformMutex() = default;
 		~PlatformMutex() = default;
 
-		virtual MutexState Lock(const Uint64 timeInMs = uint64_max) = 0;
+		virtual MutexState Lock(const UInt64 timeInMs = uint64_max) = 0;
 		virtual Bool8 Release() = 0;
 	};
 }

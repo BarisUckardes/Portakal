@@ -6,8 +6,8 @@ namespace Portakal
 	class RUNTIME_API Win32Hardware final
 	{
 	public:
-		static Uint16 GetCpuThreadCount();
-		static Uint32 GetPageSize();
+		static UInt16 GetCpuThreadCount();
+		static UInt32 GetPageSize();
 	public:
 		Win32Hardware() = delete;
 		~Win32Hardware() = delete;

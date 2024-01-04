@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    enum class RUNTIME_API MessageFlags : Uint16
+    enum class RUNTIME_API MessageFlags : UInt16
     {
         None = 1 << 0,
         Help = 1 << 1,
@@ -16,6 +16,6 @@ namespace Portakal
         IconStop = 1 << 8
     };
 
-    GENERATE_FLAGS(MessageFlags, Uint16)
+    GENERATE_FLAGS(MessageFlags, UInt16)
 }
 

@@ -10,13 +10,13 @@ namespace Portakal
 
         }
 
-        Uint16 Year;
+        UInt16 Year;
         Byte Month;
         Byte Day;
         Byte Hour;
         Byte Minute;
         Byte Second;
-        Uint64 Milliseconds;
+        UInt64 Milliseconds;
     };
 
     static Bool8 operator==(const TimeStamp& a, const TimeStamp& b)

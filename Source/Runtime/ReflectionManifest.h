@@ -33,9 +33,9 @@
 		void* CreateBool8() {return new Portakal::Bool8();}
 		void* CreateChar() {return new Portakal::Char();}
 		void* CreateByte() {return new Portakal::Byte();}
-		void* CreateUInt16() {return new Portakal::Uint16();}
-		void* CreateUInt32() {return new Portakal::Uint32();}
-		void* CreateUInt64() {return new Portakal::Uint64();}
+		void* CreateUInt16() {return new Portakal::UInt16();}
+		void* CreateUInt32() {return new Portakal::UInt32();}
+		void* CreateUInt64() {return new Portakal::UInt64();}
 		void* CreateInt16() {return new Portakal::Int16();}
 		void* CreateInt32() {return new Portakal::Int32();}
 		void* CreateInt64() {return new Portakal::Int64();}
@@ -81,12 +81,12 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::Char>(pChar);
 		Portakal::Type* pByte = Portakal::TypeDispatcher::CreateType("Byte",sizeof(Portakal::Byte),Portakal::TypeModes::Class,Portakal::TypeCodes::Byte,CreateByte,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Byte>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::Byte>(pByte);
-		Portakal::Type* pUint16 = Portakal::TypeDispatcher::CreateType("Uint16",sizeof(Portakal::Uint16),Portakal::TypeModes::Class,Portakal::TypeCodes::UInt16,CreateUInt16,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Uint16>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::Uint16>(pUint16);
-		Portakal::Type* pUint32 = Portakal::TypeDispatcher::CreateType("Uint32",sizeof(Portakal::Uint32),Portakal::TypeModes::Class,Portakal::TypeCodes::UInt32,CreateUInt32,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Uint32>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::Uint32>(pUint32);
-		Portakal::Type* pUint64 = Portakal::TypeDispatcher::CreateType("Uint64",sizeof(Portakal::Uint64),Portakal::TypeModes::Class,Portakal::TypeCodes::UInt64,CreateUInt64,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Uint64>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::Uint64>(pUint64);
+		Portakal::Type* pUInt16 = Portakal::TypeDispatcher::CreateType("UInt16",sizeof(Portakal::UInt16),Portakal::TypeModes::Class,Portakal::TypeCodes::UInt16,CreateUInt16,Portakal::TypeDispatcher::GetTypeAddress<Portakal::UInt16>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::UInt16>(pUInt16);
+		Portakal::Type* pUInt32 = Portakal::TypeDispatcher::CreateType("UInt32",sizeof(Portakal::UInt32),Portakal::TypeModes::Class,Portakal::TypeCodes::UInt32,CreateUInt32,Portakal::TypeDispatcher::GetTypeAddress<Portakal::UInt32>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::UInt32>(pUInt32);
+		Portakal::Type* pUInt64 = Portakal::TypeDispatcher::CreateType("UInt64",sizeof(Portakal::UInt64),Portakal::TypeModes::Class,Portakal::TypeCodes::UInt64,CreateUInt64,Portakal::TypeDispatcher::GetTypeAddress<Portakal::UInt64>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::UInt64>(pUInt64);
 		Portakal::Type* pInt16 = Portakal::TypeDispatcher::CreateType("Int16",sizeof(Portakal::Int16),Portakal::TypeModes::Class,Portakal::TypeCodes::Int16,CreateInt16,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Int16>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::Int16>(pInt16);
 		Portakal::Type* pInt32 = Portakal::TypeDispatcher::CreateType("Int32",sizeof(Portakal::Int32),Portakal::TypeModes::Class,Portakal::TypeCodes::Int32,CreateInt32,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Int32>());
@@ -158,28 +158,28 @@ extern "C"
 		Portakal::TypeDispatcher::RegisterEnum("Switch",157,pPlatformType);
 
         //Register fields here
-		Portakal::TypeDispatcher::RegisterField("mMyType",offsetof(Portakal::TestClass,mMyType),typeof(Portakal::Uint32),Portakal::FieldMode::Normal,pTestClass);
+		Portakal::TypeDispatcher::RegisterField("mMyType",offsetof(Portakal::TestClass,mMyType),typeof(Portakal::UInt32),Portakal::FieldMode::Normal,pTestClass);
 		Portakal::TypeDispatcher::RegisterField("mMahString",offsetof(Portakal::TestClass,mMahString),typeof(Portakal::String),Portakal::FieldMode::Normal,pTestClass);
 		Portakal::TypeDispatcher::RegisterField("mMahObjectString",offsetof(Portakal::TestClass,mMahObjectString),typeof(Portakal::String),Portakal::FieldMode::Object,pTestClass);
 		Portakal::TypeDispatcher::RegisterField("mMahArray",offsetof(Portakal::TestClass,mMahArray),typeof(Portakal::String),Portakal::FieldMode::Array,pTestClass);
-		Portakal::TypeDispatcher::RegisterField("A",offsetof(Portakal::Guid,A),typeof(Portakal::Uint32),Portakal::FieldMode::Normal,pGuid);
-		Portakal::TypeDispatcher::RegisterField("B",offsetof(Portakal::Guid,B),typeof(Portakal::Uint32),Portakal::FieldMode::Normal,pGuid);
-		Portakal::TypeDispatcher::RegisterField("C",offsetof(Portakal::Guid,C),typeof(Portakal::Uint32),Portakal::FieldMode::Normal,pGuid);
-		Portakal::TypeDispatcher::RegisterField("D",offsetof(Portakal::Guid,D),typeof(Portakal::Uint32),Portakal::FieldMode::Normal,pGuid);
+		Portakal::TypeDispatcher::RegisterField("A",offsetof(Portakal::Guid,A),typeof(Portakal::UInt32),Portakal::FieldMode::Normal,pGuid);
+		Portakal::TypeDispatcher::RegisterField("B",offsetof(Portakal::Guid,B),typeof(Portakal::UInt32),Portakal::FieldMode::Normal,pGuid);
+		Portakal::TypeDispatcher::RegisterField("C",offsetof(Portakal::Guid,C),typeof(Portakal::UInt32),Portakal::FieldMode::Normal,pGuid);
+		Portakal::TypeDispatcher::RegisterField("D",offsetof(Portakal::Guid,D),typeof(Portakal::UInt32),Portakal::FieldMode::Normal,pGuid);
 		Portakal::TypeDispatcher::RegisterField("X",offsetof(Portakal::Vector2F,X),typeof(Portakal::Float32),Portakal::FieldMode::Normal,pVector2F);
 		Portakal::TypeDispatcher::RegisterField("Y",offsetof(Portakal::Vector2F,Y),typeof(Portakal::Float32),Portakal::FieldMode::Normal,pVector2F);
 		Portakal::TypeDispatcher::RegisterField("X",offsetof(Portakal::Vector2I,X),typeof(Portakal::Int32),Portakal::FieldMode::Normal,pVector2I);
 		Portakal::TypeDispatcher::RegisterField("Y",offsetof(Portakal::Vector2I,Y),typeof(Portakal::Int32),Portakal::FieldMode::Normal,pVector2I);
-		Portakal::TypeDispatcher::RegisterField("X",offsetof(Portakal::Vector2UI,X),typeof(Portakal::Uint32),Portakal::FieldMode::Normal,pVector2UI);
-		Portakal::TypeDispatcher::RegisterField("Y",offsetof(Portakal::Vector2UI,Y),typeof(Portakal::Uint32),Portakal::FieldMode::Normal,pVector2UI);
-		Portakal::TypeDispatcher::RegisterField("X",offsetof(Portakal::Vector2US,X),typeof(Portakal::Uint16),Portakal::FieldMode::Normal,pVector2US);
-		Portakal::TypeDispatcher::RegisterField("Y",offsetof(Portakal::Vector2US,Y),typeof(Portakal::Uint16),Portakal::FieldMode::Normal,pVector2US);
+		Portakal::TypeDispatcher::RegisterField("X",offsetof(Portakal::Vector2UI,X),typeof(Portakal::UInt32),Portakal::FieldMode::Normal,pVector2UI);
+		Portakal::TypeDispatcher::RegisterField("Y",offsetof(Portakal::Vector2UI,Y),typeof(Portakal::UInt32),Portakal::FieldMode::Normal,pVector2UI);
+		Portakal::TypeDispatcher::RegisterField("X",offsetof(Portakal::Vector2US,X),typeof(Portakal::UInt16),Portakal::FieldMode::Normal,pVector2US);
+		Portakal::TypeDispatcher::RegisterField("Y",offsetof(Portakal::Vector2US,Y),typeof(Portakal::UInt16),Portakal::FieldMode::Normal,pVector2US);
 		Portakal::TypeDispatcher::RegisterField("Path",offsetof(Portakal::ResourceDescriptor,Path),typeof(Portakal::String),Portakal::FieldMode::Normal,pResourceDescriptor);
 		Portakal::TypeDispatcher::RegisterField("ResourceType",offsetof(Portakal::ResourceDescriptor,ResourceType),typeof(Portakal::String),Portakal::FieldMode::Normal,pResourceDescriptor);
 		Portakal::TypeDispatcher::RegisterField("Name",offsetof(Portakal::ResourceDescriptor,Name),typeof(Portakal::String),Portakal::FieldMode::Normal,pResourceDescriptor);
 		Portakal::TypeDispatcher::RegisterField("ID",offsetof(Portakal::ResourceDescriptor,ID),typeof(Portakal::Guid),Portakal::FieldMode::Normal,pResourceDescriptor);
-		Portakal::TypeDispatcher::RegisterField("FileOffset",offsetof(Portakal::ResourceDescriptor,FileOffset),typeof(Portakal::Uint64),Portakal::FieldMode::Normal,pResourceDescriptor);
-		Portakal::TypeDispatcher::RegisterField("FileSize",offsetof(Portakal::ResourceDescriptor,FileSize),typeof(Portakal::Uint64),Portakal::FieldMode::Normal,pResourceDescriptor);
+		Portakal::TypeDispatcher::RegisterField("FileOffset",offsetof(Portakal::ResourceDescriptor,FileOffset),typeof(Portakal::UInt64),Portakal::FieldMode::Normal,pResourceDescriptor);
+		Portakal::TypeDispatcher::RegisterField("FileSize",offsetof(Portakal::ResourceDescriptor,FileSize),typeof(Portakal::UInt64),Portakal::FieldMode::Normal,pResourceDescriptor);
 		Portakal::TypeDispatcher::RegisterField("bOptimized",offsetof(Portakal::ResourceDescriptor,bOptimized),typeof(Portakal::Bool8),Portakal::FieldMode::Normal,pResourceDescriptor);
 
         //Register attributes here

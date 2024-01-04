@@ -63,7 +63,7 @@ namespace Portakal
 			return X * other.X + Y * other.Y + Z * other.Z;
 		}
 
-		T operator[](const Uint32 index) const
+		T operator[](const UInt32 index) const
 		{
 			switch (index)
 			{
@@ -208,8 +208,8 @@ namespace Portakal
 	};
 
 	typedef Vector3<Int32> Vector3I;
-	typedef Vector3<Uint32> Vector3UI;
-	typedef Vector3<Uint16> Vector3US;
+	typedef Vector3<UInt32> Vector3UI;
+	typedef Vector3<UInt16> Vector3US;
 	typedef Vector3<Byte> Vector3B;
 	typedef Vector3<float> Vector3F;
 	typedef Vector3<double> Vector3D;

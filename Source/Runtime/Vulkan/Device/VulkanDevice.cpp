@@ -23,7 +23,7 @@ namespace Portakal
     VulkanDevice::VulkanDevice(const GraphicsDeviceDesc& desc) : GraphicsDevice(desc),mPhysicalDevice(((const VulkanAdapter*)desc.pAdapter)->GetVkPhysicalDevice())
     {
         //Get queue families
-        Uint32 queueFamilyCount = 0;
+        UInt32 queueFamilyCount = 0;
         vkGetPhysicalDeviceQueueFamilyProperties(mPhysicalDevice, &queueFamilyCount, nullptr);
         DEV_ASSERT(queueFamilyCount > 0, "VulkanDevice", "No queue families found!");
 
@@ -31,7 +31,7 @@ namespace Portakal
         vkGetPhysicalDeviceQueueFamilyProperties(mPhysicalDevice, &queueFamilyCount, queueFamilyProperties.GetData());
 
         //Collect queue families
-        for (Uint32 i = 0;i<queueFamilyCount;i++)
+        for (UInt32 i = 0;i<queueFamilyCount;i++)
         {
             const VkQueueFamilyProperties& properties = queueFamilyProperties[i];
             if (properties.queueFlags & VK_QUEUE_GRAPHICS_BIT && mGraphicsQueueFamily.FamilyIndex == 255)
@@ -244,7 +244,7 @@ namespace Portakal
     {
         VkFence vkFences[128];
 
-        for (Uint32 fenceIndex = 0; fenceIndex < count; fenceIndex++)
+        for (UInt32 fenceIndex = 0; fenceIndex < count; fenceIndex++)
         {
             const VulkanFence* pVkFence = (const VulkanFence*)ppFences[fenceIndex];
 
@@ -374,7 +374,7 @@ namespace Portakal
         const VulkanFence* pVkFence = (const VulkanFence*)pFence;
         VkCommandBuffer cmdBuffers[10];
 
-        for (Uint32 cmdListIndex = 0; cmdListIndex < cmdListCount; cmdListIndex++)
+        for (UInt32 cmdListIndex = 0; cmdListIndex < cmdListCount; cmdListIndex++)
         {
             const VulkanCommandList* pCmdList = (const VulkanCommandList*)ppCmdLists[cmdListIndex];
 

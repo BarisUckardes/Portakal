@@ -30,10 +30,10 @@ namespace Portakal
 	void D3DCommandList::SetIndexBufferCore(const GraphicsBuffer* pBuffer, const CommandListIndexBufferType type)
 	{
 	}
-	void D3DCommandList::DrawIndexedCore(const Uint32 indexCount, const Uint32 indexOffset, const Uint32 vertexOffset, const Uint32 instanceCount, const Uint32 instanceOffset)
+	void D3DCommandList::DrawIndexedCore(const UInt32 indexCount, const UInt32 indexOffset, const UInt32 vertexOffset, const UInt32 instanceCount, const UInt32 instanceOffset)
 	{
 	}
-	void D3DCommandList::DispatchComputeCore(const Uint32 groupX, const Uint32 groupY, const Uint32 groupZ)
+	void D3DCommandList::DispatchComputeCore(const UInt32 groupX, const UInt32 groupY, const UInt32 groupZ)
 	{
 	}
 	void D3DCommandList::SetPipelineCore(const Pipeline* pPipeline)

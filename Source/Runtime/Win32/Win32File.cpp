@@ -35,7 +35,7 @@ namespace Portakal
     {
         return DeleteFileA(*path) != 0;
     }
-    Bool8 Win32File::Write(const String& path, const String& content, const Uint64 offsetInBytes)
+    Bool8 Win32File::Write(const String& path, const String& content, const UInt64 offsetInBytes)
     {
         HANDLE fileHandle = NULL;
 
@@ -74,7 +74,7 @@ namespace Portakal
 
         return bIsWriteSuccess;
     }
-    Bool8 Win32File::Write(const String& path, const MemoryView& view, const Uint64 offsetInBytes)
+    Bool8 Win32File::Write(const String& path, const MemoryView& view, const UInt64 offsetInBytes)
     {
         HANDLE fileHandle = NULL;
 
@@ -109,10 +109,10 @@ namespace Portakal
 
         return bIsWriteSuccess;
     }
-    Bool8 Win32File::Read(const String& path, String& contentOut, const Uint64 startByte, const Uint64 endByte)
+    Bool8 Win32File::Read(const String& path, String& contentOut, const UInt64 startByte, const UInt64 endByte)
     {
         //Get file size
-        Uint64 fileSize = 0;
+        UInt64 fileSize = 0;
         if (!GetSize(path, fileSize))
         {
             DEV_LOG("Win32File", "Failed to get size of the file");
@@ -120,7 +120,7 @@ namespace Portakal
         }
 
         //Get and check expected read range
-        const Uint64 expectedReadRange = endByte == 0 ? fileSize : endByte - startByte;
+        const UInt64 expectedReadRange = endByte == 0 ? fileSize : endByte - startByte;
         if (fileSize == 0 || expectedReadRange > fileSize)
             return false;
 
@@ -149,10 +149,10 @@ namespace Portakal
         CloseHandle(fileHandle);
         return true;
     }
-    Bool8 Win32File::Read(const String& path, MemoryView& view, const Uint64 startByte, const Uint64 endByte)
+    Bool8 Win32File::Read(const String& path, MemoryView& view, const UInt64 startByte, const UInt64 endByte)
     {
         //Get file size
-        Uint64 fileSize = 0;
+        UInt64 fileSize = 0;
         if (!GetSize(path, fileSize))
         {
             DEV_LOG("Win32File", "Failed to get size of the file");
@@ -160,7 +160,7 @@ namespace Portakal
         }
 
         //Get and check expected read range
-        const Uint64 expectedReadRange = endByte == 0 ? fileSize : endByte - startByte;
+        const UInt64 expectedReadRange = endByte == 0 ? fileSize : endByte - startByte;
         if (fileSize == 0 || expectedReadRange > fileSize)
             return false;
 
@@ -203,7 +203,7 @@ namespace Portakal
         PathRemoveExtension(pData);
         return pData;
     }
-    Bool8 Win32File::GetSize(const String& path, Uint64& sizeInBytesOut)
+    Bool8 Win32File::GetSize(const String& path, UInt64& sizeInBytesOut)
     {
         const HANDLE fileHandle = CreateFileA(*path, GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
         if (fileHandle == NULL || fileHandle == INVALID_HANDLE_VALUE)

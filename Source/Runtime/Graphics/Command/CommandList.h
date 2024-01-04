@@ -45,8 +45,8 @@ namespace Portakal
 		void EndRecording();
 		void SetVertexBuffer(const SharedHeap<GraphicsBuffer>& pBuffer);
 		void SetIndexBuffer(const SharedHeap<GraphicsBuffer>& pBuffer, const CommandListIndexBufferType type);
-		void DrawIndexed(const Uint32 indexCount, const Uint32 indexOffset, const Uint32 vertexoffset, const Uint32 instanceCount, const Uint32 instanceOffset);
-		void DispatchCompute(const Uint32 groupX, const Uint32 groupY, const Uint32 groupZ);
+		void DrawIndexed(const UInt32 indexCount, const UInt32 indexOffset, const UInt32 vertexoffset, const UInt32 instanceCount, const UInt32 instanceOffset);
+		void DispatchCompute(const UInt32 groupX, const UInt32 groupY, const UInt32 groupZ);
 		void SetPipeline(const SharedHeap<Pipeline>& pPipeline);
 		void BeginRenderPass(const SharedHeap<RenderPass>& pRenderPass,const Color4F& clearColor,const Byte subFramebufferIndex = 0);
 		void EndRenderPass();
@@ -63,8 +63,8 @@ namespace Portakal
 		virtual void EndRecordingCore() = 0;
 		virtual void SetVertexBufferCore(const GraphicsBuffer* pBuffer) = 0;
 		virtual void SetIndexBufferCore(const GraphicsBuffer* pBuffer, const CommandListIndexBufferType type) = 0;
-		virtual void DrawIndexedCore(const Uint32 indexCount, const Uint32 indexOffset, const Uint32 vertexoffset, const Uint32 instanceCount, const Uint32 instanceOffset) = 0;
-		virtual void DispatchComputeCore(const Uint32 groupX, const Uint32 groupY, const Uint32 groupZ) = 0;
+		virtual void DrawIndexedCore(const UInt32 indexCount, const UInt32 indexOffset, const UInt32 vertexoffset, const UInt32 instanceCount, const UInt32 instanceOffset) = 0;
+		virtual void DispatchComputeCore(const UInt32 groupX, const UInt32 groupY, const UInt32 groupZ) = 0;
 		virtual void SetPipelineCore(const Pipeline* pPipeline) = 0;
 		virtual void BeginRenderPassCore(const RenderPass* pRenderPass, const Color4F& clearColor, const Byte subFramebufferIndex) = 0;
 		virtual void EndRenderPassCore() = 0;

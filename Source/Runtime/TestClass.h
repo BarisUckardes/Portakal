@@ -19,7 +19,7 @@ namespace Portakal
 		}
 	public:
 		PFIELD();
-		Uint32 mMyType;
+		UInt32 mMyType;
 		PFIELD();
 		String mMahString;
 		PFIELD();
@@ -28,6 +28,18 @@ namespace Portakal
 		Array<String> mMahArray;
 	};
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -33,10 +33,10 @@ namespace Portakal
         mTexture = mDevice->CreateTexture(desc);
 
         //Create mip data
-        for (Uint32 arrayIndex = 0; arrayIndex < desc.ArrayLevels; arrayIndex++)
+        for (UInt32 arrayIndex = 0; arrayIndex < desc.ArrayLevels; arrayIndex++)
         {
             Array<MipData> mips;
-            for (Uint32 mipIndex = 0; mipIndex < desc.MipLevels; mipIndex++)
+            for (UInt32 mipIndex = 0; mipIndex < desc.MipLevels; mipIndex++)
             {
                 MipData mipData = {};
 

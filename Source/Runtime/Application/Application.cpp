@@ -9,7 +9,7 @@ namespace Portakal
     Application::~Application()
     {
     }
-    void Application::RemoveModule(const Uint32 index)
+    void Application::RemoveModule(const UInt32 index)
     {
         ApplicationModule* pModule = mModules[index];
         pModule->_SetState(ApplicationModuleState::NeedsFinalization);

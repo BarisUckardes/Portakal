@@ -11,7 +11,7 @@ namespace Portakal
         return id;
     }
 
-    Guid Guid::Create(const Uint32 a, const Uint32 b, const Uint32 c, const Uint32 d)
+    Guid Guid::Create(const UInt32 a, const UInt32 b, const UInt32 c, const UInt32 d)
     {
         return Guid(a, b, c, d);
     }
@@ -25,7 +25,7 @@ namespace Portakal
     {
     }
 
-    Guid::Guid(const Uint32 a, const Uint32 b, const Uint32 c, const Uint32 d)
+    Guid::Guid(const UInt32 a, const UInt32 b, const UInt32 c, const UInt32 d)
     {
         A = a;
         B = b;

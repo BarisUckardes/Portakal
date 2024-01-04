@@ -7,7 +7,7 @@ namespace Portakal
     struct RUNTIME_API ResourceTablePoolEntry
     {
         GraphicsResourceType Type;
-        Uint32 Count;
+        UInt32 Count;
     };
 
 }

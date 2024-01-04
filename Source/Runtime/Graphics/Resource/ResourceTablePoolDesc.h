@@ -7,6 +7,6 @@ namespace Portakal
     struct RUNTIME_API ResourceTablePoolDesc
     {
         Array<ResourceTablePoolEntry> Entries;
-        Uint32 MaxTables;
+        UInt32 MaxTables;
     };
 }

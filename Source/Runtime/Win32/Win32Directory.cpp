@@ -21,7 +21,7 @@ namespace Portakal
 		}
 
 		//Iterate items and delete
-		for (Uint32 i = 0; i < subItems.GetSize(); i++)
+		for (UInt32 i = 0; i < subItems.GetSize(); i++)
 		{
 			const String& itemPath = subItems[i];
 			const Bool8 bIsFile = !Exists(itemPath);

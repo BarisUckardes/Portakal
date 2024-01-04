@@ -28,7 +28,7 @@ namespace Portakal
     }
     BOOL CALLBACK EnumDeviceProc(LPCDIDEVICEINSTANCE instance, LPVOID pUserData)
     {
-        const Uint64 deviceType = GET_DIDEVICE_TYPE(instance->dwDevType);
+        const UInt64 deviceType = GET_DIDEVICE_TYPE(instance->dwDevType);
         DirectInputEnumProcContext* pContext = (DirectInputEnumProcContext*)pUserData;
 
         //Validate if devices are keyboard,mouse,gamepad etc.

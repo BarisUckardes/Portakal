@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	Uint64 GetCharPointerSize(const Char* target)
+	UInt64 GetCharPointerSize(const Char* target)
 	{
 		unsigned int pSize = 0;
 		while (target[pSize] != '\0')
@@ -11,7 +11,7 @@ namespace Portakal
 		return pSize;
 	}
 
-	Uint64 GetWCharPointerSize(const wchar_t* target)
+	UInt64 GetWCharPointerSize(const wchar_t* target)
 	{
 		const wchar_t* ptr = target;
 		while (*ptr)
@@ -19,7 +19,7 @@ namespace Portakal
 		return ptr - target;
 	}
 
-	String::String(const Char* pData, const Uint64 sizeInBytes)
+	String::String(const Char* pData, const UInt64 sizeInBytes)
 	{
 		mSize = sizeInBytes;
 		mSource = new Char[sizeInBytes + 1];
@@ -28,7 +28,7 @@ namespace Portakal
 		mSource[sizeInBytes] = '\0';
 	}
 
-	String::String(const Byte* pData, const Uint64 sizeInBytes)
+	String::String(const Byte* pData, const UInt64 sizeInBytes)
 	{
 		mSize = sizeInBytes;
 		mSource = new Char[sizeInBytes + 1];
@@ -47,12 +47,12 @@ namespace Portakal
 		}
 
 		mSource = new Char[mSize + 1];
-		for (Uint64 i = 0; i < mSize; i++)
+		for (UInt64 i = 0; i < mSize; i++)
 			mSource[i] = (Char)pData[i];
 		mSource[mSize] = '\0';
 	}
 
-	String::String(const Uint64 sizeInBytes)
+	String::String(const UInt64 sizeInBytes)
 	{
 		mSize = sizeInBytes;
 		mSource = new Char[sizeInBytes + 1];
@@ -98,19 +98,19 @@ namespace Portakal
 		mSize = 0;
 	}
 
-	Uint64 String::FindIndex(const String& target, const Uint64 startIndex, const Uint64 count) const
+	UInt64 String::FindIndex(const String& target, const UInt64 startIndex, const UInt64 count) const
 	{
 		if (startIndex >= mSize)
 			return uint64_max;
 
-		const Uint64 targetSize = target.GetSize();
+		const UInt64 targetSize = target.GetSize();
 		if (targetSize == 0)
 			return uint64_max;
 
 		if (targetSize > mSize)
 			return uint64_max;
 
-		Uint64 searchLength = mSize - targetSize;
+		UInt64 searchLength = mSize - targetSize;
 		if (count > 0 && count < searchLength)
 			searchLength = count;
 
@@ -136,26 +136,26 @@ namespace Portakal
 		return uint64_max;
 	}
 
-	Uint64 String::FindIndex(const Char target) const
+	UInt64 String::FindIndex(const Char target) const
 	{
-		for (Uint64 i = 0; i < mSize; i++)
+		for (UInt64 i = 0; i < mSize; i++)
 			if (mSource[i] == target)
 				return i;
 
 		return uint64_max;
 	}
 
-	Uint64 String::FindIndex(const String& target) const
+	UInt64 String::FindIndex(const String& target) const
 	{
-		const Uint64 targetSize = target.GetSize();
+		const UInt64 targetSize = target.GetSize();
 		if (targetSize == 0)
 			return uint64_max;
 		if (targetSize > mSize)
 			return uint64_max;
 
-		const Uint64 searchSize = mSize - targetSize;
+		const UInt64 searchSize = mSize - targetSize;
 
-		for (Uint64 i = 0; i < searchSize; i++)
+		for (UInt64 i = 0; i < searchSize; i++)
 		{
 			if (mSource[i] == target[0])
 			{
@@ -177,19 +177,19 @@ namespace Portakal
 		return uint64_max;
 	}
 
-	Uint64 String::FindLastIndex(const String& target, const Uint64 startIndex) const
+	UInt64 String::FindLastIndex(const String& target, const UInt64 startIndex) const
 	{
 		if (startIndex >= mSize)
 			return -1;
 
-		const Uint64 targetSize = target.GetSize();
+		const UInt64 targetSize = target.GetSize();
 		if (targetSize == 0)
 			return uint64_max;
 
 		if (targetSize > mSize)
 			return uint64_max;
 
-		const Uint64 searchSize = mSize - targetSize;
+		const UInt64 searchSize = mSize - targetSize;
 
 		for (unsigned int i = searchSize; i > startIndex; i--)
 		{
@@ -213,17 +213,17 @@ namespace Portakal
 		return uint64_max;
 	}
 
-	Uint64 String::GetCount(const Char target) const
+	UInt64 String::GetCount(const Char target) const
 	{
-		Uint64 count = 0;
-		for (Uint64 i = 0; i < mSize; i++)
+		UInt64 count = 0;
+		for (UInt64 i = 0; i < mSize; i++)
 			if (mSource[i] == target)
 				count++;
 
 		return count;
 	}
 
-	String String::GetSubset(const Uint64 startIndex, const Uint64 length) const
+	String String::GetSubset(const UInt64 startIndex, const UInt64 length) const
 	{
 		String subset(length);
 		Memory::Copy(subset.GetSource(), mSource, length);
@@ -278,7 +278,7 @@ namespace Portakal
 	{
 		mSize = GetWCharPointerSize(other);
 		mSource = new Char[mSize + 1];
-		for (Uint64 i = 0; i < mSize; i++)
+		for (UInt64 i = 0; i < mSize; i++)
 			mSource[i] = (Char)other[i];
 		mSource[mSize] = '\0';
 

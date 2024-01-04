@@ -15,7 +15,7 @@ namespace Portakal
 			return mHandle;
 		}
 
-		virtual MutexState Lock(const Uint64 timeInMs) override;
+		virtual MutexState Lock(const UInt64 timeInMs) override;
 		virtual Bool8 Release() override;
 		virtual void OnShutdown() override;
 	private:

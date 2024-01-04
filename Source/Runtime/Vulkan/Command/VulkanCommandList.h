@@ -23,8 +23,8 @@ namespace Portakal
         virtual void SetIndexBufferCore(const GraphicsBuffer* pBuffer, const CommandListIndexBufferType type) override;
 
         // Inherited via CommandList
-        virtual void DrawIndexedCore(const Uint32 indexCount, const Uint32 indexOffset, const Uint32 vertexOffset, const Uint32 instanceCount, const Uint32 instanceOffset) override;
-        virtual void DispatchComputeCore(const Uint32 groupX, const Uint32 groupY, const Uint32 groupZ) override;
+        virtual void DrawIndexedCore(const UInt32 indexCount, const UInt32 indexOffset, const UInt32 vertexOffset, const UInt32 instanceCount, const UInt32 instanceOffset) override;
+        virtual void DispatchComputeCore(const UInt32 groupX, const UInt32 groupY, const UInt32 groupZ) override;
 
         // Inherited via CommandList
         virtual void SetPipelineCore(const Pipeline* pPipeline) override;

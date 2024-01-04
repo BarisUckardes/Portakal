@@ -1,80 +1,27 @@
 #pragma once
 #include <Runtime/Application/ApplicationModule.h>
-#include "EditorPlayerProjectModule.reflected.h"
+#include <Editor/GUI/Window/GUIWindowAPI.h>
+#include "GUIWindowModule.reflected.h"
 
 namespace Portakal
 {
 	PCLASS();
-	class EditorPlayerProjectModule : public ApplicationModule
+	class EDITOR_API GUIWindowModule : public ApplicationModule
 	{
 		GENERATE_OBJECT;
 	public:
-		EditorPlayerProjectModule() = default;
-		~EditorPlayerProjectModule() = default;
+		GUIWindowModule() = default;
+		~GUIWindowModule() = default;
+
 	private:
 		// Inherited via ApplicationModule
 		void OnInitialize() override;
 		void OnFinalize() override;
 		void OnTick() override;
+	private:
+		GUIWindowAPI* mAPI;
 	};
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -80,14 +80,14 @@ namespace Portakal
 
 		// Get Swapchain buffers
 		Array<ComPtr<ID3D12Resource>> swapchainBuffers(GetBufferCount());
-		for (Uint32 i = 0; i < GetBufferCount(); i++)
+		for (UInt32 i = 0; i < GetBufferCount(); i++)
 		{
 			DEV_SYSTEM(SUCCEEDED(mSwapchain->GetBuffer(i, IID_PPV_ARGS(&swapchainBuffers[i]))),
 					   "DirectXSwapchain", "Failed to get swapchain buffer", "Swapchain buffer has been gotten succesfully.");
 		}
 
 		// Create Render Target Views
-		for (Uint32 i = 0; i < GetBufferCount(); i++)
+		for (UInt32 i = 0; i < GetBufferCount(); i++)
 		{
 			D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
 			rtvDesc.Format = D3DTextureUtils::GetD3DTextureFormat(GetColorFormat());
@@ -104,7 +104,7 @@ namespace Portakal
 		// Store swapchain textures and texture views
 		Array<SharedHeap<Texture>> swapchainTextures;
 		Array< SharedHeap<TextureView>> swapchainTextureViews;
-		for (Uint32 i = 0; i < GetBufferCount(); i++)
+		for (UInt32 i = 0; i < GetBufferCount(); i++)
 		{
 			D3D12_RESOURCE_DESC swapchainResourceDesc = swapchainBuffers[i]->GetDesc();
 
@@ -113,7 +113,7 @@ namespace Portakal
 			swapchainBufferDesc.Format = GetColorFormat();
 			swapchainBufferDesc.MipLevels = swapchainResourceDesc.MipLevels;
 			swapchainBufferDesc.SampleCount = TextureSampleCount::SAMPLE_COUNT_1;
-			swapchainBufferDesc.Size = { (Uint16)swapchainResourceDesc.Width, (Uint16)swapchainResourceDesc.Height, 1 };
+			swapchainBufferDesc.Size = { (UInt16)swapchainResourceDesc.Width, (UInt16)swapchainResourceDesc.Height, 1 };
 			swapchainBufferDesc.Type = TextureType::Texture2D;
 			swapchainBufferDesc.Usage = TextureUsage::ColorAttachment;
 
@@ -130,7 +130,7 @@ namespace Portakal
 	void D3DSwapchain::CreateDepthStencilView()
 	{
 	}
-	void D3DSwapchain::ResizeCore(const Uint16 width, const Uint16 height)
+	void D3DSwapchain::ResizeCore(const UInt16 width, const UInt16 height)
 	{
 	}
 	void D3DSwapchain::OnShutdown()

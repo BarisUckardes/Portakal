@@ -12,7 +12,7 @@ namespace Portakal
     class RUNTIME_API DirectInputKeys final
     {
     public:
-        static KeyboardKeys GetKey(const Uint64 key);
+        static KeyboardKeys GetKey(const UInt64 key);
     public:
         DirectInputKeys() = delete;
         ~DirectInputKeys() = delete;

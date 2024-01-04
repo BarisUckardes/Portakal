@@ -5,20 +5,20 @@
 
 namespace Portakal
 {
-	typedef Uint64 MemoryHandle;
+	typedef UInt64 MemoryHandle;
 	class RUNTIME_API GraphicsMemoryHeap : public GraphicsDeviceObject
 	{
 	private:
 		struct SubAllocationBlock
 		{
 			Bool8 bOwned;
-			Uint64 SizeInBytes;
+			UInt64 SizeInBytes;
 		};
 	public:
 		GraphicsMemoryHeap(const GraphicsMemoryHeapDesc& desc);
 		~GraphicsMemoryHeap() = default;
 
-		FORCEINLINE Uint64 GetHeapSize() const noexcept
+		FORCEINLINE UInt64 GetHeapSize() const noexcept
 		{
 			return mSize;
 		}
@@ -30,14 +30,14 @@ namespace Portakal
 		{
 			return GraphicsDeviceObjectType::MemoryHeap;
 		}
-		MemoryHandle Allocate(const Uint64 sizeInBytes);
+		MemoryHandle Allocate(const UInt64 sizeInBytes);
 		void Free(const MemoryHandle handle);
 	protected:
-		virtual MemoryHandle AllocateCore(const Uint64 offsetInBytes) = 0;
+		virtual MemoryHandle AllocateCore(const UInt64 offsetInBytes) = 0;
 	private:
-		const Uint64 mSize;
+		const UInt64 mSize;
 		const GraphicsMemoryType mType;
-		Uint64 mOccupiedSize;
+		UInt64 mOccupiedSize;
 		LinkedList<SubAllocationBlock> mBlocks;
 	};
 }

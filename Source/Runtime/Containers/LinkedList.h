@@ -57,9 +57,9 @@ namespace Portakal
             pNewNode->Data = value;
             pNode->Next = pNewNode;
         }
-        void Insert(const T& value, const Uint32 index)
+        void Insert(const T& value, const UInt32 index)
         {
-            Uint32 counter = 0;
+            UInt32 counter = 0;
             Node* pFormerNode = nullptr;
             Node* pNode = mRoot;
 
@@ -101,9 +101,9 @@ namespace Portakal
                 counter++;
             }
         }
-        void RemoveAt(const Uint32 index)
+        void RemoveAt(const UInt32 index)
         {
-            Uint32 counter = 0;
+            UInt32 counter = 0;
             Node* pNode = mRoot;
             Node* pOldNode = nullptr;
             while (pNode != nullptr)

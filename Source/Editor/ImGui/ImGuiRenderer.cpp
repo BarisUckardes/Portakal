@@ -133,17 +133,17 @@ namespace Portakal
 
         //Allocate indexes
         if (pDrawData->TotalIdxCount > mMesh->GetIndexCount())
-            mMesh->AllocateIndexes(pDrawData->TotalIdxCount + 100, sizeof(Uint16), mDeviceMemory, mHostMemory, true);
+            mMesh->AllocateIndexes(pDrawData->TotalIdxCount + 100, sizeof(UInt16), mDeviceMemory, mHostMemory, true);
 
-        Uint32 vertexOffset = 0;
-        Uint32 indexOffset = 0;
+        UInt32 vertexOffset = 0;
+        UInt32 indexOffset = 0;
 
         //Iterate command lists
-        for (Uint32 cmdListIndex = 0; cmdListIndex < pDrawData->CmdListsCount; cmdListIndex++)
+        for (UInt32 cmdListIndex = 0; cmdListIndex < pDrawData->CmdListsCount; cmdListIndex++)
         {
             const ImDrawList* pCmdList = pDrawData->CmdLists[cmdListIndex];
-            const Uint32 vertexBufferSize = pCmdList->VtxBuffer.Size * sizeof(ImDrawVert);
-            const Uint32 indexBufferSize = pCmdList->IdxBuffer.Size * sizeof(Uint16);
+            const UInt32 vertexBufferSize = pCmdList->VtxBuffer.Size * sizeof(ImDrawVert);
+            const UInt32 indexBufferSize = pCmdList->IdxBuffer.Size * sizeof(UInt16);
 
             mMesh->UpdateVertexes({ (Byte*)pCmdList->VtxBuffer.Data,vertexBufferSize }, vertexOffset);
             mMesh->UpdateIndexes({ (Byte*)pCmdList->IdxBuffer.Data,indexBufferSize }, indexOffset);
@@ -208,7 +208,7 @@ namespace Portakal
             */
             ViewportDesc viewport = {};
             viewport.OffsetInPixels = { 0,0 };
-            viewport.SizeInPixels = { (Uint16)pDrawData->DisplaySize.x,(Uint16)pDrawData->DisplaySize.y };
+            viewport.SizeInPixels = { (UInt16)pDrawData->DisplaySize.x,(UInt16)pDrawData->DisplaySize.y };
             viewport.DepthRange = { 0.0f,1.0f };
            //mCmdList->SetViewports(&viewport, 1);
 
@@ -216,17 +216,17 @@ namespace Portakal
             * Draw
             */
             const Vector2F clipOffset = { pDrawData->DisplayPos.x,pDrawData->DisplayPos.y };
-            Uint32 drawVertexOffset = 0;
-            Uint32 drawIndexOffset = 0;
+            UInt32 drawVertexOffset = 0;
+            UInt32 drawIndexOffset = 0;
             ResourceTable* ppResourceSets[]
             {
                 mStaticResourceTable.GetHeap(),
                 nullptr
             };
-            for (Uint32 cmdListIndex = 0; cmdListIndex < pDrawData->CmdListsCount; cmdListIndex++)
+            for (UInt32 cmdListIndex = 0; cmdListIndex < pDrawData->CmdListsCount; cmdListIndex++)
             {
                 ImDrawList* pDrawList = pDrawData->CmdLists[cmdListIndex];
-                for (Uint32 cmdIndex = 0; cmdIndex < pDrawList->CmdBuffer.Size; cmdIndex++)
+                for (UInt32 cmdIndex = 0; cmdIndex < pDrawList->CmdBuffer.Size; cmdIndex++)
                 {
                     ImDrawCmd& cmd = pDrawList->CmdBuffer[cmdIndex];
 
@@ -245,8 +245,8 @@ namespace Portakal
                         continue;
 
                     ScissorDesc scissor = {};
-                    scissor.OffsetInPixels = { (Uint32)clipMin.X,(Uint32)clipMin.Y };
-                    scissor.SizeInPixels = { (Uint32)clipMax.X,(Uint32)clipMax.Y };
+                    scissor.OffsetInPixels = { (UInt32)clipMin.X,(UInt32)clipMin.Y };
+                    scissor.SizeInPixels = { (UInt32)clipMax.X,(UInt32)clipMax.Y };
 
                     mCmdList->SetScissors(&scissor, 1);
 
@@ -411,7 +411,7 @@ namespace Portakal
         defaultFontTextureDesc.Type = TextureType::Texture2D;
         defaultFontTextureDesc.Usage = TextureUsage::Sampled | TextureUsage::TransferDestination;
         defaultFontTextureDesc.Format = TextureFormat::R8_G8_B8_A8_UNorm;
-        defaultFontTextureDesc.Size = { (Uint16)width,(Uint16)height,1 };
+        defaultFontTextureDesc.Size = { (UInt16)width,(UInt16)height,1 };
         defaultFontTextureDesc.MipLevels = 1;
         defaultFontTextureDesc.ArrayLevels = 1;
         defaultFontTextureDesc.SampleCount = TextureSampleCount::SAMPLE_COUNT_1;
@@ -490,7 +490,7 @@ namespace Portakal
 
         //Allocate vertex and index buffer
         mMesh->AllocateVertexes(6400, sizeof(ImDrawVert), mDeviceMemory, mHostMemory, true);
-        mMesh->AllocateIndexes(6400, sizeof(Uint16), mDeviceMemory, mHostMemory, true);
+        mMesh->AllocateIndexes(6400, sizeof(UInt16), mDeviceMemory, mHostMemory, true);
     }
     void ImGuiRenderer::SetupDefaultTheme()
     {

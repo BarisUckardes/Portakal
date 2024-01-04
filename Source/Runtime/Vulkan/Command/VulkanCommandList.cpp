@@ -67,11 +67,11 @@ namespace Portakal
 		VulkanBuffer* pVkBuffer = (VulkanBuffer*)pBuffer;
 		vkCmdBindIndexBuffer(mCommandBuffer, pVkBuffer->GetVkBuffer(), 0, type == CommandListIndexBufferType::Unsigned_Short ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32);
 	}
-	void VulkanCommandList::DrawIndexedCore(const Uint32 indexCount, const Uint32 indexOffset, const Uint32 vertexOffset, const Uint32 instanceCount, const Uint32 instanceOffset)
+	void VulkanCommandList::DrawIndexedCore(const UInt32 indexCount, const UInt32 indexOffset, const UInt32 vertexOffset, const UInt32 instanceCount, const UInt32 instanceOffset)
 	{
 		vkCmdDrawIndexed(mCommandBuffer, indexCount, instanceCount, indexOffset, vertexOffset, instanceOffset);
 	}
-	void VulkanCommandList::DispatchComputeCore(const Uint32 groupX, const Uint32 groupY, const Uint32 groupZ)
+	void VulkanCommandList::DispatchComputeCore(const UInt32 groupX, const UInt32 groupY, const UInt32 groupZ)
 	{
 		vkCmdDispatch(mCommandBuffer, groupX, groupY, groupZ);
 	}

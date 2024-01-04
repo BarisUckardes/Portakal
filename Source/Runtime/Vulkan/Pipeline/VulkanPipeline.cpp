@@ -18,7 +18,7 @@ namespace Portakal
         * Create shader stages
         */
         Array<VkPipelineShaderStageCreateInfo> shaderStageCreateInformation;
-        for (Uint32 shaderIndex = 0; shaderIndex < desc.GraphicsShaders.GetSize(); shaderIndex++)
+        for (UInt32 shaderIndex = 0; shaderIndex < desc.GraphicsShaders.GetSize(); shaderIndex++)
         {
             const VulkanShader* pShader = (const VulkanShader*)desc.GraphicsShaders[shaderIndex].GetHeap();
 
@@ -37,7 +37,7 @@ namespace Portakal
         */
         Array<VkVertexInputBindingDescription> inputBindingDescriptions;
         Array<VkVertexInputAttributeDescription> inputAttributeDescriptions;
-        for (Uint32 bindingIndex = 0; bindingIndex < desc.InputLayout.Bindings.GetSize(); bindingIndex++)
+        for (UInt32 bindingIndex = 0; bindingIndex < desc.InputLayout.Bindings.GetSize(); bindingIndex++)
         {
             const InputBinding& binding = desc.InputLayout.Bindings[bindingIndex];
 
@@ -46,8 +46,8 @@ namespace Portakal
             vkBindingDescription.binding = bindingIndex;
 
 
-            Uint32 inputOffset = 0;
-            for (Uint32 attributeIndex = 0; attributeIndex < binding.Elements.GetSize(); attributeIndex++)
+            UInt32 inputOffset = 0;
+            for (UInt32 attributeIndex = 0; attributeIndex < binding.Elements.GetSize(); attributeIndex++)
             {
                 const InputElement& inputElement = binding.Elements[attributeIndex];
 
@@ -184,7 +184,7 @@ namespace Portakal
         * Create pipeline resource layout
         */
         Array<VkDescriptorSetLayout> descriptorSetLayouts;
-        for (Uint32 layoutIndex = 0; layoutIndex < desc.ResourceLayout.ResourceLayouts.GetSize(); layoutIndex++)
+        for (UInt32 layoutIndex = 0; layoutIndex < desc.ResourceLayout.ResourceLayouts.GetSize(); layoutIndex++)
         {
             const VulkanResourceTableLayout* pLayout = (const VulkanResourceTableLayout*)desc.ResourceLayout.ResourceLayouts[layoutIndex];
             descriptorSetLayouts.Add(pLayout->GetVkSetLayout());

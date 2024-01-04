@@ -8,7 +8,7 @@ namespace Portakal
         //Create internal resources
         CreateInternalResources(desc.pDevice.GetHeap());
     }
-    void Swapchain::Resize(const Uint16 width, const Uint16 height)
+    void Swapchain::Resize(const UInt16 width, const UInt16 height)
     {
         //Wait for all fences to be idle
         GetOwnerDevice()->WaitDeviceIdle();
@@ -72,7 +72,7 @@ namespace Portakal
         mTextures = textures;
         mViews = views;
     }
-    void Swapchain::SetSize(const Uint16 width, const Uint16 height)
+    void Swapchain::SetSize(const UInt16 width, const UInt16 height)
     {
         DEV_LOG("Swapchain", "Size: %d,%d", width, height);
         mSize = { width,height };

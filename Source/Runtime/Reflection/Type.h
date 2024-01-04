@@ -22,7 +22,7 @@ namespace Portakal
 		{
 			return mName;
 		}
-		FORCEINLINE Uint32 GetSize() const noexcept
+		FORCEINLINE UInt32 GetSize() const noexcept
 		{
 			return mSize;
 		}
@@ -59,7 +59,7 @@ namespace Portakal
 		void* CreateDefaultHeapObject() const noexcept;
 		Bool8 IsSubClassOf(const Type* pType) const noexcept;
 	private:
-		Type(const String& name, const Uint32 size, const TypeModes mode, const TypeCodes code, DefaultHeapObjectGenerator defaultObjectGenerator,Type** ppModuleAddress);
+		Type(const String& name, const UInt32 size, const TypeModes mode, const TypeCodes code, DefaultHeapObjectGenerator defaultObjectGenerator,Type** ppModuleAddress);
 		~Type();
 
 		void _RegisterEnum(const String& name, const Int64 value);
@@ -68,7 +68,7 @@ namespace Portakal
 		void _RegisterAttribute(Attribute* pAttribute);
 	private:
 		const String mName;
-		const Uint32 mSize;
+		const UInt32 mSize;
 		const TypeModes mMode;
 		const TypeCodes mCode;
 		const DefaultHeapObjectGenerator mDefaultObjectGenerator;
