@@ -91,10 +91,10 @@ namespace Portakal
                     int targetLineIndex = lastIncludeLineIndex + 1;
                     string line = $"#include \"{file.Name}.reflected.h\"";
                     file.Lines.Insert(targetLineIndex, line);
-                }
 
-                //Write to header file
-                File.WriteAllLines(file.Path, file.Lines);
+                    //Write to header file
+                    File.WriteAllLines(file.Path, file.Lines);
+                }
 
                 //Create reflected file content
                 string filePath = @$"{Path.GetDirectoryName(file.Path)}\{file.Name}.reflected.h";
