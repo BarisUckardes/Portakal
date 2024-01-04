@@ -37,10 +37,11 @@ namespace Portakal
         SharedHeap<Swapchain> pSwapchain = pRenderer->GetDevice()->GetMainSwapchain();
 
         //Check if render target needs a refresh
-        if (mRenderTargets.IsEmpty())
+        if (pSwapchain->GetSize() != mLastSwapchainSize)
         {
             SharedHeap<GraphicsDevice> pTargetDevice = pRenderer->GetDevice();
             InvalidateRenderTarget(pTargetDevice);
+            mLastSwapchainSize = pSwapchain->GetSize();
         }
 
         //End rendering session and render
@@ -58,6 +59,10 @@ namespace Portakal
         if (pMainSwapchain.IsShutdown())
             return;
 
+        //Clear former render targets
+        mRenderTargets.Clear();
+
+        //Create new render targets
         Array<SharedHeap<Texture>> textures = pMainSwapchain->GetTextures();
         Array<SharedHeap<TextureView>> views = pMainSwapchain->GetTextureViews();
         for (int i = 0; i < textures.GetSize(); i++)

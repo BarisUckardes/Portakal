@@ -10,7 +10,10 @@ namespace Portakal
 	{
 		GENERATE_OBJECT;
 	public:
-		ImGuiRenderEndModule() = default;
+		ImGuiRenderEndModule() : mSwapchainBufferIndex(0)
+		{
+
+		}
 		~ImGuiRenderEndModule() = default;
 
 	private:
@@ -22,6 +25,7 @@ namespace Portakal
 		void InvalidateRenderTarget(const SharedHeap<GraphicsDevice>& pDevice);
 	private:
 		Array<SharedHeap<RenderTarget>> mRenderTargets;
+		Vector2US mLastSwapchainSize;
 		Byte mSwapchainBufferIndex;
 
 	};
