@@ -22,10 +22,10 @@ namespace Portakal
         info.format = VulkanTextureUtils::GetTextureFormat(pTexture->GetFormat());
         info.viewType = VulkanTextureUtils::GetImageViewType(pTexture->GetTextureType());
         info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        info.subresourceRange.baseArrayLayer = 0;
-        info.subresourceRange.baseMipLevel = 0;
-        info.subresourceRange.layerCount = desc.ArrayLevel;
-        info.subresourceRange.levelCount = desc.MipLevel;
+        info.subresourceRange.baseArrayLayer = desc.ArrayLevel;
+        info.subresourceRange.baseMipLevel = desc.MipLevel;
+        info.subresourceRange.layerCount = desc.pTexture->GetArrayLevels();
+        info.subresourceRange.levelCount = desc.pTexture->GetMipLevels();
         info.components = swizzleMap;
         info.flags = VkImageViewCreateFlags();
         info.pNext = nullptr;

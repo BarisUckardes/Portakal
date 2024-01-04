@@ -221,18 +221,18 @@ namespace Portakal
         {
             switch (mask)
             {
-            case BlendColorWriteMask::R:
-                return VK_COLOR_COMPONENT_R_BIT;
-            case BlendColorWriteMask::G:
-                return VK_COLOR_COMPONENT_G_BIT;
-            case BlendColorWriteMask::B:
-                return VK_COLOR_COMPONENT_B_BIT;
-            case BlendColorWriteMask::A:
-                return VK_COLOR_COMPONENT_A_BIT;
-            case BlendColorWriteMask::All:
-                return VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-            default:
-                return VK_COLOR_COMPONENT_FLAG_BITS_MAX_ENUM;
+                case BlendColorWriteMask::R:
+                    return VK_COLOR_COMPONENT_R_BIT;
+                case BlendColorWriteMask::G:
+                    return VK_COLOR_COMPONENT_G_BIT;
+                case BlendColorWriteMask::B:
+                    return VK_COLOR_COMPONENT_B_BIT;
+                case BlendColorWriteMask::A:
+                    return VK_COLOR_COMPONENT_A_BIT;
+                case BlendColorWriteMask::All:
+                    return VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+                default:
+                    return VK_COLOR_COMPONENT_FLAG_BITS_MAX_ENUM;
             }
         }
         FORCEINLINE static VkBlendOp GetBlendOperation(const BlendOperation operation) noexcept

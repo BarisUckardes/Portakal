@@ -207,8 +207,8 @@ namespace Portakal
 
 			//Create view
 			TextureViewDesc viewDesc = {};
-			viewDesc.MipLevel = 1;
-			viewDesc.ArrayLevel = 1;
+			viewDesc.MipLevel = 0;
+			viewDesc.ArrayLevel = 0;
 			viewDesc.pTexture = pTexture;
 			SharedHeap<TextureView> pView = mDevice->CreateTextureView(viewDesc);
 			views.Add(pView);

@@ -27,6 +27,8 @@ namespace Portakal
             return KeyboardKeys::LeftShift;
         case VK_RSHIFT:
             return KeyboardKeys::RightShift;
+        case VK_SHIFT:
+            return KeyboardKeys::LeftShift;
         case VK_CAPITAL:
             return KeyboardKeys::CapsLock;
         case VK_RIGHT:
@@ -37,6 +39,11 @@ namespace Portakal
             return KeyboardKeys::Up;
         case VK_DOWN:
             return KeyboardKeys::Down;
+        case VK_LWIN:
+        case VK_RWIN:
+            return KeyboardKeys::Menu;
+        case VK_MENU:
+            return KeyboardKeys::LeftAlt;
         default:
         {
             if (vk_key >= 0x30 && vk_key <= 0x39) // its numeric

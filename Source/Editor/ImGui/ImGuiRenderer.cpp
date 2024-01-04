@@ -86,21 +86,38 @@ namespace Portakal
 
     ImGuiRenderer::~ImGuiRenderer()
     {
-        mDevice->WaitFences(mFence.GetHeapAddress(), 1);
-        mFence->Shutdown();
+        mDevice->WaitDeviceIdle();
+        mFontResourceTable.Shutdown();
+        mStaticResourceTable.Shutdown();
+        mFontResourceLayout.Shutdown();
+        mStaticResourceLayout.Shutdown();
+        mResourcePool.Shutdown();
+        mDefaultFontTexture.Shutdown();
+        mSampler.Shutdown();
+        mVertexShader.Shutdown();
+        mFragmentShader.Shutdown();
+        mMesh.Shutdown();
+        mStagingBuffer.Shutdown();
+        mConstantBuffer.Shutdown();
+        mCmdList.Shutdown();
+        mCmdPool.Shutdown();
+        mHostMemory.Shutdown();
+        mDeviceMemory.Shutdown();
     }
 
     void ImGuiRenderer::StartRendering(const float deltaTimeInMilliseconds)
     {
         ImGui::NewFrame();
     }
-    void ImGuiRenderer::EndRendering(const SharedHeap<RenderPass>& pRenderPass, const Color4F clearColor)
+    void ImGuiRenderer::EndRendering(const SharedHeap<RenderTarget>& pRenderTarget, const Color4F clearColor)
     {
-        if (mLatestRenderPass.IsShutdown() || pRenderPass != mLatestRenderPass)
-            InvalidateRenderPass(pRenderPass, 0);
+        ImGui::ShowDemoWindow();
+
+        if (mLatestRenderTarget.IsShutdown() || pRenderTarget != mLatestRenderTarget)
+            InvalidateRenderTarget(pRenderTarget, 0);
 
         //Get display size
-        const Vector2US renderSize = pRenderPass->GetRenderRegion();
+        const Vector2US renderSize = pRenderTarget->GetRenderPass()->GetRenderRegion();
         ImGuiIO& io = ImGui::GetIO();
         io.DisplaySize = { (float)renderSize.X,(float)renderSize.Y };
         io.DisplayFramebufferScale = { 1.0f,1.0f };
@@ -169,7 +186,7 @@ namespace Portakal
         mCmdList->SetPipeline(mPipeline);
 
         //Start rendering
-        mCmdList->BeginRenderPass(pRenderPass, Color4F::CornflowerBlue());
+        mCmdList->BeginRenderPass(pRenderTarget->GetRenderPass(), Color4F::CornflowerBlue());
 
         //Check the renderable range
         const bool bHasRenderableRange = pDrawData->DisplaySize.x > 0.0f && pDrawData->DisplaySize.y > 0.0f && pDrawData->CmdListsCount != 0;
@@ -194,7 +211,7 @@ namespace Portakal
             viewport.OffsetInPixels = { 0,0 };
             viewport.SizeInPixels = { (uint16)pDrawData->DisplaySize.x,(uint16)pDrawData->DisplaySize.y };
             viewport.DepthRange = { 0.0f,1.0f };
-            mCmdList->SetViewports(&viewport, 1);
+           //mCmdList->SetViewports(&viewport, 1);
 
             /*
             * Draw
@@ -272,6 +289,10 @@ namespace Portakal
         ImGuiIO& io = ImGui::GetIO();
         io.BackendFlags = ImGuiBackendFlags_None;
         io.ConfigFlags = ImGuiConfigFlags_DockingEnable;
+
+        //Set display size
+        io.DisplaySize = { 32,32 };
+        io.DisplayFramebufferScale = { 1.0f,1.0f };
 
         //Set clipboard callbacks
         io.SetClipboardTextFn = SetClipboardTextCallback;
@@ -457,10 +478,11 @@ namespace Portakal
         mDevice->UpdateResourceTable(mStaticResourceTable.GetHeap(), staticTableUpdateDesc);
 
         //Update font resource table
+        SharedHeap<TextureView> pFontTextureView = mDefaultFontTexture->GetView(0, 0);
         ResourceTableUpdateDesc fontTableUpdateDesc = {};
         fontTableUpdateDesc.Entries =
         {
-            {mDefaultFontTexture->GetView(0,0).GetHeap(),GraphicsResourceType::SampledTexture,0,0,0,0}
+            {pFontTextureView.QueryAs<GraphicsDeviceObject>(),GraphicsResourceType::SampledTexture,0,0,0,0}
         };
         mDevice->UpdateResourceTable(mFontResourceTable.GetHeap(), fontTableUpdateDesc);
 
@@ -468,8 +490,8 @@ namespace Portakal
         mMesh = new MeshResource(mDevice);
 
         //Allocate vertex and index buffer
-        mMesh->AllocateVertexes(6400, sizeof(ImDrawVert), mHostMemory, mDeviceMemory, true);
-        mMesh->AllocateIndexes(6400, sizeof(uint16), mHostMemory, mDeviceMemory, true);
+        mMesh->AllocateVertexes(6400, sizeof(ImDrawVert), mDeviceMemory, mHostMemory, true);
+        mMesh->AllocateIndexes(6400, sizeof(uint16), mDeviceMemory, mHostMemory, true);
     }
     void ImGuiRenderer::SetupDefaultTheme()
     {
@@ -524,7 +546,73 @@ namespace Portakal
         style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
         style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.43f);
     }
-    void ImGuiRenderer::InvalidateRenderPass(const SharedHeap<RenderPass>& pRenderPass,const byte subpassIndex)
+    void ImGuiRenderer::OnResized(const Vector2US size)
+    {
+        ImGuiIO& io = ImGui::GetIO();
+        io.DisplaySize = { (float)size.X,(float)size.Y };
+    }
+
+    void ImGuiRenderer::OnMouseMoved(const Vector2I mousePosition)
+    {
+        ImGuiIO& io = ImGui::GetIO();
+        io.AddMousePosEvent(mousePosition.X, mousePosition.Y);
+    }
+
+    void ImGuiRenderer::OnMouseButtonDown(const MouseButtons button)
+    {
+        ImGuiIO& io = ImGui::GetIO();
+        io.AddMouseButtonEvent(ImGuiUtils::GetMouseButton(button), true);
+    }
+
+    void ImGuiRenderer::OnMouseButtonUp(const MouseButtons button)
+    {
+        ImGuiIO& io = ImGui::GetIO();
+        io.AddMouseButtonEvent(ImGuiUtils::GetMouseButton(button), false);
+    }
+
+    void ImGuiRenderer::OnMouseWheel(const float delta)
+    {
+        ImGuiIO& io = ImGui::GetIO();
+        io.AddMouseWheelEvent(delta, delta);
+    }
+
+    void ImGuiRenderer::OnKeyboardKeyDown(const KeyboardKeys key)
+    {
+        ImGuiIO& io = ImGui::GetIO();
+        io.AddKeyEvent(ImGuiUtils::GetKeyboardKey(key), true);
+
+        if (key == KeyboardKeys::LeftControl)
+            io.AddKeyEvent(ImGuiKey_ModCtrl, true);
+        if (key == KeyboardKeys::LeftShift)
+            io.AddKeyEvent(ImGuiKey_ModShift, true);
+        if (key == KeyboardKeys::LeftShift)
+            io.AddKeyEvent(ImGuiKey_ModAlt, true);
+        if (key == KeyboardKeys::LeftShift)
+            io.AddKeyEvent(ImGuiKey_ModSuper, true);
+    }
+
+    void ImGuiRenderer::OnKeyboardKeyUp(const KeyboardKeys key)
+    {
+        ImGuiIO& io = ImGui::GetIO();
+        io.AddKeyEvent(ImGuiUtils::GetKeyboardKey(key), false);
+
+        if (key == KeyboardKeys::LeftControl)
+            io.AddKeyEvent(ImGuiKey_ModCtrl, false);
+        if (key == KeyboardKeys::LeftShift)
+            io.AddKeyEvent(ImGuiKey_ModShift, false);
+        if (key == KeyboardKeys::LeftShift)
+            io.AddKeyEvent(ImGuiKey_ModAlt, false);
+        if (key == KeyboardKeys::LeftShift)
+            io.AddKeyEvent(ImGuiKey_ModSuper, false);
+    }
+
+    void ImGuiRenderer::OnKeyboardChar(const char c)
+    {
+        ImGuiIO& io = ImGui::GetIO();
+
+        io.AddInputCharacter(c);
+    }
+    void ImGuiRenderer::InvalidateRenderTarget(const SharedHeap<RenderTarget>& pRenderTarget,const byte subpassIndex)
     {
         //Destroy the former pipeline
         mPipeline.Shutdown();
@@ -553,6 +641,7 @@ namespace Portakal
         blendingAttachment.ColorOperation = BlendOperation::Add;
         blendingAttachment.SourceAlphaFactor = BlendFactor::One;
         blendingAttachment.DestinationAlphaFactor = BlendFactor::OneMinusSrcAlpha;
+        blendingAttachment.WriteMask = BlendColorWriteMask::All;
         blendingStateDesc.Attachments.Add(blendingAttachment);
 
         //Create rasterizer state
@@ -587,6 +676,12 @@ namespace Portakal
         resourceLayoutDesc.ResourceLayouts.Add(mStaticResourceLayout.GetHeap());
         resourceLayoutDesc.ResourceLayouts.Add(mFontResourceLayout.GetHeap());
 
+        //Create viewport desc
+        ViewportDesc viewport = {};
+        viewport.OffsetInPixels = { 0,0 };
+        viewport.SizeInPixels = pRenderTarget->GetRenderPass()->GetRenderRegion();
+        viewport.DepthRange = { 0.0f,1.0f };
+
         //Create graphics device
         GraphicsPipelineDesc pipelineDesc = {};
         pipelineDesc.BlendState = blendingStateDesc;
@@ -597,15 +692,17 @@ namespace Portakal
         pipelineDesc.RasterizerState = rasterizerStateDesc;
         pipelineDesc.ResourceLayout = resourceLayoutDesc;
         pipelineDesc.GraphicsShaders = { mVertexShader,mFragmentShader };
-        pipelineDesc.pRenderPass = pRenderPass;
+        pipelineDesc.Viewport = viewport;
+        pipelineDesc.pRenderPass = pRenderTarget->GetRenderPass();
         pipelineDesc.SubpassIndex = subpassIndex;
         mPipeline = mDevice->CreateGraphicsPipeline(pipelineDesc);
 
         //Set properties
-        mLatestRenderPass = pRenderPass;
+        mLatestRenderTarget = pRenderTarget;
 
     }
     void ImGuiRenderer::OnShutdown()
     {
+
     }
 }

@@ -114,59 +114,62 @@ namespace Portakal
         //disown memory
         pNode->Data.bOwned = false;
 
-        //Do a compacting pass
-        LinkedList<SubAllocationBlock>::Node* pStartNode = mBlocks.GetRoot();
-        LinkedList<SubAllocationBlock>::Node* pEndNode = pStartNode->Next;
-        uint32 freeBlockCount = 0;
-        uint64 compactedBlockSize = 0;
-        while (pStartNode != nullptr)
-        {
-            //Check if start node has a not owned memory block
-            if (!pStartNode->Data.bOwned)
-            {
-                //Iterate and collect
-                while (pEndNode != nullptr && !pEndNode->Data.bOwned)
-                {
-                    //Get block size
-                    compactedBlockSize += pEndNode->Data.SizeInBytes;
+        ////Do a compacting pass
+        //LinkedList<SubAllocationBlock>::Node* pStartNode = mBlocks.GetRoot();
+        //LinkedList<SubAllocationBlock>::Node* pEndNode = pStartNode->Next;
+        //uint32 freeBlockCount = 0;
+        //uint64 compactedBlockSize = 0;
+        //while (pStartNode != nullptr)
+        //{
+        //    //Check if start node has a not owned memory block
+        //    if (!pStartNode->Data.bOwned)
+        //    {
+        //        //Iterate and collect
+        //        while (pEndNode != nullptr && !pEndNode->Data.bOwned)
+        //        {
+        //            //Get block size
+        //            compactedBlockSize += pEndNode->Data.SizeInBytes;
 
-                    //Tick
-                    pEndNode = pEndNode->Next;
-                    freeBlockCount++;
-                }
+        //            //Tick
+        //            pEndNode = pEndNode->Next;
+        //            freeBlockCount++;
+        //        }
 
-                //Check if there's a consecutive free blocks
-                if (freeBlockCount > 1)
-                {
-                    LinkedList<SubAllocationBlock>::Node* pTest = pStartNode->Next;
-                    while (pTest != pEndNode)
-                    {
-                        //Cache the next one
-                        LinkedList<SubAllocationBlock>::Node* pTemp = pTest->Next;
+        //        //Check if there's a consecutive free blocks
+        //        if (freeBlockCount > 1)
+        //        {
+        //            LinkedList<SubAllocationBlock>::Node* pTest = pStartNode->Next;
+        //            while (pTest != pEndNode)
+        //            {
+        //                //Cache the next one
+        //                LinkedList<SubAllocationBlock>::Node* pTemp = pTest->Next;
 
-                        //Delete the current one
-                        delete pTest;
+        //                //Delete the current one
+        //                delete pTest;
 
-                        //Make the connections
-                        pTest = pTemp;
-                    }
+        //                //Make the connections
+        //                pTest = pTemp;
+        //            }
 
-                    //Create new node
-                    LinkedList<SubAllocationBlock>::Node* pNewNode = new LinkedList<SubAllocationBlock>::Node();
-                    pNewNode->Data.bOwned = false;
-                    pNewNode->Data.SizeInBytes = compactedBlockSize;
-                    
-                    //Connect
-                    pNewNode->Next = pEndNode;
-                    pStartNode->Next = pNewNode;
-                }
-            }
-          
-            //Tick
-            pStartNode = pStartNode->Next;
-            pEndNode = pStartNode->Next;
-            freeBlockCount = 0;
-            compactedBlockSize = 0;
-        }
+        //            //Create new node
+        //            LinkedList<SubAllocationBlock>::Node* pNewNode = new LinkedList<SubAllocationBlock>::Node();
+        //            pNewNode->Data.bOwned = false;
+        //            pNewNode->Data.SizeInBytes = compactedBlockSize;
+        //            
+        //            //Connect
+        //            pNewNode->Next = pEndNode;
+        //            pStartNode->Next = pNewNode;
+        //        }
+        //    }
+        //  
+        //    //Tick
+        //    if (pStartNode == nullptr)
+        //        break;
+
+        //    pStartNode = pStartNode->Next;
+        //    pEndNode = pStartNode->Next;
+        //    freeBlockCount = 0;
+        //    compactedBlockSize = 0;
+        //}
     }
 }

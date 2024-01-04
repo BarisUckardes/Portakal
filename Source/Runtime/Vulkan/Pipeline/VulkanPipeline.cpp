@@ -93,12 +93,12 @@ namespace Portakal
         * Create viewport and scissors
         */
         VkViewport viewport = {};
-        viewport.x = 0;
-        viewport.y = 0;
-        viewport.width = 0;
-        viewport.height = 0;
-        viewport.minDepth = 0.0f;
-        viewport.maxDepth = 1.0f;
+        viewport.x = desc.Viewport.OffsetInPixels.X;
+        viewport.y = desc.Viewport.OffsetInPixels.Y;
+        viewport.width = desc.Viewport.SizeInPixels.X;
+        viewport.height = desc.Viewport.SizeInPixels.Y;
+        viewport.minDepth = desc.Viewport.DepthRange.X;
+        viewport.maxDepth = desc.Viewport.DepthRange.Y;
 
         VkRect2D scissor = {};
         scissor.offset = { 0,0 };
@@ -220,6 +220,18 @@ namespace Portakal
             vkShaderStageInfos[shaderIndex] = info;
         }
 
+        constexpr VkDynamicState dynamicStates[] =
+        {
+               //VK_DYNAMIC_STATE_VIEWPORT,
+                VK_DYNAMIC_STATE_SCISSOR
+        };
+        VkPipelineDynamicStateCreateInfo dynamicStateCreateInfo = {};
+        dynamicStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+        dynamicStateCreateInfo.pNext = nullptr;
+        dynamicStateCreateInfo.flags = VkPipelineDynamicStateCreateFlags();
+        dynamicStateCreateInfo.dynamicStateCount = sizeof(dynamicStates) / sizeof(VkDynamicState);
+        dynamicStateCreateInfo.pDynamicStates = dynamicStates;
+
         //Create output state
         VkFormat colorAttachmentFormats[8];
         for (byte colorAttachmentIndex = 0; colorAttachmentIndex < desc.OutputMerger.ColorFormats.GetSize(); colorAttachmentIndex++)
@@ -249,7 +261,7 @@ namespace Portakal
         pipelineCreateInfo.pMultisampleState = &multiSampleStateCreateInfo;
         pipelineCreateInfo.pDepthStencilState = &depthStencilStateCreateInfo;
         pipelineCreateInfo.pColorBlendState = &blendingStateCreateInfo;
-        pipelineCreateInfo.pDynamicState = nullptr;
+        pipelineCreateInfo.pDynamicState = &dynamicStateCreateInfo;
         pipelineCreateInfo.layout = mLayout;
         pipelineCreateInfo.renderPass = pPass->GetVkRenderPass();
         pipelineCreateInfo.subpass = desc.SubpassIndex;

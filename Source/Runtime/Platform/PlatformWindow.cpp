@@ -151,6 +151,8 @@ namespace Portakal
 			default:
 				break;
 		}
+
+		mEvents.Add(data);
 	}
 	void PlatformWindow::OnShutdown()
 	{

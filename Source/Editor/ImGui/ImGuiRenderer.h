@@ -4,12 +4,10 @@
 #include <Runtime/Window/WindowEventData.h>
 #include <Runtime/Graphics/Device/GraphicsDevice.h>
 #include <Runtime/Graphics/RenderPass/RenderPass.h>
-
 #include <Runtime/Resource/Mesh/MeshResource.h>
 #include <Runtime/Resource/Texture/TextureResource.h>
-
+#include <Runtime/Resource/RenderTarget/RenderTarget.h>
 #include <Runtime/Containers/HashMap.h>
-
 #include <imgui.h>
 
 namespace Portakal
@@ -26,18 +24,19 @@ namespace Portakal
 		ImGuiRenderer();
 		~ImGuiRenderer();
 
+		FORCEINLINE SharedHeap<GraphicsDevice> GetDevice() const noexcept
+		{
+			return mDevice;
+		}
+
 		void StartRendering(float deltaTimeInMilliSeconds);
-		void EndRendering(const SharedHeap<RenderPass>& pRenderPass, const Color4F clearColor);
+		void EndRendering(const SharedHeap<RenderTarget>& pRenderTarget, const Color4F clearColor);
 
 		ImGuiTextureBinding* CreateTextureBinding(Texture* pTexture);
 		ImGuiTextureBinding* GetTextureBinding(const Texture* pTexture);
 
 		void DeleteTextureBinding(const Texture* pTexture);
 		void ClearTextureBindings();
-
-	private:
-		void CreateImGuiResources();
-		void SetupDefaultTheme();
 
 		void OnResized(const Vector2US newSize);
 		void OnMouseMoved(const Vector2I mousePosition);
@@ -47,9 +46,11 @@ namespace Portakal
 		void OnKeyboardKeyDown(const KeyboardKeys key);
 		void OnKeyboardKeyUp(const KeyboardKeys key);
 		void OnKeyboardChar(const char value);
-
 	private:
-		void InvalidateRenderPass(const SharedHeap<RenderPass>& pRenderPass,const byte subpassIndex);
+		void CreateImGuiResources();
+		void SetupDefaultTheme();
+	private:
+		void InvalidateRenderTarget(const SharedHeap<RenderTarget>& pRenderTarget,const byte subpassIndex);
 		virtual void OnShutdown() override;
 
 	private:
@@ -82,7 +83,7 @@ namespace Portakal
 
 		SharedHeap<Pipeline> mPipeline;
 		SharedHeap<Fence> mFence;
-		SharedHeap<RenderPass> mLatestRenderPass;
+		SharedHeap<RenderTarget> mLatestRenderTarget;
 
 		HashMap<const Texture*, ImGuiTextureBinding*> mTextureBindings;
 	};

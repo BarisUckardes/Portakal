@@ -15,8 +15,8 @@ namespace Portakal
 	 */
 	struct RUNTIME_API ViewportDesc
 	{
-		Vector2UI SizeInPixels;
-		Vector2UI OffsetInPixels;
+		Vector2US SizeInPixels;
+		Vector2US OffsetInPixels;
 		Vector2F DepthRange;
 	};
 }

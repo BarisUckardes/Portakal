@@ -29,6 +29,7 @@ namespace Portakal
             GetOwnerApplication()->PostQuitRequest("Editor player window is closed!");
             return;
         }
+
         mWindow->PollMessages();
     }
 }

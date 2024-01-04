@@ -59,6 +59,10 @@ namespace Portakal
 
                 //Tick
                 pModule->OnTick();
+
+                //Check for quit request
+                if (mQuitRequest)
+                    break;
             }
 
             //Call post tick impl

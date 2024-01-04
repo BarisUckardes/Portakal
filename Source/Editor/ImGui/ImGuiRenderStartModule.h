@@ -1,23 +1,16 @@
 #pragma once
 #include <Runtime/Application/ApplicationModule.h>
-#include <Editor/ImGui/ImGuiRenderer.h>
-#include <Editor/ImGui/ImGuiAPI.h>
-#include "ImguiModule.reflected.h"
+#include "ImGuiRenderStartModule.reflected.h"
 
 namespace Portakal
 {
-	class ImGuiAPI;
-
 	PCLASS();
-	class RUNTIME_API ImGuiModule : public ApplicationModule
+	class EDITOR_API ImGuiRenderStartModule : public ApplicationModule
 	{
 		GENERATE_OBJECT;
 	public:
-		ImGuiModule() : mAPI(nullptr)
-		{
-
-		}
-		~ImGuiModule() = default;
+		ImGuiRenderStartModule() = default;
+		~ImGuiRenderStartModule() = default;
 
 	private:
 		// Inherited via ApplicationModule
@@ -25,21 +18,9 @@ namespace Portakal
 		void OnFinalize() override;
 		void OnTick() override;
 	private:
-		ImGuiAPI* mAPI;
+
 	};
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

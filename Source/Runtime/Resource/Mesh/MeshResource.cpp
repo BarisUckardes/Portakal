@@ -173,7 +173,7 @@ namespace Portakal
 
 		CommandListDesc cmdListDesc = {};
 		cmdListDesc.pPool = mCmdPool;
-		mDevice->CreateCommandList(cmdListDesc);
+		mCmdList = mDevice->CreateCommandList(cmdListDesc);
 
 		mFence = mDevice->CreateFence();
 	}

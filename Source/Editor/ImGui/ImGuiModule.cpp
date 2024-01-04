@@ -4,15 +4,13 @@ namespace Portakal
 {
 	void ImGuiModule::OnInitialize()
 	{
-		//Create renderer
-		mRenderer = new ImGuiRenderer();
-		
 		//Create API
-		mAPI = nullptr;
+		mAPI = new ImGuiAPI();
 	}
 	void ImGuiModule::OnFinalize()
 	{
-		mRenderer.Shutdown();
+		delete mAPI;
+		mAPI = nullptr;
 	}
 	void ImGuiModule::OnTick()
 	{

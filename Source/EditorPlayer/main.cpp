@@ -77,8 +77,10 @@ namespace Portakal
 		pApplication->RegisterModule<EditorPlayerWindowModule>(6);
 		pApplication->RegisterModule<EditorPlayerGDeviceModule>(7);
 		pApplication->RegisterModule<ImGuiModule>(8);
-
-		//Add routine modules
+		
+		//GUI modules
+		pApplication->RegisterModule<ImGuiRenderStartModule>(9);
+		pApplication->RegisterModule<ImGuiRenderEndModule>(10);
 
 		//Run
 		pApplication->Run();

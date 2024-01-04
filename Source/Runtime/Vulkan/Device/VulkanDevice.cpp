@@ -290,8 +290,8 @@ namespace Portakal
         const VulkanMemoryHeap* pHeap = (const VulkanMemoryHeap*)pBuffer->GetGraphicsHeap().GetHeap();
 
         byte* pTargetHostData = nullptr;
-        vkMapMemory(mLogicalDevice, pHeap->GetVkMemory(), pBuffer->GetAlignedMemoryHandle() + desc.OffsetInBytes, desc.View.GetSize(), 0, (void**)&pTargetHostData);
-        Memory::Copy((void*)desc.View.GetMemory(), pTargetHostData, desc.View.GetSize());
+        DEV_ASSERT(vkMapMemory(mLogicalDevice, pHeap->GetVkMemory(), pBuffer->GetAlignedMemoryHandle() + desc.OffsetInBytes, desc.View.GetSize(), 0, (void**)&pTargetHostData) == VK_SUCCESS, "VulkanDevice", "Failed to map the host buffer");
+        Memory::Copy(pTargetHostData, (void*)desc.View.GetMemory(), desc.View.GetSize());
         vkUnmapMemory(mLogicalDevice, pHeap->GetVkMemory());
     }
     void VulkanDevice::UpdateResourceTableCore(ResourceTable* pTable, const ResourceTableUpdateDesc& desc)

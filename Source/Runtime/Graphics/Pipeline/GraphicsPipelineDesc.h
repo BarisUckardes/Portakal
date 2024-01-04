@@ -11,6 +11,7 @@
 #include <Runtime/Graphics/Pipeline/ResourceLayout/ResourceLayoutDesc.h>
 #include <Runtime/Graphics/RenderPass/RenderPass.h>
 #include <Runtime/Graphics/Shader/Shader.h>
+#include <Runtime/Graphics/Command/ViewportDesc.h>
 
 namespace Portakal
 {
@@ -25,6 +26,7 @@ namespace Portakal
         ResourceLayoutDesc ResourceLayout;
         Array<SharedHeap<Shader>> GraphicsShaders;
         SharedHeap<RenderPass> pRenderPass;
+        ViewportDesc Viewport;
         byte SubpassIndex;
     };
 }
