@@ -7,7 +7,6 @@
 
 namespace Portakal
 {
-    byte index = 0;
     void ImGuiRenderEndModule::OnInitialize()
     {
 
@@ -34,6 +33,9 @@ namespace Portakal
             return;
         }
 
+        //Get main swapchain
+        SharedHeap<Swapchain> pSwapchain = pRenderer->GetDevice()->GetMainSwapchain();
+
         //Check if render target needs a refresh
         if (mRenderTargets.IsEmpty())
         {
@@ -42,12 +44,12 @@ namespace Portakal
         }
 
         //End rendering session and render
-        pRenderer->EndRendering(mRenderTargets[index], Color4F::CornflowerBlue());
+        pRenderer->EndRendering(mRenderTargets[mSwapchainBufferIndex], Color4F::CornflowerBlue());
 
         //Present
-        pRenderer->GetDevice()->GetMainSwapchain()->Present();
-        pRenderer->GetDevice()->GetMainSwapchain()->WaitForPresent(index);
-        index = (index + 1) % 2;
+        pSwapchain->Present();
+        pSwapchain->WaitForPresent(mSwapchainBufferIndex);
+        mSwapchainBufferIndex = (mSwapchainBufferIndex + 1) % pSwapchain->GetBufferCount();
     }
     void ImGuiRenderEndModule::InvalidateRenderTarget(const SharedHeap<GraphicsDevice>& pDevice)
     {
