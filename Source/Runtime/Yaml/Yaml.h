@@ -19,7 +19,7 @@ namespace Portakal
 			return YamlDefaultSerializer::ToYaml(pObject,typeof(T));
 		}
 
-		static bool IsYaml(const String& yaml)
+		static Bool8 IsYaml(const String& yaml)
 		{
 			return true;
 		}

@@ -20,7 +20,7 @@ namespace Portakal
 		}
 	private:
 		VkInstance mInstance;
-		Array<const char*> mEnabledValidationLayers;
+		Array<const Char*> mEnabledValidationLayers;
 #ifdef PORTAKAL_DEBUG
 		VkDebugUtilsMessengerEXT mDebugMessenger;
 #endif

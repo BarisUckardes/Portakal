@@ -10,6 +10,6 @@ namespace Portakal
         TextureUtils() = delete;
         ~TextureUtils() = delete;
 
-        static byte GetFormatSize(const TextureFormat format);
+        static Byte GetFormatSize(const TextureFormat format);
     };
 }

@@ -7,7 +7,7 @@ typedef Portakal::Win32Input PlatformAbstraction;
 
 namespace Portakal
 {
-	bool PlatformInput::Initialize()
+	Bool8 PlatformInput::Initialize()
 	{
 		return PlatformAbstraction::Initialize();
 	}

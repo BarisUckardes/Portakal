@@ -6,9 +6,9 @@ namespace Portakal
 {
     struct RUNTIME_API DepthStencilStateDesc
     {
-        bool bDepthTestEnabled;
-        bool bDepthWriteEnabled;
-        bool bStencilTestEnabled;
+        Bool8 bDepthTestEnabled;
+        Bool8 bDepthWriteEnabled;
+        Bool8 bStencilTestEnabled;
         CompareOperation DepthTestOperation;
         StencilFaceDesc StencilFrontFace;
         StencilFaceDesc StencilBackFace;

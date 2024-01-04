@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API KeyboardKeys : byte
+	enum class RUNTIME_API KeyboardKeys : Byte
 	{
 		Unknown,
 		Space,

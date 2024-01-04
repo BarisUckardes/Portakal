@@ -23,9 +23,9 @@ namespace Portakal
 		float MouseWheelDelta;
 
 		KeyboardKeys KeyboardKey;
-		char KeyboardChar;
+		Char KeyboardChar;
 
-		bool Handled;
-		byte WindowIndex;
+		Bool8 Handled;
+		Byte WindowIndex;
 	};
 }

@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    enum class RUNTIME_API BlendColorWriteMask : unsigned char
+    enum class RUNTIME_API BlendColorWriteMask : Byte
     {
         R = 1,
         G = 2,
@@ -12,5 +12,5 @@ namespace Portakal
         All = R | G | B | A
     };
 
-    GENERATE_FLAGS(BlendColorWriteMask, unsigned char)
+    GENERATE_FLAGS(BlendColorWriteMask,Byte)
 }

@@ -20,10 +20,10 @@ namespace Portakal
 		}
 
 		//Create color attachment descs
-		const byte colorAttachmentCount = desc.ColorAttachments.GetSize();
-		const bool bHasDepthStencilAttachment = !desc.DepthStencilAttachment.pTexture.IsShutdown();
+		const Byte colorAttachmentCount = desc.ColorAttachments.GetSize();
+		const Bool8 bHasDepthStencilAttachment = !desc.DepthStencilAttachment.pTexture.IsShutdown();
 		Array<VkAttachmentDescription> attachments(colorAttachmentCount + bHasDepthStencilAttachment);
-		for (byte i = 0; i < attachments.GetSize(); i++)
+		for (Byte i = 0; i < attachments.GetSize(); i++)
 		{
 			const RenderPassAttachmentDesc& attachmentDesc = desc.ColorAttachments[i];
 			VkAttachmentDescription attachment = {};
@@ -58,7 +58,7 @@ namespace Portakal
 
 		//Create attachment references
 		Array<VkAttachmentReference> references(attachments.GetSize());
-		for (byte i = 0; i < references.GetSize(); i++)
+		for (Byte i = 0; i < references.GetSize(); i++)
 		{
 			VkAttachmentReference reference = {};
 			reference.attachment = i;
@@ -73,7 +73,7 @@ namespace Portakal
 			VkAttachmentReference colorAttachmentsReferences[16];
 			VkAttachmentReference inputAttachmentReferences[16];
 			VkAttachmentReference multiSampleAttachmentReferences[16];
-			uint32 preserveAttachmentReferences[16];
+			Uint32 preserveAttachmentReferences[16];
 
 			VkSubpassDescription subpass = {};
 			subpass.pipelineBindPoint = subpassDesc.BindPoint == PipelineBindPoint::Graphics ? VK_PIPELINE_BIND_POINT_GRAPHICS : VK_PIPELINE_BIND_POINT_COMPUTE;
@@ -123,7 +123,7 @@ namespace Portakal
 		//Create framebuffer
 		if (desc.bSwapchain)
 		{
-			for (byte i = 0; i < desc.AttachmentViews.GetSize(); i++)
+			for (Byte i = 0; i < desc.AttachmentViews.GetSize(); i++)
 			{
 				const VulkanTextureView* pView = (const VulkanTextureView*)desc.AttachmentViews[i].GetHeap();
 				VkImageView imageView = pView->GetVkImageView();
@@ -147,7 +147,7 @@ namespace Portakal
 		else
 		{
 			VkImageView imageViews[8] = {};
-			for (byte i = 0; i < desc.AttachmentViews.GetSize(); i++)
+			for (Byte i = 0; i < desc.AttachmentViews.GetSize(); i++)
 			{
 				const VulkanTextureView* pView = (const VulkanTextureView*)desc.AttachmentViews[i].GetHeap();
 				imageViews[i] = pView->GetVkImageView();
@@ -181,7 +181,7 @@ namespace Portakal
 	void VulkanRenderPass::CreateAsSwapchain(const RenderPassDesc& desc, VulkanDevice* pDevice)
 	{
 		//Get depth state
-		const bool bDepthEnabled = !desc.DepthStencilAttachment.pTexture.IsShutdown();
+		const Bool8 bDepthEnabled = !desc.DepthStencilAttachment.pTexture.IsShutdown();
 
 		const RenderPassAttachmentDesc& attachmentDesc = desc.ColorAttachments[0];
 
@@ -270,7 +270,7 @@ namespace Portakal
 		DEV_ASSERT(vkCreateRenderPass(mLogicalDevice, &info, nullptr, &mRenderPass) == VK_SUCCESS, "VulkanRenderPass", "Failed to create render pass!");
 
 		//Create framebuffers
-		for (byte framebufferIndex = 0; framebufferIndex < desc.ColorAttachments.GetSize(); framebufferIndex++)
+		for (Byte framebufferIndex = 0; framebufferIndex < desc.ColorAttachments.GetSize(); framebufferIndex++)
 		{
 			VkImageView imageViews[2] = { ((const VulkanTextureView*)desc.AttachmentViews[framebufferIndex].GetHeap())->GetVkImageView(),VK_NULL_HANDLE };
 

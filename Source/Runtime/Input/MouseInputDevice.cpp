@@ -5,39 +5,39 @@ namespace Portakal
 {
 	MouseInputDevice::MouseInputDevice()
 	{
-		for (uint16 i = 0; i < 256; i++)
+		for (Uint16 i = 0; i < 256; i++)
 		{
 			mLastState[i] = false;
 			mButtons[i] = {};
 		}
 	}
-	bool MouseInputDevice::IsButtonDown(const MouseButtons button) const noexcept
+	Bool8 MouseInputDevice::IsButtonDown(const MouseButtons button) const noexcept
 	{
-		return mButtons[(uint16)button].bDown;
+		return mButtons[(Uint16)button].bDown;
 	}
-	bool MouseInputDevice::IsButtonUp(const MouseButtons button) const noexcept
+	Bool8 MouseInputDevice::IsButtonUp(const MouseButtons button) const noexcept
 	{
-		return !mButtons[(uint16)button].bDown;
+		return !mButtons[(Uint16)button].bDown;
 	}
-	bool MouseInputDevice::IsButtonPressed(const MouseButtons button) const noexcept
+	Bool8 MouseInputDevice::IsButtonPressed(const MouseButtons button) const noexcept
 	{
-		return mButtons[(uint16)button].bPressed;
+		return mButtons[(Uint16)button].bPressed;
 	}
-	bool MouseInputDevice::IsButtonReleased(const MouseButtons button) const noexcept
+	Bool8 MouseInputDevice::IsButtonReleased(const MouseButtons button) const noexcept
 	{
-		return mButtons[(uint16)button].bReleased;
+		return mButtons[(Uint16)button].bReleased;
 	}
-	bool MouseInputDevice::GetWheelDelta() const noexcept
+	Bool8 MouseInputDevice::GetWheelDelta() const noexcept
 	{
 		return mWheelDelta;
 	}
-	void MouseInputDevice::UpdateButtons(const bool* pButtons)
+	void MouseInputDevice::UpdateButtons(const Bool8* pButtons)
 	{
 		//Set keys
-		for (uint16 i = 0; i < 256; i++)
+		for (Uint16 i = 0; i < 256; i++)
 		{
-			const bool bOldState = mLastState[i];
-			const bool bNewState = pButtons[i];
+			const Bool8 bOldState = mLastState[i];
+			const Bool8 bNewState = pButtons[i];
 
 			MouseEntry& entry = mButtons[i];
 			entry.bDown = bNewState;

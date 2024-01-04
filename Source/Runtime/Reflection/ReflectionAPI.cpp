@@ -100,7 +100,7 @@ namespace Portakal
         //Register the main
         CreateEntry(pMainLibrary, true);
     }
-    ReflectionAPI::Entry ReflectionAPI::CreateEntry(const SharedHeap<PlatformLibrary>& pLibrary,const bool bMain)
+    ReflectionAPI::Entry ReflectionAPI::CreateEntry(const SharedHeap<PlatformLibrary>& pLibrary,const Bool8 bMain)
     {
         //Try get loader proc
         GetManifestProc getProc = (GetManifestProc)pLibrary->GetSymbol("GenerateModuleManifest");
@@ -132,7 +132,7 @@ namespace Portakal
 
         return entry;
     }
-    void ReflectionAPI::DeleteEntry(const Entry& entry, const bool bMain)
+    void ReflectionAPI::DeleteEntry(const Entry& entry, const Bool8 bMain)
     {
         //Delete
         delete entry.pAssembly;

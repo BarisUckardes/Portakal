@@ -49,7 +49,7 @@ namespace Portakal
 		if (handle == NULL || handle == INVALID_HANDLE_VALUE)
 			return;
 
-		SetConsoleTextAttribute(handle, (byte)color + (byte)gLastBackgroundColor + 16);
+		SetConsoleTextAttribute(handle, (Byte)color + (Byte)gLastBackgroundColor + 16);
 	}
 	void Win32Console::SetBackgroundColor(const ConsoleColor color)
 	{
@@ -60,7 +60,7 @@ namespace Portakal
 		if (handle == NULL || handle == INVALID_HANDLE_VALUE)
 			return;
 
-		SetConsoleTextAttribute(handle,(byte)gLastBackgroundColor + (byte)color*16);
+		SetConsoleTextAttribute(handle,(Byte)gLastBackgroundColor + (Byte)color*16);
 	}
 	void Win32Console::Clear()
 	{

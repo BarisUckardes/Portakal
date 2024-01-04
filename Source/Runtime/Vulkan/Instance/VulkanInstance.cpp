@@ -41,8 +41,8 @@ namespace Portakal
     {
         struct ExtensionEntry
         {
-            const char* pName;
-            bool bSupported;
+            const Char* pName;
+            Bool8 bSupported;
         };
         //Create instance extension array
         Array<ExtensionEntry> instanceRequestedExtensions;
@@ -50,7 +50,7 @@ namespace Portakal
             instanceRequestedExtensions.Add({ extension.GetCopyRaw(),false });
 
         //Get supported extension count
-        uint32 supportedInstanceExtensionCount = 0;
+        Uint32 supportedInstanceExtensionCount = 0;
         DEV_ASSERT(vkEnumerateInstanceExtensionProperties(nullptr, &supportedInstanceExtensionCount, nullptr) == VK_SUCCESS, "VulkanInstance", "Failed to enumarate the instance extensions!");
         DEV_ASSERT(supportedInstanceExtensionCount > 0, "VulkanInstance", "No instance extension found!");
 
@@ -73,13 +73,13 @@ namespace Portakal
 #endif
 
         //Check if extension names are supported
-        for (uint32 instanceExtensionIndex = 0; instanceExtensionIndex < instanceRequestedExtensions.GetSize(); instanceExtensionIndex++)
+        for (Uint32 instanceExtensionIndex = 0; instanceExtensionIndex < instanceRequestedExtensions.GetSize(); instanceExtensionIndex++)
         {
             ExtensionEntry& entry = instanceRequestedExtensions[instanceExtensionIndex];
 
             //Check if properties contains this extension
-            bool bExtensionSupported = false;
-            for (uint32 supportedInstanceExtensionIndex = 0; supportedInstanceExtensionIndex < supportedInstanceExtensionCount; supportedInstanceExtensionIndex++)
+            Bool8 bExtensionSupported = false;
+            for (Uint32 supportedInstanceExtensionIndex = 0; supportedInstanceExtensionIndex < supportedInstanceExtensionCount; supportedInstanceExtensionIndex++)
             {
                 const VkExtensionProperties& supportedInstanceExtensionProperty = supportedInstanceExtensions[supportedInstanceExtensionIndex];
 
@@ -94,9 +94,9 @@ namespace Portakal
         }
 
         //Filter extensions
-        Array<const char*> selectedExtensions;
-        Array<const char*> unsupportedExtensions;
-        for (uint32 i = 0; i < instanceRequestedExtensions.GetSize(); i++)
+        Array<const Char*> selectedExtensions;
+        Array<const Char*> unsupportedExtensions;
+        for (Uint32 i = 0; i < instanceRequestedExtensions.GetSize(); i++)
         {
             ExtensionEntry& entry = instanceRequestedExtensions[i];
             if (entry.bSupported)
@@ -106,7 +106,7 @@ namespace Portakal
         }
 
         //Get supported layers
-        uint32 instanceSupportedLayerCount = 0;
+        Uint32 instanceSupportedLayerCount = 0;
         DEV_ASSERT(vkEnumerateInstanceLayerProperties(&instanceSupportedLayerCount, nullptr) == VK_SUCCESS, "VulkanInstance", "Failed to get the instance layer properties");
         DEV_ASSERT(instanceSupportedLayerCount > 0, "VulkanInstance", "No valid instance layer is supported!");
 
@@ -119,7 +119,7 @@ namespace Portakal
 #endif
 
         //Get layers
-        Array<const char*> instanceSelectedLayerNames = {};
+        Array<const Char*> instanceSelectedLayerNames = {};
 #ifdef PORTAKAL_DEBUG
         instanceSelectedLayerNames.Add("VK_LAYER_KHRONOS_validation");
 #endif
@@ -160,17 +160,17 @@ namespace Portakal
         debugMessengerInfo.pUserData = nullptr;
         DEV_ASSERT(debugMessengerCreateProc(mInstance, &debugMessengerInfo, nullptr, &mDebugMessenger) == VK_SUCCESS, "VulkanInstance", "Failed to create VkDebugUtilsMessengerEXT");
 
-        for (const char* pName : selectedExtensions)
+        for (const Char* pName : selectedExtensions)
             DEV_LOG("VulkanInstance", "Extension [%s] is enabled", pName);
-        for (const char* pName : unsupportedExtensions)
+        for (const Char* pName : unsupportedExtensions)
             DEV_LOG("VUlkanInstance", "Extension [%s] is not supported", pName);
-        for (const char* pName : instanceSelectedLayerNames)
+        for (const Char* pName : instanceSelectedLayerNames)
             DEV_LOG("VulkanInstance", "Layer [%s] is enabled", pName);
 #endif
 
 
         //Get physical devices
-        uint32 physicalDeviceCount = 0;
+        Uint32 physicalDeviceCount = 0;
         DEV_ASSERT(vkEnumeratePhysicalDevices(mInstance, &physicalDeviceCount, 0) == VK_SUCCESS, "VulkanInstance", "Failed to enumarate physical devices!");
         DEV_ASSERT(physicalDeviceCount > 0, "VulkanInstance", "No physical gpus found!");
 

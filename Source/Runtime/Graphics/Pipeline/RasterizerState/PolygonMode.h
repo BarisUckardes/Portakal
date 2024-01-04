@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API PolygonMode : byte
+	enum class RUNTIME_API PolygonMode : Byte
 	{
 		Fill,
 		Line,

@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    enum class RUNTIME_API GamepadButtons : byte
+    enum class RUNTIME_API GamepadButtons : Byte
     {
         A,
         B,

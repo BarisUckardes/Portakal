@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API LogicOperation : byte
+	enum class RUNTIME_API LogicOperation : Byte
 	{
 		Clear,
 		Set,

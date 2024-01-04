@@ -18,7 +18,7 @@ namespace Portakal
         * Create shader stages
         */
         Array<VkPipelineShaderStageCreateInfo> shaderStageCreateInformation;
-        for (uint32 shaderIndex = 0; shaderIndex < desc.GraphicsShaders.GetSize(); shaderIndex++)
+        for (Uint32 shaderIndex = 0; shaderIndex < desc.GraphicsShaders.GetSize(); shaderIndex++)
         {
             const VulkanShader* pShader = (const VulkanShader*)desc.GraphicsShaders[shaderIndex].GetHeap();
 
@@ -37,7 +37,7 @@ namespace Portakal
         */
         Array<VkVertexInputBindingDescription> inputBindingDescriptions;
         Array<VkVertexInputAttributeDescription> inputAttributeDescriptions;
-        for (uint32 bindingIndex = 0; bindingIndex < desc.InputLayout.Bindings.GetSize(); bindingIndex++)
+        for (Uint32 bindingIndex = 0; bindingIndex < desc.InputLayout.Bindings.GetSize(); bindingIndex++)
         {
             const InputBinding& binding = desc.InputLayout.Bindings[bindingIndex];
 
@@ -46,8 +46,8 @@ namespace Portakal
             vkBindingDescription.binding = bindingIndex;
 
 
-            uint32 inputOffset = 0;
-            for (uint32 attributeIndex = 0; attributeIndex < binding.Elements.GetSize(); attributeIndex++)
+            Uint32 inputOffset = 0;
+            for (Uint32 attributeIndex = 0; attributeIndex < binding.Elements.GetSize(); attributeIndex++)
             {
                 const InputElement& inputElement = binding.Elements[attributeIndex];
 
@@ -168,7 +168,7 @@ namespace Portakal
         blendingStateCreateInfo.blendConstants[3] = 1;
 
         Array<VkPipelineColorBlendAttachmentState> blendingAttachments;
-        for (byte attachmentIndex = 0; attachmentIndex < desc.BlendState.Attachments.GetSize(); attachmentIndex++)
+        for (Byte attachmentIndex = 0; attachmentIndex < desc.BlendState.Attachments.GetSize(); attachmentIndex++)
         {
             const BlendStateAttachment& attachment = desc.BlendState.Attachments[attachmentIndex];
 
@@ -184,7 +184,7 @@ namespace Portakal
         * Create pipeline resource layout
         */
         Array<VkDescriptorSetLayout> descriptorSetLayouts;
-        for (uint32 layoutIndex = 0; layoutIndex < desc.ResourceLayout.ResourceLayouts.GetSize(); layoutIndex++)
+        for (Uint32 layoutIndex = 0; layoutIndex < desc.ResourceLayout.ResourceLayouts.GetSize(); layoutIndex++)
         {
             const VulkanResourceTableLayout* pLayout = (const VulkanResourceTableLayout*)desc.ResourceLayout.ResourceLayouts[layoutIndex];
             descriptorSetLayouts.Add(pLayout->GetVkSetLayout());
@@ -205,7 +205,7 @@ namespace Portakal
         * Get shader stage info
         */
         VkPipelineShaderStageCreateInfo vkShaderStageInfos[8];
-        for (byte shaderIndex = 0; shaderIndex < desc.GraphicsShaders.GetSize(); shaderIndex++)
+        for (Byte shaderIndex = 0; shaderIndex < desc.GraphicsShaders.GetSize(); shaderIndex++)
         {
             const VulkanShader* pShader = (const VulkanShader*)desc.GraphicsShaders[shaderIndex].GetHeap();
 
@@ -234,7 +234,7 @@ namespace Portakal
 
         //Create output state
         VkFormat colorAttachmentFormats[8];
-        for (byte colorAttachmentIndex = 0; colorAttachmentIndex < desc.OutputMerger.ColorFormats.GetSize(); colorAttachmentIndex++)
+        for (Byte colorAttachmentIndex = 0; colorAttachmentIndex < desc.OutputMerger.ColorFormats.GetSize(); colorAttachmentIndex++)
         {
             colorAttachmentFormats[colorAttachmentIndex] = VulkanTextureUtils::GetTextureFormat(desc.OutputMerger.ColorFormats[colorAttachmentIndex]);
         }
@@ -290,7 +290,7 @@ namespace Portakal
         * Create pipeline layout
         */
         VkDescriptorSetLayout vkSetLayouts[32];
-        for (byte layoutIndex = 0; layoutIndex < desc.ResourceLayouts.GetSize(); layoutIndex++)
+        for (Byte layoutIndex = 0; layoutIndex < desc.ResourceLayouts.GetSize(); layoutIndex++)
         {
             vkSetLayouts[layoutIndex] = ((const VulkanResourceTableLayout*)desc.ResourceLayouts[layoutIndex])->GetVkSetLayout();
         }

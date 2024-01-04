@@ -2,7 +2,7 @@
 
 namespace Portakal
 {
-	bool ProjectAPI::_SetProject(const ProjectDescriptor& descriptor, const String& folderPath)
+	Bool8 ProjectAPI::_SetProject(const ProjectDescriptor& descriptor, const String& folderPath)
 	{
 		mDescriptor = descriptor;
 		mFolderPath = folderPath;

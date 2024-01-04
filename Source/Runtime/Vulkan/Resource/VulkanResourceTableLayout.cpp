@@ -11,7 +11,7 @@ namespace Portakal
         * Create descriptor layout
         */
         VkDescriptorSetLayoutBinding vkLayoutBindings[32];
-        for (byte bindingIndex = 0; bindingIndex < desc.Entries.GetSize(); bindingIndex++)
+        for (Byte bindingIndex = 0; bindingIndex < desc.Entries.GetSize(); bindingIndex++)
         {
             const ResourceLayoutEntry& entry = desc.Entries[bindingIndex];
 

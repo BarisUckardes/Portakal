@@ -20,7 +20,7 @@ namespace Portakal
 		{
 			return mOwnerFolder;
 		}
-		FORCEINLINE bool IsRootFolder() const noexcept
+		FORCEINLINE Bool8 IsRootFolder() const noexcept
 		{
 			return mOwnerFolder == nullptr;
 		}

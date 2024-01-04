@@ -8,7 +8,7 @@ namespace Portakal
 	class RUNTIME_API PlatformInput final
 	{
 	public:
-		static bool Initialize();
+		static Bool8 Initialize();
 		static void GetConnectedInputDevices(Array<SharedHeap<InputDevice>>& devicesOut);
 	public:
 		PlatformInput() = delete;

@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API WindowEventType : byte
+	enum class RUNTIME_API WindowEventType : Byte
 	{
 		None,
 

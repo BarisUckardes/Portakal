@@ -30,19 +30,19 @@ namespace Portakal
 	void D3DCommandList::SetIndexBufferCore(const GraphicsBuffer* pBuffer, const CommandListIndexBufferType type)
 	{
 	}
-	void D3DCommandList::DrawIndexedCore(const uint32 indexCount, const uint32 indexOffset, const uint32 vertexOffset, const uint32 instanceCount, const uint32 instanceOffset)
+	void D3DCommandList::DrawIndexedCore(const Uint32 indexCount, const Uint32 indexOffset, const Uint32 vertexOffset, const Uint32 instanceCount, const Uint32 instanceOffset)
 	{
 	}
-	void D3DCommandList::DispatchComputeCore(const uint32 groupX, const uint32 groupY, const uint32 groupZ)
+	void D3DCommandList::DispatchComputeCore(const Uint32 groupX, const Uint32 groupY, const Uint32 groupZ)
 	{
 	}
 	void D3DCommandList::SetPipelineCore(const Pipeline* pPipeline)
 	{
 	}
-	void D3DCommandList::SetViewportsCore(const ViewportDesc* pViewports, const byte count)
+	void D3DCommandList::SetViewportsCore(const ViewportDesc* pViewports, const Byte count)
 	{
 	}
-	void D3DCommandList::SetScissorsCore(const ScissorDesc* pScissors, const byte count)
+	void D3DCommandList::SetScissorsCore(const ScissorDesc* pScissors, const Byte count)
 	{
 	}
 	void D3DCommandList::CopyBufferToTextureCore(const GraphicsBuffer* pBuffer, const Texture* Texture, const BufferTextureCopyDesc& desc)
@@ -63,7 +63,7 @@ namespace Portakal
 	void D3DCommandList::CommitResourcesCore(const Array<ResourceTable*>& resources)
 	{
 	}
-	void D3DCommandList::BeginRenderPassCore(const RenderPass* pRenderPass, const Color4F& clearColor, const byte subFramebufferIndex)
+	void D3DCommandList::BeginRenderPassCore(const RenderPass* pRenderPass, const Color4F& clearColor, const Byte subFramebufferIndex)
 	{
 
 	}

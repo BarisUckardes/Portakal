@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API GraphicsMemoryAccessFlags : uint16
+	enum class RUNTIME_API GraphicsMemoryAccessFlags : Uint16
 	{
 		Unknown = 0,
 		IndexRead = 1,
@@ -23,5 +23,5 @@ namespace Portakal
 		MemoryRead = 16384,
 		MemoryWrite = 32768
 	};
-	GENERATE_FLAGS(GraphicsMemoryAccessFlags,uint16)
+	GENERATE_FLAGS(GraphicsMemoryAccessFlags,Uint16)
 }

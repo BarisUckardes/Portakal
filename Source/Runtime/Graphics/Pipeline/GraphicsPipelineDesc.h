@@ -27,6 +27,6 @@ namespace Portakal
         Array<SharedHeap<Shader>> GraphicsShaders;
         SharedHeap<RenderPass> pRenderPass;
         ViewportDesc Viewport;
-        byte SubpassIndex;
+        Byte SubpassIndex;
     };
 }

@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    enum class RUNTIME_API TextureFormat : byte
+    enum class RUNTIME_API TextureFormat : Byte
     {
         None,
         /**

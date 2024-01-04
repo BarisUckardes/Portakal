@@ -12,16 +12,16 @@ namespace Portakal
 	class RUNTIME_API MemoryOwnedView final
 	{
 	public:
-		MemoryOwnedView(void* pMemory, const uint64 sizeInBytes);
+		MemoryOwnedView(void* pMemory, const Uint64 sizeInBytes);
 		MemoryOwnedView(void* pMemoryStart, void* pMemoryEnd);
 		MemoryOwnedView(const MemoryOwnedView& other) = delete;
 		~MemoryOwnedView();
 
 		FORCEINLINE void* GetMemory() const noexcept { return mMemory; }
-		FORCEINLINE uint64 GetSize() const noexcept { return mSize; }
+		FORCEINLINE Uint64 GetSize() const noexcept { return mSize; }
 
 	private:
 		void* mMemory;
-		uint64 mSize;
+		Uint64 mSize;
 	};
 }

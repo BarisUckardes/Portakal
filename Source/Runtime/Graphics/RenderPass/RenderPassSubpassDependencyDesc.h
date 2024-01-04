@@ -7,11 +7,11 @@ namespace Portakal
 {
 	struct RUNTIME_API RenderPassSubpassDependencyDesc
 	{
-		byte InputSubpass;
+		Byte InputSubpass;
 		GraphicsMemoryAccessFlags InputAccess;
 		PipelineStageFlags InputStageFlags;
 
-		byte OutputSubpass;
+		Byte OutputSubpass;
 		GraphicsMemoryAccessFlags OutputAccess;
 		PipelineStageFlags OutputStageFlags;
 	};

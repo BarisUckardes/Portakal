@@ -42,14 +42,14 @@ namespace Portakal
 
 		mBoundIndexBuffer = pBuffer;
 	}
-	void CommandList::DrawIndexed(const uint32 indexCount, const uint32 indexOffset, const uint32 vertexOffset, const uint32 instanceCount, const uint32 instanceOffset)
+	void CommandList::DrawIndexed(const Uint32 indexCount, const Uint32 indexOffset, const Uint32 vertexOffset, const Uint32 instanceCount, const Uint32 instanceOffset)
 	{
 		if (IsShutdown())
 			return;
 
 		DrawIndexedCore(indexCount, indexOffset, vertexOffset, instanceCount, instanceOffset);
 	}
-	void CommandList::DispatchCompute(const uint32 groupX, const uint32 groupY, const uint32 groupZ)
+	void CommandList::DispatchCompute(const Uint32 groupX, const Uint32 groupY, const Uint32 groupZ)
 	{
 		if (IsShutdown())
 			return;
@@ -69,7 +69,7 @@ namespace Portakal
 
 		mBoundPipeline = pPipeline;
 	}
-	void CommandList::BeginRenderPass(const SharedHeap<RenderPass>& pRenderPass, const Color4F& clearColor,const byte subFramebufferIndex)
+	void CommandList::BeginRenderPass(const SharedHeap<RenderPass>& pRenderPass, const Color4F& clearColor,const Byte subFramebufferIndex)
 	{
 		if (IsShutdown())
 			return;
@@ -86,14 +86,14 @@ namespace Portakal
 		EndRenderPassCore();
 		mBoundRenderPass = nullptr;
 	}
-	void CommandList::SetViewports(const ViewportDesc* pViewports, const byte count)
+	void CommandList::SetViewports(const ViewportDesc* pViewports, const Byte count)
 	{
 		if (IsShutdown())
 			return;
 
 		SetViewportsCore(pViewports, count);
 	}
-	void CommandList::SetScissors(const ScissorDesc* pScissors, const byte count)
+	void CommandList::SetScissors(const ScissorDesc* pScissors, const Byte count)
 	{
 		if (IsShutdown())
 			return;

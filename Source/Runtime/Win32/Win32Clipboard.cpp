@@ -54,7 +54,7 @@ namespace Portakal
 		* Lock the data and write to string
 		*/
 		GlobalLock(handle);
-		const String value = (char*)handle;
+		const String value = (Char*)handle;
 		GlobalUnlock(handle);
 
 

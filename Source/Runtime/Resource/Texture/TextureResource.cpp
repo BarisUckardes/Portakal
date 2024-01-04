@@ -13,7 +13,7 @@ namespace Portakal
     {
         CreateInternalResources();
     }
-    void TextureResource::AllocateTexture(const TextureDesc& desc, const SharedHeap<GraphicsMemoryHeap>& pHostHeap, const bool bAllocateStagebuffersUpfront,const bool bCreateViewsUpfront)
+    void TextureResource::AllocateTexture(const TextureDesc& desc, const SharedHeap<GraphicsMemoryHeap>& pHostHeap, const Bool8 bAllocateStagebuffersUpfront,const Bool8 bCreateViewsUpfront)
     {
         //Validate if shutdown
         if (IsShutdown())
@@ -33,10 +33,10 @@ namespace Portakal
         mTexture = mDevice->CreateTexture(desc);
 
         //Create mip data
-        for (uint32 arrayIndex = 0; arrayIndex < desc.ArrayLevels; arrayIndex++)
+        for (Uint32 arrayIndex = 0; arrayIndex < desc.ArrayLevels; arrayIndex++)
         {
             Array<MipData> mips;
-            for (uint32 mipIndex = 0; mipIndex < desc.MipLevels; mipIndex++)
+            for (Uint32 mipIndex = 0; mipIndex < desc.MipLevels; mipIndex++)
             {
                 MipData mipData = {};
 
@@ -71,7 +71,7 @@ namespace Portakal
         mDesc = desc;
         mHostHeap = pHostHeap;
     }
-    SharedHeap<TextureView> TextureResource::CreateView(const byte mipLevel, const byte arrayLevel)
+    SharedHeap<TextureView> TextureResource::CreateView(const Byte mipLevel, const Byte arrayLevel)
     {
         //Validate if shutdown
         if (IsShutdown())
@@ -105,7 +105,7 @@ namespace Portakal
 
         return data.pView;
     }
-    SharedHeap<TextureView> TextureResource::GetView(const byte mipLevel, const byte arrayLevel)
+    SharedHeap<TextureView> TextureResource::GetView(const Byte mipLevel, const Byte arrayLevel)
     {
         //Validate if shutdown
         if (IsShutdown())
@@ -137,7 +137,7 @@ namespace Portakal
         }
         return mip.pView;
     }
-    void TextureResource::Update(const MemoryView& memory, const Vector3US offset, const TextureMemoryLayout inputMemoryLayout, const GraphicsMemoryAccessFlags inputAccessFlags, const PipelineStageFlags inputPipelineFlags, const GraphicsQueueType inputQueueType, const byte mipLevel, const byte arrayLevel)
+    void TextureResource::Update(const MemoryView& memory, const Vector3US offset, const TextureMemoryLayout inputMemoryLayout, const GraphicsMemoryAccessFlags inputAccessFlags, const PipelineStageFlags inputPipelineFlags, const GraphicsQueueType inputQueueType, const Byte mipLevel, const Byte arrayLevel)
     {
         //Validate if shutdown
         if (IsShutdown())

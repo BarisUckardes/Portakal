@@ -93,12 +93,12 @@ namespace Portakal
 		SharedHeap<Swapchain> CreateSwapchain(const SwapchainDesc& desc);
 		SharedHeap<RenderPass> CreateRenderPass(const RenderPassDesc& desc);
 
-		void WaitFences(Fence** ppFences, const byte count);
+		void WaitFences(Fence** ppFences, const Byte count);
 		void WaitDeviceIdle();
 		void WaitQueueDefault(const GraphicsQueueType type);
 		void UpdateHostBuffer(GraphicsBuffer* pBuffer, const GraphicsBufferHostUpdateDesc& desc);
 		void UpdateResourceTable(ResourceTable* pTable, const ResourceTableUpdateDesc& desc);
-		void SubmitCommandLists(CommandList** ppCmdLists, const byte cmdListCount, const GraphicsQueueType type, const Fence* pFence);
+		void SubmitCommandLists(CommandList** ppCmdLists, const Byte cmdListCount, const GraphicsQueueType type, const Fence* pFence);
 	protected:
 		void RegisterChild(const SharedHeap<GraphicsDeviceObject>& pObject);
 		void RemoveChild(const SharedHeap<GraphicsDeviceObject>& pObject);
@@ -121,12 +121,12 @@ namespace Portakal
 		virtual Swapchain* CreateSwapchainCore(const SwapchainDesc& desc) = 0;
 		virtual RenderPass* CreateRenderPassCore(const RenderPassDesc& desc) = 0;
 
-		virtual void WaitFencesCore(Fence** ppFences, const byte count) = 0;
+		virtual void WaitFencesCore(Fence** ppFences, const Byte count) = 0;
 		virtual void WaitDeviceIdleCore() = 0;
 		virtual void WaitQueueDefaultCore(const GraphicsQueueType type) = 0;
 		virtual void UpdateHostBufferCore(GraphicsBuffer* pBuffer, const GraphicsBufferHostUpdateDesc& desc) = 0;
 		virtual void UpdateResourceTableCore(ResourceTable* pTable, const ResourceTableUpdateDesc& desc) = 0;
-		virtual void SubmitCommandListsCore(CommandList** ppCmdLists, const byte cmdListCount, const GraphicsQueueType type, const Fence* pFence) = 0;
+		virtual void SubmitCommandListsCore(CommandList** ppCmdLists, const Byte cmdListCount, const GraphicsQueueType type, const Fence* pFence) = 0;
 	private:
 		GraphicsAdapter* mOwnerAdapter;
 		const GraphicsBackend mBackend;

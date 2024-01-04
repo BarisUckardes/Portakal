@@ -14,8 +14,8 @@ namespace Portakal
 	struct RUNTIME_API GraphicsBufferDesc
 	{
 		GraphicsBufferUsage Usage;
-		uint32 SubItemCount;
-		uint32 SubItemSizeInBytes;
+		Uint32 SubItemCount;
+		Uint32 SubItemSizeInBytes;
 		SharedHeap<GraphicsMemoryHeap> pHeap;
 	};
 }

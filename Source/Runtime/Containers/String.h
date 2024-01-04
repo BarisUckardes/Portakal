@@ -34,54 +34,54 @@ namespace Portakal
 	class RUNTIME_API String final
 	{
 	public:
-		String(const char* pData, const uint64 sizeInBytes);
-		String(const byte* pData, const uint64 sizeInBytes);
+		String(const Char* pData, const Uint64 sizeInBytes);
+		String(const Byte* pData, const Uint64 sizeInBytes);
 		String(const wchar_t* pData);
-		String(const uint64 sizeInBytes);
-		String(const char* pData);
+		String(const Uint64 sizeInBytes);
+		String(const Char* pData);
 		String(const String& other);
 		String();
 		~String();
 
-		FORCEINLINE uint64 GetSize() const noexcept { return mSize; }
-		FORCEINLINE char* GetSource() const noexcept { return mSource; }
+		FORCEINLINE Uint64 GetSize() const noexcept { return mSize; }
+		FORCEINLINE Char* GetSource() const noexcept { return mSource; }
 
-		FORCEINLINE uint64 FindIndex(const String& target, const uint64 startIndex, const uint64 count = 0)const;
-		FORCEINLINE uint64 FindIndex(const char target) const;
-		FORCEINLINE uint64 FindIndex(const String& target) const;
-		FORCEINLINE uint64 FindLastIndex(const String& target, const uint64 startIndex) const;
-		FORCEINLINE uint64 GetCount(const char target) const;
-		FORCEINLINE String GetSubset(const uint64 startIndex, const uint64 length) const;
+		FORCEINLINE Uint64 FindIndex(const String& target, const Uint64 startIndex, const Uint64 count = 0)const;
+		FORCEINLINE Uint64 FindIndex(const Char target) const;
+		FORCEINLINE Uint64 FindIndex(const String& target) const;
+		FORCEINLINE Uint64 FindLastIndex(const String& target, const Uint64 startIndex) const;
+		FORCEINLINE Uint64 GetCount(const Char target) const;
+		FORCEINLINE String GetSubset(const Uint64 startIndex, const Uint64 length) const;
 		FORCEINLINE Type* GetType() const noexcept
 		{
 			return typeof(String);
 		}
 		String GetCopy() const;
-		const char* GetCopyRaw() const;
+		const Char* GetCopyRaw() const;
 		void Clear();
 
-		const char* operator*() const { return mSource; }
+		const Char* operator*() const { return mSource; }
 
 		String operator+=(const String& other);
-		String operator+=(const char* other);
-		String operator+=(char other);
-		String operator-=(const char* other);
+		String operator+=(const Char* other);
+		String operator+=(Char other);
+		String operator-=(const Char* other);
 		String operator-=(const String& other);
 
 		String operator=(const String other);
-		String operator=(const char* other);
+		String operator=(const Char* other);
 		String operator=(const wchar_t* other);
 
-		char operator[](unsigned int index) const { return mSource[index]; }
+		Char operator[](unsigned int index) const { return mSource[index]; }
 
 	private:
-		char* mSource;
-		uint64 mSize;
+		Char* mSource;
+		Uint64 mSize;
 	};
 
 	String operator+(const String& target0, const String& target1);
-	bool operator==(const String& target0, const String& target1);
-	bool operator!=(const String& target0, const String& target1);
+	Bool8 operator==(const String& target0, const String& target1);
+	Bool8 operator!=(const String& target0, const String& target1);
 }
 
 

@@ -15,7 +15,7 @@ namespace Portakal
 
             }
 
-            bool OwnQueue(VkQueue& queueOut)
+            Bool8 OwnQueue(VkQueue& queueOut)
             {
                 if (FreeQueues.GetSize() == 0)
                 {
@@ -28,7 +28,7 @@ namespace Portakal
                 return true;
             }
 
-            bool HasFreeQueue() const noexcept
+            Bool8 HasFreeQueue() const noexcept
             {
                 return FreeQueues.GetSize() > 0;
             }
@@ -38,8 +38,8 @@ namespace Portakal
                 FreeQueues.Add(queue);
             }
 
-            byte FamilyIndex;
-            byte QueueCapacity;
+            Byte FamilyIndex;
+            Byte QueueCapacity;
             VkQueue DefaultQueue;
             Array<VkQueue> Queues;
             Array<VkQueue> FreeQueues;
@@ -52,17 +52,17 @@ namespace Portakal
 
         }
 
-        FORCEINLINE int32 GetPresentQueueFamilyIndex(const VkSurfaceKHR surface) const noexcept;
+        FORCEINLINE Int32 GetPresentQueueFamilyIndex(const VkSurfaceKHR surface) const noexcept;
         FORCEINLINE VkQueue GetPresentQueue(const VkSurfaceKHR surface) const noexcept;
-        FORCEINLINE int32 GetGraphicsQueueFamilyIndex()
+        FORCEINLINE Int32 GetGraphicsQueueFamilyIndex()
         {
             return mGraphicsQueueFamily.FamilyIndex;
         }
-        FORCEINLINE int32 GetComputeQueueFamilyIndex()
+        FORCEINLINE Int32 GetComputeQueueFamilyIndex()
         {
             return mComputeQueueFamily.FamilyIndex;
         }
-        FORCEINLINE int32 GetTransfersQueueFamilyIndex()
+        FORCEINLINE Int32 GetTransfersQueueFamilyIndex()
         {
             return mTransferQueueFamily.FamilyIndex;
         }
@@ -90,12 +90,12 @@ namespace Portakal
         CommandPool* CreateCommandPoolCore(const CommandPoolDesc& desc) override;
         Pipeline* CreateGraphicsPipelineCore(const GraphicsPipelineDesc& desc) override;
         SharedHeap<Pipeline> CreateComputePipelineCore(const ComputePipelineDesc& desc) override;
-        void WaitFencesCore(Fence** ppFences, const byte count) override;
+        void WaitFencesCore(Fence** ppFences, const Byte count) override;
         void WaitDeviceIdleCore() override;
         void WaitQueueDefaultCore(const GraphicsQueueType type) override;
         void UpdateHostBufferCore(GraphicsBuffer* pBuffer, const GraphicsBufferHostUpdateDesc& desc) override;
         void UpdateResourceTableCore(ResourceTable* pTable, const ResourceTableUpdateDesc& desc) override;
-        void SubmitCommandListsCore(CommandList** ppCmdLists, const byte cmdListCount, const GraphicsQueueType type, const Fence* pFence) override;
+        void SubmitCommandListsCore(CommandList** ppCmdLists, const Byte cmdListCount, const GraphicsQueueType type, const Fence* pFence) override;
 	private:
         DeviceQueueFamily mGraphicsQueueFamily;
         DeviceQueueFamily mComputeQueueFamily;

@@ -9,23 +9,23 @@ namespace Portakal
 	private:
 		struct KeyEntry
 		{
-			bool bDown;
-			bool bPressed;
-			bool bReleased;
+			Bool8 bDown;
+			Bool8 bPressed;
+			Bool8 bReleased;
 		};
 	public:
 		KeyboardInputDevice();
 		~KeyboardInputDevice() = default;
 
-		bool IsKeyDown(const KeyboardKeys key) const noexcept;
-		bool IsKeyUp(const KeyboardKeys key) const noexcept;
-		bool IsKeyPressed(const KeyboardKeys key) const noexcept;
-		bool IsKeyReleased(const KeyboardKeys key) const noexcept;
+		Bool8 IsKeyDown(const KeyboardKeys key) const noexcept;
+		Bool8 IsKeyUp(const KeyboardKeys key) const noexcept;
+		Bool8 IsKeyPressed(const KeyboardKeys key) const noexcept;
+		Bool8 IsKeyReleased(const KeyboardKeys key) const noexcept;
 		virtual InputDeviceType GetDeviceType() const noexcept final { return InputDeviceType::Keyboard; }
 	protected:
-		virtual void UpdateKeyState(const bool* pKeys);
+		virtual void UpdateKeyState(const Bool8* pKeys);
 	private:
-		bool mLastState[256];
+		Bool8 mLastState[256];
 		KeyEntry mKeys[256];
 	};
 }

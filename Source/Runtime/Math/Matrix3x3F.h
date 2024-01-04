@@ -31,7 +31,7 @@ namespace Portakal
 		Matrix3x3F() = default;
 		Matrix3x3F(const std::initializer_list<float>& initList)
 		{
-			byte i = 0;
+			Byte i = 0;
 			for (auto& pElement : initList)
 			{
 				mData[i++] = pElement;
@@ -40,7 +40,7 @@ namespace Portakal
 
 		Matrix3x3F(const Vector3F& row0, const Vector3F& row1, const Vector3F& row2)
 		{
-			for (byte i = 0; i < 4; ++i)
+			for (Byte i = 0; i < 4; ++i)
 			{
 				mData[i] = row0[i];
 				mData[i + 4] = row1[i];
@@ -65,7 +65,7 @@ namespace Portakal
 
 		Matrix3x3F& operator=(const Matrix3x3F& other)
 		{
-			for (byte i = 0; i < 8; ++i)
+			for (Byte i = 0; i < 8; ++i)
 			{
 				mData[i] = other.mData[i];
 			}
@@ -74,7 +74,7 @@ namespace Portakal
 
 		Matrix3x3F& operator+=(const Matrix3x3F& other)
 		{
-			for (byte i = 0; i < 8; ++i)
+			for (Byte i = 0; i < 8; ++i)
 			{
 				mData[i] += other.mData[i];
 			}
@@ -83,7 +83,7 @@ namespace Portakal
 
 		Matrix3x3F& operator-=(const Matrix3x3F& other)
 		{
-			for (byte i = 0; i < 8; ++i)
+			for (Byte i = 0; i < 8; ++i)
 			{
 				mData[i] -= other.mData[i];
 			}
@@ -93,12 +93,12 @@ namespace Portakal
 		Matrix3x3F& operator*=(const Matrix3x3F& other)
 		{
 			Matrix3x3F result = Matrix3x3F::Identity();
-			for (byte i = 0; i < 4; ++i)
+			for (Byte i = 0; i < 4; ++i)
 			{
-				for (byte j = 0; i < 4; ++i)
+				for (Byte j = 0; i < 4; ++i)
 				{
 					result.mData[i * 4 + j] = 0;
-					for (byte k = 0; k < 4; ++k)
+					for (Byte k = 0; k < 4; ++k)
 					{
 						result.mData[i * 4 + j] += mData[i * 4 + k] * other.mData[k * 4 + j];
 					}
@@ -110,7 +110,7 @@ namespace Portakal
 
 		Matrix3x3F& operator*=(float scalar)
 		{
-			for (byte i = 0; i < 9; ++i)
+			for (Byte i = 0; i < 9; ++i)
 			{
 				mData[i] *= scalar;
 			}
@@ -119,35 +119,35 @@ namespace Portakal
 
 		Matrix3x3F& operator/=(float scalar)
 		{
-			for (byte i = 0; i < 9; ++i)
+			for (Byte i = 0; i < 9; ++i)
 			{
 				mData[i] /= scalar;
 			}
 			return *this;
 		}
 
-		float& operator()(byte row, byte column) { return mData[row * 3 + column]; }
-		const float& operator()(byte row, byte column) const { return mData[row * 3 + column]; }
-		float& operator[](byte index) { return mData[index]; }
+		float& operator()(Byte row, Byte column) { return mData[row * 3 + column]; }
+		const float& operator()(Byte row, Byte column) const { return mData[row * 3 + column]; }
+		float& operator[](Byte index) { return mData[index]; }
 
-		Vector3<float> GetRow(byte row) const
+		Vector3<float> GetRow(Byte row) const
 		{
 			return Vector3<float>(mData[row * 3], mData[row * 3 + 1], mData[row * 3 + 2]);
 		}
 
-		Vector3<float> GetColumn(byte column) const
+		Vector3<float> GetColumn(Byte column) const
 		{
 			return Vector3<float>(mData[column], mData[column + 3], mData[column + 6]);
 		}
 
-		void SetRow(byte index, const Vector3<float>& row)
+		void SetRow(Byte index, const Vector3<float>& row)
 		{
 			mData[index * 3] = row[0];
 			mData[index * 3 + 1] = row[1];
 			mData[index * 3 + 2] = row[2];
 		}
 
-		void SetColumn(byte index, const Vector3<float>& column)
+		void SetColumn(Byte index, const Vector3<float>& column)
 		{
 			mData[index] = column[0];
 			mData[index + 3] = column[1];

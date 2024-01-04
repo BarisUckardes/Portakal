@@ -9,7 +9,7 @@
 
 namespace Portakal
 {
-	void DevInfo(LogLevel pType, const char* pMessage, ...)
+	void DevInfo(LogLevel pType, const Char* pMessage, ...)
 	{
 		va_list args;
 		va_start(args, pMessage);
@@ -45,7 +45,7 @@ namespace Portakal
 		}
 	}
 
-	void DevSuccess(const char* pTitle, const char* pMessage, ...)
+	void DevSuccess(const Char* pTitle, const Char* pMessage, ...)
 	{
 		va_list args;
 		va_start(args, pMessage);
@@ -55,7 +55,7 @@ namespace Portakal
 		va_end(args);
 	}
 
-	void DevLog(const char* pTitle, const char* pMessage, ...)
+	void DevLog(const Char* pTitle, const Char* pMessage, ...)
 	{
 		va_list args;
 		va_start(args, pMessage);
@@ -65,7 +65,7 @@ namespace Portakal
 		va_end(args);
 	}
 
-	void DevSystem(bool pCondition, const char* pTitle, const char* pFailed, const char* pSucceed)
+	void DevSystem(Bool8 pCondition, const Char* pTitle, const Char* pFailed, const Char* pSucceed)
 	{
 		if (!pCondition)
 		{
@@ -79,7 +79,7 @@ namespace Portakal
 		}
 	}
 
-	void DevAssert(bool pCondition, const char* pTitle, const char* pFailed, ...)
+	void DevAssert(Bool8 pCondition, const Char* pTitle, const Char* pFailed, ...)
 	{
 		if (!pCondition)
 		{

@@ -90,7 +90,7 @@ namespace Portakal
 int main(const unsigned int argumentCount, const char** ppArguments)
 {
 	Portakal::Array<Portakal::String> cmdArguments;
-	for (Portakal::uint32 i = 0; i < argumentCount; i++)
+	for (Portakal::Uint32 i = 0; i < argumentCount; i++)
 		cmdArguments.Add(ppArguments[i]);
 
 	Portakal::Run(cmdArguments);

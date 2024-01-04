@@ -63,7 +63,7 @@ namespace Portakal
         {
             return mMaxAnisotropy;
         }
-        FORCEINLINE const bool IsComparisonEnabled() const
+        FORCEINLINE const Bool8 IsComparisonEnabled() const
         {
             return mComparisonEnabled;
         }
@@ -98,7 +98,7 @@ namespace Portakal
         const SamplerAddressMode mAddressModeW;
         const float mMipLodBias;
         const float mMaxAnisotropy;
-        const bool mComparisonEnabled;
+        const Bool8 mComparisonEnabled;
         const CompareOperation mCompareOperation;
         const float mMinLod;
         const float mMaxLod;

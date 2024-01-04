@@ -12,7 +12,7 @@
 
 namespace Portakal
 {
-    bool Win32File::Exists(const String& path)
+    Bool8 Win32File::Exists(const String& path)
     {
         const DWORD diagnostics = GetFileAttributesA(*path);
 
@@ -21,7 +21,7 @@ namespace Portakal
 
         return true;
     }
-    bool Win32File::Create(const String& path)
+    Bool8 Win32File::Create(const String& path)
     {
         const HANDLE fileHandle = CreateFileA(*path, GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
         if (fileHandle == NULL || fileHandle == INVALID_HANDLE_VALUE)
@@ -31,11 +31,11 @@ namespace Portakal
 
         return true;
     }
-    bool Win32File::Delete(const String& path)
+    Bool8 Win32File::Delete(const String& path)
     {
         return DeleteFileA(*path) != 0;
     }
-    bool Win32File::Write(const String& path, const String& content, const uint64 offsetInBytes)
+    Bool8 Win32File::Write(const String& path, const String& content, const Uint64 offsetInBytes)
     {
         HANDLE fileHandle = NULL;
 
@@ -67,14 +67,14 @@ namespace Portakal
 
         //Write to file
         DWORD writtenBytes = 0;
-        const bool bIsWriteSuccess = WriteFile(fileHandle, *content, content.GetSize(), &writtenBytes, NULL);
+        const Bool8 bIsWriteSuccess = WriteFile(fileHandle, *content, content.GetSize(), &writtenBytes, NULL);
 
         //Close handle
         CloseHandle(fileHandle);
 
         return bIsWriteSuccess;
     }
-    bool Win32File::Write(const String& path, const MemoryView& view, const uint64 offsetInBytes)
+    Bool8 Win32File::Write(const String& path, const MemoryView& view, const Uint64 offsetInBytes)
     {
         HANDLE fileHandle = NULL;
 
@@ -102,17 +102,17 @@ namespace Portakal
 
         //Write to file
         DWORD writtenBytes = 0;
-        const bool bIsWriteSuccess = WriteFile(fileHandle, view.GetMemory(), view.GetSize(), &writtenBytes, NULL);
+        const Bool8 bIsWriteSuccess = WriteFile(fileHandle, view.GetMemory(), view.GetSize(), &writtenBytes, NULL);
 
         //Close handle
         CloseHandle(fileHandle);
 
         return bIsWriteSuccess;
     }
-    bool Win32File::Read(const String& path, String& contentOut, const uint64 startByte, const uint64 endByte)
+    Bool8 Win32File::Read(const String& path, String& contentOut, const Uint64 startByte, const Uint64 endByte)
     {
         //Get file size
-        uint64 fileSize = 0;
+        Uint64 fileSize = 0;
         if (!GetSize(path, fileSize))
         {
             DEV_LOG("Win32File", "Failed to get size of the file");
@@ -120,7 +120,7 @@ namespace Portakal
         }
 
         //Get and check expected read range
-        const uint64 expectedReadRange = endByte == 0 ? fileSize : endByte - startByte;
+        const Uint64 expectedReadRange = endByte == 0 ? fileSize : endByte - startByte;
         if (fileSize == 0 || expectedReadRange > fileSize)
             return false;
 
@@ -132,7 +132,7 @@ namespace Portakal
         //Read file
         DWORD bytesRead = 0;
         OVERLAPPED overlappedData = { 0 };
-        byte* pBuffer = new byte[expectedReadRange];
+        Byte* pBuffer = new Byte[expectedReadRange];
         if (ReadFile(fileHandle, pBuffer, expectedReadRange, &bytesRead, NULL) == 0)
         {
             CloseHandle(fileHandle);
@@ -143,16 +143,16 @@ namespace Portakal
         if (bytesRead != expectedReadRange)
             return false;
 
-        contentOut = String((char*)pBuffer, expectedReadRange);
+        contentOut = String((Char*)pBuffer, expectedReadRange);
 
         //Close handle
         CloseHandle(fileHandle);
         return true;
     }
-    bool Win32File::Read(const String& path, MemoryView& view, const uint64 startByte, const uint64 endByte)
+    Bool8 Win32File::Read(const String& path, MemoryView& view, const Uint64 startByte, const Uint64 endByte)
     {
         //Get file size
-        uint64 fileSize = 0;
+        Uint64 fileSize = 0;
         if (!GetSize(path, fileSize))
         {
             DEV_LOG("Win32File", "Failed to get size of the file");
@@ -160,7 +160,7 @@ namespace Portakal
         }
 
         //Get and check expected read range
-        const uint64 expectedReadRange = endByte == 0 ? fileSize : endByte - startByte;
+        const Uint64 expectedReadRange = endByte == 0 ? fileSize : endByte - startByte;
         if (fileSize == 0 || expectedReadRange > fileSize)
             return false;
 
@@ -172,7 +172,7 @@ namespace Portakal
         //Read file
         DWORD bytesRead = 0;
         OVERLAPPED overlappedData = { 0 };
-        byte* pBuffer = new byte[expectedReadRange];
+        Byte* pBuffer = new Byte[expectedReadRange];
         if (!ReadFile(fileHandle, pBuffer, expectedReadRange, &bytesRead, NULL))
         {
             CloseHandle(fileHandle);
@@ -189,7 +189,7 @@ namespace Portakal
         //Close handle
         CloseHandle(fileHandle);
     }
-    bool Win32File::Copy(const String& sourcePath, const String& destinationPath)
+    Bool8 Win32File::Copy(const String& sourcePath, const String& destinationPath)
     {
         return CopyFile(*sourcePath,*destinationPath,TRUE);
     }
@@ -199,11 +199,11 @@ namespace Portakal
     }
     String Win32File::RemoveExtension(const String& path)
     {
-        char* pData = path.GetSource();
+        Char* pData = path.GetSource();
         PathRemoveExtension(pData);
         return pData;
     }
-    bool Win32File::GetSize(const String& path, uint64& sizeInBytesOut)
+    Bool8 Win32File::GetSize(const String& path, Uint64& sizeInBytesOut)
     {
         const HANDLE fileHandle = CreateFileA(*path, GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
         if (fileHandle == NULL || fileHandle == INVALID_HANDLE_VALUE)
@@ -217,7 +217,7 @@ namespace Portakal
     }
     String Win32File::GetName(const String& path)
     {
-        const char* pData = PathFindFileNameA(*path);
+        const Char* pData = PathFindFileNameA(*path);
         return pData;
     }
     String Win32File::GetNameWithoutExtension(const String& path)
@@ -233,7 +233,7 @@ namespace Portakal
 
         return output;
     }
-    bool Win32File::GetFileLastChangeTime(const String& path,TimeStamp& timeOut)
+    Bool8 Win32File::GetFileLastChangeTime(const String& path,TimeStamp& timeOut)
     {
         //Open file
         const HANDLE fileHandle = CreateFileA(*path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -271,7 +271,7 @@ namespace Portakal
 
         return true;
     }
-    bool Win32File::GetFileCreateTime(const String& path,TimeStamp& timeOut)
+    Bool8 Win32File::GetFileCreateTime(const String& path,TimeStamp& timeOut)
     {
         //Open file
         const HANDLE fileHandle = CreateFileA(*path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);

@@ -32,7 +32,7 @@ namespace Portakal
 		{
 			return mCmdPool;
 		}
-		FORCEINLINE bool IsRecording() const noexcept { return mRecording; }
+		FORCEINLINE Bool8 IsRecording() const noexcept { return mRecording; }
 		FORCEINLINE const SharedHeap<GraphicsBuffer>& GetBoundVertexBuffer() const noexcept { return mBoundVertexBuffer; }
 		FORCEINLINE const SharedHeap<GraphicsBuffer>& GetBoundIndexBuffer() const noexcept { return mBoundIndexBuffer; }
 		FORCEINLINE const SharedHeap<Pipeline>& GetBoundPipeline() const noexcept { return mBoundPipeline; }
@@ -45,13 +45,13 @@ namespace Portakal
 		void EndRecording();
 		void SetVertexBuffer(const SharedHeap<GraphicsBuffer>& pBuffer);
 		void SetIndexBuffer(const SharedHeap<GraphicsBuffer>& pBuffer, const CommandListIndexBufferType type);
-		void DrawIndexed(const uint32 indexCount, const uint32 indexOffset, const uint32 vertexoffset, const uint32 instanceCount, const uint32 instanceOffset);
-		void DispatchCompute(const uint32 groupX, const uint32 groupY, const uint32 groupZ);
+		void DrawIndexed(const Uint32 indexCount, const Uint32 indexOffset, const Uint32 vertexoffset, const Uint32 instanceCount, const Uint32 instanceOffset);
+		void DispatchCompute(const Uint32 groupX, const Uint32 groupY, const Uint32 groupZ);
 		void SetPipeline(const SharedHeap<Pipeline>& pPipeline);
-		void BeginRenderPass(const SharedHeap<RenderPass>& pRenderPass,const Color4F& clearColor,const byte subFramebufferIndex = 0);
+		void BeginRenderPass(const SharedHeap<RenderPass>& pRenderPass,const Color4F& clearColor,const Byte subFramebufferIndex = 0);
 		void EndRenderPass();
-		void SetViewports(const ViewportDesc* pViewports, const byte count);
-		void SetScissors(const ScissorDesc* pScissors, const byte count);
+		void SetViewports(const ViewportDesc* pViewports, const Byte count);
+		void SetScissors(const ScissorDesc* pScissors, const Byte count);
 		void CopyBufferToTexture(const GraphicsBuffer* pSource, const Texture* pDestination, const BufferTextureCopyDesc& desc);
 		void CopyBufferToBuffer(const GraphicsBuffer* pBuffer, const GraphicsBuffer* pDestination, const BufferBufferCopyDesc& desc);
 		void CopyTextureToTexture(const Texture* pSource, const Texture* pDestination, const TextureCopyDesc& desc);
@@ -63,13 +63,13 @@ namespace Portakal
 		virtual void EndRecordingCore() = 0;
 		virtual void SetVertexBufferCore(const GraphicsBuffer* pBuffer) = 0;
 		virtual void SetIndexBufferCore(const GraphicsBuffer* pBuffer, const CommandListIndexBufferType type) = 0;
-		virtual void DrawIndexedCore(const uint32 indexCount, const uint32 indexOffset, const uint32 vertexoffset, const uint32 instanceCount, const uint32 instanceOffset) = 0;
-		virtual void DispatchComputeCore(const uint32 groupX, const uint32 groupY, const uint32 groupZ) = 0;
+		virtual void DrawIndexedCore(const Uint32 indexCount, const Uint32 indexOffset, const Uint32 vertexoffset, const Uint32 instanceCount, const Uint32 instanceOffset) = 0;
+		virtual void DispatchComputeCore(const Uint32 groupX, const Uint32 groupY, const Uint32 groupZ) = 0;
 		virtual void SetPipelineCore(const Pipeline* pPipeline) = 0;
-		virtual void BeginRenderPassCore(const RenderPass* pRenderPass, const Color4F& clearColor, const byte subFramebufferIndex) = 0;
+		virtual void BeginRenderPassCore(const RenderPass* pRenderPass, const Color4F& clearColor, const Byte subFramebufferIndex) = 0;
 		virtual void EndRenderPassCore() = 0;
-		virtual void SetViewportsCore(const ViewportDesc* pViewports, const byte count) = 0;
-		virtual void SetScissorsCore(const ScissorDesc* pScissors, const byte count) = 0;
+		virtual void SetViewportsCore(const ViewportDesc* pViewports, const Byte count) = 0;
+		virtual void SetScissorsCore(const ScissorDesc* pScissors, const Byte count) = 0;
 		virtual void CopyBufferToTextureCore(const GraphicsBuffer* pBuffer, const Texture* pDestination, const BufferTextureCopyDesc& desc) = 0;
 		virtual void CopyBufferToBufferCore(const GraphicsBuffer* pBuffer, const GraphicsBuffer* pDestination, const BufferBufferCopyDesc& desc) = 0;
 		virtual void CopyTextureToTextureCore(const Texture* pSource, const Texture* pDestination, const TextureCopyDesc& desc) = 0;
@@ -82,6 +82,6 @@ namespace Portakal
 		SharedHeap<GraphicsBuffer> mBoundIndexBuffer;
 		SharedHeap<Pipeline> mBoundPipeline;
 		SharedHeap<RenderPass> mBoundRenderPass;
-		bool mRecording;
+		Bool8 mRecording;
 	};
 }

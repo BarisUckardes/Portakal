@@ -33,15 +33,15 @@ namespace Portakal
 		virtual void SetIndexBufferCore(const GraphicsBuffer* pBuffer, const CommandListIndexBufferType type) override;
 
 		// Inherited via CommandList
-		virtual void DrawIndexedCore(const uint32 indexCount, const uint32 indexOffset, const uint32 vertexOffset, const uint32 instanceCount, const uint32 instanceOffset) override;
-		virtual void DispatchComputeCore(const uint32 groupX, const uint32 groupY, const uint32 groupZ) override;
+		virtual void DrawIndexedCore(const Uint32 indexCount, const Uint32 indexOffset, const Uint32 vertexOffset, const Uint32 instanceCount, const Uint32 instanceOffset) override;
+		virtual void DispatchComputeCore(const Uint32 groupX, const Uint32 groupY, const Uint32 groupZ) override;
 
 		// Inherited via CommandList
 		virtual void SetPipelineCore(const Pipeline* pPipeline) override;
 
 		// Inherited via CommandList
-		void SetViewportsCore(const ViewportDesc* pViewports, const byte count) override;
-		void SetScissorsCore(const ScissorDesc* pScissors, const byte count) override;
+		void SetViewportsCore(const ViewportDesc* pViewports, const Byte count) override;
+		void SetScissorsCore(const ScissorDesc* pScissors, const Byte count) override;
 
 		// Inherited via CommandList
 		virtual void CopyBufferToTextureCore(const GraphicsBuffer* pBuffer, const Texture* Texture, const BufferTextureCopyDesc& desc) override;
@@ -56,7 +56,7 @@ namespace Portakal
 		void CommitResourcesCore(const Array<ResourceTable*>& resources) override;
 
 		// Inherited via CommandList
-		void BeginRenderPassCore(const RenderPass* pRenderPass, const Color4F& clearColor, const byte subFramebufferIndex) override;
+		void BeginRenderPassCore(const RenderPass* pRenderPass, const Color4F& clearColor, const Byte subFramebufferIndex) override;
 		void EndRenderPassCore() override;
 
 		virtual void OnShutdown() override;

@@ -8,7 +8,7 @@ namespace Portakal
     class RUNTIME_API Win32Input
     {
     public:
-        static bool Initialize();
+        static Bool8 Initialize();
         static void GetConnectedDevices(Array<SharedHeap<InputDevice>>& devices);
     public:
         Win32Input() = delete;

@@ -18,17 +18,17 @@ namespace Portakal
 		void CreateDepthStencilView();
 
 	private:
-		virtual void ResizeCore(const uint16 width, const uint16 height) override;
+		virtual void ResizeCore(const Uint16 width, const Uint16 height) override;
 		virtual void OnShutdown() override;
-		virtual bool PresentCore() override;
-		virtual bool SetFullScreen() override;
-		virtual bool SetWindowed() override;
+		virtual Bool8 PresentCore() override;
+		virtual Bool8 SetFullScreen() override;
+		virtual Bool8 SetWindowed() override;
 
 	private:
 		D3DDevice* mD3DDevice;
 		ComPtr<IDXGISwapChain1> mSwapchain;
 		ComPtr<ID3D12DescriptorHeap> mRenderTargetView;
 		Array<D3D12_CPU_DESCRIPTOR_HANDLE> mRTVHandles;
-		uint32 mRTVDescriptorSize;
+		Uint32 mRTVDescriptorSize;
 	};
 }

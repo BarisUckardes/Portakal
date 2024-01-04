@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API TextureUsage : byte
+	enum class RUNTIME_API TextureUsage : Byte
 	{
 		None = 0,
 		Sampled = 1,
@@ -13,5 +13,5 @@ namespace Portakal
 		TransferSource = 16,
 		TransferDestination = 32
 	};
-	GENERATE_FLAGS(TextureUsage, byte);
+	GENERATE_FLAGS(TextureUsage, Byte);
 }

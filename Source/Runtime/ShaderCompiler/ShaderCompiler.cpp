@@ -11,7 +11,7 @@ using namespace Microsoft::WRL;
 
 namespace Portakal
 {
-	bool ShaderCompiler::CompileToSPIRV(const String& sourceAsString, const String& entryMethodName, const ShaderStage stage, const ShaderLanguage language, MemoryOwnedView** ppViewOut)
+	Bool8 ShaderCompiler::CompileToSPIRV(const String& sourceAsString, const String& entryMethodName, const ShaderStage stage, const ShaderLanguage language, MemoryOwnedView** ppViewOut)
 	{
 		DEV_ASSERT(language != ShaderLanguage::Unknown, "ShaderCompiler", "Invalid shader language");
 
@@ -29,7 +29,7 @@ namespace Portakal
 			return false;
 		}
 
-		*ppViewOut = new MemoryOwnedView((byte*)module.cbegin(), (byte*)module.cend());
+		*ppViewOut = new MemoryOwnedView((Byte*)module.cbegin(), (Byte*)module.cend());
 
 		if (*ppViewOut == nullptr)
 		{
@@ -40,7 +40,7 @@ namespace Portakal
 		return true;
 	}
 
-	bool ShaderCompiler::CompileToSPIRV(const MemoryOwnedView* pView, const String& entryMethodName, const ShaderStage stage, const ShaderLanguage language, MemoryOwnedView** ppViewOut)
+	Bool8 ShaderCompiler::CompileToSPIRV(const MemoryOwnedView* pView, const String& entryMethodName, const ShaderStage stage, const ShaderLanguage language, MemoryOwnedView** ppViewOut)
 	{
 		DEV_ASSERT(language != ShaderLanguage::Unknown, "ShaderCompiler", "Invalid shader language");
 
@@ -49,7 +49,7 @@ namespace Portakal
 
 		compileOptions.SetSourceLanguage(ShaderCompilerUtils::GetLanguage(language));
 
-		shaderc::SpvCompilationResult module = compiler.CompileGlslToSpv((const char*)pView->GetMemory(), ShaderCompilerUtils::GetShaderKind(stage), "", compileOptions);
+		shaderc::SpvCompilationResult module = compiler.CompileGlslToSpv((const Char*)pView->GetMemory(), ShaderCompilerUtils::GetShaderKind(stage), "", compileOptions);
 
 		if (module.GetCompilationStatus() != shaderc_compilation_status_success)
 		{
@@ -58,7 +58,7 @@ namespace Portakal
 			return false;
 		}
 
-		*ppViewOut = new MemoryOwnedView((byte*)module.cbegin(), (byte*)module.cend());
+		*ppViewOut = new MemoryOwnedView((Byte*)module.cbegin(), (Byte*)module.cend());
 
 		if (*ppViewOut == nullptr)
 		{
@@ -69,7 +69,7 @@ namespace Portakal
 		return true;
 	}
 
-	bool ShaderCompiler::CompileFromSPIRV(const MemoryView& pView, GraphicsBackend chosenApi, MemoryOwnedView** ppBytes)
+	Bool8 ShaderCompiler::CompileFromSPIRV(const MemoryView& pView, GraphicsBackend chosenApi, MemoryOwnedView** ppBytes)
 	{
 		*ppBytes = nullptr;
 
@@ -78,7 +78,7 @@ namespace Portakal
 		{
 		case GraphicsBackend::Vulkan:
 		{
-			*ppBytes = new MemoryOwnedView((byte*)pView.GetMemory(), pView.GetSize());
+			*ppBytes = new MemoryOwnedView((Byte*)pView.GetMemory(), pView.GetSize());
 			return true;
 		}
 		case GraphicsBackend::DirectX12:
@@ -100,7 +100,7 @@ namespace Portakal
 		return true;
 	}
 
-	bool ShaderCompiler::CompileFromSPIRV(const MemoryView& pView, const ShaderLanguage language, MemoryOwnedView** ppViewOut)
+	Bool8 ShaderCompiler::CompileFromSPIRV(const MemoryView& pView, const ShaderLanguage language, MemoryOwnedView** ppViewOut)
 	{
 		*ppViewOut = nullptr;
 
@@ -135,7 +135,7 @@ namespace Portakal
 
 		String compiledSource = pCompiler->compile().c_str();
 
-		*ppViewOut = new MemoryOwnedView((byte*)compiledSource.GetSource(), compiledSource.GetSize());
+		*ppViewOut = new MemoryOwnedView((Byte*)compiledSource.GetSource(), compiledSource.GetSize());
 
 		if (*ppViewOut == nullptr)
 		{

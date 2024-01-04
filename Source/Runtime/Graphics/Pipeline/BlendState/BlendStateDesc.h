@@ -7,7 +7,7 @@ namespace Portakal
 {
     struct RUNTIME_API BlendStateDesc
     {
-        bool bLogicOperationEnabled = false;
+        Bool8 bLogicOperationEnabled = false;
         LogicOperation LogicOperation = LogicOperation::And;
         Array<BlendStateAttachment> Attachments;
     };

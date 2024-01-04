@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API TypeCodes : byte
+	enum class RUNTIME_API TypeCodes : Byte
 	{
 		Void,
 		Composed,

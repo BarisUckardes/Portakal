@@ -10,7 +10,7 @@ namespace Portakal
 		static SharedHeap<PlatformLibrary> Load(const String& path);
 		static SharedHeap<PlatformLibrary> GetCurrent();
 	public:
-		PlatformLibrary(const String& path,const bool bMain) : mPath(path),mMain(bMain)
+		PlatformLibrary(const String& path,const Bool8 bMain) : mPath(path),mMain(bMain)
 		{
 
 		}
@@ -20,7 +20,7 @@ namespace Portakal
 		{
 			return mPath;
 		}
-		FORCEINLINE bool IsMain() const noexcept
+		FORCEINLINE Bool8 IsMain() const noexcept
 		{
 			return mMain;
 		}
@@ -28,6 +28,6 @@ namespace Portakal
 		virtual PlatformLibraryHandle GetSymbol(const String& name) = 0;
 	private:
 		const String mPath;
-		const bool mMain;
+		const Bool8 mMain;
 	};
 }

@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	bool Win32Input::Initialize()
+	Bool8 Win32Input::Initialize()
 	{
 		return DirectInputSubsystem::Initialize();
 	}

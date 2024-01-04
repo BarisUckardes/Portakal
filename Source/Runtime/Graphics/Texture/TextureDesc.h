@@ -16,8 +16,8 @@ namespace Portakal
 		TextureUsage Usage;
 		TextureFormat Format;
 		Vector3US Size;
-		byte MipLevels;
-		byte ArrayLevels;
+		Byte MipLevels;
+		Byte ArrayLevels;
 		TextureSampleCount SampleCount;
 		SharedHeap<GraphicsMemoryHeap> pHeap;
 	};

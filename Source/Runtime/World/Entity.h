@@ -29,8 +29,8 @@ namespace Portakal
 
 		void SetOwnerEntity(const SharedHeap<Entity>& pOwnerEntity);
 		SharedHeap<Component> AddComponent(const Type* pType);
-		bool RemoveComponent(const Type* pType);
-		bool HasComponent(const Type* pType) const noexcept;
+		Bool8 RemoveComponent(const Type* pType);
+		Bool8 HasComponent(const Type* pType) const noexcept;
 		template<typename T,typename... TArgs>
 		SharedHeap<T> AddComponent(TArgs... args)
 		{
@@ -47,7 +47,7 @@ namespace Portakal
 			return pComponent;
 		}
 		template<typename T>
-		bool HasComponent() const noexcept
+		Bool8 HasComponent() const noexcept
 		{
 			const Type* pTargetType = typeof(T);
 			for (const SharedHeap<Component>& pComponent : mComponents)

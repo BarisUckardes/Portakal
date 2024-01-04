@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    enum class RUNTIME_API BlendOperation : byte
+    enum class RUNTIME_API BlendOperation : Byte
     {
         Add,
         Subtract,

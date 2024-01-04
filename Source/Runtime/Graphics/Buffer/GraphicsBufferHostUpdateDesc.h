@@ -14,6 +14,6 @@ namespace Portakal
 	struct RUNTIME_API GraphicsBufferHostUpdateDesc
 	{
 		MemoryView View;
-		uint64 OffsetInBytes;
+		Uint64 OffsetInBytes;
 	};
 }

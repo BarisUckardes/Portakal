@@ -18,13 +18,41 @@ namespace Portakal
 		PFIELD();
 		Guid ID;
 		PFIELD();
-		uint32 VersionMajor;
+		Uint32 VersionMajor;
 		PFIELD();
-		uint32 VersionMinor;
+		Uint32 VersionMinor;
 		PFIELD();
-		uint32 VersionPatch;
+		Uint32 VersionPatch;
 	};
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

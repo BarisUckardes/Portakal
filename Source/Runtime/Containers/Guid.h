@@ -15,15 +15,15 @@ namespace Portakal
 		GENERATE_OBJECT;
 	public:
 		static Guid Create();
-		static Guid Create(const uint32 a, const uint32 b, const uint32 c, const uint32 d);
+		static Guid Create(const Uint32 a, const Uint32 b, const Uint32 c, const Uint32 d);
 		static Guid Zero();
 		static Guid Parse(const String& str);
-		static bool TryParse(const String& str, Guid& out);
-		static bool IsEmpty(const Guid& guid);
+		static Bool8 TryParse(const String& str, Guid& out);
+		static Bool8 IsEmpty(const Guid& guid);
 		static String ToString(const Guid& guid);
 		static String FromString(const String& str);
 	public:
-		Guid(const uint32 a, const uint32 b, const uint32 c, const uint32 d);
+		Guid(const Uint32 a, const Uint32 b, const Uint32 c, const Uint32 d);
 		Guid(const Guid& other);
 		Guid();
 		~Guid() = default;
@@ -31,19 +31,47 @@ namespace Portakal
 		Guid& operator=(const Guid& other);
 		Guid& operator=(Guid&& other) noexcept;
 
-		bool operator==(const Guid& other) const;
-		bool operator!=(const Guid& other) const;
+		Bool8 operator==(const Guid& other) const;
+		Bool8 operator!=(const Guid& other) const;
 
 		PFIELD();
-		uint32 A;
+		Uint32 A;
 		PFIELD();
-		uint32 B;
+		Uint32 B;
 		PFIELD();
-		uint32 C;
+		Uint32 C;
 		PFIELD();
-		uint32 D;
+		Uint32 D;
 	};
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

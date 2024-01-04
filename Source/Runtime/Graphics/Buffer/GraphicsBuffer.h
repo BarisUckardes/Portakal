@@ -15,15 +15,15 @@ namespace Portakal
 		{
 			return mUsages;
 		}
-		FORCEINLINE uint32 GetSubItemCount() const noexcept
+		FORCEINLINE Uint32 GetSubItemCount() const noexcept
 		{
 			return mSubItemCount;
 		}
-		FORCEINLINE uint32 GetSubItemSize() const noexcept
+		FORCEINLINE Uint32 GetSubItemSize() const noexcept
 		{
 			return mSubItemSize;
 		}
-		FORCEINLINE uint64 GetTotalSize() const noexcept
+		FORCEINLINE Uint64 GetTotalSize() const noexcept
 		{
 			return mTotalSize;
 		}
@@ -37,8 +37,8 @@ namespace Portakal
 		virtual void OnShutdown() override;
 	private:
 		const GraphicsBufferUsage mUsages;
-		const uint32 mSubItemCount;
-		const uint32 mSubItemSize;
-		const uint64 mTotalSize;
+		const Uint32 mSubItemCount;
+		const Uint32 mSubItemSize;
+		const Uint64 mTotalSize;
 	};
 }

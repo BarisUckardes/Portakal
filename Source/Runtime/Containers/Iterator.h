@@ -33,12 +33,12 @@ namespace Portakal
         FORCEINLINE T* operator->() const noexcept { return mPtr; }
         FORCEINLINE T& operator*() const noexcept { return *mPtr; }
         FORCEINLINE operator T* () const noexcept { return mPtr; }
-        FORCEINLINE bool operator==(const Iterator& other) const noexcept { return mPtr == other.mPtr; }
-        FORCEINLINE bool operator!=(const Iterator& other) const noexcept { return mPtr != other.mPtr; }
-        FORCEINLINE bool operator<(const Iterator& other) const noexcept { return mPtr < other.mPtr; }
-        FORCEINLINE bool operator>(const Iterator& other) const noexcept { return mPtr > other.mPtr; }
-        FORCEINLINE bool operator<=(const Iterator& other) const noexcept { return mPtr <= other.mPtr; }
-        FORCEINLINE bool operator>=(const Iterator& other) const noexcept { return mPtr >= other.mPtr; }
+        FORCEINLINE Bool8 operator==(const Iterator& other) const noexcept { return mPtr == other.mPtr; }
+        FORCEINLINE Bool8 operator!=(const Iterator& other) const noexcept { return mPtr != other.mPtr; }
+        FORCEINLINE Bool8 operator<(const Iterator& other) const noexcept { return mPtr < other.mPtr; }
+        FORCEINLINE Bool8 operator>(const Iterator& other) const noexcept { return mPtr > other.mPtr; }
+        FORCEINLINE Bool8 operator<=(const Iterator& other) const noexcept { return mPtr <= other.mPtr; }
+        FORCEINLINE Bool8 operator>=(const Iterator& other) const noexcept { return mPtr >= other.mPtr; }
 
         FORCEINLINE Iterator& operator++() noexcept
         {
@@ -83,8 +83,8 @@ namespace Portakal
         FORCEINLINE int operator-(const Iterator& other) const noexcept { return mPtr - other.mPtr; }
         FORCEINLINE T& operator[](int index) const noexcept { return mPtr[index]; }
         FORCEINLINE T* Get() const noexcept { return mPtr; }
-        FORCEINLINE bool IsValid() const noexcept { return mPtr != nullptr; }
-        explicit operator bool() const noexcept { return IsValid(); }
+        FORCEINLINE Bool8 IsValid() const noexcept { return mPtr != nullptr; }
+        explicit operator Bool8() const noexcept { return IsValid(); }
 
     private:
         T* mPtr = nullptr;

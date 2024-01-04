@@ -6,6 +6,6 @@ namespace Portakal
 	struct RUNTIME_API EnumValue
 	{
 		String Name;
-		int64 Value;
+		Int64 Value;
 	};
 }

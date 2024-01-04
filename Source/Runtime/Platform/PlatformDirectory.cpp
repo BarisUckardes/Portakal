@@ -7,11 +7,11 @@ typedef Portakal::Win32Directory PlatformAbstraction;
 
 namespace Portakal
 {
-	bool PlatformDirectory::Create(const String& path)
+	Bool8 PlatformDirectory::Create(const String& path)
 	{
 		return PlatformAbstraction::Create(path);
 	}
-	bool PlatformDirectory::Delete(const String& path)
+	Bool8 PlatformDirectory::Delete(const String& path)
 	{
 		return PlatformAbstraction::Delete(path);
 	}
@@ -19,19 +19,19 @@ namespace Portakal
 	{
 		return PlatformAbstraction::GetName(path);
 	}
-	bool PlatformDirectory::GetFileNames(const String& path, Array<String>& namesOut)
+	Bool8 PlatformDirectory::GetFileNames(const String& path, Array<String>& namesOut)
 	{
 		return PlatformAbstraction::GetFileNames(path,namesOut);
 	}
-	bool PlatformDirectory::GetFolderNames(const String& path, Array<String>& foldersOut)
+	Bool8 PlatformDirectory::GetFolderNames(const String& path, Array<String>& foldersOut)
 	{
 		return PlatformAbstraction::GetFolderNames(path,foldersOut);
 	}
-	bool PlatformDirectory::GetFileNamesViaExtension(const String& path, const String& extension, Array<String>& namesOut)
+	Bool8 PlatformDirectory::GetFileNamesViaExtension(const String& path, const String& extension, Array<String>& namesOut)
 	{
 		return PlatformAbstraction::GetFileNamesViaExtension(path,extension,namesOut);
 	}
-	bool PlatformDirectory::Exists(const String& path)
+	Bool8 PlatformDirectory::Exists(const String& path)
 	{
 		return PlatformAbstraction::Exists(path);
 	}

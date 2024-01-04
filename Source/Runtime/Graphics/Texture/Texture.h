@@ -8,7 +8,7 @@ namespace Portakal
 	class RUNTIME_API Texture : public GraphicsMemoryObject
 	{
 	public:
-		Texture(const TextureDesc& desc,const bool bSwapchain);
+		Texture(const TextureDesc& desc,const Bool8 bSwapchain);
 		~Texture() = default;
 
 		FORCEINLINE TextureType GetTextureType() const noexcept
@@ -27,11 +27,11 @@ namespace Portakal
 		{
 			return mSize;
 		}
-		FORCEINLINE byte GetMipLevels() const noexcept
+		FORCEINLINE Byte GetMipLevels() const noexcept
 		{
 			return mMipLevels;
 		}
-		FORCEINLINE byte GetArrayLevels() const noexcept
+		FORCEINLINE Byte GetArrayLevels() const noexcept
 		{
 			return mArrayLevels;
 		}
@@ -39,7 +39,7 @@ namespace Portakal
 		{
 			return mSampleCount;
 		}
-		FORCEINLINE bool IsSwapchain() const noexcept
+		FORCEINLINE Bool8 IsSwapchain() const noexcept
 		{
 			return mSwapchain;
 		}
@@ -55,9 +55,9 @@ namespace Portakal
 		const TextureUsage mUsages;
 		const TextureFormat mFormat;
 		const Vector3US mSize;
-		const byte mMipLevels;
-		const byte mArrayLevels;
+		const Byte mMipLevels;
+		const Byte mArrayLevels;
 		const TextureSampleCount mSampleCount;
-		const bool mSwapchain;
+		const Bool8 mSwapchain;
 	};
 }

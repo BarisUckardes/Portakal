@@ -17,7 +17,7 @@ namespace Portakal
         SamplerAddressMode AddressModeW;
         float MipLodBias;
         float MaxAnisotropy;
-        bool ComparisonEnabled;
+        Bool8 ComparisonEnabled;
         CompareOperation CompareOperation;
         float MinLod;
         float MaxLod;

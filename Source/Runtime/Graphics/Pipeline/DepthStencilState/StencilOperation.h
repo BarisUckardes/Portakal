@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    enum class RUNTIME_API StencilOperation : byte
+    enum class RUNTIME_API StencilOperation : Byte
     {
         Keep,
         Zero,

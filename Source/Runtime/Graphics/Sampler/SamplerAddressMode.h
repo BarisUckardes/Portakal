@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    enum class RUNTIME_API SamplerAddressMode : byte
+    enum class RUNTIME_API SamplerAddressMode : Byte
     {
         Repeat,
         MirroredRepeat,

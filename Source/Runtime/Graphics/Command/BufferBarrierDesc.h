@@ -22,7 +22,7 @@ namespace Portakal
 		PipelineStageFlags DestinationStageFlags;
 		GraphicsMemoryAccessFlags DestinationAccessFlags;
 		GraphicsQueueType DestinationQueueFamily;
-		uint64 OffsetInBytes;
-		uint64 SizeInBytes;
+		Uint64 OffsetInBytes;
+		Uint64 SizeInBytes;
 	};
 }

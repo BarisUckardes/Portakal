@@ -14,7 +14,7 @@ namespace Portakal
     {
 
     }
-    bool Win32CriticalSection::TryEnter()
+    Bool8 Win32CriticalSection::TryEnter()
     {
         return TryEnterCriticalSection(&mCS);
     }

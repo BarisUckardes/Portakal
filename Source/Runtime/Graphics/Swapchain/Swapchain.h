@@ -16,7 +16,7 @@ namespace Portakal
 		Swapchain(const SwapchainDesc& desc);
 		virtual ~Swapchain() override = default;
 
-		FORCEINLINE byte GetBufferCount() const noexcept
+		FORCEINLINE Byte GetBufferCount() const noexcept
 		{
 			return mBufferCount;
 		}
@@ -40,7 +40,7 @@ namespace Portakal
 		{
 			return mSize;
 		}
-		FORCEINLINE SharedHeap<Fence> GetPresentFence(const byte index = 0) const noexcept
+		FORCEINLINE SharedHeap<Fence> GetPresentFence(const Byte index = 0) const noexcept
 		{
 			return mPresentFences[index];
 		}
@@ -56,7 +56,7 @@ namespace Portakal
 		{
 			return mViews;
 		}
-		FORCEINLINE byte GetImageIndex() const noexcept
+		FORCEINLINE Byte GetImageIndex() const noexcept
 		{
 			return mIndex;
 		}
@@ -71,26 +71,26 @@ namespace Portakal
 	
 		virtual GraphicsDeviceObjectType GetObjectType() const noexcept override final { return GraphicsDeviceObjectType::Swapchain; }
 	
-		void Resize(const uint16 width, const uint16 height);
-		bool Present();
-		void WaitForPresent(const byte index);
+		void Resize(const Uint16 width, const Uint16 height);
+		Bool8 Present();
+		void WaitForPresent(const Byte index);
 		void TransitionToPresent();
-		bool SetMode(const WindowMode mode);
+		Bool8 SetMode(const WindowMode mode);
 	protected:
 		void SetTextures(const Array<SharedHeap<Texture>>& textures, const Array<SharedHeap<TextureView>>& views);
-		void SetSize(const uint16 width, const uint16 height);
+		void SetSize(const Uint16 width, const Uint16 height);
 
-		virtual void ResizeCore(const uint16 width, const uint16 height) = 0;
+		virtual void ResizeCore(const Uint16 width, const Uint16 height) = 0;
 		virtual void OnShutdown() override;
-		virtual bool PresentCore() = 0;
-		virtual bool SetFullScreen() = 0;
-		virtual bool SetWindowed() = 0;
+		virtual Bool8 PresentCore() = 0;
+		virtual Bool8 SetFullScreen() = 0;
+		virtual Bool8 SetWindowed() = 0;
 	private:
 		void CreateInternalResources(GraphicsDevice* pDevice);
 		void IncrementIndex();
 		void FreeTextures();
 	private:
-		const byte mBufferCount;
+		const Byte mBufferCount;
 		const TextureFormat mColorFormat;
 		const TextureFormat mDepthStencilFormat;
 		const SharedHeap<PlatformWindow> mWindow;
@@ -102,6 +102,6 @@ namespace Portakal
 		SharedHeap<CommandPool> mCmdPool;
 		SharedHeap<CommandList> mCmdList;
 		Vector2US mSize;
-		byte mIndex;
+		Byte mIndex;
 	};
 }

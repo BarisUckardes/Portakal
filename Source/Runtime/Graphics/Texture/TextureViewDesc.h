@@ -6,8 +6,8 @@ namespace Portakal
 	class Texture;
 	struct RUNTIME_API TextureViewDesc
 	{
-		byte MipLevel;
-		byte ArrayLevel;
+		Byte MipLevel;
+		Byte ArrayLevel;
 		SharedHeap<Texture> pTexture;
 	};
 }

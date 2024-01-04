@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    enum class RUNTIME_API SamplerFiltering : byte
+    enum class RUNTIME_API SamplerFiltering : Byte
     {
         None,
         Linear,

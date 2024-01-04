@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API ApplicationModuleState : byte
+	enum class RUNTIME_API ApplicationModuleState : Byte
 	{
 		OK,
 		NeedsInitialization,

@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API PresentMode : byte
+	enum class RUNTIME_API PresentMode : Byte
 	{
 		Immediate,
 		VsyncImmediate,

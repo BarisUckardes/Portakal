@@ -9,7 +9,7 @@ namespace Portakal
 	class RUNTIME_API DirectInputSubsystem final
 	{
 	public:
-		static bool Initialize();
+		static Bool8 Initialize();
 		static void GetInputDevices(Array<SharedHeap<InputDevice>>& devicesOut);
 	private:
 		static inline IDirectInput8* sInput;

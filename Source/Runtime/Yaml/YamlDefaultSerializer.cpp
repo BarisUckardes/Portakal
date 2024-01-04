@@ -27,43 +27,43 @@ namespace Portakal
 			}
 			case TypeCodes::Bool:
 			{
-				bool* pValue = (bool*)pObject;
+				Bool8* pValue = (Bool8*)pObject;
 				emitter << YAML::Value << *pValue;
 				break;
 			}
 			case TypeCodes::Char:
 			{
-				char* pValue = (char*)pObject;
+				Char* pValue = (Char*)pObject;
 				emitter << YAML::Value << *pValue;
 				break;
 			}
 			case TypeCodes::Byte:
 			{
-				unsigned char* pValue = (unsigned char*)pObject;
+				Byte* pValue = (Byte*)pObject;
 				emitter << YAML::Value << *pValue;
 				break;
 			}
 			case TypeCodes::Int32:
 			{
-				int32* pValue = (int32*)pObject;
+				Int32* pValue = (Int32*)pObject;
 				emitter << YAML::Value << *pValue;
 				break;
 			}
 			case TypeCodes::UInt32:
 			{
-				uint32* pValue = (uint32*)pObject;
+				Uint32* pValue = (Uint32*)pObject;
 				emitter << YAML::Value << *pValue;
 				break;
 			}
 			case TypeCodes::Int16:
 			{
-				int16* pValue = (int16*)pObject;
+				Int16* pValue = (Int16*)pObject;
 				emitter << YAML::Value << *pValue;
 				break;
 			}
 			case TypeCodes::UInt16:
 			{
-				uint16* pValue = (uint16*)pObject;
+				Uint16* pValue = (Uint16*)pObject;
 				emitter << YAML::Value << *pValue;
 				break;
 			}
@@ -81,13 +81,13 @@ namespace Portakal
 			}
 			case TypeCodes::Int64:
 			{
-				int64* pValue = (int64*)pObject;
+				Int64* pValue = (Int64*)pObject;
 				emitter << YAML::Value << *pValue;
 				break;
 			}
 			case TypeCodes::UInt64:
 			{
-				uint64* pValue = (uint64*)pObject;
+				Uint64* pValue = (Uint64*)pObject;
 				emitter << YAML::Value << *pValue;
 				break;
 			}
@@ -95,19 +95,19 @@ namespace Portakal
 	}
 	void GenerateEnumYAML(YAML::Emitter& emitter, const void* pObject)
 	{
-		const uint64 value = *(uint64*)pObject;
+		const Uint64 value = *(Uint64*)pObject;
 		emitter << YAML::Value << value;
 	}
 	void GenerateArrayYAML(YAML::Emitter& emitter, const void* pObject, const Type* pType, const Type* pElementType)
 	{
 		const Array<String>* pArray = (const Array<String>*)pObject;
-		const uint32 elementSizeInBytes = pElementType->GetSize();
+		const Uint32 elementSizeInBytes = pElementType->GetSize();
 
 
 		emitter << YAML::BeginSeq;
-		for (uint32 elementIndex = 0; elementIndex < pArray->GetSize(); elementIndex++)
+		for (Uint32 elementIndex = 0; elementIndex < pArray->GetSize(); elementIndex++)
 		{
-			GenerateObjectYAML(emitter, (byte*)pArray->GetDataConst() + elementSizeInBytes * elementIndex, pElementType);
+			GenerateObjectYAML(emitter, (Byte*)pArray->GetDataConst() + elementSizeInBytes * elementIndex, pElementType);
 		}
 	}
 	void GenerateObjectYAML(YAML::Emitter& emitter, const void* pObject, const Type* pType)
@@ -122,7 +122,7 @@ namespace Portakal
 		for (const Field* pField : fields)
 		{
 			const Type* pFieldType = pField->GetType();
-			void* pLocation = (byte*)pObject + pField->GetOffset();
+			void* pLocation = (Byte*)pObject + pField->GetOffset();
 
 			emitter << YAML::Key << *pField->GetName();
 
@@ -180,44 +180,44 @@ namespace Portakal
 		}
 		case TypeCodes::Bool:
 		{
-			const bool nodeValue = node.as<bool>();
-			*(bool*)pObject = nodeValue;
+			const Bool8 nodeValue = node.as<Bool8>();
+			*(Bool8*)pObject = nodeValue;
 			break;
 		}
 		case TypeCodes::Char:
 		{
-			const char nodeValue = node.as<char>();
-			*(char*)pObject = nodeValue;
+			const Char nodeValue = node.as<Char>();
+			*(Char*)pObject = nodeValue;
 			break;
 		}
 		case TypeCodes::Byte:
 		{
-			const byte nodeValue = node.as<char>();
-			*(byte*)pObject = nodeValue;
+			const Byte nodeValue = node.as<Char>();
+			*(Byte*)pObject = nodeValue;
 			break;
 		}
 		case TypeCodes::Int32:
 		{
-			const int32 nodeValue = node.as<int>();
-			*(int32*)pObject = nodeValue;
+			const Int32 nodeValue = node.as<int>();
+			*(Int32*)pObject = nodeValue;
 			break;
 		}
 		case TypeCodes::UInt32:
 		{
-			const uint32 nodeValue = node.as<unsigned int>();
-			*(uint32*)pObject = nodeValue;
+			const Uint32 nodeValue = node.as<unsigned int>();
+			*(Uint32*)pObject = nodeValue;
 			break;
 		}
 		case TypeCodes::Int16:
 		{
-			const int16 nodeValue = node.as<short>();
-			*(int16*)pObject = nodeValue;
+			const Int16 nodeValue = node.as<short>();
+			*(Int16*)pObject = nodeValue;
 			break;
 		}
 		case TypeCodes::UInt16:
 		{
-			const uint16 nodeValue = node.as<unsigned short>();
-			*(uint16*)pObject = nodeValue;
+			const Uint16 nodeValue = node.as<unsigned short>();
+			*(Uint16*)pObject = nodeValue;
 			break;
 		}
 		case TypeCodes::Float:
@@ -234,32 +234,32 @@ namespace Portakal
 		}
 		case TypeCodes::Int64:
 		{
-			const int64 nodeValue = node.as<long long>();
-			*(int64*)pObject = nodeValue;
+			const Int64 nodeValue = node.as<long long>();
+			*(Int64*)pObject = nodeValue;
 			break;
 		}
 		case TypeCodes::UInt64:
 		{
-			const uint64 nodeValue = node.as<unsigned long long>();
-			*(uint64*)pObject = nodeValue;
+			const Uint64 nodeValue = node.as<unsigned long long>();
+			*(Uint64*)pObject = nodeValue;
 			break;
 		}
 		}
 	}
 	void LoadAsEnum(const YAML::Node& node, void* pObject, const Type* pType)
 	{
-		const int64 value = node.as<long long>();
-		*(int64*)pObject = value;
+		const Int64 value = node.as<long long>();
+		*(Int64*)pObject = value;
 	}
 	void LoadAsArray(const YAML::Node& node, void* pObject, const Type* pElementType)
 	{
-		const uint32 elementSizeInBytes = pElementType->GetSize();
-		const uint32 elementCount = node.size();
+		const Uint32 elementSizeInBytes = pElementType->GetSize();
+		const Uint32 elementCount = node.size();
 
 		/*
 		* Allocate array
 		*/
-		Array<char>* pArray = (Array<char>*)pObject;
+		Array<Char>* pArray = (Array<Char>*)pObject;
 		pArray->Clear();
 		pArray->CreateIndirect(elementCount);
 
@@ -268,7 +268,7 @@ namespace Portakal
 		* Iterate and fill
 		*/
 		void* pArrayStart = pArray->GetData();
-		uint32 index = 0;
+		Uint32 index = 0;
 		for (YAML::const_iterator it = node.begin(); it != node.end(); it++)
 		{
 			const YAML::Node elementNode = *it;
@@ -278,7 +278,7 @@ namespace Portakal
 				continue;
 			}
 
-			void* pLocation = (byte*)pArrayStart + elementSizeInBytes * index;
+			void* pLocation = (Byte*)pArrayStart + elementSizeInBytes * index;
 			LoadAsObject(elementNode, pLocation, pElementType);
 			index++;
 		}
@@ -290,8 +290,8 @@ namespace Portakal
 		for (const Field* pField : fields)
 		{
 			const Type* pFieldType = pField->GetType();
-			const uint32 offsetInBytes = pField->GetOffset();
-			void* pLocation = (byte*)pObject + offsetInBytes;
+			const Uint32 offsetInBytes = pField->GetOffset();
+			void* pLocation = (Byte*)pObject + offsetInBytes;
 
 			/*
 			* Validate if this map has a valid field name

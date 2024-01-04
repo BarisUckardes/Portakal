@@ -12,7 +12,7 @@ namespace Portakal
 		PlatformCriticalSection() = default;
 		~PlatformCriticalSection() = default;
 
-		FORCEINLINE virtual bool TryEnter() = 0;
+		FORCEINLINE virtual Bool8 TryEnter() = 0;
 		FORCEINLINE virtual void Enter() = 0;
 		FORCEINLINE virtual void Leave() = 0;
 	};

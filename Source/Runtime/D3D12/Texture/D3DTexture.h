@@ -16,7 +16,7 @@ namespace Portakal
 		ComPtr<ID3D12Resource> GetTextureResource() const { return mTexture; }
 
 	private:
-		const bool mSwapchain;
+		const Bool8 mSwapchain;
 		ComPtr<ID3D12Resource> mTexture;
 	};
 }

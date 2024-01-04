@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API CompareOperation : byte
+	enum class RUNTIME_API CompareOperation : Byte
 	{
 		Never,
 		Less,

@@ -12,7 +12,7 @@ namespace Portakal
 		static ProjectDescriptor GetProjectDetails();
 		static String GetFolderPath();
 	private:
-		bool _SetProject(const ProjectDescriptor& descriptor, const String& folderPath);
+		Bool8 _SetProject(const ProjectDescriptor& descriptor, const String& folderPath);
 	private:
 		ProjectAPI() = default;
 		~ProjectAPI() = default;

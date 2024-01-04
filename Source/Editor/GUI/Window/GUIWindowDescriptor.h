@@ -1,20 +1,50 @@
 #pragma once
-
-#include <Runtime/Containers/String.h>
-#include <Runtime/Math/Vector2.h>
 #include <Runtime/Containers/Guid.h>
-
-#include <Editor/GUI/GUIDirection.h>
+#include <Runtime/Math/Vector2.h>
+#include "GUIWindowDescriptor.reflected.h"
 
 namespace Portakal
 {
-	struct EDITOR_API GUIWindowDescriptor
+	PCLASS();
+	class EDITOR_API GUIWindowDescriptor
 	{
-		String Name;
-		Guid ID;
-		Vector2UI Size;
-		Vector2I Position;
-		GUIDirection DockState;
-	};
+	public:
+		GUIWindowDescriptor() = default;
+		~GUIWindowDescriptor() = default;
 
+		PFIELD();
+		String Name;
+		PFIELD();
+		Guid ID;
+		PFIELD();
+		Vector2US mSize;
+		PFIELD();
+		Vector2US mPosition;
+	};
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

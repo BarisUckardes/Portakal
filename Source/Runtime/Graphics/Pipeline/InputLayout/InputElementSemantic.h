@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    enum class RUNTIME_API InputElementSemantic : byte
+    enum class RUNTIME_API InputElementSemantic : Byte
     {
         Position,
         Normal,

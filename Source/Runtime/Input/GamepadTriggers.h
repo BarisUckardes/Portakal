@@ -3,7 +3,7 @@
 
 namespace Roveldo
 {
-    enum class RUNTIME_API GamepadTriggers : byte
+    enum class RUNTIME_API GamepadTriggers : Byte
     {
         Right,
         Left

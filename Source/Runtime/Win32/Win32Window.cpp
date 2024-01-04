@@ -163,7 +163,7 @@ namespace Portakal
 
 	Win32Window::Win32Window(const WindowDesc& desc) : PlatformWindow(desc)
 	{
-		constexpr const char WINDOW_CLASS_NAME[] = "PortakalWin32WindowClass";
+		constexpr const Char WINDOW_CLASS_NAME[] = "PortakalWin32WindowClass";
 
 		//Get process handle
 		const HINSTANCE processHandle = GetModuleHandle(NULL);

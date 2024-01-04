@@ -10,7 +10,7 @@ namespace Portakal
 	{
 		Free();
 	}
-	void GraphicsMemoryObject::Allocate(const uint64 size)
+	void GraphicsMemoryObject::Allocate(const Uint64 size)
 	{
 		//Validate
 		if (mHeap.IsShutdown())

@@ -1,7 +1,7 @@
 
 #undef PENUM()
 #define PENUM()\
- enum class PlatformType : int64;\
+ enum class PlatformType : Int64;\
 	template<>\
 	class TypeAccessor<PlatformType>\
 	{\

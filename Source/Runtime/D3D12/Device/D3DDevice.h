@@ -38,12 +38,12 @@ namespace Portakal
 		virtual Swapchain* CreateSwapchainCore(const SwapchainDesc& desc) override;
 		virtual RenderPass* CreateRenderPassCore(const RenderPassDesc& desc) override { return nullptr; }
 
-		virtual void WaitFencesCore(Fence** ppFences, const byte count) override {}
+		virtual void WaitFencesCore(Fence** ppFences, const Byte count) override {}
 		virtual void WaitDeviceIdleCore() override {}
 		virtual void WaitQueueDefaultCore(const GraphicsQueueType type) override {}
 		virtual void UpdateHostBufferCore(GraphicsBuffer* pBuffer, const GraphicsBufferHostUpdateDesc& desc) override {}
 		virtual void UpdateResourceTableCore(ResourceTable* pTable, const ResourceTableUpdateDesc& desc) override {}
-		virtual void SubmitCommandListsCore(CommandList** ppCmdLists, const byte cmdListCount, const GraphicsQueueType type, const Fence* pFence) override {}
+		virtual void SubmitCommandListsCore(CommandList** ppCmdLists, const Byte cmdListCount, const GraphicsQueueType type, const Fence* pFence) override {}
 
 		virtual void OnShutdown() override {};
 	private:

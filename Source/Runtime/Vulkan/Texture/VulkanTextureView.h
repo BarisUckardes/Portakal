@@ -18,7 +18,7 @@ namespace Portakal
 		}
 		virtual void OnShutdown() override;
 	private:
-		const bool mSwapchain;
+		const Bool8 mSwapchain;
 		const VkDevice mLogicalDevice;
 		VkImageView mView;
 	};

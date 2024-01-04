@@ -7,7 +7,7 @@ namespace Portakal
 	class RUNTIME_API TextureLoader final
 	{
 	public:
-		static bool LoadFromPath(const String& path, TextureLoadResult& resultOut);
+		static Bool8 LoadFromPath(const String& path, TextureLoadResult& resultOut);
 	public:
 		TextureLoader() = delete;
 		~TextureLoader() = delete;

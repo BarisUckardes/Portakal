@@ -5,7 +5,7 @@ namespace Portakal
 {
     unsigned int Win32MessageBoxUtils::GetFlags(const MessageFlags flags)
     {
-        uint32 result = (const uint32)MessageFlags::None;
+        Uint32 result = (const Uint32)MessageFlags::None;
 
         if (flags & MessageFlags::Help)
             result |= MB_HELP;

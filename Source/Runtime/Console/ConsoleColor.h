@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API ConsoleColor : byte
+	enum class RUNTIME_API ConsoleColor : Byte
 	{
         Black,
         DarkBlue,

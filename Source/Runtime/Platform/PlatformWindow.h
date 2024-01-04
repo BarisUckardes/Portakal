@@ -43,7 +43,7 @@ namespace Portakal
 		{
 			return mMode;
 		}
-		FORCEINLINE bool IsVisible() const noexcept
+		FORCEINLINE Bool8 IsVisible() const noexcept
 		{
 			return mVisible;
 		}
@@ -93,6 +93,6 @@ namespace Portakal
 		Vector2US mSize;
 		Vector2I mPosition;
 		WindowMode mMode;
-		bool mVisible;
+		Bool8 mVisible;
 	};
 }

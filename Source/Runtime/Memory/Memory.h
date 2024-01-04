@@ -11,9 +11,9 @@ namespace Portakal
 	{
 	public:
 #ifdef PORTAKAL_PLATFORM_WINDOWS
-		static void Copy(void* __restrict pDestination, const void* __restrict pSource, uint64 pSizeInBytes);
-		static bool Check(const void* __restrict pA, const void* __restrict pB, const uint64 sizeInBytes);
-		static void Set(void* __restrict pDestination, const byte value, const uint64 sizeInBytes);
+		static void Copy(void* __restrict pDestination, const void* __restrict pSource, Uint64 pSizeInBytes);
+		static Bool8 Check(const void* __restrict pA, const void* __restrict pB, const Uint64 sizeInBytes);
+		static void Set(void* __restrict pDestination, const Byte value, const Uint64 sizeInBytes);
 #endif
 	public:
 		Memory() = delete;

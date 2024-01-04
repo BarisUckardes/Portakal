@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	KeyboardKeys Win32Keys::GetKey(const uint32 vk_key)
+	KeyboardKeys Win32Keys::GetKey(const Uint32 vk_key)
 	{
         switch (vk_key)
         {
@@ -51,7 +51,7 @@ namespace Portakal
                 const KeyboardKeys key = (KeyboardKeys)((long long)KeyboardKeys::Num0 + vk_key - 0x30);
                 return key;
             }
-            if (vk_key >= 0x41 && vk_key <= 0x5A) // its char
+            if (vk_key >= 0x41 && vk_key <= 0x5A) // its Char
             {
                 const KeyboardKeys key = (KeyboardKeys)((long long)KeyboardKeys::A + vk_key - 0x41);
                 return key;

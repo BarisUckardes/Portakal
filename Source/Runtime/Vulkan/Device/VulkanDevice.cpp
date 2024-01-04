@@ -23,7 +23,7 @@ namespace Portakal
     VulkanDevice::VulkanDevice(const GraphicsDeviceDesc& desc) : GraphicsDevice(desc),mPhysicalDevice(((const VulkanAdapter*)desc.pAdapter)->GetVkPhysicalDevice())
     {
         //Get queue families
-        uint32 queueFamilyCount = 0;
+        Uint32 queueFamilyCount = 0;
         vkGetPhysicalDeviceQueueFamilyProperties(mPhysicalDevice, &queueFamilyCount, nullptr);
         DEV_ASSERT(queueFamilyCount > 0, "VulkanDevice", "No queue families found!");
 
@@ -31,7 +31,7 @@ namespace Portakal
         vkGetPhysicalDeviceQueueFamilyProperties(mPhysicalDevice, &queueFamilyCount, queueFamilyProperties.GetData());
 
         //Collect queue families
-        for (uint32 i = 0;i<queueFamilyCount;i++)
+        for (Uint32 i = 0;i<queueFamilyCount;i++)
         {
             const VkQueueFamilyProperties& properties = queueFamilyProperties[i];
             if (properties.queueFlags & VK_QUEUE_GRAPHICS_BIT && mGraphicsQueueFamily.FamilyIndex == 255)
@@ -87,7 +87,7 @@ namespace Portakal
         }
 
         //Get logical device extensions
-        Array<const char*> logicalDeviceExtensions;
+        Array<const Char*> logicalDeviceExtensions;
         logicalDeviceExtensions.Add(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
         logicalDeviceExtensions.Add(VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME);
         logicalDeviceExtensions.Add(VK_KHR_DEPTH_STENCIL_RESOLVE_EXTENSION_NAME);
@@ -120,7 +120,7 @@ namespace Portakal
 
         DEV_LOG("VulkanDevice", "Initialized");
     }
-    int32 VulkanDevice::GetPresentQueueFamilyIndex(const VkSurfaceKHR surface) const noexcept
+    Int32 VulkanDevice::GetPresentQueueFamilyIndex(const VkSurfaceKHR surface) const noexcept
     {
         //Check graphics
         VkBool32 bGraphicsCanPresent = false;
@@ -240,11 +240,11 @@ namespace Portakal
     {
         return new VulkanPipeline(desc, this);
     }
-    void VulkanDevice::WaitFencesCore(Fence** ppFences, const byte count)
+    void VulkanDevice::WaitFencesCore(Fence** ppFences, const Byte count)
     {
         VkFence vkFences[128];
 
-        for (uint32 fenceIndex = 0; fenceIndex < count; fenceIndex++)
+        for (Uint32 fenceIndex = 0; fenceIndex < count; fenceIndex++)
         {
             const VulkanFence* pVkFence = (const VulkanFence*)ppFences[fenceIndex];
 
@@ -289,7 +289,7 @@ namespace Portakal
     {
         const VulkanMemoryHeap* pHeap = (const VulkanMemoryHeap*)pBuffer->GetGraphicsHeap().GetHeap();
 
-        byte* pTargetHostData = nullptr;
+        Byte* pTargetHostData = nullptr;
         DEV_ASSERT(vkMapMemory(mLogicalDevice, pHeap->GetVkMemory(), pBuffer->GetAlignedMemoryHandle() + desc.OffsetInBytes, desc.View.GetSize(), 0, (void**)&pTargetHostData) == VK_SUCCESS, "VulkanDevice", "Failed to map the host buffer");
         Memory::Copy(pTargetHostData, (void*)desc.View.GetMemory(), desc.View.GetSize());
         vkUnmapMemory(mLogicalDevice, pHeap->GetVkMemory());
@@ -302,7 +302,7 @@ namespace Portakal
 
         const VulkanResourceTable* pVkSet = (const VulkanResourceTable*)pTable;
 
-        for (byte entryIndex = 0; entryIndex < desc.Entries.GetSize(); entryIndex++)
+        for (Byte entryIndex = 0; entryIndex < desc.Entries.GetSize(); entryIndex++)
         {
             const ResourceTableUpdateEntry& entry = desc.Entries[entryIndex];
 
@@ -369,12 +369,12 @@ namespace Portakal
 
         vkUpdateDescriptorSets(mLogicalDevice, desc.Entries.GetSize(), writeInformation, 0, nullptr);
     }
-    void VulkanDevice::SubmitCommandListsCore(CommandList** ppCmdLists, const byte cmdListCount, const GraphicsQueueType type, const Fence* pFence)
+    void VulkanDevice::SubmitCommandListsCore(CommandList** ppCmdLists, const Byte cmdListCount, const GraphicsQueueType type, const Fence* pFence)
     {
         const VulkanFence* pVkFence = (const VulkanFence*)pFence;
         VkCommandBuffer cmdBuffers[10];
 
-        for (uint32 cmdListIndex = 0; cmdListIndex < cmdListCount; cmdListIndex++)
+        for (Uint32 cmdListIndex = 0; cmdListIndex < cmdListCount; cmdListIndex++)
         {
             const VulkanCommandList* pCmdList = (const VulkanCommandList*)ppCmdLists[cmdListIndex];
 

@@ -18,7 +18,7 @@ namespace Portakal
 		{
 			return mOwnerResource;
 		}
-		FORCEINLINE bool IsVirtual() const noexcept
+		FORCEINLINE Bool8 IsVirtual() const noexcept
 		{
 			return mOwnerResource.GetHeap() == nullptr;
 		}
@@ -28,6 +28,34 @@ namespace Portakal
 		SharedHeap<Resource> mOwnerResource;
 	};
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

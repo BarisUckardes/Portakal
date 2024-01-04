@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    enum class RUNTIME_API SamplerBorderColor : byte
+    enum class RUNTIME_API SamplerBorderColor : Byte
     {
         TransparentBlack,
         OpaqueBlack,

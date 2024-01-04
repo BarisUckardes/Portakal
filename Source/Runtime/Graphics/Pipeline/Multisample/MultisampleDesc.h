@@ -5,7 +5,7 @@ namespace Portakal
 {
     struct RUNTIME_API MultisampleDesc
     {
-        bool bSampleShadingEnabled;
+        Bool8 bSampleShadingEnabled;
         TextureSampleCount Samples;
     };
 }

@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API RenderPassLoadOperation : byte
+	enum class RUNTIME_API RenderPassLoadOperation : Byte
 	{
 		Load,
 		Clear

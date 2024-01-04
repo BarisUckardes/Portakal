@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    enum class RUNTIME_API ShaderLanguage : byte
+    enum class RUNTIME_API ShaderLanguage : Byte
     {
         Unknown,
         GLSL,

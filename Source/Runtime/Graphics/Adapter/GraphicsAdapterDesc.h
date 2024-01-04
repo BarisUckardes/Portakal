@@ -11,14 +11,14 @@ namespace Portakal
 	{
 		String ProductName;
 		String VendorName;
-		bool bSupportGeometryShader;
-		bool bSupportComputeShader;
-		uint8 ColorAttachmentCount;
-		uint32 ShaderTextureCount;
-		uint32 ShaderSamplerCount;
-		uint32 ShaderBufferCount;
+		Bool8 bSupportGeometryShader;
+		Bool8 bSupportComputeShader;
+		Uint8 ColorAttachmentCount;
+		Uint32 ShaderTextureCount;
+		Uint32 ShaderSamplerCount;
+		Uint32 ShaderBufferCount;
 		Vector3UI ImageDimensions;
-		uint64 VRam;
+		Uint64 VRam;
 		GraphicsInstance* pInstance;
 	};
 }

@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    enum class RUNTIME_API PipelineStageFlags : uint16
+    enum class RUNTIME_API PipelineStageFlags : Uint16
     {
         TopOfPipe = 0x0001,
         VertexInput = 0x0002,
@@ -20,5 +20,5 @@ namespace Portakal
         BottomOfPipe = 0x4096
     };
 
-    GENERATE_FLAGS(PipelineStageFlags, uint16)
+    GENERATE_FLAGS(PipelineStageFlags, Uint16)
 }

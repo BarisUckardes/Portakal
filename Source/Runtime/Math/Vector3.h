@@ -63,7 +63,7 @@ namespace Portakal
 			return X * other.X + Y * other.Y + Z * other.Z;
 		}
 
-		T operator[](const uint32 index) const
+		T operator[](const Uint32 index) const
 		{
 			switch (index)
 			{
@@ -182,22 +182,22 @@ namespace Portakal
 			return *this;
 		}
 
-		bool operator==(const Vector3& other) const
+		Bool8 operator==(const Vector3& other) const
 		{
 			return X == other.X && Y == other.Y && Z == other.Z;;
 		}
 
-		bool operator!=(const Vector3& other) const
+		Bool8 operator!=(const Vector3& other) const
 		{
 			return X != other.X || Y != other.Y || Z != other.Z;
 		}
 
-		bool operator==(const T& other) const
+		Bool8 operator==(const T& other) const
 		{
 			return X == other && Y == other && Z == other;
 		}
 
-		bool operator!=(const T& other) const
+		Bool8 operator!=(const T& other) const
 		{
 			return X != other || Y != other;
 		}
@@ -207,10 +207,10 @@ namespace Portakal
 		T Z;
 	};
 
-	typedef Vector3<int32> Vector3I;
-	typedef Vector3<uint32> Vector3UI;
-	typedef Vector3<uint16> Vector3US;
-	typedef Vector3<byte> Vector3B;
+	typedef Vector3<Int32> Vector3I;
+	typedef Vector3<Uint32> Vector3UI;
+	typedef Vector3<Uint16> Vector3US;
+	typedef Vector3<Byte> Vector3B;
 	typedef Vector3<float> Vector3F;
 	typedef Vector3<double> Vector3D;
 }

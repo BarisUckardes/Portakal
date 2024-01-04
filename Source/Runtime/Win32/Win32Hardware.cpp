@@ -3,13 +3,13 @@
 
 namespace Portakal
 {
-	uint16 Win32Hardware::GetCpuThreadCount()
+	Uint16 Win32Hardware::GetCpuThreadCount()
 	{
 		SYSTEM_INFO info = {};
 		GetSystemInfo(&info);
 		return info.dwNumberOfProcessors;
 	}
-	uint32 Win32Hardware::GetPageSize()
+	Uint32 Win32Hardware::GetPageSize()
 	{
 		SYSTEM_INFO info = {};
 		GetSystemInfo(&info);

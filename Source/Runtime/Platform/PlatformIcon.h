@@ -8,7 +8,7 @@ namespace Portakal
 	class RUNTIME_API PlatformIcon
 	{
 	public:
-		static bool LoadIconFromPath(const String& path,const PlatformWindow* pTargetWindow);
+		static Bool8 LoadIconFromPath(const String& path,const PlatformWindow* pTargetWindow);
 	public:
 		PlatformIcon() = delete;
 		~PlatformIcon() = delete;

@@ -19,13 +19,13 @@ namespace Portakal
 #error ("Invalid platform detected!")
 #endif
 	}
-	bool Platform::InitializePlatformDependencies(const String& executablePath)
+	Bool8 Platform::InitializePlatformDependencies(const String& executablePath)
 	{
 		//First set executable path
 		PlatformPaths::_SetExecutablePath(executablePath);
 
 		//Initialize
-		bool bState = PlatformInput::Initialize();
+		Bool8 bState = PlatformInput::Initialize();
 
 		if (bState)
 			DEV_LOG("Platform", "Dependencies initialized!");

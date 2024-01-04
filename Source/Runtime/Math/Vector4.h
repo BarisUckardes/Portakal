@@ -229,22 +229,22 @@ namespace Portakal
 			return Vector4(X / other, Y / other, Z / other, W / other);
 		}
 
-		bool operator==(const Vector4& other) const
+		Bool8 operator==(const Vector4& other) const
 		{
 			return X == other.X && Y == other.Y && Z == other.Z && W == other.W;
 		}
 
-		bool operator!=(const Vector4& other) const
+		Bool8 operator!=(const Vector4& other) const
 		{
 			return X != other.X || Y != other.Y || Z != other.Z || W != other.W;
 		}
 
-		bool operator==(const _Tx& other) const
+		Bool8 operator==(const _Tx& other) const
 		{
 			return X == other && Y == other && Z == other && W == other;
 		}
 
-		bool operator!=(const _Tx& other) const
+		Bool8 operator!=(const _Tx& other) const
 		{
 			return X != other || Y != other || Z != other || W != other;
 		}
@@ -353,10 +353,10 @@ namespace Portakal
 			left.W + (right.W - left.W) * pFactor);
 	}
 
-	typedef Vector4<int32> Vector4I;
-	typedef Vector4<uint32> Vector4UI;
-	typedef Vector4<uint16> Vector4US;
-	typedef Vector4<byte> Vector4B;
+	typedef Vector4<Int32> Vector4I;
+	typedef Vector4<Uint32> Vector4UI;
+	typedef Vector4<Uint16> Vector4US;
+	typedef Vector4<Byte> Vector4B;
 	typedef Vector4<float> Vector4F;
 	typedef Vector4<double> Vector4D;
 }

@@ -7,7 +7,7 @@ namespace Portakal
         //Add the first block
         mBlocks.Add({ false,desc.SizeInBytes });
     }
-    MemoryHandle GraphicsMemoryHeap::Allocate(const uint64 sizeInBytes)
+    MemoryHandle GraphicsMemoryHeap::Allocate(const Uint64 sizeInBytes)
     {
         //Check if it's active
         if (IsShutdown())
@@ -23,9 +23,9 @@ namespace Portakal
             return uint64_max;
         }
 
-        uint32 nodeIndex = 0;
-        uint64 offset = 0;
-        bool bFoundValidBlock = false;
+        Uint32 nodeIndex = 0;
+        Uint64 offset = 0;
+        Bool8 bFoundValidBlock = false;
 
         while (pNode != nullptr)
         {
@@ -59,7 +59,7 @@ namespace Portakal
 
         //Allocate implementation
         const MemoryHandle allocationHandle = AllocateCore(offset);
-        const uint64 remainingSize = pNode->Data.SizeInBytes - sizeInBytes;
+        const Uint64 remainingSize = pNode->Data.SizeInBytes - sizeInBytes;
 
         if (remainingSize == 0)
         {
@@ -91,7 +91,7 @@ namespace Portakal
 
         {
             //Find sub allocation block with the given offset
-            uint64 offset = 0;
+            Uint64 offset = 0;
             while (pNode != nullptr)
             {
                 //Check
@@ -117,8 +117,8 @@ namespace Portakal
         ////Do a compacting pass
         //LinkedList<SubAllocationBlock>::Node* pStartNode = mBlocks.GetRoot();
         //LinkedList<SubAllocationBlock>::Node* pEndNode = pStartNode->Next;
-        //uint32 freeBlockCount = 0;
-        //uint64 compactedBlockSize = 0;
+        //Uint32 freeBlockCount = 0;
+        //Uint64 compactedBlockSize = 0;
         //while (pStartNode != nullptr)
         //{
         //    //Check if start node has a not owned memory block

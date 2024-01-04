@@ -14,7 +14,7 @@ namespace Portakal
 		}
 		~RenderPass() = default;
 
-		FORCEINLINE bool IsSwapchain() const noexcept
+		FORCEINLINE Bool8 IsSwapchain() const noexcept
 		{
 			return mSwapchain;
 		}
@@ -32,6 +32,6 @@ namespace Portakal
 		const Array<RenderPassSubpassDesc> mSubpasses;
 		const Array<RenderPassSubpassDependencyDesc> mDependencies;
 		const Vector2US mSize;
-		const bool mSwapchain;
+		const Bool8 mSwapchain;
 	};
 }

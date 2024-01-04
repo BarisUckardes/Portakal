@@ -29,7 +29,7 @@ namespace Portakal
 
 		DEV_LOG("VulkanSwapchain", "Shutdown");
 	}
-	bool VulkanSwapchain::PresentCore()
+	Bool8 VulkanSwapchain::PresentCore()
 	{
 		//Get queue first and validate
 		const VkQueue queue = ((VulkanDevice*)mDevice)->GetPresentQueue(mSurface);
@@ -43,7 +43,7 @@ namespace Portakal
 		VkFence fence = ((VulkanFence*)GetPresentFence(GetImageIndex()).GetHeap())->GetVkFence();
 
 		//Acquire image
-		uint32 imageIndex = 0;
+		Uint32 imageIndex = 0;
 		if (vkAcquireNextImageKHR(mLogicalDevice, mSwapchain, uint64_max, VK_NULL_HANDLE, fence, &imageIndex) != VK_SUCCESS)
 		{
 			DEV_LOG("VulkanSwapchain", "Failed to acquire image");
@@ -68,7 +68,7 @@ namespace Portakal
 
 		return true;
 	}
-	void VulkanSwapchain::ResizeCore(const uint16 width, const uint16 height)
+	void VulkanSwapchain::ResizeCore(const Uint16 width, const Uint16 height)
 	{
 		//First free
 		Free();
@@ -96,7 +96,7 @@ namespace Portakal
 		const Vector2US windowSize = { width,height };
 
 		//Get supported formats
-		uint32 supportedFormatCount = 0;
+		Uint32 supportedFormatCount = 0;
 		DEV_ASSERT(vkGetPhysicalDeviceSurfaceFormatsKHR(mPhysicalDevice, mSurface, &supportedFormatCount, nullptr) == VK_SUCCESS, "VulkanSwapchain", "Failed to get supported surface formats");
 		DEV_ASSERT(supportedFormatCount > 0, "VulkanSwapchain", "No supported formats found!");
 
@@ -107,8 +107,8 @@ namespace Portakal
 		const VkFormat requestedFormat = VulkanTextureUtils::GetTextureFormat(GetColorFormat());
 
 		//Check if requested format is supported
-		bool bRequiredFormatSupported = false;
-		for (byte i = 0; i < supportedFormatCount; i++)
+		Bool8 bRequiredFormatSupported = false;
+		for (Byte i = 0; i < supportedFormatCount; i++)
 		{
 			const VkSurfaceFormatKHR& surfaceFormat = supportedFormats[i];
 
@@ -121,7 +121,7 @@ namespace Portakal
 		DEV_ASSERT(bRequiredFormatSupported, "VulkanSwapchain", "Requested format is not supported!");
 
 		//Get present modes
-		uint32 supportedPresentModeCount = 0;
+		Uint32 supportedPresentModeCount = 0;
 		DEV_ASSERT(vkGetPhysicalDeviceSurfacePresentModesKHR(mPhysicalDevice, mSurface, &supportedPresentModeCount, nullptr) == VK_SUCCESS, "VulkanSwapchain", "Failed to get present modes");
 		DEV_ASSERT(supportedPresentModeCount > 0, "VulkanSwapchain", "No supported present modes available!");
 
@@ -129,8 +129,8 @@ namespace Portakal
 		DEV_ASSERT(vkGetPhysicalDeviceSurfacePresentModesKHR(mPhysicalDevice, mSurface, &supportedPresentModeCount, supportedPresentModes.GetData()) == VK_SUCCESS, "VulkanSwapchain", "Failed to get present modes");
 
 		//Check if default present mode exists
-		bool bPresentModeSupported = false;
-		for (byte i = 0; i < supportedPresentModeCount; i++)
+		Bool8 bPresentModeSupported = false;
+		for (Byte i = 0; i < supportedPresentModeCount; i++)
 		{
 			const VkPresentModeKHR& mode = supportedPresentModes[i];
 			if (mode == VK_PRESENT_MODE_FIFO_KHR)
@@ -144,13 +144,13 @@ namespace Portakal
 		//Select extent
 		const VkExtent2D selectedExtent =
 		{
-			Math::Clamp((uint32)windowSize.X,surfaceCapabilities.minImageExtent.width,surfaceCapabilities.maxImageExtent.width),
-			Math::Clamp((uint32)windowSize.Y,surfaceCapabilities.minImageExtent.height,surfaceCapabilities.maxImageExtent.height)
+			Math::Clamp((Uint32)windowSize.X,surfaceCapabilities.minImageExtent.width,surfaceCapabilities.maxImageExtent.width),
+			Math::Clamp((Uint32)windowSize.Y,surfaceCapabilities.minImageExtent.height,surfaceCapabilities.maxImageExtent.height)
 		};
 		SetSize(selectedExtent.width, selectedExtent.height);
 
 		//Try get present queue family index
-		const int32 presentFamilyIndex = ((VulkanDevice*)mDevice)->GetPresentQueueFamilyIndex(mSurface);
+		const Int32 presentFamilyIndex = ((VulkanDevice*)mDevice)->GetPresentQueueFamilyIndex(mSurface);
 		DEV_ASSERT(presentFamilyIndex != -1, "VulkanSwapchain", "No presentable queue found");
 
 		//Create swapchain
@@ -179,7 +179,7 @@ namespace Portakal
 		DEV_LOG("VulkanSwapchain", "Initialized!");
 
 		//Get swapchain images
-		uint32 swapchainImageCount = 0;
+		Uint32 swapchainImageCount = 0;
 		DEV_ASSERT(vkGetSwapchainImagesKHR(mLogicalDevice, mSwapchain, &swapchainImageCount, nullptr) == VK_SUCCESS, "VulkanSwapchain", "Failed to get swapchain images!");
 		DEV_ASSERT(swapchainImageCount == GetBufferCount(), "VulkanSwapchain", "Swapchain image count does not match with the requested image count");
 
@@ -189,14 +189,14 @@ namespace Portakal
 		//Create texture wrapper around swapchain textures
 		Array<SharedHeap<Texture>> textures;
 		Array<SharedHeap<TextureView>> views;
-		for (byte i = 0; i < swapchainImageCount; i++)
+		for (Byte i = 0; i < swapchainImageCount; i++)
 		{
 			//Create texture
 			TextureDesc textureDesc = {};
 			textureDesc.Type = TextureType::Texture2D;
 			textureDesc.Format = GetColorFormat();
 			textureDesc.Usage = TextureUsage::ColorAttachment;
-			textureDesc.Size = { (uint16)selectedExtent.width,(uint16)selectedExtent.height,1 };
+			textureDesc.Size = { (Uint16)selectedExtent.width,(Uint16)selectedExtent.height,1 };
 			textureDesc.MipLevels = 1;
 			textureDesc.ArrayLevels = 1;
 			textureDesc.SampleCount = TextureSampleCount::SAMPLE_COUNT_1;
@@ -227,7 +227,7 @@ namespace Portakal
 		if(mSurface != VK_NULL_HANDLE)
 			vkDestroySurfaceKHR(((VulkanInstance*)mDevice->GetOwnerAdapter()->GetOwnerInstance())->GetVkInstance(), mSurface, nullptr);
 	}
-	bool VulkanSwapchain::SetFullScreen()
+	Bool8 VulkanSwapchain::SetFullScreen()
 	{
 		//Get monitor and validate
 		SharedHeap<PlatformMonitor> pMonitor = GetWindow()->GetMonitor();
@@ -239,7 +239,7 @@ namespace Portakal
 
 		return true;
 	}
-	bool VulkanSwapchain::SetWindowed()
+	Bool8 VulkanSwapchain::SetWindowed()
 	{
 		//Get monitor and validate
 		SharedHeap<PlatformMonitor> pMonitor = GetWindow()->GetMonitor();

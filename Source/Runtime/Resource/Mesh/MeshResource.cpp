@@ -12,7 +12,7 @@ namespace Portakal
 		mDevice = nullptr;
 		CreateInternalResources();
 	}
-	void MeshResource::AllocateVertexes(const uint32 count, const uint32 elementSize, const SharedHeap<GraphicsMemoryHeap>& pDeviceHeap, const SharedHeap<GraphicsMemoryHeap>& pHostHeap, const bool bAllocateStagebufferUpfront)
+	void MeshResource::AllocateVertexes(const Uint32 count, const Uint32 elementSize, const SharedHeap<GraphicsMemoryHeap>& pDeviceHeap, const SharedHeap<GraphicsMemoryHeap>& pHostHeap, const Bool8 bAllocateStagebufferUpfront)
 	{
 		//Check if shutdown
 		if (IsShutdown())
@@ -44,7 +44,7 @@ namespace Portakal
 		//Set properties
 		mVertexHostHeap = pHostHeap;
 	}
-	void MeshResource::AllocateIndexes(const uint32 count, const uint32 elementSize, const SharedHeap<GraphicsMemoryHeap>& pDeviceHeap, const SharedHeap<GraphicsMemoryHeap>& pHostHeap, const bool bAllocateStagebufferUpfront)
+	void MeshResource::AllocateIndexes(const Uint32 count, const Uint32 elementSize, const SharedHeap<GraphicsMemoryHeap>& pDeviceHeap, const SharedHeap<GraphicsMemoryHeap>& pHostHeap, const Bool8 bAllocateStagebufferUpfront)
 	{
 		//Check if shutdown
 		if (IsShutdown())
@@ -76,7 +76,7 @@ namespace Portakal
 		//Set properties
 		mIndexHostHeap = pHostHeap;
 	}
-	void MeshResource::UpdateVertexes(const MemoryView memory, const uint32 offset)
+	void MeshResource::UpdateVertexes(const MemoryView memory, const Uint32 offset)
 	{
 		//Check if shutdown
 		if (IsShutdown())
@@ -117,7 +117,7 @@ namespace Portakal
 		mDevice->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, mFence.GetHeap());
 		mDevice->WaitFences(mFence.GetHeapAddress(), 1);
 	}
-	void MeshResource::UpdateIndexes(const MemoryView memory, const uint32 offset)
+	void MeshResource::UpdateIndexes(const MemoryView memory, const Uint32 offset)
 	{
 		//Check if shutdown
 		if (IsShutdown())

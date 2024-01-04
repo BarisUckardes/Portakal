@@ -35,7 +35,7 @@ namespace Portakal
 			return;
 
 		//Get index
-		const int32 index = pAPI->mMap.FindIndex(pWindow);
+		const Int32 index = pAPI->mMap.FindIndex(pWindow);
 		if (index == -1)
 			return;
 

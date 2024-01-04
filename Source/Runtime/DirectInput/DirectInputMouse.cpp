@@ -21,8 +21,8 @@ namespace Portakal
 		}
 
 		//Catch buttons
-		bool states[4];
-		for (uint16 i = 0; i < 4; i++)
+		Bool8 states[4];
+		for (Uint16 i = 0; i < 4; i++)
 			states[i] = state.rgbButtons[i] == 1;
 
 		//Update buttons

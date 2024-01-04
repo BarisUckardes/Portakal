@@ -13,7 +13,7 @@ namespace Portakal
 	private:
 		void OnShutdown() override;
 		void OnNameChange(const String& name) override;
-		bool TryEnter() override;
+		Bool8 TryEnter() override;
 		void Enter() override;
 		void Leave() override;
 	private:

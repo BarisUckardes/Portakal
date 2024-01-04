@@ -67,11 +67,11 @@ namespace Portakal
 		VulkanBuffer* pVkBuffer = (VulkanBuffer*)pBuffer;
 		vkCmdBindIndexBuffer(mCommandBuffer, pVkBuffer->GetVkBuffer(), 0, type == CommandListIndexBufferType::Unsigned_Short ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32);
 	}
-	void VulkanCommandList::DrawIndexedCore(const uint32 indexCount, const uint32 indexOffset, const uint32 vertexOffset, const uint32 instanceCount, const uint32 instanceOffset)
+	void VulkanCommandList::DrawIndexedCore(const Uint32 indexCount, const Uint32 indexOffset, const Uint32 vertexOffset, const Uint32 instanceCount, const Uint32 instanceOffset)
 	{
 		vkCmdDrawIndexed(mCommandBuffer, indexCount, instanceCount, indexOffset, vertexOffset, instanceOffset);
 	}
-	void VulkanCommandList::DispatchComputeCore(const uint32 groupX, const uint32 groupY, const uint32 groupZ)
+	void VulkanCommandList::DispatchComputeCore(const Uint32 groupX, const Uint32 groupY, const Uint32 groupZ)
 	{
 		vkCmdDispatch(mCommandBuffer, groupX, groupY, groupZ);
 	}
@@ -177,7 +177,7 @@ namespace Portakal
 							 1, &barrier,
 							 0, nullptr);
 	}
-	byte VulkanCommandList::GetQueueFamilyIndex(GraphicsQueueType type)
+	Byte VulkanCommandList::GetQueueFamilyIndex(GraphicsQueueType type)
 	{
 		VulkanDevice* pDevice = (VulkanDevice*)GetOwnerDevice();
 
@@ -196,7 +196,7 @@ namespace Portakal
 	{
 		vkFreeCommandBuffers(mLogicalDevice, mCommandPool, 1, &mCommandBuffer);
 	}
-	void VulkanCommandList::BeginRenderPassCore(const RenderPass* pRenderPass, const Color4F& clearColor, const byte subFramebufferIndex = 0)
+	void VulkanCommandList::BeginRenderPassCore(const RenderPass* pRenderPass, const Color4F& clearColor, const Byte subFramebufferIndex = 0)
 	{
 		const VulkanRenderPass* pVkPass = (const VulkanRenderPass*)pRenderPass;
 		const VkFramebuffer framebuffer = pVkPass->GetvkSwapchainFramebuffers()[subFramebufferIndex];
@@ -220,11 +220,11 @@ namespace Portakal
 	{
 		vkCmdEndRenderPass(mCommandBuffer);
 	}
-	void VulkanCommandList::SetViewportsCore(const ViewportDesc* pViewports, const byte count)
+	void VulkanCommandList::SetViewportsCore(const ViewportDesc* pViewports, const Byte count)
 	{
 		VkViewport vkViewports[32];
 
-		for (byte viewportIndex = 0; viewportIndex < count; viewportIndex++)
+		for (Byte viewportIndex = 0; viewportIndex < count; viewportIndex++)
 		{
 			const ViewportDesc& viewport = pViewports[viewportIndex];
 
@@ -240,16 +240,16 @@ namespace Portakal
 		}
 		vkCmdSetViewport(mCommandBuffer, 0, count, vkViewports);
 	}
-	void VulkanCommandList::SetScissorsCore(const ScissorDesc* pScissorss, const byte count)
+	void VulkanCommandList::SetScissorsCore(const ScissorDesc* pScissorss, const Byte count)
 	{
 		VkRect2D vkScissors[32];
 
-		for (byte scissorIndex = 0; scissorIndex < count; scissorIndex++)
+		for (Byte scissorIndex = 0; scissorIndex < count; scissorIndex++)
 		{
 			const ScissorDesc& scissor = pScissorss[scissorIndex];
 
 			VkRect2D rect = {};
-			rect.offset = { (int32)(scissor.OffsetInPixels.X),(int32)(scissor.OffsetInPixels.Y) };
+			rect.offset = { (Int32)(scissor.OffsetInPixels.X),(Int32)(scissor.OffsetInPixels.Y) };
 			rect.extent = { scissor.SizeInPixels.X,scissor.SizeInPixels.Y };
 
 			vkScissors[scissorIndex] = rect;
@@ -263,7 +263,7 @@ namespace Portakal
 
 		const VulkanPipeline* pPipeline = (const VulkanPipeline*)GetBoundPipeline().GetHeap();
 
-		for (byte resourceIndex = 0; resourceIndex < resources.GetSize(); resourceIndex++)
+		for (Byte resourceIndex = 0; resourceIndex < resources.GetSize(); resourceIndex++)
 		{
 			const VulkanResourceTable* pResource = (const VulkanResourceTable*)resources[resourceIndex];
 

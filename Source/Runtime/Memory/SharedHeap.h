@@ -27,7 +27,7 @@ namespace Portakal
         {
             mData = (Object*)pObject;
             if (pObject != nullptr)
-                mReferenceCount = new uint32(1);
+                mReferenceCount = new Uint32(1);
             else
                 mReferenceCount = nullptr;
 
@@ -41,8 +41,8 @@ namespace Portakal
             Deference();
         }
 
-        FORCEINLINE const bool IsShutdown() const noexcept { return (mData == nullptr || mData->IsShutdown()); }
-        FORCEINLINE bool IsValid() const noexcept { return mData != nullptr; }
+        FORCEINLINE const Bool8 IsShutdown() const noexcept { return (mData == nullptr || mData->IsShutdown()); }
+        FORCEINLINE Bool8 IsValid() const noexcept { return mData != nullptr; }
         FORCEINLINE T* GetHeap() const noexcept { return (T*)mData; }
         FORCEINLINE T** GetHeapAddress() noexcept { return (T**)&mData; }
 
@@ -108,7 +108,7 @@ namespace Portakal
             Deference();
 
             mData = (Object*)pData;
-            mReferenceCount = new uint32(1);
+            mReferenceCount = new Uint32(1);
         }
         void operator=(T* pData)
         {
@@ -122,22 +122,22 @@ namespace Portakal
             }
 
             mData = (Object*)pData;
-            mReferenceCount = new uint32(1);
+            mReferenceCount = new Uint32(1);
         }
-        bool operator ==(const SharedHeap& other)
+        Bool8 operator ==(const SharedHeap& other)
         {
             return mData == other.mData;
 
         }
-        bool operator !=(const SharedHeap& other)
+        Bool8 operator !=(const SharedHeap& other)
         {
             return mData != other.mData;
         }
-        bool operator==(const T* pData)
+        Bool8 operator==(const T* pData)
         {
             return mData == (Object*)pData;
         }
-        bool operator!=(const T* pData)
+        Bool8 operator!=(const T* pData)
         {
             return mData != (Object*)pData;
         }
@@ -163,6 +163,6 @@ namespace Portakal
         }
     private:
         Object* mData;
-        uint32* mReferenceCount;
+        Uint32* mReferenceCount;
     };
 }

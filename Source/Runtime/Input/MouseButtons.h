@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    enum class RUNTIME_API MouseButtons : byte
+    enum class RUNTIME_API MouseButtons : Byte
     {
         Right,
         Left,

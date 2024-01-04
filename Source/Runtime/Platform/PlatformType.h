@@ -6,7 +6,7 @@
 namespace Portakal
 {
 	PENUM();
-	enum class RUNTIME_API PlatformType : int64
+	enum class RUNTIME_API PlatformType : Int64
 	{
 		Windows = 112,
 		Linux,
@@ -15,6 +15,34 @@ namespace Portakal
 		Switch
 	};
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

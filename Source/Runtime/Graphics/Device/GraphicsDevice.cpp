@@ -21,8 +21,8 @@ namespace Portakal
         */
         DEV_ASSERT(desc.MipLevels > 0, "GraphicsDevice", "A texture should always have it's mip levels value higher than 0");
 
-        const uint16 maxDimension = Math::Max(desc.Size.X, desc.Size.Y);
-        const uint16 maxMipCount = Math::Log2(maxDimension) + 1;
+        const Uint16 maxDimension = Math::Max(desc.Size.X, desc.Size.Y);
+        const Uint16 maxMipCount = Math::Log2(maxDimension) + 1;
         DEV_ASSERT(maxMipCount > desc.MipLevels, "Texture", "Requested mip levels are not possible with this texture, considering the dimensions the max mip levels can be %d while you requested %d",
             maxMipCount, desc.MipLevels);
 
@@ -158,7 +158,7 @@ namespace Portakal
         RegisterChild(pResourceSet.QueryAs<GraphicsDeviceObject>());
         return pResourceSet;
     }
-    void GraphicsDevice::WaitFences(Fence** ppFences, const byte count)
+    void GraphicsDevice::WaitFences(Fence** ppFences, const Byte count)
     {
         WaitFencesCore(ppFences, count);
     }
@@ -178,7 +178,7 @@ namespace Portakal
     {
         UpdateResourceTableCore(pTable, desc);
     }
-    void GraphicsDevice::SubmitCommandLists(CommandList** ppCmdLists, const byte cmdListCount, const GraphicsQueueType type, const Fence* pFence)
+    void GraphicsDevice::SubmitCommandLists(CommandList** ppCmdLists, const Byte cmdListCount, const GraphicsQueueType type, const Fence* pFence)
     {
         SubmitCommandListsCore(ppCmdLists, cmdListCount, type, pFence);
     }

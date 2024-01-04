@@ -17,7 +17,7 @@ namespace Portakal
 		Object() : mShutdown(false), mID(Guid::Create()) {}
 		virtual ~Object() = default;
 
-		FORCEINLINE bool IsShutdown() const noexcept { return mShutdown; }
+		FORCEINLINE Bool8 IsShutdown() const noexcept { return mShutdown; }
 		FORCEINLINE String GetName() const noexcept { return mName; }
 		FORCEINLINE Guid GetID() const noexcept { return mID; }
 
@@ -31,9 +31,37 @@ namespace Portakal
 	private:
 		String mName;
 		Guid mID;
-		bool mShutdown;
+		Bool8 mShutdown;
 	};
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

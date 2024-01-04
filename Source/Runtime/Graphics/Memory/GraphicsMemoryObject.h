@@ -9,7 +9,7 @@ namespace Portakal
 		GraphicsMemoryObject(const SharedHeap<GraphicsMemoryHeap>& pHeap);
 		~GraphicsMemoryObject() = default;
 
-		FORCEINLINE uint64 GetMemorySize() const noexcept
+		FORCEINLINE Uint64 GetMemorySize() const noexcept
 		{
 			return mSize;
 		}
@@ -27,7 +27,7 @@ namespace Portakal
 		}
 
 	protected:
-		void Allocate(const uint64 size);
+		void Allocate(const Uint64 size);
 		void Free();
 		void SetAlignedMemory(const MemoryHandle handle);
 		virtual void OnShutdown() override;
@@ -35,6 +35,6 @@ namespace Portakal
 		SharedHeap<GraphicsMemoryHeap> mHeap;
 		MemoryHandle mMemory;
 		MemoryHandle mAlignedMemory;
-		uint64 mSize;
+		Uint64 mSize;
 	};
 }

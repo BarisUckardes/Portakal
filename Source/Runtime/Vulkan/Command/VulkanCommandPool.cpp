@@ -6,7 +6,7 @@ namespace Portakal
 	VulkanCommandPool::VulkanCommandPool(const CommandPoolDesc& desc, VulkanDevice* pDevice) : CommandPool(desc),mLogicalDevice(pDevice->GetVkLogicalDevice()),mPool(VK_NULL_HANDLE)
 	{
         //Get family index
-        int32 queueFamilyIndex = -1;
+        Int32 queueFamilyIndex = -1;
         switch (desc.Type)
         {
         case CommandPoolType::Graphics:

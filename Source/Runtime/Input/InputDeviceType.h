@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API InputDeviceType : byte
+	enum class RUNTIME_API InputDeviceType : Byte
 	{
 		Keyboard,
 		Mouse,

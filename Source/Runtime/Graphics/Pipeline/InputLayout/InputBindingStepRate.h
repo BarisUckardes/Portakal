@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    enum class RUNTIME_API InputBindingStepRate : byte
+    enum class RUNTIME_API InputBindingStepRate : Byte
     {
         Vertex,
         Instance

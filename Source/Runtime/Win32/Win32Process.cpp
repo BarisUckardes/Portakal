@@ -7,7 +7,7 @@ namespace Portakal
 		STARTUPINFO info = {};
 		ZeroMemory(&info, sizeof(info));
 
-		CreateProcess(*path, (char*)*command, NULL, NULL, FALSE, 0, NULL, NULL, &info, &mInformation);
+		CreateProcess(*path, (Char*)*command, NULL, NULL, FALSE, 0, NULL, NULL, &info, &mInformation);
 	}
 	Win32Process::~Win32Process()
 	{

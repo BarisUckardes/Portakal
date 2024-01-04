@@ -36,7 +36,7 @@ namespace Portakal
 		if (pAPI == nullptr)
 			return;
 
-		const int32 index = pAPI->mMap.FindIndex(pScene);
+		const Int32 index = pAPI->mMap.FindIndex(pScene);
 		if (index == -1) // WTF
 			return;
 
@@ -52,7 +52,7 @@ namespace Portakal
 		if (pAPI == nullptr)
 			return;
 
-		const int32 index = pAPI->mMap.FindIndex(pScene);
+		const Int32 index = pAPI->mMap.FindIndex(pScene);
 		if (index == -1) // WTF
 			return;
 

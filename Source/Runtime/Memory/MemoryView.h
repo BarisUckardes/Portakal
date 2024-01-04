@@ -13,7 +13,7 @@ namespace Portakal
 	class RUNTIME_API MemoryView final
 	{
 	public:
-		MemoryView(void* pMemory, const uint64 sizeInBytes) : mMemory(pMemory), mSize(sizeInBytes)
+		MemoryView(void* pMemory, const Uint64 sizeInBytes) : mMemory(pMemory), mSize(sizeInBytes)
 		{}
 
 		MemoryView(const MemoryView& other);
@@ -22,10 +22,10 @@ namespace Portakal
 		~MemoryView();
 
 		FORCEINLINE void* GetMemory() const noexcept { return mMemory; }
-		FORCEINLINE uint64 GetSize() const noexcept { return mSize; }
+		FORCEINLINE Uint64 GetSize() const noexcept { return mSize; }
 
 	private:
 		void* mMemory;
-		uint64 mSize;
+		Uint64 mSize;
 	};
 }

@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    enum class RUNTIME_API TextureSampleCount : byte
+    enum class RUNTIME_API TextureSampleCount : Byte
     {
         SAMPLE_COUNT_1 = 1,
         SAMPLE_COUNT_2 = 2,

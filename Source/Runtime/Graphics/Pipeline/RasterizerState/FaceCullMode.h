@@ -3,12 +3,12 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API FaceCullMode : byte
+	enum class RUNTIME_API FaceCullMode : Byte
 	{
 		None = 1,
 		Front = 2,
 		Back = 4
 	};
 
-	GENERATE_FLAGS(FaceCullMode, byte)
+	GENERATE_FLAGS(FaceCullMode, Byte)
 }

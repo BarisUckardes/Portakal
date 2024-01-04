@@ -17,8 +17,8 @@ namespace Portakal
 		RenderPassStoreOperation StencilStoreOperation;
 		TextureMemoryLayout InputLayout;
 		TextureMemoryLayout OutputLayout;
-		byte MipLevel;
-		byte ArrayLevel;
+		Byte MipLevel;
+		Byte ArrayLevel;
 
 	};
 }

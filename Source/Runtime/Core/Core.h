@@ -3,16 +3,19 @@
 #if defined(_MSC_VER) && _MSC_VER >= 1910
 namespace Portakal
 {
-	typedef bool bool8;
-	typedef unsigned char uint8, byte;
-	typedef unsigned short uint16;
-	typedef unsigned int uint32;
-	typedef unsigned long long uint64;
+	typedef char Char;
+	typedef bool Bool8;
+	typedef unsigned char Uint8, Byte;
+	typedef unsigned short Uint16;
+	typedef unsigned int Uint32;
+	typedef unsigned long long Uint64;
 
-	typedef signed char int8;
-	typedef signed short int16;
-	typedef signed int int32;
-	typedef signed long long int64;
+	typedef signed char Int8;
+	typedef signed short Int16;
+	typedef signed int Int32;
+	typedef signed long long Int64;
+	typedef float Float32;
+	typedef double Float64;
 
 	class Type;
 	template<typename T>
@@ -55,11 +58,11 @@ namespace Portakal
 		Fatal
 	};
 
-    void RUNTIME_API DevInfo(LogLevel pType, const char* pMessage,...);
-	void RUNTIME_API DevSuccess(const char* pTitle, const char* pMessage,...);
-    void RUNTIME_API DevLog(const char* pTitle, const char* pMessage,...);
-    void RUNTIME_API DevSystem(bool pCondition, const char* pTitle, const char* pFailed, const char* pSucceed);
-    void RUNTIME_API DevAssert(bool pCondition, const char* pTitle, const char* pFailed,...);
+    void RUNTIME_API DevInfo(LogLevel pType, const Char* pMessage,...);
+	void RUNTIME_API DevSuccess(const Char* pTitle, const Char* pMessage,...);
+    void RUNTIME_API DevLog(const Char* pTitle, const Char* pMessage,...);
+    void RUNTIME_API DevSystem(Bool8 pCondition, const Char* pTitle, const Char* pFailed, const Char* pSucceed);
+    void RUNTIME_API DevAssert(Bool8 pCondition, const Char* pTitle, const Char* pFailed,...);
 }
 
 #ifdef PORTAKAL_DEBUG
@@ -99,12 +102,12 @@ namespace Portakal
 	{\
 		return  (flagType)((dataType)a | (dataType)b);\
 	}\
-	FORCEINLINE static bool operator &(const flagType a, const flagType b)\
+	FORCEINLINE static Bool8 operator &(const flagType a, const flagType b)\
 	{\
 		return ((dataType)a & (dataType)b);\
 	}
 
-#define BYTE_TO_MB(byte) byte/1000000.0
+#define BYTE_TO_MB(Byte) Byte/1000000.0
 #define MB_TO_BYTE(mb) mb*1000000.0
 #define NANO_TO_SECONDS(nano) nano / 1000000000.0f
 #define NANO_TO_MS(nano) nano / 1000000.0f

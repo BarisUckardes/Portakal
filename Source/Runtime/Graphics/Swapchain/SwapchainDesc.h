@@ -9,7 +9,7 @@ namespace Portakal
 	struct RUNTIME_API SwapchainDesc
 	{
 		PresentMode PresentMode;
-		byte BufferCount;
+		Byte BufferCount;
 		TextureFormat ColorFormat;
 		TextureFormat DepthStencilFormat;
 		SharedHeap<PlatformWindow> pWindow;

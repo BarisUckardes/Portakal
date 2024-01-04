@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API CommandPoolType : byte
+	enum class RUNTIME_API CommandPoolType : Byte
 	{
 		Graphics,
 		Compute,

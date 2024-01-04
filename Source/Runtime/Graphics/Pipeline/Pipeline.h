@@ -82,7 +82,7 @@ namespace Portakal
         {
             return mComputeShaders;
         }
-        FORCEINLINE byte GetSubpassIndex() const noexcept
+        FORCEINLINE Byte GetSubpassIndex() const noexcept
         {
             return mSubpassIndex;
         }
@@ -103,7 +103,7 @@ namespace Portakal
         const ResourceLayoutDesc mResourceLayout;
         const Array<SharedHeap<Shader>> mGraphicsShaders;
         const Array<SharedHeap<Shader>> mComputeShaders;
-        const byte mSubpassIndex;
+        const Byte mSubpassIndex;
     };
 
 }

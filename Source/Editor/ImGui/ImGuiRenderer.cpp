@@ -15,7 +15,7 @@
 #define IMGUI_MAX_RESOURCE_TABLES 8192
 namespace Portakal
 {
-    static const char vertexShaderSource[] =
+    static const Char vertexShaderSource[] =
         "	layout(set=0,binding=0) cbuffer vertexBuffer \
             {\
               float4x4 ProjectionMatrix; \
@@ -43,7 +43,7 @@ namespace Portakal
               return output;\
             }";
 
-    static const char pixelShaderSource[] =
+    static const Char pixelShaderSource[] =
         "struct PS_INPUT\
             {\
             float4 pos : SV_POSITION;\
@@ -59,12 +59,12 @@ namespace Portakal
             return out_col; \
             }";
 
-    void SetClipboardTextCallback(void* userData, const char* text)
+    void SetClipboardTextCallback(void* userData, const Char* text)
     {
         PlatformClipboard::SetClipboardText(text);
     }
 
-    const char* GetClipboardTextCallback(void* userData)
+    const Char* GetClipboardTextCallback(void* userData)
     {
         return PlatformClipboard::GetClipboardText().GetSource();
     }
@@ -112,8 +112,7 @@ namespace Portakal
     void ImGuiRenderer::EndRendering(const SharedHeap<RenderTarget>& pRenderTarget, const Color4F clearColor)
     {
         ImGui::ShowDemoWindow();
-
-        if (mLatestRenderTarget.IsShutdown() || pRenderTarget != mLatestRenderTarget)
+        if (mLatestRenderTarget.IsShutdown())
             InvalidateRenderTarget(pRenderTarget, 0);
 
         //Get display size
@@ -134,20 +133,20 @@ namespace Portakal
 
         //Allocate indexes
         if (pDrawData->TotalIdxCount > mMesh->GetIndexCount())
-            mMesh->AllocateIndexes(pDrawData->TotalIdxCount + 100, sizeof(uint16), mDeviceMemory, mHostMemory, true);
+            mMesh->AllocateIndexes(pDrawData->TotalIdxCount + 100, sizeof(Uint16), mDeviceMemory, mHostMemory, true);
 
-        uint32 vertexOffset = 0;
-        uint32 indexOffset = 0;
+        Uint32 vertexOffset = 0;
+        Uint32 indexOffset = 0;
 
         //Iterate command lists
-        for (uint32 cmdListIndex = 0; cmdListIndex < pDrawData->CmdListsCount; cmdListIndex++)
+        for (Uint32 cmdListIndex = 0; cmdListIndex < pDrawData->CmdListsCount; cmdListIndex++)
         {
             const ImDrawList* pCmdList = pDrawData->CmdLists[cmdListIndex];
-            const uint32 vertexBufferSize = pCmdList->VtxBuffer.Size * sizeof(ImDrawVert);
-            const uint32 indexBufferSize = pCmdList->IdxBuffer.Size * sizeof(uint16);
+            const Uint32 vertexBufferSize = pCmdList->VtxBuffer.Size * sizeof(ImDrawVert);
+            const Uint32 indexBufferSize = pCmdList->IdxBuffer.Size * sizeof(Uint16);
 
-            mMesh->UpdateVertexes({ (byte*)pCmdList->VtxBuffer.Data,vertexBufferSize }, vertexOffset);
-            mMesh->UpdateIndexes({ (byte*)pCmdList->IdxBuffer.Data,indexBufferSize }, indexOffset);
+            mMesh->UpdateVertexes({ (Byte*)pCmdList->VtxBuffer.Data,vertexBufferSize }, vertexOffset);
+            mMesh->UpdateIndexes({ (Byte*)pCmdList->IdxBuffer.Data,indexBufferSize }, indexOffset);
 
             vertexOffset += vertexBufferSize;
             indexOffset += indexBufferSize;
@@ -168,7 +167,7 @@ namespace Portakal
 
         //Set projection matrix host data
         GraphicsBufferHostUpdateDesc hostStagingBufferUpdateDesc = {};
-        hostStagingBufferUpdateDesc.View = { (byte*)projectionData,sizeof(projectionData) };
+        hostStagingBufferUpdateDesc.View = { (Byte*)projectionData,sizeof(projectionData) };
         hostStagingBufferUpdateDesc.OffsetInBytes = 0;
         mDevice->UpdateHostBuffer(mStagingBuffer.GetHeap(), hostStagingBufferUpdateDesc);
 
@@ -189,7 +188,7 @@ namespace Portakal
         mCmdList->BeginRenderPass(pRenderTarget->GetRenderPass(), Color4F::CornflowerBlue());
 
         //Check the renderable range
-        const bool bHasRenderableRange = pDrawData->DisplaySize.x > 0.0f && pDrawData->DisplaySize.y > 0.0f && pDrawData->CmdListsCount != 0;
+        const Bool8 bHasRenderableRange = pDrawData->DisplaySize.x > 0.0f && pDrawData->DisplaySize.y > 0.0f && pDrawData->CmdListsCount != 0;
 
         if (bHasRenderableRange)
         {
@@ -209,7 +208,7 @@ namespace Portakal
             */
             ViewportDesc viewport = {};
             viewport.OffsetInPixels = { 0,0 };
-            viewport.SizeInPixels = { (uint16)pDrawData->DisplaySize.x,(uint16)pDrawData->DisplaySize.y };
+            viewport.SizeInPixels = { (Uint16)pDrawData->DisplaySize.x,(Uint16)pDrawData->DisplaySize.y };
             viewport.DepthRange = { 0.0f,1.0f };
            //mCmdList->SetViewports(&viewport, 1);
 
@@ -217,17 +216,17 @@ namespace Portakal
             * Draw
             */
             const Vector2F clipOffset = { pDrawData->DisplayPos.x,pDrawData->DisplayPos.y };
-            uint32 drawVertexOffset = 0;
-            uint32 drawIndexOffset = 0;
+            Uint32 drawVertexOffset = 0;
+            Uint32 drawIndexOffset = 0;
             ResourceTable* ppResourceSets[]
             {
                 mStaticResourceTable.GetHeap(),
                 nullptr
             };
-            for (uint32 cmdListIndex = 0; cmdListIndex < pDrawData->CmdListsCount; cmdListIndex++)
+            for (Uint32 cmdListIndex = 0; cmdListIndex < pDrawData->CmdListsCount; cmdListIndex++)
             {
                 ImDrawList* pDrawList = pDrawData->CmdLists[cmdListIndex];
-                for (uint32 cmdIndex = 0; cmdIndex < pDrawList->CmdBuffer.Size; cmdIndex++)
+                for (Uint32 cmdIndex = 0; cmdIndex < pDrawList->CmdBuffer.Size; cmdIndex++)
                 {
                     ImDrawCmd& cmd = pDrawList->CmdBuffer[cmdIndex];
 
@@ -246,8 +245,8 @@ namespace Portakal
                         continue;
 
                     ScissorDesc scissor = {};
-                    scissor.OffsetInPixels = { (uint32)clipMin.X,(uint32)clipMin.Y };
-                    scissor.SizeInPixels = { (uint32)clipMax.X,(uint32)clipMax.Y };
+                    scissor.OffsetInPixels = { (Uint32)clipMin.X,(Uint32)clipMin.Y };
+                    scissor.SizeInPixels = { (Uint32)clipMax.X,(Uint32)clipMax.Y };
 
                     mCmdList->SetScissors(&scissor, 1);
 
@@ -399,7 +398,7 @@ namespace Portakal
         mCmdList = mDevice->CreateCommandList(cmdListDesc);
 
         //Create texture data
-        byte* pFontData = nullptr;
+        Byte* pFontData = nullptr;
         int width;
         int height;
         int channelCount;
@@ -412,7 +411,7 @@ namespace Portakal
         defaultFontTextureDesc.Type = TextureType::Texture2D;
         defaultFontTextureDesc.Usage = TextureUsage::Sampled | TextureUsage::TransferDestination;
         defaultFontTextureDesc.Format = TextureFormat::R8_G8_B8_A8_UNorm;
-        defaultFontTextureDesc.Size = { (uint16)width,(uint16)height,1 };
+        defaultFontTextureDesc.Size = { (Uint16)width,(Uint16)height,1 };
         defaultFontTextureDesc.MipLevels = 1;
         defaultFontTextureDesc.ArrayLevels = 1;
         defaultFontTextureDesc.SampleCount = TextureSampleCount::SAMPLE_COUNT_1;
@@ -491,7 +490,7 @@ namespace Portakal
 
         //Allocate vertex and index buffer
         mMesh->AllocateVertexes(6400, sizeof(ImDrawVert), mDeviceMemory, mHostMemory, true);
-        mMesh->AllocateIndexes(6400, sizeof(uint16), mDeviceMemory, mHostMemory, true);
+        mMesh->AllocateIndexes(6400, sizeof(Uint16), mDeviceMemory, mHostMemory, true);
     }
     void ImGuiRenderer::SetupDefaultTheme()
     {
@@ -606,14 +605,16 @@ namespace Portakal
             io.AddKeyEvent(ImGuiKey_ModSuper, false);
     }
 
-    void ImGuiRenderer::OnKeyboardChar(const char c)
+    void ImGuiRenderer::OnKeyboardChar(const Char c)
     {
         ImGuiIO& io = ImGui::GetIO();
 
         io.AddInputCharacter(c);
     }
-    void ImGuiRenderer::InvalidateRenderTarget(const SharedHeap<RenderTarget>& pRenderTarget,const byte subpassIndex)
+    void ImGuiRenderer::InvalidateRenderTarget(const SharedHeap<RenderTarget>& pRenderTarget,const Byte subpassIndex)
     {
+        DEV_LOG("ImGuiRenderer", "Pipeline and RenderTarget invalidation");
+
         //Destroy the former pipeline
         mPipeline.Shutdown();
 

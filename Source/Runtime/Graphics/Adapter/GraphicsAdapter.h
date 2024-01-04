@@ -20,13 +20,13 @@ namespace Portakal
 
 		FORCEINLINE String GetProductName() const noexcept { return mProductName; }
 		FORCEINLINE String GetVendorName() const noexcept { return mVendorName; }
-		FORCEINLINE bool DoesSupportGeometryShader() const noexcept { return mSupportGeometryShader; }
-		FORCEINLINE bool DoesSupportComputeShader() const noexcept { return mSupportComputeShader; }
-		FORCEINLINE uint8 GetColorAttachmentCount() const noexcept { return mColorAttachmentCount; }
-		FORCEINLINE uint32 GetShaderTextureCount() const noexcept { return mShaderTextureCount; }
-		FORCEINLINE uint32 GetShaderSamplerCount() const noexcept { return mShaderSamplerCount; }
-		FORCEINLINE uint32 GetShaderBufferCount() const noexcept { return mShaderBufferCount; }
-		FORCEINLINE uint64 GetVRam() const noexcept { return mVRam; }
+		FORCEINLINE Bool8 DoesSupportGeometryShader() const noexcept { return mSupportGeometryShader; }
+		FORCEINLINE Bool8 DoesSupportComputeShader() const noexcept { return mSupportComputeShader; }
+		FORCEINLINE Uint8 GetColorAttachmentCount() const noexcept { return mColorAttachmentCount; }
+		FORCEINLINE Uint32 GetShaderTextureCount() const noexcept { return mShaderTextureCount; }
+		FORCEINLINE Uint32 GetShaderSamplerCount() const noexcept { return mShaderSamplerCount; }
+		FORCEINLINE Uint32 GetShaderBufferCount() const noexcept { return mShaderBufferCount; }
+		FORCEINLINE Uint64 GetVRam() const noexcept { return mVRam; }
 		FORCEINLINE Vector3UI GetImageDimensions() const noexcept { return mImageDimensions; }
 		FORCEINLINE GraphicsInstance* GetOwnerInstance() const noexcept
 		{
@@ -40,13 +40,13 @@ namespace Portakal
 	private:
 		const String mProductName;
 		const String mVendorName;
-		const bool mSupportGeometryShader;
-		bool mSupportComputeShader;
-		const uint8 mColorAttachmentCount;
-		const uint32 mShaderTextureCount;
-		const uint32 mShaderSamplerCount;
-		const uint32 mShaderBufferCount;
-		const uint64 mVRam;
+		const Bool8 mSupportGeometryShader;
+		Bool8 mSupportComputeShader;
+		const Uint8 mColorAttachmentCount;
+		const Uint32 mShaderTextureCount;
+		const Uint32 mShaderSamplerCount;
+		const Uint32 mShaderBufferCount;
+		const Uint64 mVRam;
 		const Vector3UI mImageDimensions;
 		GraphicsInstance* mOwnerInstance;
 		Array<SharedHeap<GraphicsDevice>> mDevices;

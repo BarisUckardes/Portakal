@@ -80,14 +80,14 @@ namespace Portakal
 
 		// Get Swapchain buffers
 		Array<ComPtr<ID3D12Resource>> swapchainBuffers(GetBufferCount());
-		for (uint32 i = 0; i < GetBufferCount(); i++)
+		for (Uint32 i = 0; i < GetBufferCount(); i++)
 		{
 			DEV_SYSTEM(SUCCEEDED(mSwapchain->GetBuffer(i, IID_PPV_ARGS(&swapchainBuffers[i]))),
 					   "DirectXSwapchain", "Failed to get swapchain buffer", "Swapchain buffer has been gotten succesfully.");
 		}
 
 		// Create Render Target Views
-		for (uint32 i = 0; i < GetBufferCount(); i++)
+		for (Uint32 i = 0; i < GetBufferCount(); i++)
 		{
 			D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
 			rtvDesc.Format = D3DTextureUtils::GetD3DTextureFormat(GetColorFormat());
@@ -104,7 +104,7 @@ namespace Portakal
 		// Store swapchain textures and texture views
 		Array<SharedHeap<Texture>> swapchainTextures;
 		Array< SharedHeap<TextureView>> swapchainTextureViews;
-		for (uint32 i = 0; i < GetBufferCount(); i++)
+		for (Uint32 i = 0; i < GetBufferCount(); i++)
 		{
 			D3D12_RESOURCE_DESC swapchainResourceDesc = swapchainBuffers[i]->GetDesc();
 
@@ -113,7 +113,7 @@ namespace Portakal
 			swapchainBufferDesc.Format = GetColorFormat();
 			swapchainBufferDesc.MipLevels = swapchainResourceDesc.MipLevels;
 			swapchainBufferDesc.SampleCount = TextureSampleCount::SAMPLE_COUNT_1;
-			swapchainBufferDesc.Size = { (uint16)swapchainResourceDesc.Width, (uint16)swapchainResourceDesc.Height, 1 };
+			swapchainBufferDesc.Size = { (Uint16)swapchainResourceDesc.Width, (Uint16)swapchainResourceDesc.Height, 1 };
 			swapchainBufferDesc.Type = TextureType::Texture2D;
 			swapchainBufferDesc.Usage = TextureUsage::ColorAttachment;
 
@@ -130,24 +130,24 @@ namespace Portakal
 	void D3DSwapchain::CreateDepthStencilView()
 	{
 	}
-	void D3DSwapchain::ResizeCore(const uint16 width, const uint16 height)
+	void D3DSwapchain::ResizeCore(const Uint16 width, const Uint16 height)
 	{
 	}
 	void D3DSwapchain::OnShutdown()
 	{
 	}
-	bool D3DSwapchain::PresentCore()
+	Bool8 D3DSwapchain::PresentCore()
 	{
 		return true;
 	}
-	bool D3DSwapchain::SetFullScreen()
+	Bool8 D3DSwapchain::SetFullScreen()
 	{
 		if (SUCCEEDED(mSwapchain->SetFullscreenState(true, nullptr)))
 			return true;
 
 		return false;
 	}
-	bool D3DSwapchain::SetWindowed()
+	Bool8 D3DSwapchain::SetWindowed()
 	{
 		if (SUCCEEDED(mSwapchain->SetFullscreenState(false, nullptr)))
 			return true;

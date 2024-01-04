@@ -17,6 +17,6 @@ namespace Portakal
 		Array<RenderPassSubpassDesc> Subpasses;
 		Array<RenderPassSubpassDependencyDesc> Dependencies;
 		Array<SharedHeap<TextureView>> AttachmentViews;
-		bool bSwapchain;
+		Bool8 bSwapchain;
 	};
 }

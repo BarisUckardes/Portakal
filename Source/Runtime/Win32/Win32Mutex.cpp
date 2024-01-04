@@ -6,7 +6,7 @@ namespace Portakal
 	{
 		mHandle = CreateMutex(NULL, FALSE, NULL);
 	}
-	MutexState Win32Mutex::Lock(const uint64 timeInMs)
+	MutexState Win32Mutex::Lock(const Uint64 timeInMs)
 	{
 		const HRESULT result = WaitForSingleObject(mHandle,timeInMs);
 
@@ -21,7 +21,7 @@ namespace Portakal
 			return MutexState::Invalid;
 		};
 	}
-	bool Win32Mutex::Release()
+	Bool8 Win32Mutex::Release()
 	{
 		return ReleaseMutex(mHandle);
 	}

@@ -10,7 +10,7 @@ namespace Portakal
         * Create descriptor pool
         */
         VkDescriptorPoolSize sizes[16];
-        for (byte entryIndex = 0; entryIndex < desc.Entries.GetSize(); entryIndex++)
+        for (Byte entryIndex = 0; entryIndex < desc.Entries.GetSize(); entryIndex++)
         {
             const ResourceTablePoolEntry& entry = desc.Entries[entryIndex];
 

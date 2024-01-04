@@ -24,7 +24,7 @@ namespace Portakal
 			return;
 		}
 
-		const LRESULT setValueResult = RegSetValueEx(key, *valueName, 0, REG_SZ, (const unsigned char*)*value, value.GetSize());
+		const LRESULT setValueResult = RegSetValueEx(key, *valueName, 0, REG_SZ, (const Byte*)*value, value.GetSize());
 		if (setValueResult != ERROR_SUCCESS)
 		{
 			return;

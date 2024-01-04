@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API GraphicsQueueType : byte
+	enum class RUNTIME_API GraphicsQueueType : Byte
 	{
 		Graphics,
 		Compute,

@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    enum class RUNTIME_API GraphicsResourceType : byte
+    enum class RUNTIME_API GraphicsResourceType : Byte
     {
         Sampler,
         SampledTexture,

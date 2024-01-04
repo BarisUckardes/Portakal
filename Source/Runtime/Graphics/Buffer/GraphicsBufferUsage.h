@@ -12,7 +12,7 @@ namespace Portakal
 	 * @throw Have no clue about the storage, transfer source and transfer destination. Transfers 
 	 * are giving a basic idea by the name but don't know what storage is.
 	 */
-	enum class GraphicsBufferUsage : byte
+	enum class GraphicsBufferUsage : Byte
 	{
 		Unknown = 0,
 		VertexBuffer = 1,
@@ -23,5 +23,5 @@ namespace Portakal
 		TransferDestination = 32
 	};
 
-	GENERATE_FLAGS(GraphicsBufferUsage, byte)
+	GENERATE_FLAGS(GraphicsBufferUsage, Byte)
 }

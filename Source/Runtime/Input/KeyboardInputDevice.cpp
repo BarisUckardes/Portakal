@@ -5,35 +5,35 @@ namespace Portakal
 {
 	KeyboardInputDevice::KeyboardInputDevice()
 	{
-		for(uint16 i = 0;i<256;i++)
+		for(Uint16 i = 0;i<256;i++)
 		{
 			mLastState[i] = false;
 			mKeys[i] = {};
 		}
 	}
-	bool KeyboardInputDevice::IsKeyDown(const KeyboardKeys key) const noexcept
+	Bool8 KeyboardInputDevice::IsKeyDown(const KeyboardKeys key) const noexcept
 	{
-		return mKeys[(uint16)key].bDown;
+		return mKeys[(Uint16)key].bDown;
 	}
-	bool KeyboardInputDevice::IsKeyUp(const KeyboardKeys key) const noexcept
+	Bool8 KeyboardInputDevice::IsKeyUp(const KeyboardKeys key) const noexcept
 	{
-		return !mKeys[(uint16)key].bDown;
+		return !mKeys[(Uint16)key].bDown;
 	}
-	bool KeyboardInputDevice::IsKeyPressed(const KeyboardKeys key) const noexcept
+	Bool8 KeyboardInputDevice::IsKeyPressed(const KeyboardKeys key) const noexcept
 	{
-		return mKeys[(uint16)key].bPressed;
+		return mKeys[(Uint16)key].bPressed;
 	}
-	bool KeyboardInputDevice::IsKeyReleased(const KeyboardKeys key) const noexcept
+	Bool8 KeyboardInputDevice::IsKeyReleased(const KeyboardKeys key) const noexcept
 	{
-		return mKeys[(uint16)key].bReleased;
+		return mKeys[(Uint16)key].bReleased;
 	}
-	void KeyboardInputDevice::UpdateKeyState(const bool* pKeys)
+	void KeyboardInputDevice::UpdateKeyState(const Bool8* pKeys)
 	{
 		//Set states
-		for (uint16 i = 0; i < 256; i++)
+		for (Uint16 i = 0; i < 256; i++)
 		{
-			const bool bOldState = mLastState[i];
-			const bool bNewState = pKeys[i];
+			const Bool8 bOldState = mLastState[i];
+			const Bool8 bNewState = pKeys[i];
 
 			KeyEntry& entry = mKeys[i];
 			entry.bDown = bNewState;

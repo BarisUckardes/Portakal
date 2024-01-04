@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API WindowMode : byte
+	enum class RUNTIME_API WindowMode : Byte
 	{
 		Windowed,
 		WindowedBorderless,

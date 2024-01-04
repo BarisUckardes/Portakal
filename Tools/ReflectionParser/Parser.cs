@@ -108,7 +108,7 @@ namespace Portakal
                         }
                     case FileType.Enum:
                         {
-                            forwardLineContent = @$"#undef PENUM(){Environment.NewLine}#define PENUM()\{Environment.NewLine} enum class {file.Name} : int64;\";
+                            forwardLineContent = @$"#undef PENUM(){Environment.NewLine}#define PENUM()\{Environment.NewLine} enum class {file.Name} : Int64;\";
                             break;
                         }
                 }
@@ -168,28 +168,28 @@ namespace Portakal
 
             //Write all primitive types first
             string typeLines = string.Empty;
-            typeLines += $"\t\tPortakal::Type* pbool8 = Portakal::TypeDispatcher::CreateType(\"bool8\",sizeof(Portakal::bool8),Portakal::TypeModes::Class,Portakal::TypeCodes::Bool,CreateBool8,Portakal::TypeDispatcher::GetTypeAddress<Portakal::bool8>());{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<bool>(pbool8);{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::Type* pchar = Portakal::TypeDispatcher::CreateType(\"char\",sizeof(char),Portakal::TypeModes::Class,Portakal::TypeCodes::Char,CreateChar,Portakal::TypeDispatcher::GetTypeAddress<char>());{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<char>(pchar);{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::Type* pbyte = Portakal::TypeDispatcher::CreateType(\"byte\",sizeof(Portakal::byte),Portakal::TypeModes::Class,Portakal::TypeCodes::Byte,CreateByte,Portakal::TypeDispatcher::GetTypeAddress<Portakal::byte>());{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::byte>(pbyte);{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::Type* puint16 = Portakal::TypeDispatcher::CreateType(\"uint16\",sizeof(Portakal::uint16),Portakal::TypeModes::Class,Portakal::TypeCodes::UInt16,CreateUInt16,Portakal::TypeDispatcher::GetTypeAddress<Portakal::uint16>());{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::uint16>(puint16);{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::Type* puint32 = Portakal::TypeDispatcher::CreateType(\"uint32\",sizeof(Portakal::uint32),Portakal::TypeModes::Class,Portakal::TypeCodes::UInt32,CreateUInt32,Portakal::TypeDispatcher::GetTypeAddress<Portakal::uint32>());{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::uint32>(puint32);{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::Type* puint64 = Portakal::TypeDispatcher::CreateType(\"uint64\",sizeof(Portakal::uint64),Portakal::TypeModes::Class,Portakal::TypeCodes::UInt64,CreateUInt64,Portakal::TypeDispatcher::GetTypeAddress<Portakal::uint64>());{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::uint64>(puint64);{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::Type* pint16 = Portakal::TypeDispatcher::CreateType(\"int16\",sizeof(Portakal::int16),Portakal::TypeModes::Class,Portakal::TypeCodes::Int16,CreateInt16,Portakal::TypeDispatcher::GetTypeAddress<Portakal::int16>());{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::int16>(pint16);{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::Type* pint32 = Portakal::TypeDispatcher::CreateType(\"int32\",sizeof(Portakal::int32),Portakal::TypeModes::Class,Portakal::TypeCodes::Int32,CreateInt32,Portakal::TypeDispatcher::GetTypeAddress<Portakal::int32>());{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::int32>(pint32);{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::Type* pint64 = Portakal::TypeDispatcher::CreateType(\"int64\",sizeof(Portakal::int64),Portakal::TypeModes::Class,Portakal::TypeCodes::Int64,CreateInt64,Portakal::TypeDispatcher::GetTypeAddress<Portakal::int64>());{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::int64>(pint64);{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::Type* pfloat = Portakal::TypeDispatcher::CreateType(\"float\",sizeof(float),Portakal::TypeModes::Class,Portakal::TypeCodes::Float,CreateFloat,Portakal::TypeDispatcher::GetTypeAddress<float>());{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<float>(pfloat);{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::Type* pdouble = Portakal::TypeDispatcher::CreateType(\"double\",sizeof(double),Portakal::TypeModes::Class,Portakal::TypeCodes::Double,CreateDouble,Portakal::TypeDispatcher::GetTypeAddress<double>());{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<double>(pdouble);{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* pBool8 = Portakal::TypeDispatcher::CreateType(\"Bool8\",sizeof(Portakal::Bool8),Portakal::TypeModes::Class,Portakal::TypeCodes::Bool,CreateBool8,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Bool8>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::Bool8>(pBool8);{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* pChar = Portakal::TypeDispatcher::CreateType(\"Char\",sizeof(Portakal::Char),Portakal::TypeModes::Class,Portakal::TypeCodes::Char,CreateChar,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Char>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::Char>(pChar);{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* pByte = Portakal::TypeDispatcher::CreateType(\"Byte\",sizeof(Portakal::Byte),Portakal::TypeModes::Class,Portakal::TypeCodes::Byte,CreateByte,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Byte>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::Byte>(pByte);{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* pUint16 = Portakal::TypeDispatcher::CreateType(\"Uint16\",sizeof(Portakal::Uint16),Portakal::TypeModes::Class,Portakal::TypeCodes::UInt16,CreateUInt16,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Uint16>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::Uint16>(pUint16);{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* pUint32 = Portakal::TypeDispatcher::CreateType(\"Uint32\",sizeof(Portakal::Uint32),Portakal::TypeModes::Class,Portakal::TypeCodes::UInt32,CreateUInt32,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Uint32>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::Uint32>(pUint32);{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* pUint64 = Portakal::TypeDispatcher::CreateType(\"Uint64\",sizeof(Portakal::Uint64),Portakal::TypeModes::Class,Portakal::TypeCodes::UInt64,CreateUInt64,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Uint64>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::Uint64>(pUint64);{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* pInt16 = Portakal::TypeDispatcher::CreateType(\"Int16\",sizeof(Portakal::Int16),Portakal::TypeModes::Class,Portakal::TypeCodes::Int16,CreateInt16,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Int16>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::Int16>(pInt16);{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* pInt32 = Portakal::TypeDispatcher::CreateType(\"Int32\",sizeof(Portakal::Int32),Portakal::TypeModes::Class,Portakal::TypeCodes::Int32,CreateInt32,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Int32>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::Int32>(pInt32);{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* pInt64 = Portakal::TypeDispatcher::CreateType(\"Int64\",sizeof(Portakal::Int64),Portakal::TypeModes::Class,Portakal::TypeCodes::Int64,CreateInt64,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Int64>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::Int64>(pInt64);{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* pFloat32 = Portakal::TypeDispatcher::CreateType(\"Float32\",sizeof(Portakal::Float32),Portakal::TypeModes::Class,Portakal::TypeCodes::Float,CreateFloat32,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Float32>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::Float32>(pFloat32);{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* pFloat64 = Portakal::TypeDispatcher::CreateType(\"Float64\",sizeof(Portakal::Float64),Portakal::TypeModes::Class,Portakal::TypeCodes::Double,CreateFloat64,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Float64>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::Float64>(pFloat64);{Environment.NewLine}";
             typeLines += $"\t\tPortakal::Type* pString = Portakal::TypeDispatcher::CreateType(\"String\",sizeof(Portakal::String),Portakal::TypeModes::Class,Portakal::TypeCodes::String,CreateString,Portakal::TypeDispatcher::GetTypeAddress<Portakal::String>());{Environment.NewLine}";
             typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::String>(pString);{Environment.NewLine}";
 
@@ -255,17 +255,17 @@ namespace Portakal
 
             //Register default object generators
             string objectGenerators = string.Empty;
-            objectGenerators += $"\t\tvoid* CreateBool8() {{return new Portakal::bool8();}}{Environment.NewLine}";
-            objectGenerators += $"\t\tvoid* CreateChar() {{return new char();}}{Environment.NewLine}";
-            objectGenerators += $"\t\tvoid* CreateByte() {{return new Portakal::byte();}}{Environment.NewLine}";
-            objectGenerators += $"\t\tvoid* CreateUInt16() {{return new Portakal::uint16();}}{Environment.NewLine}";
-            objectGenerators += $"\t\tvoid* CreateUInt32() {{return new Portakal::uint32();}}{Environment.NewLine}";
-            objectGenerators += $"\t\tvoid* CreateUInt64() {{return new Portakal::uint64();}}{Environment.NewLine}";
-            objectGenerators += $"\t\tvoid* CreateInt16() {{return new Portakal::int16();}}{Environment.NewLine}";
-            objectGenerators += $"\t\tvoid* CreateInt32() {{return new Portakal::int32();}}{Environment.NewLine}";
-            objectGenerators += $"\t\tvoid* CreateInt64() {{return new Portakal::int64();}}{Environment.NewLine}";
-            objectGenerators += $"\t\tvoid* CreateFloat() {{return new float();}}{Environment.NewLine}";
-            objectGenerators += $"\t\tvoid* CreateDouble() {{return new double();}}{Environment.NewLine}";
+            objectGenerators += $"\t\tvoid* CreateBool8() {{return new Portakal::Bool8();}}{Environment.NewLine}";
+            objectGenerators += $"\t\tvoid* CreateChar() {{return new Portakal::Char();}}{Environment.NewLine}";
+            objectGenerators += $"\t\tvoid* CreateByte() {{return new Portakal::Byte();}}{Environment.NewLine}";
+            objectGenerators += $"\t\tvoid* CreateUInt16() {{return new Portakal::Uint16();}}{Environment.NewLine}";
+            objectGenerators += $"\t\tvoid* CreateUInt32() {{return new Portakal::Uint32();}}{Environment.NewLine}";
+            objectGenerators += $"\t\tvoid* CreateUInt64() {{return new Portakal::Uint64();}}{Environment.NewLine}";
+            objectGenerators += $"\t\tvoid* CreateInt16() {{return new Portakal::Int16();}}{Environment.NewLine}";
+            objectGenerators += $"\t\tvoid* CreateInt32() {{return new Portakal::Int32();}}{Environment.NewLine}";
+            objectGenerators += $"\t\tvoid* CreateInt64() {{return new Portakal::Int64();}}{Environment.NewLine}";
+            objectGenerators += $"\t\tvoid* CreateFloat32() {{return new Portakal::Float32();}}{Environment.NewLine}";
+            objectGenerators += $"\t\tvoid* CreateFloat64() {{return new Portakal::Float64();}}{Environment.NewLine}";
             objectGenerators += $"\t\tvoid* CreateString() {{return new Portakal::String();}}{Environment.NewLine}";
             foreach (FileInfo file in fileInfos)
             {

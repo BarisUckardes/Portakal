@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	uint64 GetCharPointerSize(const char* target)
+	Uint64 GetCharPointerSize(const Char* target)
 	{
 		unsigned int pSize = 0;
 		while (target[pSize] != '\0')
@@ -11,7 +11,7 @@ namespace Portakal
 		return pSize;
 	}
 
-	uint64 GetWCharPointerSize(const wchar_t* target)
+	Uint64 GetWCharPointerSize(const wchar_t* target)
 	{
 		const wchar_t* ptr = target;
 		while (*ptr)
@@ -19,19 +19,19 @@ namespace Portakal
 		return ptr - target;
 	}
 
-	String::String(const char* pData, const uint64 sizeInBytes)
+	String::String(const Char* pData, const Uint64 sizeInBytes)
 	{
 		mSize = sizeInBytes;
-		mSource = new char[sizeInBytes + 1];
+		mSource = new Char[sizeInBytes + 1];
 
 		Memory::Copy(mSource, pData, sizeInBytes);
 		mSource[sizeInBytes] = '\0';
 	}
 
-	String::String(const byte* pData, const uint64 sizeInBytes)
+	String::String(const Byte* pData, const Uint64 sizeInBytes)
 	{
 		mSize = sizeInBytes;
-		mSource = new char[sizeInBytes + 1];
+		mSource = new Char[sizeInBytes + 1];
 
 		Memory::Copy(mSource, pData, sizeInBytes);
 		mSource[sizeInBytes] = '\0';
@@ -46,20 +46,20 @@ namespace Portakal
 			return;
 		}
 
-		mSource = new char[mSize + 1];
-		for (uint64 i = 0; i < mSize; i++)
-			mSource[i] = (char)pData[i];
+		mSource = new Char[mSize + 1];
+		for (Uint64 i = 0; i < mSize; i++)
+			mSource[i] = (Char)pData[i];
 		mSource[mSize] = '\0';
 	}
 
-	String::String(const uint64 sizeInBytes)
+	String::String(const Uint64 sizeInBytes)
 	{
 		mSize = sizeInBytes;
-		mSource = new char[sizeInBytes + 1];
+		mSource = new Char[sizeInBytes + 1];
 		mSource[sizeInBytes] = '\0';
 	}
 
-	String::String(const char* pData)
+	String::String(const Char* pData)
 	{
 		mSize = GetCharPointerSize(pData);
 		if (mSize == 0)
@@ -68,7 +68,7 @@ namespace Portakal
 			return;
 		}
 
-		mSource = new char[mSize + 1];
+		mSource = new Char[mSize + 1];
 		Memory::Copy(mSource, pData, mSize);
 		mSource[mSize] = '\0';
 	}
@@ -76,7 +76,7 @@ namespace Portakal
 	String::String(const String& other)
 	{
 		mSize = other.mSize;
-		mSource = new char[mSize + 1];
+		mSource = new Char[mSize + 1];
 
 		Memory::Copy(mSource, other.mSource, mSize);
 
@@ -98,19 +98,19 @@ namespace Portakal
 		mSize = 0;
 	}
 
-	uint64 String::FindIndex(const String& target, const uint64 startIndex, const uint64 count) const
+	Uint64 String::FindIndex(const String& target, const Uint64 startIndex, const Uint64 count) const
 	{
 		if (startIndex >= mSize)
 			return uint64_max;
 
-		const uint64 targetSize = target.GetSize();
+		const Uint64 targetSize = target.GetSize();
 		if (targetSize == 0)
 			return uint64_max;
 
 		if (targetSize > mSize)
 			return uint64_max;
 
-		uint64 searchLength = mSize - targetSize;
+		Uint64 searchLength = mSize - targetSize;
 		if (count > 0 && count < searchLength)
 			searchLength = count;
 
@@ -118,7 +118,7 @@ namespace Portakal
 		{
 			if (mSource[i] == target[0])
 			{
-				bool found = true;
+				Bool8 found = true;
 				for (unsigned int j = 1; j < searchLength; j++)
 				{
 					if (mSource[i + j] != target[j])
@@ -136,30 +136,30 @@ namespace Portakal
 		return uint64_max;
 	}
 
-	uint64 String::FindIndex(const char target) const
+	Uint64 String::FindIndex(const Char target) const
 	{
-		for (uint64 i = 0; i < mSize; i++)
+		for (Uint64 i = 0; i < mSize; i++)
 			if (mSource[i] == target)
 				return i;
 
 		return uint64_max;
 	}
 
-	uint64 String::FindIndex(const String& target) const
+	Uint64 String::FindIndex(const String& target) const
 	{
-		const uint64 targetSize = target.GetSize();
+		const Uint64 targetSize = target.GetSize();
 		if (targetSize == 0)
 			return uint64_max;
 		if (targetSize > mSize)
 			return uint64_max;
 
-		const uint64 searchSize = mSize - targetSize;
+		const Uint64 searchSize = mSize - targetSize;
 
-		for (uint64 i = 0; i < searchSize; i++)
+		for (Uint64 i = 0; i < searchSize; i++)
 		{
 			if (mSource[i] == target[0])
 			{
-				bool bFound = true;
+				Bool8 bFound = true;
 				for (unsigned int j = 1; j < targetSize; j++)
 				{
 					if (mSource[i + j] != target[j])
@@ -177,25 +177,25 @@ namespace Portakal
 		return uint64_max;
 	}
 
-	uint64 String::FindLastIndex(const String& target, const uint64 startIndex) const
+	Uint64 String::FindLastIndex(const String& target, const Uint64 startIndex) const
 	{
 		if (startIndex >= mSize)
 			return -1;
 
-		const uint64 targetSize = target.GetSize();
+		const Uint64 targetSize = target.GetSize();
 		if (targetSize == 0)
 			return uint64_max;
 
 		if (targetSize > mSize)
 			return uint64_max;
 
-		const uint64 searchSize = mSize - targetSize;
+		const Uint64 searchSize = mSize - targetSize;
 
 		for (unsigned int i = searchSize; i > startIndex; i--)
 		{
 			if (mSource[i] == target[0])
 			{
-				bool found = true;
+				Bool8 found = true;
 				for (unsigned int j = 1; j < searchSize; j++)
 				{
 					if (mSource[i + j] != target[j])
@@ -213,17 +213,17 @@ namespace Portakal
 		return uint64_max;
 	}
 
-	uint64 String::GetCount(const char target) const
+	Uint64 String::GetCount(const Char target) const
 	{
-		uint64 count = 0;
-		for (uint64 i = 0; i < mSize; i++)
+		Uint64 count = 0;
+		for (Uint64 i = 0; i < mSize; i++)
 			if (mSource[i] == target)
 				count++;
 
 		return count;
 	}
 
-	String String::GetSubset(const uint64 startIndex, const uint64 length) const
+	String String::GetSubset(const Uint64 startIndex, const Uint64 length) const
 	{
 		String subset(length);
 		Memory::Copy(subset.GetSource(), mSource, length);
@@ -237,9 +237,9 @@ namespace Portakal
 		return target;
 	}
 
-	const char* String::GetCopyRaw() const
+	const Char* String::GetCopyRaw() const
 	{
-		char* pTarget = new char[mSize];
+		Char* pTarget = new Char[mSize];
 		Memory::Copy(pTarget, mSource, mSize);
 		pTarget[mSize] = '\0';
 		return pTarget;
@@ -257,17 +257,17 @@ namespace Portakal
 	String String::operator=(const String other)
 	{
 		mSize = other.GetSize();
-		mSource = new char[mSize + 1];
+		mSource = new Char[mSize + 1];
 		Memory::Copy(mSource, other.GetSource(), mSize);
 		mSource[mSize] = '\0';
 
 		return String(mSource);
 	}
 
-	String String::operator=(const char* other)
+	String String::operator=(const Char* other)
 	{
 		mSize = GetCharPointerSize(other);
-		mSource = new char[mSize + 1];
+		mSource = new Char[mSize + 1];
 		Memory::Copy(mSource, other, mSize);
 		mSource[mSize] = '\0';
 
@@ -277,9 +277,9 @@ namespace Portakal
 	String String::operator=(const wchar_t* other)
 	{
 		mSize = GetWCharPointerSize(other);
-		mSource = new char[mSize + 1];
-		for (uint64 i = 0; i < mSize; i++)
-			mSource[i] = (char)other[i];
+		mSource = new Char[mSize + 1];
+		for (Uint64 i = 0; i < mSize; i++)
+			mSource[i] = (Char)other[i];
 		mSource[mSize] = '\0';
 
 		return String(mSource);
@@ -290,7 +290,7 @@ namespace Portakal
 		unsigned int pOtherLength = other.GetSize();
 		unsigned int newLength = mSize + pOtherLength;
 
-		char* newSource = new char[newLength + 1];
+		Char* newSource = new Char[newLength + 1];
 
 		Memory::Copy(newSource, mSource, mSize);
 		Memory::Copy(newSource + mSize, other.GetSource(), pOtherLength);
@@ -305,12 +305,12 @@ namespace Portakal
 		return String(mSource);
 	}
 
-	String String::operator+=(const char* other)
+	String String::operator+=(const Char* other)
 	{
 		unsigned int pOtherLength = GetCharPointerSize(other);
 		unsigned int newLength = mSize + pOtherLength;
 
-		char* newSource = new char[newLength + 1];
+		Char* newSource = new Char[newLength + 1];
 
 		Memory::Copy(newSource, mSource, mSize);
 		Memory::Copy(newSource + mSize, other, pOtherLength);
@@ -325,11 +325,11 @@ namespace Portakal
 		return String(mSource);
 	}
 
-	String String::operator+=(char other)
+	String String::operator+=(Char other)
 	{
 		unsigned int newLength = mSize + 1;
 
-		char* newSource = new char[newLength + 1];
+		Char* newSource = new Char[newLength + 1];
 
 		Memory::Copy(newSource, mSource, mSize);
 		newSource[mSize] = other;
@@ -342,17 +342,17 @@ namespace Portakal
 		return String(mSource);
 	}
 
-	String String::operator-=(const char* other)
+	String String::operator-=(const Char* other)
 	{
 		unsigned int pOtherLength = GetCharPointerSize(other);
 		unsigned int newLength = mSize - pOtherLength;
 
-		char* newSource = new char[newLength + 1];
+		Char* newSource = new Char[newLength + 1];
 
 		unsigned int newSourceIndex = 0;
 		for (unsigned int i = 0; i < mSize; i++)
 		{
-			bool found = false;
+			Bool8 found = false;
 			for (unsigned int j = 0; j < pOtherLength; j++)
 			{
 				if (mSource[i] == other[j])
@@ -384,12 +384,12 @@ namespace Portakal
 		unsigned int pOtherLength = other.GetSize();
 		unsigned int newLength = mSize - pOtherLength;
 
-		char* newSource = new char[newLength + 1];
+		Char* newSource = new Char[newLength + 1];
 
 		unsigned int newSourceIndex = 0;
 		for (unsigned int i = 0; i < mSize; i++)
 		{
-			bool found = false;
+			Bool8 found = false;
 			for (unsigned int j = 0; j < pOtherLength; j++)
 			{
 				if (mSource[i] == other[j])
@@ -416,12 +416,12 @@ namespace Portakal
 		return String(mSource);
 	}
 
-	bool operator==(const String& target0, const String& target1)
+	Bool8 operator==(const String& target0, const String& target1)
 	{
 		unsigned int target0Length = target0.GetSize();
 		unsigned int target1Length = target1.GetSize();
-		const char* target0Source = target0.GetSource();
-		const char* target1Source = target1.GetSource();
+		const Char* target0Source = target0.GetSource();
+		const Char* target1Source = target1.GetSource();
 
 		if (target0Length != target1Length)
 			return false;
@@ -443,7 +443,7 @@ namespace Portakal
 		unsigned int target1Length = target1.GetSize();
 		unsigned int newLength = target0Length + target1Length;
 
-		char* newSource = new char[newLength + 1];
+		Char* newSource = new Char[newLength + 1];
 
 		Memory::Copy(newSource, target0.GetSource(), target0Length);
 		Memory::Copy(newSource + target0Length, target1.GetSource(), target1Length);
@@ -453,12 +453,12 @@ namespace Portakal
 		return String(newSource);
 	}
 
-	bool operator!=(const String& target0, const String& target1)
+	Bool8 operator!=(const String& target0, const String& target1)
 	{
 		unsigned int target0Length = target0.GetSize();
 		unsigned int target1Length = target1.GetSize();
-		const char* target0Source = target0.GetSource();
-		const char* target1Source = target1.GetSource();
+		const Char* target0Source = target0.GetSource();
+		const Char* target1Source = target1.GetSource();
 
 		if (target0Length != target1Length)
 			return true;

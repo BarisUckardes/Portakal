@@ -34,13 +34,13 @@ namespace Portakal
 		Matrix4x4F() = default;
 		Matrix4x4F(std::initializer_list<float> pList)
 		{
-			for (byte i = 0; i < 16; ++i)
+			for (Byte i = 0; i < 16; ++i)
 				mData[i] = *(pList.begin() + i);
 		}
 
 		Matrix4x4F(const Vector4F& row0, const Vector4F& row1, const Vector4F& row2, const Vector4F& pRow3)
 		{
-			for (byte i = 0; i < 4; ++i)
+			for (Byte i = 0; i < 4; ++i)
 			{
 				mData[i] = row0[i];
 				mData[i + 4] = row1[i];
@@ -83,16 +83,16 @@ namespace Portakal
 
 		Matrix4x4F& operator+=(Matrix4x4F& other)
 		{
-			for (byte i = 0; i < 4; i++)
-				for (byte j = 0; j < 4; j++)
+			for (Byte i = 0; i < 4; i++)
+				for (Byte j = 0; j < 4; j++)
 					(*this)(i, j) += other(i, j);
 			return *this;
 		}
 
 		Matrix4x4F& operator-=(Matrix4x4F& other)
 		{
-			for (byte i = 0; i < 4; i++)
-				for (byte j = 0; j < 4; j++)
+			for (Byte i = 0; i < 4; i++)
+				for (Byte j = 0; j < 4; j++)
 					(*this)(i, j) -= other(i, j);
 			return *this;
 		}
@@ -100,9 +100,9 @@ namespace Portakal
 		Matrix4x4F& operator*=(Matrix4x4F& other)
 		{
 			Matrix4x4F result;
-			for (byte i = 0; i < 4; i++)
-				for (byte j = 0; j < 4; j++)
-					for (byte k = 0; k < 4; k++)
+			for (Byte i = 0; i < 4; i++)
+				for (Byte j = 0; j < 4; j++)
+					for (Byte k = 0; k < 4; k++)
 						result(i, j) += (*this)(i, k) * other(k, j);
 			*this = result;
 			return *this;
@@ -110,37 +110,37 @@ namespace Portakal
 
 		Matrix4x4F& operator*=(float scalar)
 		{
-			for (byte i = 0; i < 4; i++)
-				for (byte j = 0; j < 4; j++)
+			for (Byte i = 0; i < 4; i++)
+				for (Byte j = 0; j < 4; j++)
 					(*this)(i, j) *= scalar;
 			return *this;
 		}
 
 		Matrix4x4F& operator/=(float scalar)
 		{
-			for (byte i = 0; i < 4; i++)
-				for (byte j = 0; j < 4; j++)
+			for (Byte i = 0; i < 4; i++)
+				for (Byte j = 0; j < 4; j++)
 					(*this)(i, j) /= scalar;
 			return *this;
 		}
 
-		float& operator[](byte index) { return mData[index]; }
-		const float& operator[](byte index) const { return mData[index]; }
-		float& operator()(byte row, byte column) { return mData[row * 4 + column]; }
+		float& operator[](Byte index) { return mData[index]; }
+		const float& operator[](Byte index) const { return mData[index]; }
+		float& operator()(Byte row, Byte column) { return mData[row * 4 + column]; }
 
 		float* GetData() { return mData; }
 
-		Vector4<float> GetRow(byte index) const
+		Vector4<float> GetRow(Byte index) const
 		{
 			return Vector4<float>(mData[index * 4], mData[index * 4 + 1], mData[index * 4 + 2], mData[index * 4 + 3]);
 		}
 
-		Vector4<float> GetColumn(byte index) const
+		Vector4<float> GetColumn(Byte index) const
 		{
 			return Vector4<float>(mData[index], mData[index + 4], mData[index + 8], mData[index + 12]);
 		}
 
-		void SetRow(byte index, const Vector4<float>& row)
+		void SetRow(Byte index, const Vector4<float>& row)
 		{
 			mData[index * 4] = row[0];
 			mData[index * 4 + 1] = row[1];
@@ -148,7 +148,7 @@ namespace Portakal
 			mData[index * 4 + 3] = row[3];
 		}
 
-		void SetColumn(byte index, const Vector4<float>& column)
+		void SetColumn(Byte index, const Vector4<float>& column)
 		{
 			mData[index] = column[0];
 			mData[index + 4] = column[1];
@@ -164,7 +164,7 @@ namespace Portakal
 	{
 		Matrix4x4F result = Matrix4x4F::Identity();
 
-		for (byte i = 0; i < 16; ++i)
+		for (Byte i = 0; i < 16; ++i)
 			result[i] = left[i] + right[i];
 
 		return result;
@@ -174,7 +174,7 @@ namespace Portakal
 	{
 		Matrix4x4F result = Matrix4x4F::Identity();
 
-		for (byte i = 0; i < 16; ++i)
+		for (Byte i = 0; i < 16; ++i)
 			result[i] = left[i] - right[i];
 
 		return result;
@@ -183,7 +183,7 @@ namespace Portakal
 	Matrix4x4F operator*(Matrix4x4F const& left, Matrix4x4F const& right)
 	{
 		Matrix4x4F result = Matrix4x4F::Identity();
-		for (byte i = 0; i < 4; ++i)
+		for (Byte i = 0; i < 4; ++i)
 		{
 			result[i] = left[i] * right[0] + left[i + 4] * right[1] + left[i + 8] * right[2] + left[i + 12] * right[3];
 			result[i + 4] = left[i] * right[4] + left[i + 4] * right[5] + left[i + 8] * right[6] + left[i + 12] * right[7];
@@ -196,7 +196,7 @@ namespace Portakal
 	Matrix4x4F operator*(Matrix4x4F const& left, float scalar)
 	{
 		Matrix4x4F result = Matrix4x4F::Identity();
-		for (byte i = 0; i < 16; ++i)
+		for (Byte i = 0; i < 16; ++i)
 			result[i] = left[i] * scalar;
 
 		return result;
@@ -205,7 +205,7 @@ namespace Portakal
 	Matrix4x4F operator*(float scalar, Matrix4x4F const& right)
 	{
 		Matrix4x4F result = Matrix4x4F::Identity();
-		for (byte i = 0; i < 16; ++i)
+		for (Byte i = 0; i < 16; ++i)
 			result[i] = right[i] * scalar;
 
 		return result;
@@ -214,7 +214,7 @@ namespace Portakal
 	Matrix4x4F operator/(Matrix4x4F const& left, float scalar)
 	{
 		Matrix4x4F result = Matrix4x4F::Identity();
-		for (byte i = 0; i < 16; ++i)
+		for (Byte i = 0; i < 16; ++i)
 			result[i] = left[i] / scalar;
 
 		return result;
@@ -223,7 +223,7 @@ namespace Portakal
 	Matrix4x4F operator/(float scalar, Matrix4x4F const& right)
 	{
 		Matrix4x4F result = Matrix4x4F::Identity();
-		for (byte i = 0; i < 16; ++i)
+		for (Byte i = 0; i < 16; ++i)
 			result[i] = right[i] / scalar;
 
 		return result;

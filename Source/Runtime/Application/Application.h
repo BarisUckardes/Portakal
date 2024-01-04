@@ -14,7 +14,7 @@ namespace Portakal
 		~Application();
 
 		template<typename T,typename... TArgs>
-		void RegisterModule(const uint32 index,TArgs... args)
+		void RegisterModule(const Uint32 index,TArgs... args)
 		{
 			T* pModule = new T(args...);
 			pModule->_SetState(ApplicationModuleState::NeedsInitialization);
@@ -32,7 +32,7 @@ namespace Portakal
 			return nullptr;
 		}
 
-		void RemoveModule(const uint32 index);
+		void RemoveModule(const Uint32 index);
 		void Run();
 		void PostQuitRequest(const String reason);
 	protected:
@@ -43,6 +43,6 @@ namespace Portakal
 	private:
 		Array<ApplicationModule*> mModules;
 		String mQuitReason;
-		bool mQuitRequest;
+		Bool8 mQuitRequest;
 	};
 }

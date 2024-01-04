@@ -7,7 +7,7 @@ typedef Portakal::Win32Icon PlatformAbstraction;
 
 namespace Portakal
 {
-	bool PlatformIcon::LoadIconFromPath(const String& path, const PlatformWindow* pTargetWindow)
+	Bool8 PlatformIcon::LoadIconFromPath(const String& path, const PlatformWindow* pTargetWindow)
 	{
 		return PlatformAbstraction::LoadIconFromPath(path, pTargetWindow);
 	}

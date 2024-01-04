@@ -24,7 +24,7 @@ namespace Portakal
 		{
 			return mMode;
 		}
-		FORCEINLINE uint32 GetOffset() const noexcept
+		FORCEINLINE Uint32 GetOffset() const noexcept
 		{
 			return mOffset;
 		}
@@ -32,31 +32,31 @@ namespace Portakal
 		template<typename TValue>
 		void SetValue(void* pObject, const TValue& value) const noexcept
 		{
-			byte* pObjectByte = (byte*)pObject + mOffset;
+			Byte* pObjectByte = (Byte*)pObject + mOffset;
 			TValue* pValue = (TValue*)pObjectByte;
 			*pValue = value;
 		}
 		template<typename TValue>
 		TValue GetValue(const void* pObject) const noexcept
 		{
-			byte* pObjectByte = (byte*)pObject + mOffset;
+			Byte* pObjectByte = (Byte*)pObject + mOffset;
 			return *(TValue*)pObjectByte;
 		}
 		template<typename TAddress>
 		TAddress* GetAddress(void* pObject) const noexcept
 		{
-			byte* pObjectByte = (byte*)pObject + mOffset;
+			Byte* pObjectByte = (Byte*)pObject + mOffset;
 			return (TAddress*)pObjectByte;
 		}
 	private:
-		Field(const String& name,const Type* pFieldType,const FieldMode mode,const uint32 offset);
+		Field(const String& name,const Type* pFieldType,const FieldMode mode,const Uint32 offset);
 		~Field();
 	private:
 		const String mName;
 		const Type* mFieldType;
 		const Type* mArrayElementType;
 		const FieldMode mMode;
-		const uint32 mOffset;
+		const Uint32 mOffset;
 
 	};
 }

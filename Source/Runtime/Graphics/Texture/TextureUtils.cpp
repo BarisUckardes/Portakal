@@ -3,7 +3,7 @@
 namespace Portakal
 {
 
-    byte TextureUtils::GetFormatSize(const TextureFormat format)
+    Byte TextureUtils::GetFormatSize(const TextureFormat format)
     {
         switch (format)
         {

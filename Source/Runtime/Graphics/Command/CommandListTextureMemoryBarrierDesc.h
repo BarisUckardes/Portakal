@@ -13,8 +13,8 @@ namespace Portakal
 		TextureMemoryLayout SourceLayout;
 		TextureMemoryLayout DestinationLayout;
 		TextureAspectFlags AspectFlags;
-		byte MipIndex;
-		byte ArrayIndex;
+		Byte MipIndex;
+		Byte ArrayIndex;
 		GraphicsMemoryAccessFlags SourceAccessFlags;
 		GraphicsMemoryAccessFlags DestinationAccessFlags;
 		PipelineStageFlags SourceStageFlags;

@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API FieldMode : byte
+	enum class RUNTIME_API FieldMode : Byte
 	{
 		Normal,
 		Object,

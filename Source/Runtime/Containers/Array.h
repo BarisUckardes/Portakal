@@ -18,7 +18,7 @@ namespace Portakal
 		~ArrayBase() = default;
 
 		virtual void AddIndirect() = 0;
-		virtual void CreateIndirect(const uint32 count) = 0;
+		virtual void CreateIndirect(const Uint32 count) = 0;
 		virtual void ClearIndirect() = 0;
 	};
 
@@ -36,7 +36,7 @@ namespace Portakal
 			Add({});
 		}
 
-		virtual void CreateIndirect(const uint32 count) override
+		virtual void CreateIndirect(const Uint32 count) override
 		{
 			mSize = count;
 			mCapacity = count;
@@ -109,7 +109,7 @@ namespace Portakal
 			mCapacity = 0;
 		}
 
-		bool Has(const T& element) const
+		Bool8 Has(const T& element) const
 		{
 
 			for (unsigned int i = 0; i < mSize; i++)
@@ -189,7 +189,7 @@ namespace Portakal
 			return index;
 		}
 
-		bool Remove(const T& element)
+		Bool8 Remove(const T& element)
 		{
 			const int index = FindIndex(element);
 			if (index == -1)
@@ -308,11 +308,11 @@ namespace Portakal
 		NODISCARD unsigned int GetSize() const { return mSize; }
 		NODISCARD unsigned int GetCapacity() const { return mCapacity; }
 
-		NODISCARD bool IsEmpty() const { return mSize == 0; }
+		NODISCARD Bool8 IsEmpty() const { return mSize == 0; }
 
-		NODISCARD bool IsValid() const { return mData != nullptr; }
+		NODISCARD Bool8 IsValid() const { return mData != nullptr; }
 
-		NODISCARD bool operator==(const Array& other) const
+		NODISCARD Bool8 operator==(const Array& other) const
 		{
 			if (mSize != other.GetSize())
 				return false;
@@ -326,7 +326,7 @@ namespace Portakal
 			return true;
 		}
 
-		NODISCARD bool operator!=(const Array& other) const
+		NODISCARD Bool8 operator!=(const Array& other) const
 		{
 			if (mSize != other.GetSize())
 				return true;

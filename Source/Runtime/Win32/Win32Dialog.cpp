@@ -53,7 +53,7 @@ namespace Portakal
 		* Get path
 		*/
 		_bstr_t b(filePath);
-		output = b.operator const char* ();
+		output = b.operator const Char* ();
 		CoTaskMemFree(filePath);
 
 		pItem->Release();
@@ -115,7 +115,7 @@ namespace Portakal
 		* Get path
 		*/
 		_bstr_t b(filePath);
-		output = b.operator const char* ();
+		output = b.operator const Char* ();
 		CoTaskMemFree(filePath);
 
 		pItem->Release();

@@ -22,10 +22,38 @@ namespace Portakal
 		void InvalidateRenderTarget(const SharedHeap<GraphicsDevice>& pDevice);
 	private:
 		Array<SharedHeap<RenderTarget>> mRenderTargets;
-		byte mSwapchainBufferIndex;
+		Byte mSwapchainBufferIndex;
 
 	};
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

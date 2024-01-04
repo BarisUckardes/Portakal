@@ -34,7 +34,7 @@ namespace Portakal
 
 		}
 
-		T operator[](const byte index) const
+		T operator[](const Byte index) const
 		{
 			switch (index)
 			{
@@ -151,22 +151,22 @@ namespace Portakal
 			return Color4(R / other, G / other, B / other, A / other);
 		}
 
-		bool operator==(const Color4& other) const
+		Bool8 operator==(const Color4& other) const
 		{
 			return R == other.R && G == other.G && B == other.B && A == other.A;
 		}
 
-		bool operator!=(const Color4& other) const
+		Bool8 operator!=(const Color4& other) const
 		{
 			return R != other.R || G != other.G || B != other.B || A != other.A;
 		}
 
-		bool operator==(const T& other) const
+		Bool8 operator==(const T& other) const
 		{
 			return R == other && G == other && B == other && A == other;
 		}
 
-		bool operator!=(const T& other) const
+		Bool8 operator!=(const T& other) const
 		{
 			return R != other || G != other || B != other || A != other;
 		}
@@ -177,10 +177,10 @@ namespace Portakal
 		T A;
 	};
 
-	typedef Color4<int32> Color4I;
-	typedef Color4<uint32> Color4UI;
-	typedef Color4<uint16> Color4US;
-	typedef Color4<byte> Color4B;
+	typedef Color4<Int32> Color4I;
+	typedef Color4<Uint32> Color4UI;
+	typedef Color4<Uint16> Color4US;
+	typedef Color4<Byte> Color4B;
 	typedef Color4<float> Color4F;
 	typedef Color4<double> Color4D;
 }

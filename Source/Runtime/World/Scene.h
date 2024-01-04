@@ -14,7 +14,7 @@ namespace Portakal
 		Scene();
 		~Scene();
 
-		FORCEINLINE bool IsPrimal() const noexcept
+		FORCEINLINE Bool8 IsPrimal() const noexcept
 		{
 			return mPrimal;
 		}
@@ -49,6 +49,6 @@ namespace Portakal
 	private:
 		Array<SharedHeap<Entity>> mEntities;
 		Array<SharedHeap<SceneAspect>> mAspects;
-		bool mPrimal;
+		Bool8 mPrimal;
 	};
 }

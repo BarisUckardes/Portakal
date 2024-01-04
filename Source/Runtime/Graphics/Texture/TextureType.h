@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    enum class RUNTIME_API TextureType : byte
+    enum class RUNTIME_API TextureType : Byte
     {
         Texture1D,
         Texture2D,

@@ -10,16 +10,16 @@ namespace Portakal
 
         }
 
-        uint16 Year;
-        byte Month;
-        byte Day;
-        byte Hour;
-        byte Minute;
-        byte Second;
-        uint64 Milliseconds;
+        Uint16 Year;
+        Byte Month;
+        Byte Day;
+        Byte Hour;
+        Byte Minute;
+        Byte Second;
+        Uint64 Milliseconds;
     };
 
-    static bool operator==(const TimeStamp& a, const TimeStamp& b)
+    static Bool8 operator==(const TimeStamp& a, const TimeStamp& b)
     {
         return
             a.Day == b.Day &&
@@ -30,7 +30,7 @@ namespace Portakal
             a.Second == b.Second &&
             a.Year == a.Year;
     }
-    static bool operator!=(const TimeStamp& a, const TimeStamp& b)
+    static Bool8 operator!=(const TimeStamp& a, const TimeStamp& b)
     {
         return
             a.Day != b.Day ||
@@ -41,7 +41,7 @@ namespace Portakal
             a.Second != b.Second ||
             a.Year != a.Year;
     }
-    static bool operator > (const TimeStamp& a, const TimeStamp& b)
+    static Bool8 operator > (const TimeStamp& a, const TimeStamp& b)
     {
         return
             a.Year > b.Year ||

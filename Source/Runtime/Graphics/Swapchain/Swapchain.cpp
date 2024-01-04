@@ -8,7 +8,7 @@ namespace Portakal
         //Create internal resources
         CreateInternalResources(desc.pDevice.GetHeap());
     }
-    void Swapchain::Resize(const uint16 width, const uint16 height)
+    void Swapchain::Resize(const Uint16 width, const Uint16 height)
     {
         //Wait for all fences to be idle
         GetOwnerDevice()->WaitDeviceIdle();
@@ -19,20 +19,20 @@ namespace Portakal
         //Call implementation
         ResizeCore(width, height);
     }
-    bool Swapchain::Present()
+    Bool8 Swapchain::Present()
     {
-        const bool bState = PresentCore();
+        const Bool8 bState = PresentCore();
         IncrementIndex();
         return bState;
     }
-    void Swapchain::WaitForPresent(const byte index)
+    void Swapchain::WaitForPresent(const Byte index)
     {
         GetOwnerDevice()->WaitFences(mPresentFences[index].GetHeapAddress(), 1);
     }
     void Swapchain::TransitionToPresent()
     {
         mCmdList->BeginRecording();
-        for (byte i = 0; i < mBufferCount; i++)
+        for (Byte i = 0; i < mBufferCount; i++)
         {
             CommandListTextureMemoryBarrierDesc barrierDesc = {};
             barrierDesc.MipIndex = 0;
@@ -55,13 +55,13 @@ namespace Portakal
         GetOwnerDevice()->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, mLayoutFence.GetHeap());
         GetOwnerDevice()->WaitFences(mLayoutFence.GetHeapAddress(), 1);
     }
-    bool Swapchain::SetMode(const WindowMode mode)
+    Bool8 Swapchain::SetMode(const WindowMode mode)
     {
         //Wait for idle
         GetOwnerDevice()->WaitDeviceIdle();
 
         //Set fullscreen
-        const bool bSuccess = mode == WindowMode::Fullscreen ? SetFullScreen() : SetWindowed();
+        const Bool8 bSuccess = mode == WindowMode::Fullscreen ? SetFullScreen() : SetWindowed();
 
         return bSuccess;
     }
@@ -72,7 +72,7 @@ namespace Portakal
         mTextures = textures;
         mViews = views;
     }
-    void Swapchain::SetSize(const uint16 width, const uint16 height)
+    void Swapchain::SetSize(const Uint16 width, const Uint16 height)
     {
         DEV_LOG("Swapchain", "Size: %d,%d", width, height);
         mSize = { width,height };
@@ -84,7 +84,7 @@ namespace Portakal
 
         //Clear fencens
         mLayoutFence.Shutdown();
-        for(byte i = 0;i<mBufferCount;i++)
+        for(Byte i = 0;i<mBufferCount;i++)
             mPresentFences[i].Shutdown();
 
         //Clear cmds
@@ -107,7 +107,7 @@ namespace Portakal
         mLayoutFence = pDevice->CreateFence();
 
         //Create present fences
-        for (byte i = 0; i < mBufferCount; i++)
+        for (Byte i = 0; i < mBufferCount; i++)
             mPresentFences.Add(pDevice->CreateFence());
     }
     void Swapchain::IncrementIndex()
@@ -117,7 +117,7 @@ namespace Portakal
     void Swapchain::FreeTextures()
     {
         //Clear textures,views and present fences first
-        for (byte i = 0; i < mBufferCount; i++)
+        for (Byte i = 0; i < mBufferCount; i++)
         {
             mViews[i].Shutdown();
             mTextures[i].Shutdown();

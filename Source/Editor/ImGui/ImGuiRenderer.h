@@ -45,12 +45,12 @@ namespace Portakal
 		void OnMouseWheel(float delta);
 		void OnKeyboardKeyDown(const KeyboardKeys key);
 		void OnKeyboardKeyUp(const KeyboardKeys key);
-		void OnKeyboardChar(const char value);
+		void OnKeyboardChar(const Char value);
 	private:
 		void CreateImGuiResources();
 		void SetupDefaultTheme();
 	private:
-		void InvalidateRenderTarget(const SharedHeap<RenderTarget>& pRenderTarget,const byte subpassIndex);
+		void InvalidateRenderTarget(const SharedHeap<RenderTarget>& pRenderTarget,const Byte subpassIndex);
 		virtual void OnShutdown() override;
 
 	private:

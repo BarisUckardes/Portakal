@@ -14,11 +14,11 @@ namespace Portakal
 		{
 			return mTargetTexture.GetHeap();
 		}
-		FORCEINLINE byte GetMipLevels() const noexcept
+		FORCEINLINE Byte GetMipLevels() const noexcept
 		{
 			return mMipLevel;
 		}
-		FORCEINLINE byte GetArrayLevel() const noexcept
+		FORCEINLINE Byte GetArrayLevel() const noexcept
 		{
 			return mArrayLevel;
 		}
@@ -29,7 +29,7 @@ namespace Portakal
 		}
 	private:
 		SharedHeap<Texture> mTargetTexture;
-		byte mMipLevel;
-		byte mArrayLevel;
+		Byte mMipLevel;
+		Byte mArrayLevel;
 	};
 }

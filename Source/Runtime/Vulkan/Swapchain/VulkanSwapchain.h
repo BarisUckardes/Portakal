@@ -13,18 +13,18 @@ namespace Portakal
 
 		virtual void OnShutdown() override;
 	private:
-		bool PresentCore() override;
-		void ResizeCore(const uint16 width, const uint16 height) override;
+		Bool8 PresentCore() override;
+		void ResizeCore(const Uint16 width, const Uint16 height) override;
 		void Free();
 		// Inherited via Swapchain
-		bool SetFullScreen() override;
-		bool SetWindowed() override;
+		Bool8 SetFullScreen() override;
+		Bool8 SetWindowed() override;
 	private:
 		VulkanDevice* mDevice;
 		VkSurfaceKHR mSurface;
 		VkSwapchainKHR mSwapchain;
 		VkDevice mLogicalDevice;
 		VkPhysicalDevice mPhysicalDevice;
-		uint32 mPresentQueueFamilyIndex;
+		Uint32 mPresentQueueFamilyIndex;
 	};
 }

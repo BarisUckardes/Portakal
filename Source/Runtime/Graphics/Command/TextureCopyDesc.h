@@ -15,13 +15,13 @@ namespace Portakal
 	{
 		Vector3UI SourceOffset;
 		TextureAspectFlags SourceAspectFlags;
-		byte SourceArrayIndex;
-		byte SourceMipIndex;
+		Byte SourceArrayIndex;
+		Byte SourceMipIndex;
 
 		Vector3UI DestinationOffset;
 		TextureAspectFlags DestinationAspectFlags;
-		byte DestinationArrayIndex;
-		byte DestinationMipIndex;
+		Byte DestinationArrayIndex;
+		Byte DestinationMipIndex;
 
 		SamplerFiltering Filtering;
 	};

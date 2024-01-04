@@ -29,23 +29,23 @@ namespace Portakal
 		{
 			return mType;
 		}
-		FORCEINLINE uint64 GetFileOffset() const noexcept
+		FORCEINLINE Uint64 GetFileOffset() const noexcept
 		{
 			return mFileOffset;
 		}
-		FORCEINLINE uint64 GetFileSize() const noexcept
+		FORCEINLINE Uint64 GetFileSize() const noexcept
 		{
 			return mFileSize;
 		}
-		FORCEINLINE bool IsLoaded() const noexcept
+		FORCEINLINE Bool8 IsLoaded() const noexcept
 		{
 			return mLoaded;
 		}
-		FORCEINLINE bool IsCached() const noexcept
+		FORCEINLINE Bool8 IsCached() const noexcept
 		{
 			return mCached;
 		}
-		FORCEINLINE bool IsOptimized() const noexcept
+		FORCEINLINE Bool8 IsOptimized() const noexcept
 		{
 			return mOptimized;
 		}
@@ -68,10 +68,10 @@ namespace Portakal
 		IResourceDeserializer* mDeserializer;
 		String mPath;
 		String mType;
-		uint64 mFileOffset;
-		uint64 mFileSize;
-		bool mLoaded;
-		bool mCached;
-		bool mOptimized;
+		Uint64 mFileOffset;
+		Uint64 mFileSize;
+		Bool8 mLoaded;
+		Bool8 mCached;
+		Bool8 mOptimized;
 	};
 }

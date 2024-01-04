@@ -14,7 +14,7 @@ namespace Portakal
 	void DirectInputKeyboard::UpdateState()
 	{
 		//Get device state
-		bool cachedStates[256];
+		Bool8 cachedStates[256];
 		if (FAILED(GetDirectInputDevice()->GetDeviceState(sizeof(cachedStates), cachedStates)))
 		{
 			DEV_LOG("DirectInputKeyboard", "Failed to get device state");
@@ -22,11 +22,11 @@ namespace Portakal
 		}
 
 		//Catch keys
-		bool states[256];
-		for (uint16 i = 0; i < 256; i++)
+		Bool8 states[256];
+		for (Uint16 i = 0; i < 256; i++)
 		{
 			const KeyboardKeys key = DirectInputKeys::GetKey(i);
-			states[(uint16)key] = cachedStates[i];
+			states[(Uint16)key] = cachedStates[i];
 		}
 
 		//Update states

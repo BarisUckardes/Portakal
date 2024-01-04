@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API FaceDirection : byte
+	enum class RUNTIME_API FaceDirection : Byte
 	{
 		Clockwise,
 		CounterClockwise

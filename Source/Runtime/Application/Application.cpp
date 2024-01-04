@@ -9,7 +9,7 @@ namespace Portakal
     Application::~Application()
     {
     }
-    void Application::RemoveModule(const uint32 index)
+    void Application::RemoveModule(const Uint32 index)
     {
         ApplicationModule* pModule = mModules[index];
         pModule->_SetState(ApplicationModuleState::NeedsFinalization);
@@ -78,7 +78,7 @@ namespace Portakal
         OnFinalize();
 
         //Clear modules
-        for (int32 i = mModules.GetSize() - 1;i>=0; i--)
+        for (Int32 i = mModules.GetSize() - 1;i>=0; i--)
         {
             ApplicationModule* pModule = mModules[i];
             Type* pType = pModule->GetType();
