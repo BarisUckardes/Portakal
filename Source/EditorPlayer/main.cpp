@@ -55,6 +55,9 @@
 #include <Editor/ImGui/ImGuiModule.h>
 #include <Runtime/Graphics/GraphicsModule.h>
 #include <Editor/GUI/Window/GUIWindowModule.h>
+#include <Editor/ImGui/ImGuiRenderStartModule.h>
+#include <Editor/ImGui/ImGuiRenderEndModule.h>
+#include <Editor/Project/ProjectGenerator.h>
 
 namespace Portakal
 {

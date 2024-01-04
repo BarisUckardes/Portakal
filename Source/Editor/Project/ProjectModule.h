@@ -12,7 +12,6 @@ namespace Portakal
 	public:
 		ProjectModule(const String& projectFolderPath) : mProjectFolderPath(projectFolderPath),mAPI(nullptr)
 		{
-
 		}
 		ProjectModule() : mAPI(nullptr)
 		{
@@ -29,6 +28,16 @@ namespace Portakal
 		ProjectAPI* mAPI;
 	};
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
