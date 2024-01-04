@@ -8,6 +8,8 @@ namespace Portakal
 	class EDITOR_API GUIWindowAPI : public API<GUIWindowAPI>
 	{
 		friend class GUIWindowModule;
+	public:
+		static void MarkLayoutDirty();
 	private:
 		GUIWindowAPI();
 		~GUIWindowAPI();

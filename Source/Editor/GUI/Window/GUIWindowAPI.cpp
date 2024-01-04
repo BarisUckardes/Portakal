@@ -44,9 +44,24 @@ namespace Portakal
 			ImGui::DockBuilderAddNode(dockspaceID, ImGuiDockNodeFlags_DockSpace);
 			ImGui::DockBuilderSetNodeSize(dockspaceID, pViewport->Size);
 
-			//Set the view
+			//Split the view
 			UInt32 oppositeNode = 0;
 			const UInt32 dockIDLeft = ImGui::DockBuilderSplitNode(dockspaceID, ImGuiDir_Left, 0.15f,nullptr,&oppositeNode);
+			const UInt32 dockIDRight = ImGui::DockBuilderSplitNode(oppositeNode, ImGuiDir_Right, 0.25f, nullptr, &oppositeNode);
+			const UInt32 dockIDUp = ImGui::DockBuilderSplitNode(oppositeNode, ImGuiDir_Up, 0.25, nullptr, &oppositeNode);
+			const UInt32 dockIDDown = ImGui::DockBuilderSplitNode(oppositeNode, ImGuiDir_Down, 0.4f, nullptr, &oppositeNode);
+			const UInt32 nodes[] = { 0,dockIDDown,dockIDLeft,dockIDRight,dockIDUp,dockIDDown };
+
+			//Dock the windows
+			for (const SharedHeap<GUIWindow>& pWindow : mWindows)
+			{
+
+			}
+
+			//Set dockbuilder finish
+			ImGui::DockBuilderFinish(dockIDDown);
+
+			//Remove the dirty mark
 			mLayoutDirty = false;
 		}
 
