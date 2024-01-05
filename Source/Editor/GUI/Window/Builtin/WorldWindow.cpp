@@ -16,5 +16,6 @@ namespace Portakal
 	}
 	void WorldWindow::OnInitialize()
 	{
+		
 	}
 }
