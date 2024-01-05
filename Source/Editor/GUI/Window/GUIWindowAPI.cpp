@@ -45,6 +45,9 @@ namespace Portakal
 		const ImVec2 screenSize = pViewport->Size;
 		const ImVec2 screenPos = pViewport->Pos;
 
+		if(mLayoutDirty)
+			DEV_LOG("GUIWindowAPI", "Render first frame Window Size(%d, %d)", (Int32)screenSize.x, (Int32)screenSize.y);
+
 		ImGui::SetNextWindowSize(screenSize);
 		ImGui::SetNextWindowPos(screenPos);
 		ImGui::SetNextWindowViewport(pViewport->ID);
@@ -68,9 +71,9 @@ namespace Portakal
 		ImGui::PopStyleColor();
 
 		UInt32 dockspaceID = ImGui::GetID("EditorDockspace");
-		ImGui::DockSpace(dockspaceID, { 0,0 });
+		ImGui::DockSpace(dockspaceID, { 0, 0 });
 
-		if (mLayoutDirty)
+		if (mLayoutDirty && (screenSize.x > 200 && screenSize.y > 200)) // TODO: screenSize check looks like a hack, find a better way to do this
 		{
 			//Clear nodes
 			ImGui::DockBuilderRemoveNode(dockspaceID);
@@ -82,11 +85,11 @@ namespace Portakal
 
 			//Split the view
 			UInt32 oppositeDockID = 0;
-			const UInt32 dockIDLeft = ImGui::DockBuilderSplitNode(dockspaceID, ImGuiDir_Left, 0.15f,nullptr,&oppositeDockID);
-			const UInt32 dockIDRight = ImGui::DockBuilderSplitNode(oppositeDockID, ImGuiDir_Right, 0.25f, nullptr, &oppositeDockID);
-			const UInt32 dockIDUp = ImGui::DockBuilderSplitNode(oppositeDockID, ImGuiDir_Up, 0.25, nullptr, &oppositeDockID);
-			const UInt32 dockIDDown = ImGui::DockBuilderSplitNode(oppositeDockID, ImGuiDir_Down, 0.4f, nullptr, &oppositeDockID);
-			const UInt32 nodes[] = { dockIDLeft,dockIDRight,dockIDUp,dockIDDown };
+			const UInt32 dockIDLeft = ImGui::DockBuilderSplitNode(dockspaceID, ImGuiDir_Left, 0.20f,nullptr,&oppositeDockID);
+			const UInt32 dockIDRight = ImGui::DockBuilderSplitNode(oppositeDockID, ImGuiDir_Right, 0.20f, nullptr, &oppositeDockID);
+			const UInt32 dockIDUp = ImGui::DockBuilderSplitNode(oppositeDockID, ImGuiDir_Up, 0.25f, nullptr, &oppositeDockID);
+			const UInt32 dockIDDown = ImGui::DockBuilderSplitNode(oppositeDockID, ImGuiDir_Down, 0.45f, nullptr, &oppositeDockID);
+			const UInt32 nodes[] = { dockIDLeft,dockIDRight,dockIDUp,dockIDDown, };
 
 			//Dock the windows
 			for (const SharedHeap<GUIWindow>& pWindow : mWindows)
