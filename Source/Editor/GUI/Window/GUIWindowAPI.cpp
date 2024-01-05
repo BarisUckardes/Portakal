@@ -3,6 +3,7 @@
 #include <Runtime/Platform/PlatformFile.h>
 #include <Editor/Project/ProjectAPI.h>
 #include <Editor/GUI/Window/GUIWindowSettings.h>
+#include <Runtime/Reflection/ReflectionAPI.h>
 #include <Runtime/Yaml/Yaml.h>
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -114,6 +115,9 @@ namespace Portakal
 				pWindow->_SetSize({ (UInt16)size.x,(UInt16)size.y });
 				pWindow->_SetVisibility(bCurrentlyVisible);
 			}
+
+			//End window
+			ImGui::End();
 		}
 		ImGui::End();
 
@@ -222,6 +226,21 @@ namespace Portakal
 		//Get settings
 		GUIWindowSettings settings = {};
 		Yaml::ToObject<GUIWindowSettings>(fileContent,&settings);
+
+		//Create windows
+		for (const GUIWindowDescriptor& descriptor : settings.Settings)
+		{
+			//Get and validate type
+			Type* pType = ReflectionAPI::GetType(descriptor.Name);
+			if (pType == nullptr)
+			{
+				DEV_LOG("GUIWindowAPI", "Window type[%s] not found within the reflection domain",*descriptor.Name);
+				continue;
+			}
+
+			//Create object
+			SharedHeap<GUIWindow> pWindow = (GUIWindow*)pType->CreateDefaultHeapObject();
+		}
 
 	}
 	void GUIWindowAPI::SaveWindowSettings()

@@ -23,6 +23,7 @@ namespace Portakal
 		static const Assembly* GetMainAssembly();
 		static Array<const Assembly*> GetAssemblies();
 		static Array<Type*> GetSubTypes(const Type* pTargetType);
+		static Type* GetType(const String& name);
 	private:
 		ReflectionAPI();
 		~ReflectionAPI();

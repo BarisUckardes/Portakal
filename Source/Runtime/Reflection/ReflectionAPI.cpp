@@ -45,6 +45,11 @@ namespace Portakal
     }
     Array<Type*> ReflectionAPI::GetSubTypes(const Type* pTargetType)
     {
+        //Check API
+        ReflectionAPI* pAPI = GetUnderlyingAPI();
+        if (pAPI == nullptr)
+            return {};
+
         Array<Type*> subTypes;
         Array<const Assembly*> assemblies = GetAssemblies();
         if (assemblies.GetSize() == 0)
@@ -61,6 +66,27 @@ namespace Portakal
         }
 
         return subTypes;
+    }
+    Type* ReflectionAPI::GetType(const String& name)
+    {
+        //Check API
+        ReflectionAPI* pAPI = GetUnderlyingAPI();
+        if (pAPI == nullptr)
+            return nullptr;
+
+        Array<const Assembly*> assemblies = GetAssemblies();
+        if (assemblies.GetSize() == 0)
+            return nullptr;
+
+        for (const Assembly* pAssembly : assemblies)
+        {
+            const Array<Type*>& types = pAssembly->GetTypes();
+            for (Type* pType : types)
+                if (pType->GetName() == name)
+                    return pType;
+        }
+
+        return nullptr;
     }
     ReflectionAPI::ReflectionAPI()
     {
