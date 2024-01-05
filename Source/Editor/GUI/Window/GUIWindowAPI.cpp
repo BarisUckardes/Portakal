@@ -45,8 +45,8 @@ namespace Portakal
 		const ImVec2 screenSize = pViewport->Size;
 		const ImVec2 screenPos = pViewport->Pos;
 
-		if(mLayoutDirty)
-			DEV_LOG("GUIWindowAPI", "Render first frame Window Size(%d, %d)", (Int32)screenSize.x, (Int32)screenSize.y);
+		if(mLayoutDirty && (screenSize.x < 200 && screenSize.y < 200))
+			PORTAKAL_LOG(PE_WARNING, "ImGui Viewport Size is lesser than swapchain size! It will skip a frame to initialize dock properly!");
 
 		ImGui::SetNextWindowSize(screenSize);
 		ImGui::SetNextWindowPos(screenPos);
