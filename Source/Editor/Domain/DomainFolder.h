@@ -30,6 +30,8 @@ namespace Portakal
 		DomainFolder(DomainFolder* pOwnerFolder,const String& path);
 		~DomainFolder() = default;
 
+		void Invalidate();
+
 		virtual void OnShutdown() override;
 	private:
 		Array<SharedHeap<DomainFolder>> mFolders;

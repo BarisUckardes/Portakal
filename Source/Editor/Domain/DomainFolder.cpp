@@ -1,5 +1,6 @@
 #include "DomainFolder.h"
 #include <Runtime/Platform/PlatformDirectory.h>
+#include <Editor/Domain/DomainFile.h>
 
 namespace Portakal
 {
@@ -44,6 +45,116 @@ namespace Portakal
 			mFolders.Add(new DomainFolder(this, folderPath));
 	}
 	
+	void DomainFolder::Invalidate()
+	{
+		//Get directories and check if there's missing or new folders
+		Array<String> folders;
+		if (!PlatformDirectory::GetFolderNames(mPath,folders))
+		{
+			DEV_LOG("DomainFolder", "Failed to get folder names!");
+			return;
+		}
+
+		//Look for new folders
+		for (const String& folder : folders)
+		{
+			bool bNewFolder = true;
+			for (const SharedHeap<DomainFolder>& pFolder : mFolders)
+			{
+				if (pFolder->GetPath() == folder)
+				{
+					bNewFolder = false;
+					break;
+				}
+			}
+
+			if (bNewFolder)
+			{
+				SharedHeap<DomainFolder> pFolder = new DomainFolder(this, folder);
+				mFolders.Add(pFolder);
+			}
+		}
+
+		//Look for missing folders
+		for (const SharedHeap<DomainFolder>& pFolder : mFolders)
+		{
+			const String path = pFolder->GetPath();
+
+			bool bMissingFolder = true;
+			for (const String& folder : folders)
+			{
+				if (path == folder)
+				{
+					bMissingFolder = false;
+					break;
+				}
+			}
+
+			if (bMissingFolder)
+			{
+				pFolder.Shutdown();
+				mFolders.Remove(pFolder);
+			}
+		}
+
+		//Get files and check if there's missing or new files
+		Array<String> files;
+		if (!PlatformDirectory::GetFileNamesViaExtension(mPath,".pfd", files))
+		{
+			DEV_LOG("DomainFolder", "Failed to get file names");
+			return;
+		}
+
+		//Look for new files
+		for (const String& file : files)
+		{
+			bool bNewFile = true;
+			for (const SharedHeap<DomainFile>& pFile : mFiles)
+			{
+				if (pFile->GetDescriptorPath() == file)
+				{
+					bNewFile = false;
+					break;
+				}
+			}
+
+			if (bNewFile)
+			{
+				SharedHeap<DomainFile> pFile = new DomainFile(this, file);
+				mFiles.Add(pFile);
+			}
+		}
+
+		//Look for missing files
+		for (const SharedHeap<DomainFile>& pFile : mFiles)
+		{
+			const String path = pFile->GetDescriptorPath();
+
+			bool bMissingFile = true;
+			for (const String& file : files)
+			{
+				if (path == file)
+				{
+					bMissingFile = false;
+					break;
+				}
+			}
+
+			if (bMissingFile)
+			{
+				pFile.Shutdown();
+				mFiles.Remove(pFile);
+			}
+		}
+
+		//Check if file source contents are changed
+		for (const SharedHeap<DomainFile>& pFile : mFiles)
+		{
+			if (pFile->UpdateLastChangeTimeCheck()) // file seems to be edited
+				pFile->Invalidate();
+		}
+	}
+
 	void DomainFolder::OnShutdown()
 	{
 		//Shutdown files

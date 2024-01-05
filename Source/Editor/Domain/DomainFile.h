@@ -2,6 +2,7 @@
 #include <Runtime/Memory/SharedHeap.h>
 #include <Runtime/Resource/Resource.h>
 #include <Editor/Resource/IResourceSerializer.h>
+#include <Runtime/Time/TimeStamp.h>
 
 namespace Portakal
 {
@@ -18,10 +19,14 @@ namespace Portakal
 		{
 			return mSourcePath;
 		}
+		FORCEINLINE TimeStamp GetLastChangeTime() noexcept;
 	private:
 		DomainFile(DomainFolder* pOwnerFolder,const String& path);
 		~DomainFile() = default;
 
+		void UpdateLastChangeTime();
+		bool UpdateLastChangeTimeCheck();
+		void Invalidate();
 		virtual void OnShutdown() override;
 	private:
 		SharedHeap<Resource> mResource;
@@ -29,5 +34,6 @@ namespace Portakal
 		IResourceDeserializer* mSerializer;
 		String mPath;
 		String mSourcePath;
+		TimeStamp mLastChangeTime;
 	};
 }

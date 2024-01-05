@@ -4,9 +4,17 @@
 #include <Runtime/Reflection/ReflectionAPI.h>
 #include <Runtime/Resource/ResourceAPI.h>
 #include <Editor/Resource/ResourceSerializerAttribute.h>
+#include <Runtime/Platform/PlatformFile.h>
 
 namespace Portakal
 {
+	TimeStamp DomainFile::GetLastChangeTime() noexcept
+	{
+		//Update last change
+		UpdateLastChangeTime();
+
+		return mLastChangeTime;
+	}
 	DomainFile::DomainFile(DomainFolder* pOwnerFolder,const String& path) : mPath(path),mOwnerFolder(pOwnerFolder)
 	{
 		//Read descriptor file
@@ -58,10 +66,32 @@ namespace Portakal
 		//Create resource
 		mResource = ResourceAPI::RegisterResource(path);
 
+		//Get last change time
+		PlatformFile::GetFileLastChangeTime(mSourcePath, mLastChangeTime);
+
 		//Set properties
 		mSourcePath = descriptor.Path;
 		SetName(descriptor.Name);
 		OverrideID(descriptor.ID);
+	}
+	void DomainFile::UpdateLastChangeTime()
+	{
+		PlatformFile::GetFileLastChangeTime(mSourcePath, mLastChangeTime);
+	}
+	bool DomainFile::UpdateLastChangeTimeCheck()
+	{
+		const TimeStamp temp = mLastChangeTime;
+		UpdateLastChangeTime();
+		return temp != mLastChangeTime;
+	}
+	void DomainFile::Invalidate()
+	{
+		//Refresh serializer
+
+		//Shutdown unload resource
+
+		//Load resource
+
 	}
 	void DomainFile::OnShutdown()
 	{
