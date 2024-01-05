@@ -46,11 +46,13 @@ namespace Portakal
 		mMode = mode;
 
 		const Vector2US monitorSize = mMonitor.IsShutdown() ? Vector2US(1024, 1024) : mMonitor->GetSize();
-		const Vector2US halfMonitorSize = monitorSize / 2;
-		const Vector2I position = mMonitor->GetPosition();
+		if (!mMonitor.IsShutdown())
+		{
+			const Vector2I position = mMonitor->GetPosition();
 
-		//Set position
-		SetPosition(position);
+			//Set position
+			SetPosition(position);
+		}
 
 		//Set sizes
 		switch (mode)
@@ -58,12 +60,12 @@ namespace Portakal
 			case Portakal::WindowMode::Windowed:
 			default:
 			{
-				SetSize(monitorSize);
+				SetSize(mSize);
 				break;
 			}
 			case Portakal::WindowMode::WindowedBorderless:
 			{
-				SetSize(monitorSize);
+				SetSize(mSize);
 				break;
 			}
 			case Portakal::WindowMode::Fullscreen:

@@ -9,6 +9,14 @@ namespace Portakal
 			return;
 
 	}
+	SharedHeap<DomainFolder> DomainAPI::GetRootFolder()
+	{
+		DomainAPI* pAPI = GetUnderlyingAPI();
+		if (pAPI == nullptr)
+			return nullptr;
+
+		return pAPI->mRootFolder;
+	}
 	DomainAPI::DomainAPI(const String& folderPath) : mFolderPath(folderPath)
 	{
 		//Create root folder

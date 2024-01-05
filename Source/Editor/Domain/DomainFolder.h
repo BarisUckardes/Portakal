@@ -24,6 +24,8 @@ namespace Portakal
 		{
 			return mOwnerFolder == nullptr;
 		}
+
+		SharedHeap<DomainFolder> CreateFolder(const String& name);
 	private:
 		DomainFolder(DomainFolder* pOwnerFolder,const String& path);
 		~DomainFolder() = default;

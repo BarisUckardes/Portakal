@@ -11,7 +11,7 @@ namespace Portakal
 
         //Create window
         WindowDesc desc = {};
-        desc.Size = pMonitor->GetSize();
+        desc.Size = pMonitor->GetSize() / 2;
         desc.Position = { 0,0 };
         desc.Title = "Portakal Editor Player";
         desc.Mode = WindowMode::Windowed;

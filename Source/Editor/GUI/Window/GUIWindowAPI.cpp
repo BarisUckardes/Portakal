@@ -10,6 +10,26 @@
 
 namespace Portakal
 {
+	void GUIWindowAPI::MarkLayoutDirty()
+	{
+		GUIWindowAPI* pAPI = GetUnderlyingAPI();
+		if (pAPI == nullptr)
+			return;
+
+	}
+	SharedHeap<GUIWindow> GUIWindowAPI::CreateWindow(Type* pType)
+	{
+		GUIWindowAPI* pAPI = GetUnderlyingAPI();
+		if (pAPI == nullptr)
+			return nullptr;
+
+		SharedHeap<GUIWindow> pWindow = (GUIWindow*)pType->CreateDefaultHeapObject();
+		pWindow->OnInitialize();
+
+		pAPI->mWindows.Add(pWindow);
+
+		return pWindow;
+	}
 	GUIWindowAPI::GUIWindowAPI() : mLayoutDirty(true)
 	{
 		LoadWindowSettings();
@@ -32,13 +52,20 @@ namespace Portakal
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, { 0,0,0,1.0f });
 
 		bool bEnabled = true;
-		ImGui::Begin("Dockspace", &bEnabled, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_MenuBar);
+		ImGui::Begin("Dockspace", &bEnabled,
+			ImGuiWindowFlags_NoCollapse |
+			ImGuiWindowFlags_NoMove |
+			ImGuiWindowFlags_NoScrollbar |
+			ImGuiWindowFlags_NoResize |
+			ImGuiWindowFlags_NoTitleBar |
+			ImGuiWindowFlags_NoBringToFrontOnFocus |
+			ImGuiWindowFlags_MenuBar);
 
 		ImGui::PopStyleVar();
 		ImGui::PopStyleVar();
 		ImGui::PopStyleColor();
 
-		const UInt64 dockspaceID = ImGui::GetID("EditorDockspace");
+		UInt32 dockspaceID = ImGui::GetID("EditorDockspace");
 		ImGui::DockSpace(dockspaceID, { 0,0 });
 
 		if (mLayoutDirty)
@@ -51,12 +78,11 @@ namespace Portakal
 			ImGui::DockBuilderSetNodeSize(dockspaceID, pViewport->Size);
 
 			//Split the view
-			UInt32 oppositeNode = 0;
-			const UInt32 dockIDLeft = ImGui::DockBuilderSplitNode(dockspaceID, ImGuiDir_Left, 0.15f,nullptr,&oppositeNode);
-			const UInt32 dockIDRight = ImGui::DockBuilderSplitNode(oppositeNode, ImGuiDir_Right, 0.25f, nullptr, &oppositeNode);
-			const UInt32 dockIDUp = ImGui::DockBuilderSplitNode(oppositeNode, ImGuiDir_Up, 0.25, nullptr, &oppositeNode);
-			const UInt32 dockIDDown = ImGui::DockBuilderSplitNode(oppositeNode, ImGuiDir_Down, 0.4f, nullptr, &oppositeNode);
-			const UInt32 nodes[] = { 0,dockIDDown,dockIDLeft,dockIDRight,dockIDUp,dockIDDown };
+			const UInt32 dockIDLeft = ImGui::DockBuilderSplitNode(dockspaceID, ImGuiDir_Left, 0.15f,nullptr,&dockspaceID);
+			const UInt32 dockIDRight = ImGui::DockBuilderSplitNode(dockspaceID, ImGuiDir_Right, 0.25f, nullptr, &dockspaceID);
+			const UInt32 dockIDUp = ImGui::DockBuilderSplitNode(dockspaceID, ImGuiDir_Up, 0.25, nullptr, &dockspaceID);
+			const UInt32 dockIDDown = ImGui::DockBuilderSplitNode(dockspaceID, ImGuiDir_Down, 0.4f, nullptr, &dockspaceID);
+			const UInt32 nodes[] = { dockIDLeft,dockIDRight,dockIDUp,dockIDDown };
 
 			//Dock the windows
 			for (const SharedHeap<GUIWindow>& pWindow : mWindows)
@@ -76,7 +102,7 @@ namespace Portakal
 		}
 
 		//Render each window
-		for (Int32 i = 0; i < mWindows.GetSize(); i++)
+		for (Int32 i = 0; i < mWindows.GetSize(); i++) 
 		{
 			const SharedHeap<GUIWindow>& pWindow = mWindows[i];
 
@@ -93,7 +119,6 @@ namespace Portakal
 				else
 					pWindow->OnHide();
 			}
-
 
 			//Paint window if visible
 			if (bCurrentlyVisible)
@@ -238,8 +263,13 @@ namespace Portakal
 				continue;
 			}
 
-			//Create object
-			SharedHeap<GUIWindow> pWindow = (GUIWindow*)pType->CreateDefaultHeapObject();
+			//Create window
+			SharedHeap<GUIWindow> pWindow = GUIWindowAPI::CreateWindow(pType);
+			pWindow->OverrideID(descriptor.ID);
+			pWindow->SetName(descriptor.Name);
+			pWindow->_SetPosition(descriptor.Position);
+			pWindow->_SetSize(descriptor.Size);
+			pWindow->_SetDockDirection(descriptor.DockDirection);
 		}
 
 	}

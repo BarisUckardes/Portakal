@@ -10,6 +10,7 @@ namespace Portakal
 		friend class GUIWindowModule;
 	public:
 		static void MarkLayoutDirty();
+		static SharedHeap<GUIWindow> CreateWindow(Type* pType);
 	private:
 		GUIWindowAPI();
 		~GUIWindowAPI();

@@ -11,6 +11,7 @@ namespace Portakal
 		friend class DomainModule;
 	public:
 		static void Invalidate();
+		static SharedHeap<DomainFolder> GetRootFolder();
 	private:
 		DomainAPI(const String& folderPath);
 		~DomainAPI();

@@ -14,9 +14,9 @@ namespace Portakal
 		PFIELD();
 		Guid ID;
 		PFIELD();
-		Vector2US mSize;
+		Vector2US Size;
 		PFIELD();
-		Vector2US mPosition;
+		Vector2US Position;
 		PFIELD();
 		GUIDirection DockDirection;
 	};

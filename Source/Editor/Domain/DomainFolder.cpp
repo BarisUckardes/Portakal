@@ -3,6 +3,31 @@
 
 namespace Portakal
 {
+	SharedHeap<DomainFolder> DomainFolder::CreateFolder(const String& name)
+	{
+		//Check if folder already exists
+		const String folderPath = mPath + "\\" + name;
+		if (PlatformDirectory::Exists(folderPath))
+		{
+			DEV_LOG("DomainFolder", "This folder already exists!");
+			return nullptr;
+		}
+
+		//Create physical aspect
+		if (!PlatformDirectory::Create(folderPath))
+		{
+			DEV_LOG("DomainFolder", "Failed to create the folder");
+			return nullptr;
+		}
+
+		//Create domain folder
+		SharedHeap<DomainFolder> pFolder = new DomainFolder(this, folderPath);
+
+		//Register
+		mFolders.Add(pFolder);
+
+		return pFolder;
+	}
 	DomainFolder::DomainFolder(DomainFolder* pOwnerFolder, const String& path) : mOwnerFolder(pOwnerFolder),mPath(path)
 	{
 		//Set name

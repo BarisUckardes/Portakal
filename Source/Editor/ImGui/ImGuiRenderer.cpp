@@ -111,7 +111,6 @@ namespace Portakal
     }
     void ImGuiRenderer::EndRendering(const SharedHeap<RenderTarget>& pRenderTarget, const Color4F clearColor)
     {
-        ImGui::ShowDemoWindow();
         if (mLatestRenderTarget.IsShutdown())
             InvalidateRenderTarget(pRenderTarget, 0);
 

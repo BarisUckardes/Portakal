@@ -17,6 +17,7 @@
 #include "GUI\Window\GUIWindowModule.h"
 #include "GUI\Window\GUIWindowSettings.h"
 #include "Resource\Texture\TextureSerializer.h"
+#include "GUI\Window\Builtin\DomainWindow.h"
 #include "GUI\Window\Builtin\WorldWindow.h"
 
 
@@ -46,6 +47,7 @@
 		void* CreateGUIWindowModule() {return new Portakal::GUIWindowModule();}
 		void* CreateGUIWindowSettings() {return new Portakal::GUIWindowSettings();}
 		void* CreateTextureSerializer() {return new Portakal::TextureSerializer();}
+		void* CreateDomainWindow() {return new Portakal::DomainWindow();}
 		void* CreateWorldWindow() {return new Portakal::WorldWindow();}
 
 extern "C"
@@ -107,6 +109,8 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::GUIWindowSettings>(pGUIWindowSettings);
 ;		Portakal::Type* pTextureSerializer = Portakal::TypeDispatcher::CreateType("TextureSerializer",sizeof(Portakal::TextureSerializer),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateTextureSerializer,Portakal::TypeDispatcher::GetTypeAddress<Portakal::TextureSerializer>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::TextureSerializer>(pTextureSerializer);
+;		Portakal::Type* pDomainWindow = Portakal::TypeDispatcher::CreateType("DomainWindow",sizeof(Portakal::DomainWindow),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateDomainWindow,Portakal::TypeDispatcher::GetTypeAddress<Portakal::DomainWindow>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::DomainWindow>(pDomainWindow);
 ;		Portakal::Type* pWorldWindow = Portakal::TypeDispatcher::CreateType("WorldWindow",sizeof(Portakal::WorldWindow),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateWorldWindow,Portakal::TypeDispatcher::GetTypeAddress<Portakal::WorldWindow>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::WorldWindow>(pWorldWindow);
 ;
@@ -125,8 +129,8 @@ extern "C"
 		Portakal::TypeDispatcher::RegisterField("VersionPatch",offsetof(Portakal::ProjectDescriptor,VersionPatch),typeof(Portakal::UInt32),Portakal::FieldMode::Normal,pProjectDescriptor);
 		Portakal::TypeDispatcher::RegisterField("Name",offsetof(Portakal::GUIWindowDescriptor,Name),typeof(Portakal::String),Portakal::FieldMode::Normal,pGUIWindowDescriptor);
 		Portakal::TypeDispatcher::RegisterField("ID",offsetof(Portakal::GUIWindowDescriptor,ID),typeof(Portakal::Guid),Portakal::FieldMode::Normal,pGUIWindowDescriptor);
-		Portakal::TypeDispatcher::RegisterField("mSize",offsetof(Portakal::GUIWindowDescriptor,mSize),typeof(Portakal::Vector2US),Portakal::FieldMode::Normal,pGUIWindowDescriptor);
-		Portakal::TypeDispatcher::RegisterField("mPosition",offsetof(Portakal::GUIWindowDescriptor,mPosition),typeof(Portakal::Vector2US),Portakal::FieldMode::Normal,pGUIWindowDescriptor);
+		Portakal::TypeDispatcher::RegisterField("Size",offsetof(Portakal::GUIWindowDescriptor,Size),typeof(Portakal::Vector2US),Portakal::FieldMode::Normal,pGUIWindowDescriptor);
+		Portakal::TypeDispatcher::RegisterField("Position",offsetof(Portakal::GUIWindowDescriptor,Position),typeof(Portakal::Vector2US),Portakal::FieldMode::Normal,pGUIWindowDescriptor);
 		Portakal::TypeDispatcher::RegisterField("DockDirection",offsetof(Portakal::GUIWindowDescriptor,DockDirection),typeof(Portakal::GUIDirection),Portakal::FieldMode::Normal,pGUIWindowDescriptor);
 		Portakal::TypeDispatcher::RegisterField("Settings",offsetof(Portakal::GUIWindowSettings,Settings),typeof(Portakal::GUIWindowDescriptor),Portakal::FieldMode::Array,pGUIWindowSettings);
 
@@ -142,10 +146,11 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ResourceSerializerAttribute),typeof(Portakal::Attribute));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::GUIWindowModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureSerializer),typeof(Portakal::IResourceSerializer));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::DomainWindow),typeof(Portakal::GUIWindow));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::WorldWindow),typeof(Portakal::GUIWindow));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {pDomainModule,pGUIDirection,pImGuiModule,pImGuiRenderEndModule,pImGuiRenderStartModule,pProjectDescriptor,pProjectModule,pIResourceSerializer,pResourceSerializerAttribute,pGUIWindow,pGUIWindowDescriptor,pGUIWindowModule,pGUIWindowSettings,pTextureSerializer,pWorldWindow,};
+		Portakal::Array<Portakal::Type*> types = {pDomainModule,pGUIDirection,pImGuiModule,pImGuiRenderEndModule,pImGuiRenderStartModule,pProjectDescriptor,pProjectModule,pIResourceSerializer,pResourceSerializerAttribute,pGUIWindow,pGUIWindowDescriptor,pGUIWindowModule,pGUIWindowSettings,pTextureSerializer,pDomainWindow,pWorldWindow,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;
