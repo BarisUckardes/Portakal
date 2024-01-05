@@ -15,6 +15,11 @@ namespace Portakal
 		~GUIWindowAPI();
 
 		void Render();
+		void OnPreInvalidate();
+		void OnPostInvalidate();
+		void CreateDefaultWindowSettings();
+		void LoadWindowSettings();
+		void SaveWindowSettings();
 	private:
 		Array<SharedHeap<GUIWindow>> mWindows;
 		Bool8 mLayoutDirty;

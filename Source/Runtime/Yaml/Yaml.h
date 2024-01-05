@@ -21,7 +21,7 @@ namespace Portakal
 
 		static Bool8 IsYaml(const String& yaml)
 		{
-			return true;
+			return YamlDefaultSerializer::IsYaml(yaml);
 		}
 	public:
 		Yaml() = delete;

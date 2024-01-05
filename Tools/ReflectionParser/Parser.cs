@@ -10,7 +10,7 @@ namespace Portakal
 {
     internal static class Parser
     {
-        internal static bool Parse(string targetFolderPath,IReadOnlyCollection<string> dependencies)
+        internal static bool Parse(string targetFolderPath, IReadOnlyCollection<string> dependencies)
         {
             //First get all the files
             List<string> filesTemp = new List<string>();
@@ -19,7 +19,7 @@ namespace Portakal
             filesTemp.AddRange(Directory.GetFiles(targetFolderPath, "*.h", SearchOption.AllDirectories));
 
             string[] files = filesTemp.ToArray();
-            if(files.Length == 0)
+            if (files.Length == 0)
             {
                 Message.Warning("No .h files found at the given folder path");
                 return false;
@@ -36,7 +36,7 @@ namespace Portakal
 
             //Collect reflection enabled file contents
             List<FileInfo> fileInfos = new List<FileInfo>(100);
-            for(int i= 0;i<fileContents.Count;i++)
+            for (int i = 0; i < fileContents.Count; i++)
             {
                 string fileContent = fileContents[i];
                 string fileName = fileNames[i];
@@ -57,11 +57,11 @@ namespace Portakal
                     continue;
                 }
 
-                fileInfos.Add(new FileInfo(type, fileName, files[i],fileContent,fileContent.Contains("PCLASS(Virtual)")));
+                fileInfos.Add(new FileInfo(type, fileName, files[i], fileContent, fileContent.Contains("PCLASS(Virtual)")));
             }
 
             //Handle file data
-            foreach(FileInfo file in fileInfos)
+            foreach (FileInfo file in fileInfos)
             {
                 //Handle different types of objects
                 switch (file.Type)
@@ -144,7 +144,7 @@ namespace Portakal
 
             //Try find a reflection manifest
             string reflectionManifestPath = $@"{targetFolderPath}\ReflectionManifest.h";
-            if(File.Exists(reflectionManifestPath))
+            if (File.Exists(reflectionManifestPath))
                 File.Delete(reflectionManifestPath);
 
             //Create new reflection manifest path
@@ -152,15 +152,15 @@ namespace Portakal
 
             //Write all includes
             string includeLines = string.Empty;
-            foreach(FileInfo file in fileInfos)
+            foreach (FileInfo file in fileInfos)
             {
-                string lineContent = $"#include \"{file.Path.Replace(targetFolderPath+@"\", "")}\"";
+                string lineContent = $"#include \"{file.Path.Replace(targetFolderPath + @"\", "")}\"";
                 includeLines += $"{lineContent}{Environment.NewLine}";
             }
 
             //Write all types into array
             string typeArrayContent = string.Empty;
-            foreach(FileInfo file in fileInfos)
+            foreach (FileInfo file in fileInfos)
             {
                 //Array list line
                 typeArrayContent += $"p{file.Name},";
@@ -203,9 +203,9 @@ namespace Portakal
 
             //Register enums
             string enumLines = string.Empty;
-            foreach(FileInfo file in fileInfos)
+            foreach (FileInfo file in fileInfos)
             {
-                foreach(KeyValuePair<string,long> value in file.EnumValues)
+                foreach (KeyValuePair<string, long> value in file.EnumValues)
                 {
                     string line = $"\t\tPortakal::TypeDispatcher::RegisterEnum(\"{value.Key}\",{value.Value},p{file.Name});{Environment.NewLine}";
                     enumLines += line;
@@ -214,9 +214,9 @@ namespace Portakal
 
             //Register fields
             string fieldLines = string.Empty;
-            foreach(FileInfo file in fileInfos)
+            foreach (FileInfo file in fileInfos)
             {
-                foreach(FieldInfo field in file.Fields)
+                foreach (FieldInfo field in file.Fields)
                 {
                     string line = $"\t\tPortakal::TypeDispatcher::RegisterField(\"{field.VariableName}\",offsetof(Portakal::{file.Name},{field.VariableName}),typeof(Portakal::{field.VariableType}),Portakal::FieldMode::{field.Mode},p{file.Name});{Environment.NewLine}";
                     fieldLines += line;
@@ -225,9 +225,9 @@ namespace Portakal
 
             //Register attributes
             string attributeLines = string.Empty;
-            foreach(FileInfo file in fileInfos)
+            foreach (FileInfo file in fileInfos)
             {
-                foreach(AttributeInfo attribute in file.Attributes)
+                foreach (AttributeInfo attribute in file.Attributes)
                 {
                     if (attribute.Parameters.Length > 0)
                     {
@@ -243,7 +243,7 @@ namespace Portakal
             }
             //Register basetypes
             string baseTypeLines = string.Empty;
-            foreach(FileInfo file in fileInfos)
+            foreach (FileInfo file in fileInfos)
             {
                 //Validate
                 if (file.BaseClass == string.Empty)
@@ -317,7 +317,7 @@ extern ""C""
 
             //Get enum data type
             int enumClassLineIndex = GetLine(file.Lines, @"enum class");
-            if(enumClassLineIndex == -1)
+            if (enumClassLineIndex == -1)
             {
                 Message.Error($"No enum class found in this file!");
                 return;
@@ -325,16 +325,16 @@ extern ""C""
 
             //Get enum values
             List<KeyValuePair<string, long>> values = new List<KeyValuePair<string, long>>();
-            int enumStartIndex = GetLine(file.Lines, "{", enumClassLineIndex)+1;
+            int enumStartIndex = GetLine(file.Lines, "{", enumClassLineIndex) + 1;
             int enumEndIndex = GetLine(file.Lines, "};", enumStartIndex);
             long lastValue = 0;
-            for(int i = enumStartIndex;i<enumEndIndex;i++)
+            for (int i = enumStartIndex; i < enumEndIndex; i++)
             {
                 //Get line
                 string line = file.Lines[i];
 
                 //Handle implicit enums
-                if(!line.Contains("="))
+                if (!line.Contains("="))
                 {
                     string implicitValueName = line.Trim().Replace(",", "");
                     long implicitValue = lastValue;
@@ -347,14 +347,22 @@ extern ""C""
                 int equalIndex = line.IndexOf("=");
                 int endIndex = line.IndexOf(",");
 
-                string explicitValueName = line.Substring(0, equalIndex).Trim().Trim('\t');
-                long explicitValue = long.Parse(line.Substring(equalIndex+1, endIndex - equalIndex-1).Trim().Trim('\t'));
-                lastValue = explicitValue+1;
-                values.Add(new KeyValuePair<string, long>(explicitValueName, explicitValue));
+                if (equalIndex != -1 && endIndex != -1)
+                {
+                    string explicitValueName = line.Substring(0, equalIndex).Trim().Trim('\t');
+                    long explicitValue = long.Parse(line.Substring(equalIndex + 1, endIndex - equalIndex - 1).Trim().Trim('\t'));
+                    lastValue = explicitValue + 1;
+                    values.Add(new KeyValuePair<string, long>(explicitValueName, explicitValue));
+                }
+                else
+                {
+                    values.Add(new KeyValuePair<string, long>(line.Trim().Trim('\t'), lastValue));
+                    lastValue++;
+                }
             }
 
             //Register
-            foreach(KeyValuePair<string, long> pair in values)
+            foreach (KeyValuePair<string, long> pair in values)
             {
                 file.RegisterEnumValue(pair.Key, pair.Value);
                 Message.Info($"Enum {pair.Key}->{pair.Value}");
@@ -369,7 +377,7 @@ extern ""C""
 
             //Get class line
             int pclassLineIndex = GetLine(file.Lines, @"PCLASS();");
-            if(pclassLineIndex == -1)
+            if (pclassLineIndex == -1)
             {
                 Message.Error($"No class found in this file {file.Name}");
                 return;
@@ -380,35 +388,35 @@ extern ""C""
             //Check if it has a base class
             bool bHasBase = enumClassLine.Contains(":");
             //Get base class if have one
-            if(bHasBase)
+            if (bHasBase)
             {
                 int publicIndex = enumClassLine.LastIndexOf("public");
-                if(publicIndex == -1)
+                if (publicIndex == -1)
                 {
                     Message.Error("No public indentifier!");
                     return;
                 }
                 int baseClassStartIndex = publicIndex + "public".Length + 1;
-                string baseClass = enumClassLine.Substring(baseClassStartIndex,enumClassLine.Length - baseClassStartIndex);
-                if(baseClass != "Class")
+                string baseClass = enumClassLine.Substring(baseClassStartIndex, enumClassLine.Length - baseClassStartIndex);
+                if (baseClass != "Class")
                     file.BaseClass = baseClass;
             }
 
             //Get fields
             IReadOnlyCollection<uint> fieldIndexes = GetLineIndexes(file.Lines, "PFIELD()");
-            foreach(uint lineIndex in fieldIndexes)
+            foreach (uint lineIndex in fieldIndexes)
             {
                 string lineContent = file.Lines[(int)(lineIndex + 1)];
 
-                if(lineContent.Contains("SharedHeap<"))
+                if (lineContent.Contains("SharedHeap<"))
                 {
                     lineContent = lineContent.Trim().Trim('\t').Trim(';');
                     string[] splits = lineContent.Split(" ");
-                    string objectType = splits[0].Replace("SharedHeap<","").Replace(">","");
+                    string objectType = splits[0].Replace("SharedHeap<", "").Replace(">", "");
                     string name = splits[1];
-                    file.RegisterField(name, objectType,FieldMode.Object);
+                    file.RegisterField(name, objectType, FieldMode.Object);
                 }
-                else if(lineContent.Contains("Array<"))
+                else if (lineContent.Contains("Array<"))
                 {
                     lineContent = lineContent.Trim().Trim('\t').Trim(';');
                     string[] splits = lineContent.Split(" ");
@@ -422,9 +430,9 @@ extern ""C""
                     string[] splits = lineContent.Split(" ");
                     string valueType = splits[0];
                     string name = splits[1];
-                    file.RegisterField(name, valueType,FieldMode.Normal);
+                    file.RegisterField(name, valueType, FieldMode.Normal);
                 }
-                
+
             }
 
             //Get attributes
@@ -437,7 +445,7 @@ extern ""C""
             if (lineIndexes.Count == 0)
                 return;
 
-            foreach(uint lineIndex in lineIndexes)
+            foreach (uint lineIndex in lineIndexes)
             {
                 string line = file.Lines[(int)lineIndex];
                 line = line.Replace("PATTRIBUTE(", "").Trim().Trim(';');
@@ -445,7 +453,7 @@ extern ""C""
                 string[] splits = line.Split(",");
                 string typeName = splits[0];
                 string parameters = string.Empty;
-                for(int i = 1;i<splits.Length;i++)
+                for (int i = 1; i < splits.Length; i++)
                 {
                     string split = splits[i];
                     parameters += split + (i == splits.Length - 1 ? string.Empty : ",");
@@ -455,9 +463,9 @@ extern ""C""
                 file.RegisterAttribute(typeName, parameters);
             }
         }
-        private static int GetLine(List<string> lines,string target)
+        private static int GetLine(List<string> lines, string target)
         {
-            for(int i = 0; i < lines.Count; i++)
+            for (int i = 0; i < lines.Count; i++)
             {
                 string line = lines[i];
                 if (line.Contains(target))
@@ -466,7 +474,7 @@ extern ""C""
 
             return -1;
         }
-        private static int GetLine(List<string> lines, string target,int startOffset)
+        private static int GetLine(List<string> lines, string target, int startOffset)
         {
             for (int i = startOffset; i < lines.Count; i++)
             {
@@ -490,7 +498,7 @@ extern ""C""
         }
         private static IReadOnlyCollection<uint> GetLineIndexes(List<string> lines, string target)
         {
-            List<uint> indexes = new List<uint>();  
+            List<uint> indexes = new List<uint>();
             for (int i = 0; i < lines.Count; i++)
             {
                 string line = lines[i];
@@ -500,10 +508,10 @@ extern ""C""
 
             return indexes;
         }
-        private static int GetLastLine(List<string> lines,string target)
+        private static int GetLastLine(List<string> lines, string target)
         {
             int foundLastLine = -1;
-            for(int i = 0;i < lines.Count;i++)
+            for (int i = 0; i < lines.Count; i++)
             {
                 string line = lines[i];
                 if (line.Contains(target))

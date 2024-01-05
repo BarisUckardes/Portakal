@@ -14,4 +14,8 @@ namespace Portakal
 	{
 		mVisible = bState;
 	}
+	void GUIWindow::_SetDockDirection(const GUIDirection direction)
+	{
+		mDockDirection = direction;
+	}
 }

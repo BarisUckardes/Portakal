@@ -16,10 +16,6 @@ namespace Portakal
 		{
 			return mFieldType;
 		}
-		FORCEINLINE const Type* GetArrayElementType() const noexcept
-		{
-			return mArrayElementType;
-		}
 		FORCEINLINE FieldMode GetMode() const noexcept
 		{
 			return mMode;
@@ -54,7 +50,6 @@ namespace Portakal
 	private:
 		const String mName;
 		const Type* mFieldType;
-		const Type* mArrayElementType;
 		const FieldMode mMode;
 		const UInt32 mOffset;
 

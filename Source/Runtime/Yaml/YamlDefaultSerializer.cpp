@@ -95,20 +95,20 @@ namespace Portakal
 	}
 	void GenerateEnumYAML(YAML::Emitter& emitter, const void* pObject)
 	{
-		const UInt64 value = *(UInt64*)pObject;
+		const Int64 value = *(Int64*)pObject;
 		emitter << YAML::Value << value;
 	}
-	void GenerateArrayYAML(YAML::Emitter& emitter, const void* pObject, const Type* pType, const Type* pElementType)
+	void GenerateArrayYAML(YAML::Emitter& emitter, const void* pObject,const Type* pElementType)
 	{
 		const Array<String>* pArray = (const Array<String>*)pObject;
 		const UInt32 elementSizeInBytes = pElementType->GetSize();
-
 
 		emitter << YAML::BeginSeq;
 		for (UInt32 elementIndex = 0; elementIndex < pArray->GetSize(); elementIndex++)
 		{
 			GenerateObjectYAML(emitter, (Byte*)pArray->GetDataConst() + elementSizeInBytes * elementIndex, pElementType);
 		}
+		emitter << YAML::EndSeq;
 	}
 	void GenerateObjectYAML(YAML::Emitter& emitter, const void* pObject, const Type* pType)
 	{
@@ -126,23 +126,29 @@ namespace Portakal
 
 			emitter << YAML::Key << *pField->GetName();
 
-			if (pFieldType == nullptr) // array
+			if (pField->GetMode() == FieldMode::Array) // array
 			{
-				GenerateArrayYAML(emitter, pLocation, pFieldType, pField->GetArrayElementType());
+				GenerateArrayYAML(emitter, pLocation, pField->GetType());
 				continue;
 			}
-
-			if (pFieldType->GetCode() != TypeCodes::Composed)
+			else if (pField->GetMode() == FieldMode::Object)
 			{
-				GeneratePrimitiveYAML(emitter, pLocation, pFieldType);
-			}
-			else if (pFieldType->GetMode() == TypeModes::Enum)
-			{
-				GenerateEnumYAML(emitter, pLocation);
+				GenerateObjectYAML(emitter, pLocation, pFieldType);
 			}
 			else
 			{
-				GenerateObjectYAML(emitter, pLocation, pFieldType);
+				if (pFieldType->GetCode() != TypeCodes::Composed)
+				{
+					GeneratePrimitiveYAML(emitter, pLocation, pFieldType);
+				}
+				else if (pFieldType->GetMode() == TypeModes::Enum)
+				{
+					GenerateEnumYAML(emitter, pLocation);
+				}
+				else
+				{
+					GenerateObjectYAML(emitter, pLocation, pFieldType);
+				}
 			}
 		}
 
@@ -303,22 +309,29 @@ namespace Portakal
 			/*
 			* Check if field is a array type
 			*/
-			if (pFieldType == nullptr)
+			if (pField->GetMode() == FieldMode::Array)
 			{
-				LoadAsArray(fieldNode, pLocation, pField->GetArrayElementType());
+				LoadAsArray(fieldNode, pLocation, pField->GetType());
 				continue;
 			}
-			if (pFieldType->GetCode() != TypeCodes::Composed)
+			else if (pField->GetMode() == FieldMode::Object)
 			{
-				LoadAsPrimitive(fieldNode, pLocation, pFieldType);
-			}
-			else if (pFieldType->GetMode() == TypeModes::Enum)
-			{
-				LoadAsEnum(fieldNode, pLocation, pFieldType);
+				LoadAsObject(fieldNode, pLocation, pFieldType);
 			}
 			else
 			{
-				LoadAsObject(fieldNode, pLocation, pFieldType);
+				if (pFieldType->GetCode() != TypeCodes::Composed)
+				{
+					LoadAsPrimitive(fieldNode, pLocation, pFieldType);
+				}
+				else if (pFieldType->GetMode() == TypeModes::Enum)
+				{
+					LoadAsEnum(fieldNode, pLocation, pFieldType);
+				}
+				else
+				{
+					LoadAsObject(fieldNode, pLocation, pFieldType);
+				}
 			}
 		}
 	}
@@ -343,4 +356,10 @@ namespace Portakal
 
 		LoadAsObject(rootNode, pObject, pType);
 	}
+	bool YamlDefaultSerializer::IsYaml(const String string)
+	{
+		YAML::Node rootNode = YAML::Load(*string);
+		return rootNode.IsDefined() && !rootNode.IsNull();
+	}
+	
 }

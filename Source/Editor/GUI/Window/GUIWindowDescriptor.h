@@ -2,16 +2,13 @@
 #include <Runtime/Containers/Guid.h>
 #include <Runtime/Math/Vector2.h>
 #include "GUIWindowDescriptor.reflected.h"
+#include <Editor/GUI/GUIDirection.h>
 
 namespace Portakal
 {
 	PCLASS();
-	class EDITOR_API GUIWindowDescriptor
+	struct EDITOR_API GUIWindowDescriptor
 	{
-	public:
-		GUIWindowDescriptor() = default;
-		~GUIWindowDescriptor() = default;
-
 		PFIELD();
 		String Name;
 		PFIELD();
@@ -20,6 +17,8 @@ namespace Portakal
 		Vector2US mSize;
 		PFIELD();
 		Vector2US mPosition;
+		PFIELD();
+		GUIDirection DockDirection;
 	};
 }
 

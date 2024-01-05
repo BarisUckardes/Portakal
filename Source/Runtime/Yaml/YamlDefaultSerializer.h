@@ -8,6 +8,7 @@ namespace Portakal
 	public:
 		static String ToYaml(const void* pObject, const Type* pType);
 		static void ToObject(const String& yamlString, void* pObject, const Type* pType);
+		static bool IsYaml(const String string);
 	public:
 		YamlDefaultSerializer() = delete;
 		~YamlDefaultSerializer() = delete;
