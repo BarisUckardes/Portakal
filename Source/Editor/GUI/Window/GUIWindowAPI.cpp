@@ -42,9 +42,11 @@ namespace Portakal
 	{
 		//Setup layout
 		const ImGuiViewport* pViewport = ImGui::GetMainViewport();
+		const ImVec2 screenSize = pViewport->Size;
+		const ImVec2 screenPos = pViewport->Pos;
 
-		ImGui::SetNextWindowSize(pViewport->Size);
-		ImGui::SetNextWindowPos(pViewport->Pos);
+		ImGui::SetNextWindowSize(screenSize);
+		ImGui::SetNextWindowPos(screenPos);
 		ImGui::SetNextWindowViewport(pViewport->ID);
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0,0 });
@@ -75,27 +77,26 @@ namespace Portakal
 
 			//Add dockspace node and properties
 			ImGui::DockBuilderAddNode(dockspaceID, ImGuiDockNodeFlags_DockSpace);
-			ImGui::DockBuilderSetNodeSize(dockspaceID, pViewport->Size);
+			ImGui::DockBuilderSetNodePos(dockspaceID, screenPos);
+			ImGui::DockBuilderSetNodeSize(dockspaceID, screenSize);
 
 			//Split the view
-			const UInt32 dockIDLeft = ImGui::DockBuilderSplitNode(dockspaceID, ImGuiDir_Left, 0.15f,nullptr,&dockspaceID);
-			const UInt32 dockIDRight = ImGui::DockBuilderSplitNode(dockspaceID, ImGuiDir_Right, 0.25f, nullptr, &dockspaceID);
-			const UInt32 dockIDUp = ImGui::DockBuilderSplitNode(dockspaceID, ImGuiDir_Up, 0.25, nullptr, &dockspaceID);
-			const UInt32 dockIDDown = ImGui::DockBuilderSplitNode(dockspaceID, ImGuiDir_Down, 0.4f, nullptr, &dockspaceID);
+			UInt32 oppositeDockID = 0;
+			const UInt32 dockIDLeft = ImGui::DockBuilderSplitNode(dockspaceID, ImGuiDir_Left, 0.15f,nullptr,&oppositeDockID);
+			const UInt32 dockIDRight = ImGui::DockBuilderSplitNode(oppositeDockID, ImGuiDir_Right, 0.25f, nullptr, &oppositeDockID);
+			const UInt32 dockIDUp = ImGui::DockBuilderSplitNode(oppositeDockID, ImGuiDir_Up, 0.25, nullptr, &oppositeDockID);
+			const UInt32 dockIDDown = ImGui::DockBuilderSplitNode(oppositeDockID, ImGuiDir_Down, 0.4f, nullptr, &oppositeDockID);
 			const UInt32 nodes[] = { dockIDLeft,dockIDRight,dockIDUp,dockIDDown };
 
 			//Dock the windows
 			for (const SharedHeap<GUIWindow>& pWindow : mWindows)
 			{
-				if (pWindow->GetDockDirection() == GUIDirection::None)
-					continue;
-
-				const UInt32 dockID = nodes[(int)pWindow->GetDockDirection()];
+				const UInt32 dockID = pWindow->GetDockDirection() == GUIDirection::None ? oppositeDockID : nodes[(int)pWindow->GetDockDirection()];
 				ImGui::DockBuilderDockWindow(*pWindow->GetName(), dockID);
 			}
 
 			//Set dockbuilder finish
-			ImGui::DockBuilderFinish(dockIDDown);
+			ImGui::DockBuilderFinish(dockspaceID);
 
 			//Remove the dirty mark
 			mLayoutDirty = false;
@@ -145,7 +146,6 @@ namespace Portakal
 			ImGui::End();
 		}
 		ImGui::End();
-
 	}
 	void GUIWindowAPI::OnPreInvalidate()
 	{
