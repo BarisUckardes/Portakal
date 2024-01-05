@@ -40,70 +40,52 @@ namespace Portakal
 	}
 	void GUIWindowAPI::Render()
 	{
-		//Setup layout
-		const ImGuiViewport* pViewport = ImGui::GetMainViewport();
-		const ImVec2 screenSize = pViewport->Size;
-		const ImVec2 screenPos = pViewport->Pos;
-
-		if(mLayoutDirty && (screenSize.x < 200 && screenSize.y < 200))
-			PORTAKAL_LOG(PE_WARNING, "ImGui Viewport Size is lesser than swapchain size! It will skip a frame to initialize dock properly!");
-
-		ImGui::SetNextWindowSize(screenSize);
-		ImGui::SetNextWindowPos(screenPos);
+		//Construct initial layout
+		ImGuiViewport* pViewport = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(pViewport->Pos);
+		ImGui::SetNextWindowSize(pViewport->Size);
 		ImGui::SetNextWindowViewport(pViewport->ID);
-
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0,0 });
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
-		ImGui::PushStyleColor(ImGuiCol_WindowBg, { 0,0,0,1.0f });
-
-		bool bEnabled = true;
-		ImGui::Begin("Dockspace", &bEnabled,
-			ImGuiWindowFlags_NoCollapse |
-			ImGuiWindowFlags_NoMove |
-			ImGuiWindowFlags_NoScrollbar |
-			ImGuiWindowFlags_NoResize |
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+		bool open = true;
+		ImGui::Begin("DockSpaceWindow", &open,
+			ImGuiWindowFlags_MenuBar |
+			ImGuiWindowFlags_NoDocking |
 			ImGuiWindowFlags_NoTitleBar |
+			ImGuiWindowFlags_NoCollapse |
+			ImGuiWindowFlags_NoResize |
+			ImGuiWindowFlags_NoMove |
 			ImGuiWindowFlags_NoBringToFrontOnFocus |
-			ImGuiWindowFlags_MenuBar);
+			ImGuiWindowFlags_NoNavFocus);
+		ImGui::PopStyleVar(3);
 
-		ImGui::PopStyleVar();
-		ImGui::PopStyleVar();
-		ImGui::PopStyleColor();
-
-		UInt32 dockspaceID = ImGui::GetID("EditorDockspace");
-		ImGui::DockSpace(dockspaceID, { 0, 0 });
-
-		if (mLayoutDirty && (screenSize.x > 200 && screenSize.y > 200)) // TODO: screenSize check looks like a hack, find a better way to do this
+		if (mLayoutDirty)
 		{
-			//Clear nodes
+			ImGuiID dockspaceID = ImGui::GetID("Dockspace");
 			ImGui::DockBuilderRemoveNode(dockspaceID);
+			ImGui::DockBuilderAddNode(dockspaceID);
 
-			//Add dockspace node and properties
-			ImGui::DockBuilderAddNode(dockspaceID, ImGuiDockNodeFlags_DockSpace);
-			ImGui::DockBuilderSetNodePos(dockspaceID, screenPos);
-			ImGui::DockBuilderSetNodeSize(dockspaceID, screenSize);
+			ImGuiID dockOppositeNode = dockspaceID;
+			ImGuiID dockLeftNode = ImGui::DockBuilderSplitNode(dockOppositeNode, ImGuiDir_Left, 0.20f, NULL, &dockOppositeNode);
+			ImGuiID dockRightNode = ImGui::DockBuilderSplitNode(dockOppositeNode, ImGuiDir_Right, 0.20f, NULL, &dockOppositeNode);
+			ImGuiID dockUpNode = ImGui::DockBuilderSplitNode(dockOppositeNode, ImGuiDir_Up, 0.20f, NULL, &dockOppositeNode);
+			ImGuiID dockBottomNode = ImGui::DockBuilderSplitNode(dockOppositeNode, ImGuiDir_Down, 0.20f, NULL, &dockOppositeNode);
+			const UInt32 nodes[] = { dockOppositeNode,dockLeftNode,dockRightNode,dockUpNode,dockBottomNode };
 
-			//Split the view
-			UInt32 oppositeDockID = 0;
-			const UInt32 dockIDLeft = ImGui::DockBuilderSplitNode(dockspaceID, ImGuiDir_Left, 0.20f,nullptr,&oppositeDockID);
-			const UInt32 dockIDRight = ImGui::DockBuilderSplitNode(oppositeDockID, ImGuiDir_Right, 0.20f, nullptr, &oppositeDockID);
-			const UInt32 dockIDUp = ImGui::DockBuilderSplitNode(oppositeDockID, ImGuiDir_Up, 0.25f, nullptr, &oppositeDockID);
-			const UInt32 dockIDDown = ImGui::DockBuilderSplitNode(oppositeDockID, ImGuiDir_Down, 0.45f, nullptr, &oppositeDockID);
-			const UInt32 nodes[] = { dockIDLeft,dockIDRight,dockIDUp,dockIDDown, };
-
-			//Dock the windows
 			for (const SharedHeap<GUIWindow>& pWindow : mWindows)
 			{
-				const UInt32 dockID = pWindow->GetDockDirection() == GUIDirection::None ? oppositeDockID : nodes[(int)pWindow->GetDockDirection()];
-				ImGui::DockBuilderDockWindow(*pWindow->GetName(), dockID);
+				const UInt32 dockNode = nodes[(Int64)pWindow->GetDockDirection() + 1];
+				ImGui::DockBuilderDockWindow(*pWindow->GetType()->GetName(), dockNode);
 			}
-
-			//Set dockbuilder finish
 			ImGui::DockBuilderFinish(dockspaceID);
 
-			//Remove the dirty mark
 			mLayoutDirty = false;
 		}
+
+		ImGuiID dockspace_id = ImGui::GetID("Dockspace");
+		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), 0);
+		ImGui::End();
 
 		//Render each window
 		for (Int32 i = 0; i < mWindows.GetSize(); i++) 
@@ -148,7 +130,6 @@ namespace Portakal
 			//End window
 			ImGui::End();
 		}
-		ImGui::End();
 	}
 	void GUIWindowAPI::OnPreInvalidate()
 	{

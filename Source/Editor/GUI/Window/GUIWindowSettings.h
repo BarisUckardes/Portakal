@@ -12,4 +12,3 @@ namespace Portakal
 		Array<GUIWindowDescriptor> Settings;
 	};
 }
-
