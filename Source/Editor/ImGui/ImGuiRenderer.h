@@ -32,12 +32,6 @@ namespace Portakal
 		void StartRendering(float deltaTimeInMilliSeconds);
 		void EndRendering(const SharedHeap<RenderTarget>& pRenderTarget, const Color4F clearColor);
 
-		ImGuiTextureBinding* CreateTextureBinding(Texture* pTexture);
-		ImGuiTextureBinding* GetTextureBinding(const Texture* pTexture);
-
-		void DeleteTextureBinding(const Texture* pTexture);
-		void ClearTextureBindings();
-
 		void OnResized(const Vector2US newSize);
 		void OnMouseMoved(const Vector2I mousePosition);
 		void OnMouseButtonDown(const MouseButtons button);
@@ -83,8 +77,6 @@ namespace Portakal
 
 		SharedHeap<Pipeline> mPipeline;
 		SharedHeap<Fence> mFence;
-		SharedHeap<RenderTarget> mLatestRenderTarget;
-
-		HashMap<const Texture*, ImGuiTextureBinding*> mTextureBindings;
+		Array<SharedHeap<RenderTarget>> mRenderTargets;
 	};
 }

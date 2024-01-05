@@ -39,8 +39,14 @@ namespace Portakal
         //Check if render target needs a refresh
         if (pSwapchain->GetSize() != mLastSwapchainSize)
         {
+            //Invalidate render target
             SharedHeap<GraphicsDevice> pTargetDevice = pRenderer->GetDevice();
             InvalidateRenderTarget(pTargetDevice);
+
+            //Call on resize
+            pRenderer->OnResized(pSwapchain->GetSize());
+
+            //Register
             mLastSwapchainSize = pSwapchain->GetSize();
         }
 

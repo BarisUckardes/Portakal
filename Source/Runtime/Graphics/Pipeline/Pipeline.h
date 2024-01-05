@@ -27,7 +27,7 @@ namespace Portakal
         Pipeline(const GraphicsPipelineDesc& desc) : mBindPoint(PipelineBindPoint::Graphics),
             mBlendState(desc.BlendState), mDepthStencilState(desc.DepthStencilState),
             mInputLayout(desc.InputLayout), mMultisample(desc.Multisample),
-            mRasterizerState(desc.RasterizerState), mOutputMerger(desc.OutputMerger),
+            mRasterizerState(desc.RasterizerState),
             mResourceLayout(desc.ResourceLayout), mGraphicsShaders(desc.GraphicsShaders),mSubpassIndex(desc.SubpassIndex)
         {
         }
@@ -35,7 +35,7 @@ namespace Portakal
         Pipeline(const ComputePipelineDesc& desc) : mBindPoint(PipelineBindPoint::Compute),
             mBlendState(), mDepthStencilState(),
             mInputLayout(), mMultisample(),
-            mRasterizerState(), mOutputMerger(),
+            mRasterizerState(),
             mResourceLayout(), mComputeShaders({ desc.ComputeShader }),mSubpassIndex(255)
         {
         }
@@ -66,10 +66,6 @@ namespace Portakal
         {
             return mRasterizerState;
         }
-        FORCEINLINE const OutputMergerDesc& GetOutputMerger() const
-        {
-            return mOutputMerger;
-        }
         FORCEINLINE const ResourceLayoutDesc& GetResourceLayout() const
         {
             return mResourceLayout;
@@ -99,7 +95,6 @@ namespace Portakal
         const InputLayoutDesc mInputLayout;
         const MultisampleDesc mMultisample;
         const RasterizerStateDesc mRasterizerState;
-        const OutputMergerDesc mOutputMerger;
         const ResourceLayoutDesc mResourceLayout;
         const Array<SharedHeap<Shader>> mGraphicsShaders;
         const Array<SharedHeap<Shader>> mComputeShaders;

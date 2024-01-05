@@ -232,26 +232,12 @@ namespace Portakal
         dynamicStateCreateInfo.dynamicStateCount = sizeof(dynamicStates) / sizeof(VkDynamicState);
         dynamicStateCreateInfo.pDynamicStates = dynamicStates;
 
-        //Create output state
-        VkFormat colorAttachmentFormats[8];
-        for (Byte colorAttachmentIndex = 0; colorAttachmentIndex < desc.OutputMerger.ColorFormats.GetSize(); colorAttachmentIndex++)
-        {
-            colorAttachmentFormats[colorAttachmentIndex] = VulkanTextureUtils::GetTextureFormat(desc.OutputMerger.ColorFormats[colorAttachmentIndex]);
-        }
-
         //Get render pass
         const VulkanRenderPass* pPass = (const VulkanRenderPass*)desc.pRenderPass.GetHeap();
 
-        VkPipelineRenderingCreateInfoKHR renderingInfo = {};
-        renderingInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO_KHR;
-        renderingInfo.pNext = nullptr;
-        renderingInfo.colorAttachmentCount = desc.OutputMerger.ColorFormats.GetSize();
-        renderingInfo.pColorAttachmentFormats = colorAttachmentFormats;
-        renderingInfo.depthAttachmentFormat = desc.OutputMerger.DepthStencilFormat != TextureFormat::None ? VulkanTextureUtils::GetTextureFormat(desc.OutputMerger.DepthStencilFormat) : VK_FORMAT_UNDEFINED;
-
         VkGraphicsPipelineCreateInfo pipelineCreateInfo = {};
         pipelineCreateInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-        pipelineCreateInfo.pNext = &renderingInfo;
+        pipelineCreateInfo.pNext = nullptr;
         pipelineCreateInfo.stageCount = desc.GraphicsShaders.GetSize();
         pipelineCreateInfo.pStages = vkShaderStageInfos;
         pipelineCreateInfo.pVertexInputState = &inputStateCreateInfo;

@@ -111,7 +111,7 @@ namespace Portakal
     }
     void ImGuiRenderer::EndRendering(const SharedHeap<RenderTarget>& pRenderTarget, const Color4F clearColor)
     {
-        if (mLatestRenderTarget.IsShutdown())
+        if (!mRenderTargets.Has(pRenderTarget))
             InvalidateRenderTarget(pRenderTarget, 0);
 
         //Get display size
@@ -548,6 +548,7 @@ namespace Portakal
     {
         ImGuiIO& io = ImGui::GetIO();
         io.DisplaySize = { (float)size.X,(float)size.Y };
+        mRenderTargets.Clear();
     }
 
     void ImGuiRenderer::OnMouseMoved(const Vector2I mousePosition)
@@ -667,10 +668,6 @@ namespace Portakal
         multisampleDesc.bSampleShadingEnabled = false;
         multisampleDesc.Samples = TextureSampleCount::SAMPLE_COUNT_1;
 
-        //Create output desc
-        OutputMergerDesc outputState = {};
-        outputState.ColorFormats = { TextureFormat::R8_G8_B8_A8_UNorm };
-
         //Create resource layout desc
         ResourceLayoutDesc resourceLayoutDesc = {};
         resourceLayoutDesc.ResourceLayouts.Add(mStaticResourceLayout.GetHeap());
@@ -688,7 +685,6 @@ namespace Portakal
         pipelineDesc.DepthStencilState = depthStencilStateDesc;
         pipelineDesc.InputLayout = inputStateDesc;
         pipelineDesc.Multisample = multisampleDesc;
-        pipelineDesc.OutputMerger = outputState;
         pipelineDesc.RasterizerState = rasterizerStateDesc;
         pipelineDesc.ResourceLayout = resourceLayoutDesc;
         pipelineDesc.GraphicsShaders = { mVertexShader,mFragmentShader };
@@ -698,8 +694,7 @@ namespace Portakal
         mPipeline = mDevice->CreateGraphicsPipeline(pipelineDesc);
 
         //Set properties
-        mLatestRenderTarget = pRenderTarget;
-
+        mRenderTargets.Add(pRenderTarget);
     }
     void ImGuiRenderer::OnShutdown()
     {
