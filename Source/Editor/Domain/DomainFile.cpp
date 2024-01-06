@@ -15,7 +15,11 @@ namespace Portakal
 
 		return mLastChangeTime;
 	}
-	DomainFile::DomainFile(DomainFolder* pOwnerFolder,const String& path) : mPath(path),mOwnerFolder(pOwnerFolder)
+	void DomainFile::Save()
+	{
+
+	}
+	DomainFile::DomainFile(DomainFolder* pOwnerFolder,const String& path) : mPath(path),mOwnerFolder(pOwnerFolder),mSerializer(nullptr)
 	{
 		//Read descriptor file
 		String descriptorFileContent;

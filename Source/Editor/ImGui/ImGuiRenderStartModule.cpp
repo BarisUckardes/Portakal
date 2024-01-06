@@ -62,6 +62,6 @@ namespace Portakal
              }
         }
         //Start rendering
-        pRenderer->StartRendering(0.0016f); // 60fps dummy
+        pRenderer->StartRendering(0.000661f); // 165FPS dummy
     }
 }

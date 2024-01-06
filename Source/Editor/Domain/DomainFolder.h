@@ -16,6 +16,10 @@ namespace Portakal
 		{
 			return mFiles;
 		}
+		FORCEINLINE const Array<SharedHeap<DomainFolder>>& GetFolders() const noexcept
+		{
+			return mFolders;
+		}
 		FORCEINLINE DomainFolder* GetOwnerFolder() const noexcept
 		{
 			return mOwnerFolder;

@@ -107,6 +107,9 @@ namespace Portakal
 
     void ImGuiRenderer::StartRendering(const float deltaTimeInMilliseconds)
     {
+        ImGuiIO& io = ImGui::GetIO();
+        io.DeltaTime = deltaTimeInMilliseconds;
+
         ImGui::NewFrame();
     }
     void ImGuiRenderer::EndRendering(const SharedHeap<RenderTarget>& pRenderTarget, const Color4F clearColor)

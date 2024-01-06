@@ -16,8 +16,6 @@ namespace Portakal
 
 	private:
 
-		void RenderTargetPath();
-
 		// Inherited via GUIWindow
 		void OnShutdown() override;
 		void OnShow() override;
@@ -25,7 +23,9 @@ namespace Portakal
 		void OnPaint() override;
 		void OnInitialize() override;
 	private:
-		SharedHeap<DomainFolder> mTargetFolder;
+		DomainFolder* mTargetFolder;
+		Array<SharedHeap<DomainFolder>> mSelectedFolders;
+		Array<SharedHeap<DomainFile>> mSelectedFiles;
 	};
 }
 

@@ -20,6 +20,8 @@ namespace Portakal
 			return mSourcePath;
 		}
 		FORCEINLINE TimeStamp GetLastChangeTime() noexcept;
+
+		void Save();
 	private:
 		DomainFile(DomainFolder* pOwnerFolder,const String& path);
 		~DomainFile() = default;

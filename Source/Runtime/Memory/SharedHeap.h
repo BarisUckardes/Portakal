@@ -44,7 +44,7 @@ namespace Portakal
         FORCEINLINE const Bool8 IsShutdown() const noexcept { return (mData == nullptr || mData->IsShutdown()); }
         FORCEINLINE Bool8 IsValid() const noexcept { return mData != nullptr; }
         FORCEINLINE T* GetHeap() const noexcept { return (T*)mData; }
-        FORCEINLINE T** GetHeapAddress() noexcept { return (T**)&mData; }
+        FORCEINLINE T** GetHeapAddress() const noexcept { return (T**)&mData; }
 
         void Deference()
         {
@@ -164,5 +164,52 @@ namespace Portakal
     private:
         Object* mData;
         UInt32* mReferenceCount;
+    };
+
+    template<typename T>
+    class SharedWeakHeap
+    {
+    public:
+        SharedWeakHeap(const SharedHeap<T>& pTarget) : mData(pTarget.GetHeapAddress())
+        {
+
+        }
+        ~SharedWeakHeap()
+        {
+            mData = nullptr;
+        }
+
+        FORCEINLINE bool IsShutdown() const noexcept
+        {
+            return mData == nullptr;
+        }
+
+        FORCEINLINE T* GetHeap() const noexcept
+        {
+            return *mData;
+        }
+        FORCEINLINE T** GetHeapAddress() const noexcept
+        {
+            return mData;
+        }
+        void operator=(const SharedHeap<T>& pTarget)
+        {
+            mData = pTarget.GetHeapAddress();
+        }
+        Bool8 operator ==(const SharedWeakHeap& other)
+        {
+            return mData == other.mData;
+
+        }
+        Bool8 operator !=(const SharedWeakHeap& other)
+        {
+            return mData != other.mData;
+        }
+        FORCEINLINE T* operator*() const noexcept
+        {
+            return *mData;
+        }
+    private:
+        T** mData;
     };
 }
