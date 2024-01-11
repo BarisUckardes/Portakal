@@ -11,6 +11,10 @@ namespace Portakal
 	{
 		friend class DomainFolder;
 	public:
+		FORCEINLINE SharedHeap<ResourceSubObject> GetSubObject() const noexcept
+		{
+			return mResource->GetSubObject();
+		}
 		FORCEINLINE String GetDescriptorPath() const noexcept
 		{
 			return mPath;
@@ -19,9 +23,14 @@ namespace Portakal
 		{
 			return mSourcePath;
 		}
+
 		FORCEINLINE TimeStamp GetLastChangeTime() noexcept;
 
-		void Save();
+		void SaveSync();
+		void SaveAsync();
+		void LoadSnyc();
+		void LoadAsync();
+		void Delete();
 	private:
 		DomainFile(DomainFolder* pOwnerFolder,const String& path);
 		~DomainFile() = default;
@@ -29,11 +38,13 @@ namespace Portakal
 		void UpdateLastChangeTime();
 		bool UpdateLastChangeTimeCheck();
 		void Invalidate();
+		Type* FindSerializer(const String& target);
+		void RefreshFiles();
 		virtual void OnShutdown() override;
 	private:
 		SharedHeap<Resource> mResource;
 		DomainFolder* mOwnerFolder;
-		IResourceDeserializer* mSerializer;
+		IResourceSerializer* mSerializer;
 		String mPath;
 		String mSourcePath;
 		TimeStamp mLastChangeTime;

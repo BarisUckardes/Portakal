@@ -29,6 +29,21 @@ namespace Portakal
 
 		return pFolder;
 	}
+	void DomainFolder::Delete()
+	{
+		if (IsShutdown())
+			return;
+
+		//Delete the physical folder
+		if (!PlatformDirectory::Delete(mPath))
+		{
+			DEV_LOG("DomainFolder", "Failed to delete the folder!");
+			return;
+		}
+
+		//Shutdown
+		Shutdown();
+	}
 	DomainFolder::DomainFolder(DomainFolder* pOwnerFolder, const String& path) : mOwnerFolder(pOwnerFolder),mPath(path)
 	{
 		//Set name
@@ -155,13 +170,32 @@ namespace Portakal
 		}
 	}
 
+	void DomainFolder::_OnSubFolderDeleted(const DomainFolder* pTargetFolder)
+	{
+		mFolders.Remove(pTargetFolder);
+	}
+
+	void DomainFolder::_OnSubFileDeleted(const DomainFile* pFile)
+	{
+		mFiles.Remove(pFile);
+	}
+
 	void DomainFolder::OnShutdown()
 	{
+		//First notify the owner folder that this folder is removed
+		if (mOwnerFolder != nullptr)
+		{
+			mOwnerFolder->_OnSubFolderDeleted(this);
+		}
+
 		//Shutdown files
+		for (const SharedHeap<DomainFile>& pFile : mFiles)
+			pFile.Shutdown();
 
 		//Shutdown folders
 		for (const SharedHeap<DomainFolder>& pFolder : mFolders)
 			pFolder.Shutdown();
+
 		mFolders.Clear();
 	}
 }

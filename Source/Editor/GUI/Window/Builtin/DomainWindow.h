@@ -2,6 +2,7 @@
 #include <Editor/GUI/Window/GUIWindow.h>
 #include <Editor/Domain/DomainFolder.h>
 #include <Editor/Domain/DomainFile.h>
+#include <Editor/GUI/IContextCreateAction.h>
 #include "DomainWindow.reflected.h"
 
 namespace Portakal
@@ -16,6 +17,12 @@ namespace Portakal
 
 	private:
 
+		void SelectFolder(const SharedHeap<DomainFolder>& pFolder);
+		void SelectFile(const SharedHeap<DomainFile>& pFile);
+		void DeleteFolder(const SharedHeap<DomainFolder>& pFolder);
+		void DeleteSelections();
+		void ClearSelections();
+
 		// Inherited via GUIWindow
 		void OnShutdown() override;
 		void OnShow() override;
@@ -26,6 +33,8 @@ namespace Portakal
 		DomainFolder* mTargetFolder;
 		Array<SharedHeap<DomainFolder>> mSelectedFolders;
 		Array<SharedHeap<DomainFile>> mSelectedFiles;
+		Array<IContextCreateAction*> mContextCreateActions;
+		Array<IContextCreateAction*> mTickingContextCreateActions;
 	};
 }
 

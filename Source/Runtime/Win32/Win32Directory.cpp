@@ -14,11 +14,7 @@ namespace Portakal
 	{
 		//Get sub items
 		Array<String> subItems;
-		if (GetFileNames(path + "\\", subItems))
-		{
-			DEV_LOG("Win32Directory", "Failed to get file names");
-			return false;
-		}
+		GetFileNames(path, subItems);
 
 		//Iterate items and delete
 		for (UInt32 i = 0; i < subItems.GetSize(); i++)

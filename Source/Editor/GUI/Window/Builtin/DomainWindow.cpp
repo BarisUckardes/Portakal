@@ -1,42 +1,45 @@
 #include "DomainWindow.h"
 #include <Editor/Domain/DomainAPI.h>
 #include <imgui.h>
+#include <Runtime/Reflection/ReflectionAPI.h>
 
 namespace Portakal
 {
-	void RenderFolderPath(const SharedHeap<DomainFolder>& pFolder)
+	void DomainWindow::SelectFile(const SharedHeap<DomainFile>& pFile)
 	{
-		const String text = pFolder.IsShutdown() ? "unknown" : pFolder->GetPath();
-		ImGui::Text(*text);
-		ImGui::Separator();
+		if (mSelectedFiles.Remove(pFile))
+			return;
+
+		mSelectedFiles.Add(pFile);
 	}
-	void RenderFolders(const SharedHeap<DomainFolder>& pFolder,const Array<SharedHeap<DomainFolder>>& selectedFolders,const float width,const float height,SharedHeap<DomainFolder>& pOpenFolder)
+	void DomainWindow::DeleteFolder(const SharedHeap<DomainFolder>& pFolder)
 	{
-		//Get folders
-		const Array<SharedHeap<DomainFolder>>& folders = pFolder->GetFolders();
+		if (pFolder.IsShutdown())
+			return;
+		pFolder->Delete();
+	}
+	void DomainWindow::DeleteSelections()
+	{
+		for (const SharedHeap<DomainFile>& pFile : mSelectedFiles)
+			pFile->Delete();
 
-		//Render each
-		for (const SharedHeap<DomainFolder>& pFolder : folders)
-		{
-			//Get if selected or not
-			const bool bSelected = selectedFolders.Has(pFolder);
+		for (const SharedHeap<DomainFolder>& pFolder : mSelectedFolders)
+			pFolder->Delete();
 
-			//Create selectable
-			const ImVec2 preSelectablePos = ImGui::GetCursorPos();
-			const bool bClicked = ImGui::Selectable(*pFolder->GetName(),bSelected, ImGuiSelectableFlags_DontClosePopups, {width,height});
+		mSelectedFiles.Clear();
+		mSelectedFolders.Clear();
+	}
+	void DomainWindow::SelectFolder(const SharedHeap<DomainFolder>& pFolder)
+	{
+		if (mSelectedFolders.Remove(pFolder))
+			return;
 
-			//Check if requested to open folder
-			if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
-			{
-				pOpenFolder = pFolder;
-				DEV_LOG("DomainWindow", "Double clicked %s", *pFolder->GetName());
-			}
-
-			//Create image
-
-			//Reset same line
-			ImGui::SameLine();
-		}
+		mSelectedFolders.Add(pFolder);
+	}
+	void DomainWindow::ClearSelections()
+	{
+		mSelectedFiles.Clear();
+		mSelectedFolders.Clear();
 	}
 	void DomainWindow::OnShutdown()
 	{
@@ -74,6 +77,12 @@ namespace Portakal
 				const ImVec2 preSelectablePos = ImGui::GetCursorPos();
 				const bool bClicked = ImGui::Selectable(*pFolder->GetName(), bSelected, ImGuiSelectableFlags_DontClosePopups, { folderWidth,folderHeight });
 
+				//Check if requested selection
+				if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl) && bClicked)
+				{
+					SelectFolder(pFolder);
+				}
+
 				//Check if requested to open folder
 				if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
 				{
@@ -97,12 +106,82 @@ namespace Portakal
 
 		//Render files
 
+		
 		//Handle events
 		if (ImGui::IsKeyPressed(ImGuiKey_Backspace)) // wants to go back to the previous folder
 		{
 			if (!mTargetFolder->IsRootFolder())
 			{
+				mTargetFolder = mTargetFolder->GetOwnerFolder();
+				ClearSelections();
+			}
+		}
+		if (ImGui::IsAnyMouseDown() && !ImGui::IsAnyItemHovered()) // clicked empty space, will clear all the selections
+		{
+			ClearSelections();
+		}
+		if (ImGui::IsKeyPressed(ImGuiKey_Delete)) // wants to delete the selected items
+		{
+			DeleteSelections();
+		}
+		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && !ImGui::IsAnyItemHovered() && ImGui::IsWindowFocused()) // wants to open context popup
+		{
+			ImGui::OpenPopup("CreateContext");
+		}
 
+		//Handle popups
+		if (ImGui::BeginPopup("FolderOptions"))
+		{
+
+			ImGui::EndPopup();
+		}
+		if (ImGui::BeginPopup("CreateContext"))
+		{
+			ImGui::Text("Create:");
+			ImGui::Separator();
+			ImGui::Spacing();
+
+			for (IContextCreateAction* pAction : mContextCreateActions)
+			{
+				const String title = pAction->GetName();
+				if (ImGui::Selectable(*title))
+				{
+					if (pAction->OnAction(mTargetFolder))
+					{
+						mTickingContextCreateActions.Add(pAction);
+						break;
+					}
+				}
+			}
+
+			ImGui::EndPopup();
+		}
+
+		//Tick context actions
+		for (Int32 i = 0;i<mTickingContextCreateActions.GetSize();i++)
+		{
+			IContextCreateAction* pAction = mTickingContextCreateActions[i];
+
+			//Tick and check if close requested
+			if (!pAction->OnTick(mTargetFolder))
+			{
+				//Remove from the ticking actions
+				mTickingContextCreateActions.RemoveAt(i);
+
+				//Remove the instance from the context create actions
+				const Int32 index = mContextCreateActions.FindIndex(pAction);
+				mContextCreateActions.RemoveAt(index);
+
+				//Create new instnace
+				IContextCreateAction* pNewAction = (IContextCreateAction*)pAction->GetType()->CreateDefaultHeapObject();
+				pNewAction->SetName(pNewAction->GetType()->GetAttribute<ContextCreateItem>()->GetName());
+				mContextCreateActions.Add(pNewAction);
+
+				//Shutdown and delete
+				pAction->Shutdown();
+				delete pAction;
+
+				i--;
 			}
 		}
 	}
@@ -114,5 +193,14 @@ namespace Portakal
 			return;
 
 		mTargetFolder = pRootFolder.GetHeap();
+
+		//Collect contenxt actions
+		Array<Type*> contextCreateActionTypes = ReflectionAPI::GetSubTypes(typeof(IContextCreateAction));
+		for (Type* pType : contextCreateActionTypes)
+		{
+			IContextCreateAction* pAction = (IContextCreateAction*)pType->CreateDefaultHeapObject();
+			pAction->SetName(pType->GetAttribute<ContextCreateItem>()->GetName());
+			mContextCreateActions.Add(pAction);
+		}
 	}
 }

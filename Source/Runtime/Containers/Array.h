@@ -172,8 +172,8 @@ namespace Portakal
 			mData[index] = value;
 			mSize++;
 		}
-
-		int FindIndex(const T& element) const
+		template<typename TOther>
+		int FindIndex(const TOther& element) const
 		{
 			int index = -1;
 
@@ -189,7 +189,8 @@ namespace Portakal
 			return index;
 		}
 
-		Bool8 Remove(const T& element)
+		template<typename TOther>
+		Bool8 Remove(const TOther& element)
 		{
 			const int index = FindIndex(element);
 			if (index == -1)

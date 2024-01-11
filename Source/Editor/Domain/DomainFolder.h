@@ -30,12 +30,14 @@ namespace Portakal
 		}
 
 		SharedHeap<DomainFolder> CreateFolder(const String& name);
+		void Delete();
+		void Invalidate();
 	private:
 		DomainFolder(DomainFolder* pOwnerFolder,const String& path);
 		~DomainFolder() = default;
 
-		void Invalidate();
-
+		void _OnSubFolderDeleted(const DomainFolder* pFolder);
+		void _OnSubFileDeleted(const DomainFile* pFile);
 		virtual void OnShutdown() override;
 	private:
 		Array<SharedHeap<DomainFolder>> mFolders;
