@@ -16,12 +16,12 @@ namespace Portakal
 		~DomainWindow() = default;
 
 	private:
-
 		void SelectFolder(const SharedHeap<DomainFolder>& pFolder);
 		void SelectFile(const SharedHeap<DomainFile>& pFile);
 		void DeleteFolder(const SharedHeap<DomainFolder>& pFolder);
 		void DeleteSelections();
 		void ClearSelections();
+		void OpenFolder(DomainFolder* pFolder);
 
 		// Inherited via GUIWindow
 		void OnShutdown() override;
@@ -35,6 +35,8 @@ namespace Portakal
 		Array<SharedHeap<DomainFile>> mSelectedFiles;
 		Array<IContextMenuItem*> mContextCreateActions;
 		Array<IContextMenuItem*> mTickingContextCreateActions;
+		DomainFolder* mContextMenuFolder;
+		bool mFolderChanged;
 	};
 }
 

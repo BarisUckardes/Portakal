@@ -41,6 +41,10 @@ namespace Portakal
 		mSelectedFiles.Clear();
 		mSelectedFolders.Clear();
 	}
+	void DomainWindow::OpenFolder(DomainFolder* pFolder)
+	{
+		mTargetFolder = pFolder;
+	}
 	void DomainWindow::OnShutdown()
 	{
 
@@ -55,6 +59,9 @@ namespace Portakal
 	}
 	void DomainWindow::OnPaint()
 	{
+		//Create&Reset states
+		mFolderChanged = false;
+
 		//Render target path
 		{
 			const String text = mTargetFolder == nullptr ? "unknown" : mTargetFolder->GetPath();
@@ -86,22 +93,23 @@ namespace Portakal
 				//Check if requested to open folder
 				if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
 				{
-					pNextOpenFolder = pFolder.GetHeap();
-					DEV_LOG("DomainWindow", "Double clicked %s", *pFolder->GetName());
+					OpenFolder(pFolder.GetHeap());
 				}
 
+				//Check if requested to open folder context menu
+				if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsItemHovered())
+				{
+					ImGui::OpenPopup("FolderContextMenu");
+					mContextMenuFolder = pFolder.GetHeap();
+				}
 				//Create image
 
 				//Reset same line
 				ImGui::SameLine();
 			}
 
-			//Check if requested to open folder
-			if (pNextOpenFolder != nullptr)
-			{
-				mTargetFolder = pNextOpenFolder;
+			if (mFolderChanged)
 				return;
-			}
 		}
 
 		//Render files
@@ -130,10 +138,25 @@ namespace Portakal
 		}
 
 		//Handle popups
-		if (ImGui::BeginPopup("FolderOptions"))
+		if (ImGui::BeginPopup("FolderContextMenu"))
 		{
+			ImGui::Text("Folder");
+			ImGui::Separator();
+
+			if (ImGui::Selectable("Open"))
+			{
+				OpenFolder(mContextMenuFolder);
+			}
+			if (ImGui::Selectable("Delete"))
+			{
+				mContextMenuFolder->Delete();
+			}
 
 			ImGui::EndPopup();
+		}
+		else
+		{
+			mContextMenuFolder = nullptr;
 		}
 		if (ImGui::BeginPopup("CreateContext"))
 		{

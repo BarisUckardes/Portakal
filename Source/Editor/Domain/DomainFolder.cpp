@@ -34,7 +34,7 @@ namespace Portakal
 		if (IsShutdown())
 			return;
 
-		//Delete the physical folder
+		//Delete the physical aspect of the folder
 		if (!PlatformDirectory::Delete(mPath))
 		{
 			DEV_LOG("DomainFolder", "Failed to delete the folder!");
