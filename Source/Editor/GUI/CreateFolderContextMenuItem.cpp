@@ -1,15 +1,15 @@
-#include "CreateFolderContextAction.h"
+#include "CreateFolderContextMenuItem.h"
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.cpp>
 
 namespace Portakal
 {
-    bool CreateFolderContextAction::OnAction(DomainFolder* pFolder)
+    bool CreateFolderContextMenuItem::OnAction(DomainFolder* pFolder)
     {
         mOpen = true;
         return true;
     }
-    bool CreateFolderContextAction::OnTick(DomainFolder* pFolder)
+    bool CreateFolderContextMenuItem::OnTick(DomainFolder* pFolder)
     {
         if (mOpen)
         {
@@ -43,7 +43,7 @@ namespace Portakal
 
         return true;
     }
-    void CreateFolderContextAction::OnShutdown()
+    void CreateFolderContextMenuItem::OnShutdown()
     {
 
     }

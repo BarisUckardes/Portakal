@@ -141,7 +141,7 @@ namespace Portakal
 			ImGui::Separator();
 			ImGui::Spacing();
 
-			for (IContextCreateAction* pAction : mContextCreateActions)
+			for (IContextMenuItem* pAction : mContextCreateActions)
 			{
 				const String title = pAction->GetName();
 				if (ImGui::Selectable(*title))
@@ -160,7 +160,7 @@ namespace Portakal
 		//Tick context actions
 		for (Int32 i = 0;i<mTickingContextCreateActions.GetSize();i++)
 		{
-			IContextCreateAction* pAction = mTickingContextCreateActions[i];
+			IContextMenuItem* pAction = mTickingContextCreateActions[i];
 
 			//Tick and check if close requested
 			if (!pAction->OnTick(mTargetFolder))
@@ -173,8 +173,8 @@ namespace Portakal
 				mContextCreateActions.RemoveAt(index);
 
 				//Create new instnace
-				IContextCreateAction* pNewAction = (IContextCreateAction*)pAction->GetType()->CreateDefaultHeapObject();
-				pNewAction->SetName(pNewAction->GetType()->GetAttribute<ContextCreateItem>()->GetName());
+				IContextMenuItem* pNewAction = (IContextMenuItem*)pAction->GetType()->CreateDefaultHeapObject();
+				pNewAction->SetName(pNewAction->GetType()->GetAttribute<ContextMenuItem>()->GetName());
 				mContextCreateActions.Add(pNewAction);
 
 				//Shutdown and delete
@@ -195,11 +195,11 @@ namespace Portakal
 		mTargetFolder = pRootFolder.GetHeap();
 
 		//Collect contenxt actions
-		Array<Type*> contextCreateActionTypes = ReflectionAPI::GetSubTypes(typeof(IContextCreateAction));
+		Array<Type*> contextCreateActionTypes = ReflectionAPI::GetSubTypes(typeof(IContextMenuItem));
 		for (Type* pType : contextCreateActionTypes)
 		{
-			IContextCreateAction* pAction = (IContextCreateAction*)pType->CreateDefaultHeapObject();
-			pAction->SetName(pType->GetAttribute<ContextCreateItem>()->GetName());
+			IContextMenuItem* pAction = (IContextMenuItem*)pType->CreateDefaultHeapObject();
+			pAction->SetName(pType->GetAttribute<ContextMenuItem>()->GetName());
 			mContextCreateActions.Add(pAction);
 		}
 	}

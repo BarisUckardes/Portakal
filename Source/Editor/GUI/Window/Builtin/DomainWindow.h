@@ -2,7 +2,7 @@
 #include <Editor/GUI/Window/GUIWindow.h>
 #include <Editor/Domain/DomainFolder.h>
 #include <Editor/Domain/DomainFile.h>
-#include <Editor/GUI/IContextCreateAction.h>
+#include <Editor/GUI/IContextMenuItem.h>
 #include "DomainWindow.reflected.h"
 
 namespace Portakal
@@ -33,8 +33,8 @@ namespace Portakal
 		DomainFolder* mTargetFolder;
 		Array<SharedHeap<DomainFolder>> mSelectedFolders;
 		Array<SharedHeap<DomainFile>> mSelectedFiles;
-		Array<IContextCreateAction*> mContextCreateActions;
-		Array<IContextCreateAction*> mTickingContextCreateActions;
+		Array<IContextMenuItem*> mContextCreateActions;
+		Array<IContextMenuItem*> mTickingContextCreateActions;
 	};
 }
 

@@ -1,23 +1,23 @@
 #pragma once
 #include <Runtime/Reflection/Reflection.h>
-#include "ContextCreateItem.reflected.h"
+#include "ContextMenuItem.reflected.h"
 
 namespace Portakal
 {
 	PCLASS();
-	class EDITOR_API ContextCreateItem : public Attribute
+	class EDITOR_API ContextMenuItem : public Attribute
 	{
 		GENERATE_OBJECT;
 	public:
-		ContextCreateItem(const String& name) : mName(name)
+		ContextMenuItem(const String& name) : mName(name)
 		{
 
 		}
-		ContextCreateItem() : mName("Unknown")
+		ContextMenuItem() : mName("Unknown")
 		{
 
 		}
-		~ContextCreateItem() = default;
+		~ContextMenuItem() = default;
 
 		FORCEINLINE String GetName() const noexcept
 		{

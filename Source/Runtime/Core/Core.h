@@ -24,12 +24,11 @@ namespace Portakal
 
 	};
 #define typeof(type) Portakal::TypeAccessor<##type>::GetType()
-#define PSTRUCT()
-#define PCLASS()
-#define PENUM()
-#define PFIELD()
+#define PCLASS(...)
+#define PENUM(...)
+#define PFIELD(...)
 #define PATTRIBUTE(target,...)
-#define GENERATE_OBJECT();
+#define GENERATE_OBJECT(...);
 
 }
 #define uint64_max 0xFFFFFFFFFFFFFFFF

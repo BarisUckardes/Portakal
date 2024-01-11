@@ -1,19 +1,19 @@
 #pragma once
-#include <Editor/GUI/ContextCreateItem.h>
+#include <Editor/GUI/ContextMenuItem.h>
 #include <Editor/Domain/DomainFolder.h>
 #include <Runtime/Memory/SharedHeap.h>
-#include "IContextCreateAction.reflected.h"
+#include "IContextMenuItem.reflected.h"
 
 namespace Portakal
 {
 	PCLASS(Virtual);
-	class EDITOR_API IContextCreateAction : public Object
+	class EDITOR_API IContextMenuItem : public Object
 	{
 	public:
 		GENERATE_OBJECT;
 	public:
-		IContextCreateAction() = default;
-		~IContextCreateAction() = default;
+		IContextMenuItem() = default;
+		~IContextMenuItem() = default;
 
 		virtual bool OnAction(DomainFolder* pFolder) = 0;
 		virtual bool OnTick(DomainFolder* pFolder) = 0;
