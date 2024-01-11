@@ -611,7 +611,6 @@ namespace Portakal
     void ImGuiRenderer::OnKeyboardChar(const Char c)
     {
         ImGuiIO& io = ImGui::GetIO();
-
         io.AddInputCharacter(c);
     }
     void ImGuiRenderer::InvalidateRenderTarget(const SharedHeap<RenderTarget>& pRenderTarget,const Byte subpassIndex)

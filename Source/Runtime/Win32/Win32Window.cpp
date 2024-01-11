@@ -55,6 +55,7 @@ namespace Portakal
 			pWindow->DispatchWin32Event(event);
 			break;
 		}
+		
 		case WM_MOUSEMOVE:
 		{
 			Win32Window* pWindow = GetUserWindowData(hwnd);
@@ -141,6 +142,17 @@ namespace Portakal
 			WindowEventData event = {};
 			event.Type = WindowEventType::KeyboardUp;
 			event.KeyboardKey = Win32Keys::GetKey(wParam);
+
+			pWindow->DispatchWin32Event(event);
+			break;
+		}
+		case WM_CHAR:
+		{
+			Win32Window* pWindow = GetUserWindowData(hwnd);
+
+			WindowEventData event = {};
+			event.Type = WindowEventType::Char;
+			event.KeyboardChar = wParam;
 
 			pWindow->DispatchWin32Event(event);
 			break;

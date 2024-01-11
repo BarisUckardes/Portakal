@@ -25,7 +25,10 @@ namespace Portakal
 		void OverrideID(const Guid& id) { mID = id; }
 		void Shutdown();
 	protected:
-		virtual void OnShutdown() = 0;
+		virtual void OnShutdown()
+		{
+
+		}
 		virtual void OnNameChange(const String& name) {}
 		virtual void OnIdChanged(const Guid& id) {}
 	private:

@@ -1,6 +1,7 @@
 #include "Platform.h"
 #include <Runtime/Platform/PlatformInput.h>
 #include <Runtime/Platform/PlatformPaths.h>
+#include <Runtime/Platform/PlatformTime.h>
 
 #ifdef PORTAKAL_PLATFORM_WINDOWS
 
@@ -24,12 +25,22 @@ namespace Portakal
 		//First set executable path
 		PlatformPaths::_SetExecutablePath(executablePath);
 
-		//Initialize
-		Bool8 bState = PlatformInput::Initialize();
+		//Initialize input
+		if (!PlatformInput::Initialize())
+		{
+			DEV_LOG("Platform", "Failed to initialize PlatformInput!");
+			return false;
+		}
 
-		if (bState)
-			DEV_LOG("Platform", "Dependencies initialized!");
+		//Initialize time
+		if (!PlatformTime::Initialize())
+		{
+			DEV_LOG("Platform", "Failed to initialize PlatformTime");
+			return false;
+		}
 
-		return bState;
+		DEV_LOG("Platform", "Dependencies initialized!");
+
+		return true;
 	}
 }

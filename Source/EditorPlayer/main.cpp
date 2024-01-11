@@ -58,6 +58,8 @@
 #include <Editor/ImGui/ImGuiRenderStartModule.h>
 #include <Editor/ImGui/ImGuiRenderEndModule.h>
 #include <Editor/Project/ProjectGenerator.h>
+#include <Runtime/Platform/PlatformThread.h>
+#include <Runtime/Thread/ThreadJob.h>
 
 namespace Portakal
 {
