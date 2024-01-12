@@ -48,10 +48,10 @@ endif()
 
 # ----------------- STB IMAGE IMPLEMENTATION -----------------
 if (stbi_POPULATED) 
-    target_compile_definitions(Runtime PUBLIC STBI_IMPLEMENTED=1)
+    target_compile_definitions(Runtime PUBLIC STB_IMAGE_IMPLEMENTATION=1)
     target_include_directories(Runtime PUBLIC ${stbi_SOURCE_DIR})
 else ()
-    target_compile_definitions(Runtime PUBLIC STBI_IMPLEMENTED=0)
+    target_compile_definitions(Runtime PUBLIC STB_IMAGE_IMPLEMENTATION=0)
 endif ()
 # ------------------------------------------------------------
 

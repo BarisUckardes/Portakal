@@ -39,21 +39,21 @@ except ImportError:
 import shutil
 
 try:
-	import pTime
+	import time
 except ImportError:
-	print("pTime module is not installed. Installing...")
-	install(pTime)
+	print("time module is not installed. Installing...")
+	install(time)
 
-import pTime
+import time
 
 from colorama import Fore, Style
 
 sleepTime = 0.2
 
 print(Fore.CYAN + "[INFO] -- " + Style.RESET_ALL + "All the python libraries are up to date.")
-pTime.sleep(sleepTime)
+time.sleep(sleepTime)
 print(Fore.CYAN + "[INFO] -- " + Style.RESET_ALL + "Checking if VulkanSDK is up to date...")
-pTime.sleep(sleepTime*2)
+time.sleep(sleepTime*2)
 
 ourVersion = "1.3.268.0"
 
@@ -81,11 +81,11 @@ maxVersionStr = '.'.join(map(str, maxVersion))
 # Check if maxVersionStr is same with ourVersion 
 if maxVersionStr == ourVersion:
 	print(Fore.GREEN + "[SUCCESS] -- " + Style.RESET_ALL + "VulkanSDK is up to date")
-	pTime.sleep(sleepTime * 3)
+	time.sleep(sleepTime * 3)
 # Else print error and exit in 3 seconds
 else:
 	print(Fore.RED + "[WARNING] -- " + Style.RESET_ALL + "VulkanSDK is not up to date." + "Please update your VulkanSDK to version " + ourVersion)
-	pTime.sleep(sleepTime * 3)
+	time.sleep(sleepTime * 3)
 	exit()
 
 print(Fore.CYAN + "[INFO] -- " + Style.RESET_ALL + "Copying necessary Shader Compilers to External folder")
@@ -126,61 +126,61 @@ for file in glob.glob(sdkPath + "/Include/vulkan/*.h"):
 	shutil.copy(file, externalPath + "/External/Vulkan/Include")
 	# Print just the file name without path
 	print(Fore.GREEN + "[SUCCESS] -- " + Style.RESET_ALL + os.path.basename(file) + " has been copied to " + externalPath + "/External/Vulkan/Include/")
-	pTime.sleep(sleepTime)
+	time.sleep(sleepTime)
 
 for file in glob.glob (sdkPath + "/Include/vulkan/*.hpp"):
 	shutil.copy(file, externalPath + "/External/Vulkan/Include")
 	# Print just the file name without path
 	print(Fore.GREEN + "[SUCCESS] -- " + Style.RESET_ALL + os.path.basename(file) + " has been copied to " + externalPath + "/External/Vulkan/Include/")
-	pTime.sleep(sleepTime)
+	time.sleep(sleepTime)
 
 # Copy files from sdkpath/Include/vulkan_video to externalPath/External/Vulkan-Video/Include
 for file in glob.glob(sdkPath + "/Include/vk_video/*.h"):
 	shutil.copy(file, externalPath + "/External/Vulkan-Video/Include")
 	# Print just the file name without path
 	print(Fore.GREEN + "[SUCCESS] -- " + Style.RESET_ALL + os.path.basename(file) + " has been copied to " + externalPath + "/External/Vulkan-Video/Include/")
-	pTime.sleep(sleepTime)
+	time.sleep(sleepTime)
 
 # Copy files from sdkpath/Include/dxc to externalPath/External/Dxc/Include
 for file in glob.glob(sdkPath + "/Include/dxc/*.h"):
 	shutil.copy(file, externalPath + "/External/Dxc/Include")
 	# Print just the file name without path
 	print(Fore.GREEN + "[SUCCESS] -- " + Style.RESET_ALL + os.path.basename(file) + " has been copied to " + externalPath + "/External/Dxc/Include/")
-	pTime.sleep(sleepTime)
+	time.sleep(sleepTime)
 
 # Copy files from sdkpath/Include/glslang/Include to externalPath/External/Glslang/Include
 for file in glob.glob(sdkPath + "/Include/glslang/Include/*.h"):
 	shutil.copy(file, externalPath + "/External/Glslang/Include")
 	print(Fore.GREEN + "[SUCCESS] -- " + Style.RESET_ALL + os.path.basename(file) + " has been copied to " + externalPath + "/External/Glslang/Include/")
-	pTime.sleep(sleepTime)
+	time.sleep(sleepTime)
 
 # Copy files from sdkpath/Include/spirv_cross to externalPath/External/SPIRV-Cross/Include
 for file in glob.glob(sdkPath + "/Include/spirv_cross/*.hpp"):
 	shutil.copy(file, externalPath + "/External/SPIRV-Cross/Include")
 	print(Fore.GREEN + "[SUCCESS] -- " + Style.RESET_ALL + os.path.basename(file) + " has been copied to " + externalPath + "/External/SPIRV-Cross/Include/")
-	pTime.sleep(sleepTime)
+	time.sleep(sleepTime)
 
 for file in glob.glob(sdkPath + "/Include/spirv_cross/*.h"):
 	shutil.copy(file, externalPath + "/External/SPIRV-Cross/Include")
 	print(Fore.GREEN + "[SUCCESS] -- " + Style.RESET_ALL + os.path.basename(file) + " has been copied to " + externalPath + "/External/SPIRV-Cross/Include/")
-	pTime.sleep(sleepTime)
+	time.sleep(sleepTime)
 
 # Copy files from sdkpath/Include/shaderc to externalPath/External/Shaderc/Include
 for file in glob.glob(sdkPath + "/Include/shaderc/*.h"):
 	shutil.copy(file, externalPath + "/External/Shaderc/Include")
 	print(Fore.GREEN + "[SUCCESS] -- " + Style.RESET_ALL + os.path.basename(file) + " has been copied to " + externalPath + "/External/Shaderc/Include/")
-	pTime.sleep(sleepTime)
+	time.sleep(sleepTime)
 
 for file in glob.glob(sdkPath + "/Include/shaderc/*.hpp"):
 	shutil.copy(file, externalPath + "/External/Shaderc/Include")
 	print(Fore.GREEN + "[SUCCESS] -- " + Style.RESET_ALL + os.path.basename(file) + " has been copied to " + externalPath + "/External/Shaderc/Include/")
-	pTime.sleep(sleepTime)
+	time.sleep(sleepTime)
 
 # Copy files from sdkpath/Lib to externalPath/External/Libs
 for file in glob.glob(sdkPath + "/Lib/*.lib"):
 	shutil.copy(file, externalPath + "/External/Libs/")
 	print(Fore.GREEN + "[SUCCESS] -- " + Style.RESET_ALL + os.path.basename(file) + " has been copied to " + externalPath + "/External/Libs/")
-	pTime.sleep(sleepTime)
+	time.sleep(sleepTime)
 
 
 
@@ -209,5 +209,5 @@ with open(externalPath + "/External/Vulkan/Include/vulkan_core.h", "w") as file:
 print(Fore.GREEN + "[SUCCESS] -- " + Style.RESET_ALL + "Needed files has been edited.")
 
 print(Fore.YELLOW + "[WARNING] -- " + Style.RESET_ALL + "If you still get compiler error during the build, please check the Portakal/wiki/Home from github.com")
-pTime.sleep(sleepTime)
+time.sleep(sleepTime)
 exit()
