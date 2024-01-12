@@ -126,7 +126,6 @@ namespace Portakal
 		case WM_SYSKEYDOWN:
 		{
 			Win32Window* pWindow = GetUserWindowData(hwnd);
-			DEV_LOG("Win32Window", "%x", wParam);
 			WindowEventData event = {};
 			event.Type = WindowEventType::KeyboardDown;
 			event.KeyboardKey = Win32Keys::GetKey(wParam);

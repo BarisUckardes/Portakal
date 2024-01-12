@@ -12,7 +12,10 @@ namespace Portakal
 	{
 		GENERATE_OBJECT;
 	public:
-		DomainWindow() = default;
+		DomainWindow() : mTargetFolder(nullptr), mContextMenuFolder(nullptr), mFolderChanged(false)
+		{
+
+		}
 		~DomainWindow() = default;
 
 	private:
