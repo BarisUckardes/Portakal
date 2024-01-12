@@ -40,7 +40,7 @@ namespace Portakal
         DEV_ASSERT(vkBindImageMemory(mLogicalDevice, mImage, pHeap->GetVkMemory(), alignedMemoryHandle) == VK_SUCCESS,"VulkanTexture","Failed to bind the texture memory!");
 
         //Set aligned handle
-        SetAlignedMemory(alignedMemoryHandle);
+        SetMemoryProperties(memoryHandle,alignedMemoryHandle);
     }
     void VulkanTexture::OnShutdown()
     {

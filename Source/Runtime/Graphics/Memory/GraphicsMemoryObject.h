@@ -27,9 +27,8 @@ namespace Portakal
 		}
 
 	protected:
-		void Allocate(const UInt64 size);
 		void Free();
-		void SetAlignedMemory(const MemoryHandle handle);
+		void SetMemoryProperties(const MemoryHandle handle,const MemoryHandle alignedHandle);
 		virtual void OnShutdown() override;
 	private:
 		SharedHeap<GraphicsMemoryHeap> mHeap;

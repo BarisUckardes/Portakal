@@ -26,14 +26,14 @@ namespace Portakal
         vkGetBufferMemoryRequirements(mLogicalDevice, mBuffer, &requirements);
 
         //Get buffer memory
-        const MemoryHandle memoryHandle = GetMemoryHandle();
-        const MemoryHandle alignedHandle = memoryHandle + (requirements.alignment - (memoryHandle % requirements.alignment));
+        const MemoryHandle memoryHandle = desc.pHeap->Allocate(requirements.size + requirements.alignment);
+        const MemoryHandle alignedHandle = memoryHandle + memoryHandle == 0 ? 0 : (requirements.alignment - (memoryHandle % requirements.alignment));
 
         //Bind memory
         DEV_ASSERT(vkBindBufferMemory(mLogicalDevice, mBuffer, pHeap->GetVkMemory(), alignedHandle) == VK_SUCCESS,"VulkanBuffer","Failed to bind memory");
 
         //Set aligned handle
-        SetAlignedMemory(alignedHandle);
+        SetMemoryProperties(memoryHandle, alignedHandle);
     }
     void VulkanBuffer::OnShutdown()
     {

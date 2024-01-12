@@ -20,16 +20,16 @@ namespace Portakal
 	EditorResourceAPI::EditorResourceAPI()
 	{
 		//Get editor path
-		const String path = PlatformPaths::GetProgramsPath() + "\\Portakal\\Editor\\Resources";
+		const String path = PlatformPaths::GetProgramsPath() + "\\Portakal\\Editor\\Resources\\";
 
-		//Collect items
+		//Collect and load textures
 		Array<String> pngFiles;
-		if (!PlatformDirectory::GetFileNamesViaExtension(path, ".png", pngFiles))
+		if (!PlatformDirectory::GetFileNamesViaExtension(path,".png", pngFiles))
 		{
 			DEV_LOG("EditorResourceAPI", "Failed to get .png files");
 			return;
 		}
-
+		return;
 		for (const String& file : pngFiles)
 		{
 			//Get name

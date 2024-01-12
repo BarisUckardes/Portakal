@@ -17,6 +17,7 @@
 #include <Runtime/Vulkan/Texture/VulkanTexture.h>
 #include <Runtime/Vulkan/Texture/VulkanTextureView.h>
 #include <Runtime/Vulkan/Resource/VulkanResourceUtils.h>
+#include <string>
 
 namespace Portakal
 {

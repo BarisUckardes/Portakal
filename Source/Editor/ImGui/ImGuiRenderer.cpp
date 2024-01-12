@@ -16,9 +16,9 @@
 namespace Portakal
 {
     static const Char vertexShaderSource[] =
-        "	layout(set=0,binding=0) cbuffer vertexBuffer \
+        "layout(set=0,binding=0) cbuffer vertexBuffer\
             {\
-              float4x4 ProjectionMatrix; \
+              float4x4 ProjectionMatrix;\
             };\
             struct VS_INPUT\
             {\
@@ -258,7 +258,7 @@ namespace Portakal
                     }
                     else // custom texture
                     {
-                        ppResourceSets[1] = ((const SharedHeap<ImGuiTextureBinding>*)(cmd.TextureId))->GetHeap()->GetTable();
+                        ppResourceSets[1] = ((ImGuiTextureBinding*)(cmd.TextureId))->GetTable();
                     }
 
                     mCmdList->CommitResources({ ppResourceSets[0],ppResourceSets[1] });
