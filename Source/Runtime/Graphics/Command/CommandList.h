@@ -57,7 +57,7 @@ namespace Portakal
 		void CopyTextureToTexture(const Texture* pSource, const Texture* pDestination, const TextureCopyDesc& desc);
 		void SetTextureMemoryBarrier(const Texture* pTexture, const CommandListTextureMemoryBarrierDesc& desc);
 		void SetBufferMemoryBarrier(const GraphicsBuffer* pBuffer, const BufferBarrierDesc& desc);
-		void CommitResources(const Array<ResourceTable*>& tables);
+		void CommitResources(ResourceTable** ppTables,const UInt32 count);
 	protected:
 		virtual void BeginRecordingCore() = 0;
 		virtual void EndRecordingCore() = 0;
@@ -75,7 +75,7 @@ namespace Portakal
 		virtual void CopyTextureToTextureCore(const Texture* pSource, const Texture* pDestination, const TextureCopyDesc& desc) = 0;
 		virtual void SetTextureMemoryBarrierCore(const Texture* pTexture, const CommandListTextureMemoryBarrierDesc& desc) = 0;
 		virtual void SetBufferMemoryBarrierCore(const GraphicsBuffer* pBuffer, const BufferBarrierDesc& desc) = 0;
-		virtual void CommitResourcesCore(const Array<ResourceTable*>& tables) = 0;
+		virtual void CommitResourcesCore(ResourceTable** ppTables, const UInt32 count) = 0;
 	private:
 		const SharedHeap<CommandPool> mCmdPool;
 		SharedHeap<GraphicsBuffer> mBoundVertexBuffer;

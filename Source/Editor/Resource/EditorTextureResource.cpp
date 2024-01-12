@@ -48,7 +48,7 @@ namespace Portakal
 		mTexture = new TextureResource(pDevice);
 		TextureDesc desc = {};
 		desc.Type = TextureType::Texture2D;
-		desc.Format = TextureFormat::B8_G8_R8_A8_UNorm;
+		desc.Format = TextureFormat::R8_G8_B8_A8_UNorm;
 		desc.ArrayLevels = 1;
 		desc.MipLevels = 1;
 		desc.Size = { result.Size.X,result.Size.Y,1};

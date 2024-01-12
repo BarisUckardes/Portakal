@@ -2,6 +2,8 @@
 #include <Editor/Domain/DomainAPI.h>
 #include <imgui.h>
 #include <Runtime/Reflection/ReflectionAPI.h>
+#include <Editor/Resource/EditorResourceAPI.h>
+#include <Editor/ImGui/ImGuiAPI.h>
 
 namespace Portakal
 {
@@ -69,20 +71,23 @@ namespace Portakal
 			ImGui::Separator();
 		}
 
+		//Get item pos
+		ImVec2 itemPos = ImGui::GetCursorPos();
+
 		//Render folders
 		const Array<SharedHeap<DomainFolder>>& folders = mTargetFolder->GetFolders();
 		{
 			DomainFolder* pNextOpenFolder = nullptr;
-			const float folderWidth = 64;
-			const float folderHeight = 64;
 			for (const SharedHeap<DomainFolder>& pFolder : folders)
 			{
 				//Get if selected or not
 				const bool bSelected = mSelectedFolders.Has(pFolder);
 
 				//Create selectable
-				const ImVec2 preSelectablePos = ImGui::GetCursorPos();
-				const bool bClicked = ImGui::Selectable(*pFolder->GetName(), bSelected, ImGuiSelectableFlags_DontClosePopups, { folderWidth,folderHeight });
+				ImGui::SetCursorPos(itemPos);
+				ImGui::PushID(*pFolder->GetName());
+				const bool bClicked = ImGui::Selectable("", bSelected, ImGuiSelectableFlags_DontClosePopups, {mFolderSize,mFolderSize});
+				ImGui::PopID();
 
 				//Check if requested selection
 				if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl) && bClicked)
@@ -102,7 +107,17 @@ namespace Portakal
 					ImGui::OpenPopup("FolderContextMenu");
 					mContextMenuFolder = pFolder.GetHeap();
 				}
+
 				//Create image
+				ImGui::SetCursorPos(itemPos);
+				ImGui::Image(mFolderIconBinding->GetTable(),{ mFolderSize,mFolderSize });
+
+				//Draw text
+				ImGui::SetCursorPos({ itemPos.x,itemPos.y + mFolderSize });
+				ImGui::Text(*pFolder->GetName());
+
+				//Move next
+				itemPos.x += (mFolderSize+mItemGap);
 
 				//Reset same line
 				ImGui::SameLine();
@@ -217,7 +232,7 @@ namespace Portakal
 
 		mTargetFolder = pRootFolder.GetHeap();
 
-		//Collect contenxt actions
+		//Collect context actions
 		Array<Type*> contextCreateActionTypes = ReflectionAPI::GetSubTypes(typeof(IContextMenuItem));
 		for (Type* pType : contextCreateActionTypes)
 		{
@@ -225,5 +240,15 @@ namespace Portakal
 			pAction->SetName(pType->GetAttribute<ContextMenuItem>()->GetName());
 			mContextCreateActions.Add(pAction);
 		}
+
+		//Get folder icon
+		mFolderIcon = EditorResourceAPI::GetResource("FolderIcon").QueryAs<EditorTextureResource>();
+		mFolderIconBinding =  ImGuiAPI::GetRenderer()->GetOrCreateTextureBinding(mFolderIcon->GetTexture());
+
+		//Setup defaults
+		mFolderSize = 64;
+		mFileSize = 64;
+		mItemGap = 16;
+
 	}
 }

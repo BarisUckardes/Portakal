@@ -14,7 +14,10 @@ namespace Portakal
 			return nullptr;
 
 		//Get resource
-		SharedHeap<EditorResource>* pResource =  pAPI->mResources.Find(name);
+		SharedHeap<EditorResource>* pResource = pAPI->mResources.Find(name);
+		if (pResource == nullptr)
+			return nullptr;
+
 		return *pResource;
 	}
 	EditorResourceAPI::EditorResourceAPI()
@@ -34,7 +37,7 @@ namespace Portakal
 		{
 			//Get name
 			const String fileName = PlatformFile::GetNameWithoutExtension(file);
-
+			DEV_LOG("EditorResourceAPI", "Found png %s", *fileName);
 			//Create resource
 			SharedHeap<EditorResource> pResource = new EditorTextureResource(file);
 

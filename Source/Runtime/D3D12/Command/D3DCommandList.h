@@ -53,7 +53,7 @@ namespace Portakal
 		virtual void SetBufferMemoryBarrierCore(const GraphicsBuffer* pBuffer, const BufferBarrierDesc& desc) override;
 
 		// Inherited via CommandList
-		void CommitResourcesCore(const Array<ResourceTable*>& resources) override;
+		void CommitResourcesCore(ResourceTable** ppTables,const UInt32 count) override;
 
 		// Inherited via CommandList
 		void BeginRenderPassCore(const RenderPass* pRenderPass, const Color4F& clearColor, const Byte subFramebufferIndex) override;

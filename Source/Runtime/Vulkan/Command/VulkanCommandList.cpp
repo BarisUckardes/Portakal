@@ -257,20 +257,20 @@ namespace Portakal
 
 		vkCmdSetScissor(mCommandBuffer, 0, count, vkScissors);
 	}
-	void VulkanCommandList::CommitResourcesCore(const Array<ResourceTable*>& resources)
+	void VulkanCommandList::CommitResourcesCore(ResourceTable** ppTables, const UInt32 count)
 	{
 		VkDescriptorSet descriptorSets[128];
 
 		const VulkanPipeline* pPipeline = (const VulkanPipeline*)GetBoundPipeline().GetHeap();
 
-		for (Byte resourceIndex = 0; resourceIndex < resources.GetSize(); resourceIndex++)
+		for (Byte resourceIndex = 0; resourceIndex < count; resourceIndex++)
 		{
-			const VulkanResourceTable* pResource = (const VulkanResourceTable*)resources[resourceIndex];
+			const VulkanResourceTable* pResource = (const VulkanResourceTable*)ppTables[resourceIndex];
 
 			descriptorSets[resourceIndex] = pResource->GetVkDescriptorSet();
 		}
 
-		vkCmdBindDescriptorSets(mCommandBuffer, pPipeline->GetVkPipelinBindPoint(), pPipeline->GetVkPipelineLayout(), 0, resources.GetSize(), descriptorSets, 0, nullptr);
+		vkCmdBindDescriptorSets(mCommandBuffer, pPipeline->GetVkPipelinBindPoint(), pPipeline->GetVkPipelineLayout(), 0, count, descriptorSets, 0, nullptr);
 	}
 	void VulkanCommandList::SetPipelineCore(const Pipeline* pPipeline)
 	{

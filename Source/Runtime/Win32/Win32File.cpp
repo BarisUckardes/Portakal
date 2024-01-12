@@ -222,7 +222,11 @@ namespace Portakal
     }
     String Win32File::GetNameWithoutExtension(const String& path)
     {
-        return String();
+        char buffer[MAX_PATH];
+        Memory::Copy(buffer, *path, path.GetSize());
+        PathStripPathA(buffer);
+        PathRemoveExtensionA(buffer);
+        return buffer;
     }
     String Win32File::GetDirectory(const String& path)
     {

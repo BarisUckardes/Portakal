@@ -135,7 +135,7 @@ namespace Portakal
 
 		SetBufferMemoryBarrierCore(pBuffer, desc);
 	}
-	void CommandList::CommitResources(const Array<ResourceTable*>& tables)
+	void CommandList::CommitResources(ResourceTable** ppTables, const UInt32 count)
 	{
 		if (IsShutdown())
 			return;
@@ -148,11 +148,11 @@ namespace Portakal
 		/**
 		* Validate resource set count
 		*/
-		DEV_ASSERT(mBoundPipeline->GetResourceLayout().ResourceLayouts.GetSize() == tables.GetSize(), "CommandList", "Committed resource count does not match the given pipeline layout!");
+		DEV_ASSERT(mBoundPipeline->GetResourceLayout().ResourceLayouts.GetSize() == count, "CommandList", "Committed resource count does not match the given pipeline layout!");
 
 		/**
 		* Commit
 		*/
-		CommitResourcesCore(tables);
+		CommitResourcesCore(ppTables,count);
 	}
 }

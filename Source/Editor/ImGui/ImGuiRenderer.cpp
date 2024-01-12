@@ -86,7 +86,10 @@ namespace Portakal
 
     ImGuiRenderer::~ImGuiRenderer()
     {
+        //Wait device idle
         mDevice->WaitDeviceIdle();
+
+        mTextureBindings.Clear();
         mFontResourceTable.Shutdown();
         mStaticResourceTable.Shutdown();
         mFontResourceLayout.Shutdown();
@@ -220,7 +223,7 @@ namespace Portakal
             const Vector2F clipOffset = { pDrawData->DisplayPos.x,pDrawData->DisplayPos.y };
             UInt32 drawVertexOffset = 0;
             UInt32 drawIndexOffset = 0;
-            ResourceTable* ppResourceSets[]
+            ResourceTable* ppResourceTables[]
             {
                 mStaticResourceTable.GetHeap(),
                 nullptr
@@ -254,14 +257,14 @@ namespace Portakal
 
                     if (cmd.TextureId == nullptr) // default font texture
                     {
-                        ppResourceSets[1] = mFontResourceTable.GetHeap();
+                        ppResourceTables[1] = mFontResourceTable.GetHeap();
                     }
                     else // custom texture
                     {
-                        ppResourceSets[1] = ((ImGuiTextureBinding*)(cmd.TextureId))->GetTable();
+                        ppResourceTables[1] = (ResourceTable*)cmd.TextureId;
                     }
 
-                    mCmdList->CommitResources({ ppResourceSets[0],ppResourceSets[1] });
+                    mCmdList->CommitResources(ppResourceTables,2);
                     mCmdList->DrawIndexed(cmd.ElemCount, (drawIndexOffset + cmd.IdxOffset), (drawVertexOffset + cmd.VtxOffset), 1, 0);
                 }
 
@@ -282,7 +285,6 @@ namespace Portakal
     }
     SharedHeap<ImGuiTextureBinding> ImGuiRenderer::GetOrCreateTextureBinding(const SharedHeap<TextureResource>& pTexture)
     {
-
         const Int32 index = mTextureBindings.FindIndex(pTexture);
         if (index == -1)
         {
@@ -503,7 +505,6 @@ namespace Portakal
         };
         tablePoolDesc.MaxTables = IMGUI_MAX_RESOURCE_TABLES;
         mResourcePool = mDevice->CreateResourceTablePool(tablePoolDesc);
-
 
         // Create static resource set
         ResourceTableDesc staticResourceTableDesc = {};

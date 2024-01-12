@@ -25,6 +25,5 @@ namespace Portakal
 		SharedHeap<TextureResource> mTexture;
 		SharedHeap<GraphicsMemoryHeap> mHostHeap;
 		SharedHeap<GraphicsMemoryHeap> mDeviceHeap;
-
 	};
 }

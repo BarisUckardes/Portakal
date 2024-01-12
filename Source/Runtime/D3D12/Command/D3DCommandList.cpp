@@ -60,7 +60,7 @@ namespace Portakal
 	void D3DCommandList::SetBufferMemoryBarrierCore(const GraphicsBuffer* pBuffer, const BufferBarrierDesc& desc)
 	{
 	}
-	void D3DCommandList::CommitResourcesCore(const Array<ResourceTable*>& resources)
+	void D3DCommandList::CommitResourcesCore(ResourceTable** ppTables, const UInt32 count)
 	{
 	}
 	void D3DCommandList::BeginRenderPassCore(const RenderPass* pRenderPass, const Color4F& clearColor, const Byte subFramebufferIndex)

@@ -14,7 +14,7 @@ namespace Portakal
 	{
 		GENERATE_OBJECT;
 	public:
-		DomainWindow() : mTargetFolder(nullptr), mContextMenuFolder(nullptr), mFolderChanged(false)
+		DomainWindow() : mTargetFolder(nullptr), mContextMenuFolder(nullptr), mFolderChanged(false),mFileSize(64),mFolderSize(64),mItemGap(16)
 		{
 
 		}
@@ -44,6 +44,9 @@ namespace Portakal
 		SharedHeap<ImGuiTextureBinding> mFolderIconBinding;
 		DomainFolder* mContextMenuFolder;
 		bool mFolderChanged;
+		float mFolderSize;
+		float mFileSize;
+		float mItemGap;
 	};
 }
 
