@@ -25,6 +25,10 @@ namespace Portakal
 		TextureResource();
 		~TextureResource() = default;
 
+		FORCEINLINE SharedHeap<GraphicsDevice> GetDevice() const noexcept
+		{
+			return mDevice;
+		}
 		FORCEINLINE SharedHeap<Texture> GetTexture() const noexcept
 		{
 			return mTexture;

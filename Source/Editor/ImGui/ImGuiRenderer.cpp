@@ -258,7 +258,7 @@ namespace Portakal
                     }
                     else // custom texture
                     {
-
+                        ppResourceSets[1] = ((const SharedHeap<ImGuiTextureBinding>*)(cmd.TextureId))->GetHeap()->GetTable();
                     }
 
                     mCmdList->CommitResources({ ppResourceSets[0],ppResourceSets[1] });
@@ -279,6 +279,54 @@ namespace Portakal
         //Submit commands and wait
         mDevice->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, mFence.GetHeap());
         mDevice->WaitFences(mFence.GetHeapAddress(), 1);
+    }
+    SharedHeap<ImGuiTextureBinding> ImGuiRenderer::GetOrCreateTextureBinding(const SharedHeap<TextureResource>& pTexture)
+    {
+
+        const Int32 index = mTextureBindings.FindIndex(pTexture);
+        if (index == -1)
+        {
+            //Check capacity
+            if (mTextureBindings.GetSize() >= IMGUI_MAX_RESOURCE_TABLES)
+            {
+                DEV_LOG("ImGuiRenderer", "Cannot create new ImGuiTextureBinding due to capacity %llu is exceeded.", IMGUI_MAX_RESOURCE_TABLES);
+                return nullptr;
+            }
+
+            //Create new entry
+            SharedHeap<ImGuiTextureBinding> pBinding = new ImGuiTextureBinding(pTexture,mFontResourceLayout,mResourcePool);
+            mTextureBindings.Insert(pTexture, pBinding);
+            return pBinding;
+        }
+        else
+        {
+            return mTextureBindings[index].GetValue();
+        }
+
+        return SharedHeap<ImGuiTextureBinding>();
+    }
+    void ImGuiRenderer::DeleteTextureBinding(const SharedHeap<TextureResource>& pTexture)
+    {
+        const Int32 index = mTextureBindings.FindIndex(pTexture);
+        if (index == -1)
+            return;
+
+        Pair<SharedHeap<TextureResource>, SharedHeap<ImGuiTextureBinding>>& entry = mTextureBindings[index];
+        entry.GetValue().Shutdown();
+        entry.GetRefKey() = nullptr;
+        entry.GetRefValue() = nullptr;
+
+        mTextureBindings.Remove(pTexture);
+    }
+    void ImGuiRenderer::ClearTextureBindings()
+    {
+        for (Pair<SharedHeap<TextureResource>, SharedHeap<ImGuiTextureBinding>>& entry : mTextureBindings)
+        {
+            entry.GetValue().Shutdown();
+            entry.GetRefKey() = nullptr;
+            entry.GetRefValue() = nullptr;
+        }
+        mTextureBindings.Clear();
     }
     void ImGuiRenderer::CreateImGuiResources()
     {

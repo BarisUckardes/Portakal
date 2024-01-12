@@ -1,58 +1,58 @@
 #include "ImGuiTextureBinding.h"
-
 #include <Runtime/Graphics/Device/GraphicsDevice.h>
 #include <Runtime/Graphics/Texture/Texture.h>
 #include <Runtime/Graphics/Resource/ResourceTable.h>
 #include <Runtime/Graphics/Resource/ResourceTableLayout.h>
 #include <Runtime/Graphics/Resource/ResourceTablePool.h>
+#include <Runtime/Resource/Texture/TextureResource.h>
 
 namespace Portakal
 {
-	ImGuiTextureBinding::ImGuiTextureBinding(const SharedHeap<Texture>& pTexture, const SharedHeap<ResourceTableLayout>& pLayout, const SharedHeap<ResourceTablePool>& pPool)
+	ImGuiTextureBinding::ImGuiTextureBinding(const SharedHeap<TextureResource>& pTexture, const SharedHeap<ResourceTableLayout>& pLayout, const SharedHeap<ResourceTablePool>& pPool)
 	{
-		if (pTexture.IsShutdown() || !pTexture.IsValid())
+		//Check given texture
+		if (pTexture.IsShutdown())
 		{
-			DEV_LOG("ImGuiTextureBinding", "The Texture is not valid!");
+			DEV_LOG("ImGuiTextureBinding", "Given texture is invalid!");
 			return;
 		}
 
-		if (pLayout.IsShutdown() || !pLayout.IsValid())
+		//Check table layout
+		if (pLayout.IsShutdown())
 		{
-			DEV_LOG("ImGuiTextureBinding", "The ResourceTableLayout is not valid!");
+			DEV_LOG("ImGuiTextureBinding", "Given resource table layout is invalid!");
 			return;
 		}
 
-		if (pPool.IsShutdown() || !pPool.IsValid())
+		//Check pool
+		if (pPool.IsShutdown())
 		{
-			DEV_LOG("ImGuiTextureBinding", "The ResourceTablePool is not valid!");
+			DEV_LOG("ImGuiTextureBinding", "Given resource table pool is invalid!");
 			return;
 		}
 
-		GraphicsDevice* pDevice = pTexture->GetOwnerDevice();
+		//Create resource table
+		ResourceTableDesc tableDesc = {};
+		tableDesc.pOwnerPool = pPool.GetHeap();
+		tableDesc.pTargetLayout = pLayout.GetHeap();
+		mTable = pTexture->GetDevice()->CreateResourceTable(tableDesc);
 
-		if (pDevice == nullptr)
-		{
-			DEV_LOG("ImGuiTextureBinding", "The GraphicsDevice is not valid!");
-			return;
-		}
-
+		//Update resource table
 		ResourceTableUpdateDesc updateDesc = {};
 		updateDesc.Entries.Add(
 			{
-				.pResource = pTexture.GetHeap(),
-				.Type = GraphicsResourceType::SampledTexture,
-				.Count = 1,
-				.ArrayElement = 0,
-				.BufferOffsetInBytes = 0,
-				.Binding = 0
-			}
-		);
+					.pResource = pTexture->GetTexture().GetHeap(),
+					.Type = GraphicsResourceType::SampledTexture,
+					.Count = 1,
+					.ArrayElement = 0,
+					.BufferOffsetInBytes = 0,
+					.Binding = 0
+			});
 
-		pDevice->UpdateResourceTable(mResourceTable.GetHeap(), updateDesc);
+		pTexture->GetDevice()->UpdateResourceTable(mTable.GetHeap(), updateDesc);
 	}
-
-	ImGuiTextureBinding::~ImGuiTextureBinding()
+	void ImGuiTextureBinding::OnShutdown()
 	{
-		mResourceTable.Shutdown();
+		mTable.Shutdown();
 	}
 }

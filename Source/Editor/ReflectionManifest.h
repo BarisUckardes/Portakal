@@ -13,6 +13,7 @@
 #include "ImGui\ImGuiRenderStartModule.h"
 #include "Project\ProjectDescriptor.h"
 #include "Project\ProjectModule.h"
+#include "Resource\EditorResourceModule.h"
 #include "Resource\IResourceSerializer.h"
 #include "Resource\ResourceSerializerAttribute.h"
 #include "GUI\Window\GUIWindow.h"
@@ -49,6 +50,7 @@
 		void* CreateImGuiRenderStartModule() {return new Portakal::ImGuiRenderStartModule();}
 		void* CreateProjectDescriptor() {return new Portakal::ProjectDescriptor();}
 		void* CreateProjectModule() {return new Portakal::ProjectModule();}
+		void* CreateEditorResourceModule() {return new Portakal::EditorResourceModule();}
 		void* CreateIResourceSerializer() {return nullptr;}
 		void* CreateResourceSerializerAttribute() {return new Portakal::ResourceSerializerAttribute();}
 		void* CreateGUIWindow() {return nullptr;}
@@ -113,6 +115,8 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ProjectDescriptor>(pProjectDescriptor);
 ;		Portakal::Type* pProjectModule = Portakal::TypeDispatcher::CreateType("ProjectModule",sizeof(Portakal::ProjectModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateProjectModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ProjectModule>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ProjectModule>(pProjectModule);
+;		Portakal::Type* pEditorResourceModule = Portakal::TypeDispatcher::CreateType("EditorResourceModule",sizeof(Portakal::EditorResourceModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateEditorResourceModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::EditorResourceModule>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::EditorResourceModule>(pEditorResourceModule);
 ;		Portakal::Type* pIResourceSerializer = Portakal::TypeDispatcher::CreateType("IResourceSerializer",sizeof(Portakal::IResourceSerializer),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateIResourceSerializer,Portakal::TypeDispatcher::GetTypeAddress<Portakal::IResourceSerializer>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::IResourceSerializer>(pIResourceSerializer);
 ;		Portakal::Type* pResourceSerializerAttribute = Portakal::TypeDispatcher::CreateType("ResourceSerializerAttribute",sizeof(Portakal::ResourceSerializerAttribute),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateResourceSerializerAttribute,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ResourceSerializerAttribute>());
@@ -170,6 +174,7 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ImGuiRenderEndModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ImGuiRenderStartModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ProjectModule),typeof(Portakal::ApplicationModule));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::EditorResourceModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ResourceSerializerAttribute),typeof(Portakal::Attribute));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::GUIWindowModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureSerializer),typeof(Portakal::IResourceSerializer));
@@ -180,7 +185,7 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::WorldWindow),typeof(Portakal::GUIWindow));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {pDomainModule,pContextMenuItem,pCreateFolderContextMenuItem,pGUIDirection,pIContextMenuItem,pImGuiModule,pImGuiRenderEndModule,pImGuiRenderStartModule,pProjectDescriptor,pProjectModule,pIResourceSerializer,pResourceSerializerAttribute,pGUIWindow,pGUIWindowDescriptor,pGUIWindowModule,pGUIWindowSettings,pTextureSerializer,pDomainWindow,pGameWindow,pObjectWindow,pSceneWindow,pWorldWindow,};
+		Portakal::Array<Portakal::Type*> types = {pDomainModule,pContextMenuItem,pCreateFolderContextMenuItem,pGUIDirection,pIContextMenuItem,pImGuiModule,pImGuiRenderEndModule,pImGuiRenderStartModule,pProjectDescriptor,pProjectModule,pEditorResourceModule,pIResourceSerializer,pResourceSerializerAttribute,pGUIWindow,pGUIWindowDescriptor,pGUIWindowModule,pGUIWindowSettings,pTextureSerializer,pDomainWindow,pGameWindow,pObjectWindow,pSceneWindow,pWorldWindow,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;

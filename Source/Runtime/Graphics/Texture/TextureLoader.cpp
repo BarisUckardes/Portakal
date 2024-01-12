@@ -5,7 +5,7 @@ namespace Portakal
 {
 	Bool8 TextureLoader::LoadFromPath(const String& path, TextureLoadResult& resultOut)
 	{
-		/*int width = 0;
+		int width = 0;
 		int height = 0;
 		int channels = 0;
 		Byte* pData = stbi_load(*path, &width, &height, &channels, 4);
@@ -16,7 +16,7 @@ namespace Portakal
 		}
 
 		resultOut.Size = { (UInt16)width,(UInt16)height };
-		resultOut.pView = new MemoryOwnedView(pData, width * height * 4);*/
+		resultOut.pView = new MemoryOwnedView(pData, width * height * 4);
 
 		return true;
 	}

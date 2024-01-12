@@ -11,6 +11,8 @@ namespace Portakal
 		{
 			return sExecutablePath;
 		}
+		static String GetProgramsPath();
+		static String GetPersistentDataPath();
 	private:
 		static void _SetExecutablePath(const String& path);
 	private:

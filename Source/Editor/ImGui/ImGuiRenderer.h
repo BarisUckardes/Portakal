@@ -1,5 +1,4 @@
 #pragma once
-
 #include <Runtime/Object/Object.h>
 #include <Runtime/Window/WindowEventData.h>
 #include <Runtime/Graphics/Device/GraphicsDevice.h>
@@ -7,13 +6,15 @@
 #include <Runtime/Resource/Mesh/MeshResource.h>
 #include <Runtime/Resource/Texture/TextureResource.h>
 #include <Runtime/Resource/RenderTarget/RenderTarget.h>
+#include <Editor/ImGui/ImGuiTextureBinding.h>
 #include <Runtime/Containers/HashMap.h>
 #include <imgui.h>
 
 namespace Portakal
 {
-	class ImGuiTextureBinding;
 
+#define IMGUI_MAX_RESOURCE_TABLES 8192
+	class ImGuiTextureBinding;
 	class EDITOR_API ImGuiRenderer : public Object
 	{
 		friend class ImGuiBeginModule;
@@ -31,6 +32,10 @@ namespace Portakal
 
 		void StartRendering(float deltaTimeInMilliSeconds);
 		void EndRendering(const SharedHeap<RenderTarget>& pRenderTarget, const Color4F clearColor);
+
+		SharedHeap<ImGuiTextureBinding> GetOrCreateTextureBinding(const SharedHeap<TextureResource>& pTexture);
+		void DeleteTextureBinding(const SharedHeap<TextureResource>& pTexture);
+		void ClearTextureBindings();
 
 		void OnResized(const Vector2US newSize);
 		void OnMouseMoved(const Vector2I mousePosition);
@@ -78,5 +83,6 @@ namespace Portakal
 		SharedHeap<Pipeline> mPipeline;
 		SharedHeap<Fence> mFence;
 		Array<SharedHeap<RenderTarget>> mRenderTargets;
+		HashMap<SharedHeap<TextureResource>, SharedHeap<ImGuiTextureBinding>> mTextureBindings;
 	};
 }

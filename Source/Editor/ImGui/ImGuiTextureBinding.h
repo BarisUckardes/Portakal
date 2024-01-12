@@ -1,26 +1,32 @@
 #pragma once
-
 #include <Runtime/Memory/SharedHeap.h>
 
 namespace Portakal
 {
-
-	class Texture;
+	class TextureResource;
 	class ResourceTable;
 	class ResourceTableLayout;
 	class ResourceTablePool;
-
-	class EDITOR_API ImGuiTextureBinding
+	class EDITOR_API ImGuiTextureBinding : public Object
 	{
+		friend class ImGuiRenderer;
 	public:
-		ImGuiTextureBinding(const SharedHeap<Texture>& pTexture, const SharedHeap<ResourceTableLayout>& pLayout, const SharedHeap<ResourceTablePool>& pPool);
-		~ImGuiTextureBinding();
+		~ImGuiTextureBinding() = default;
 
-		FORCEINLINE Texture* GetTexture() const { return mTargetTexture.GetHeap(); }
-		FORCEINLINE ResourceTable* GetResourceTable() const { return mResourceTable.GetHeap(); }
-
+		FORCEINLINE SharedHeap<TextureResource> GetTexture() const noexcept
+		{
+			return mTexture.GetHeap();
+		}
+		FORCEINLINE ResourceTable* GetTable() const noexcept
+		{
+			return mTable.GetHeap();
+		}
 	private:
-		SharedHeap<Texture> mTargetTexture;
-		SharedHeap<ResourceTable> mResourceTable;
+		ImGuiTextureBinding(const SharedHeap<TextureResource>& pTexture, const SharedHeap<ResourceTableLayout>& pLayout, const SharedHeap<ResourceTablePool>& pPool);
+
+		virtual void OnShutdown() override;
+	private:
+		SharedHeap<TextureResource> mTexture;
+		SharedHeap<ResourceTable> mTable;
 	};
 }

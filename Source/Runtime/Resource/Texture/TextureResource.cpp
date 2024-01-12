@@ -1,6 +1,7 @@
 #include "TextureResource.h"
 #include <Runtime/Graphics/Command/CommandList.h>
 #include <Runtime/Graphics/Texture/TextureUtils.h>
+#include <Runtime/Graphics/GraphicsAPI.h>
 
 namespace Portakal
 {
@@ -11,6 +12,7 @@ namespace Portakal
     }
     TextureResource::TextureResource()
     {
+        mDevice = GraphicsAPI::GetDefaultDevice();
         CreateInternalResources();
     }
     void TextureResource::AllocateTexture(const TextureDesc& desc, const SharedHeap<GraphicsMemoryHeap>& pHostHeap, const Bool8 bAllocateStagebuffersUpfront,const Bool8 bCreateViewsUpfront)

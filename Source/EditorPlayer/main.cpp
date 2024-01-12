@@ -82,12 +82,13 @@ namespace Portakal
 		pApplication->RegisterModule<EditorPlayerProjectModule>(5);
 		pApplication->RegisterModule<EditorPlayerWindowModule>(6);
 		pApplication->RegisterModule<EditorPlayerGDeviceModule>(7);
-		pApplication->RegisterModule<ImGuiModule>(8);
+		pApplication->RegisterModule<EditorResourceModule>(8);
+		pApplication->RegisterModule<ImGuiModule>(9);
 		
 		//GUI modules
-		pApplication->RegisterModule<ImGuiRenderStartModule>(9);
-		pApplication->RegisterModule<GUIWindowModule>(10);
-		pApplication->RegisterModule<ImGuiRenderEndModule>(11);
+		pApplication->RegisterModule<ImGuiRenderStartModule>(10);
+		pApplication->RegisterModule<GUIWindowModule>(11);
+		pApplication->RegisterModule<ImGuiRenderEndModule>(12);
 
 		//Run
 		pApplication->Run();
