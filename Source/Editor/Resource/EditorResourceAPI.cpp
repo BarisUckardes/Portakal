@@ -29,7 +29,7 @@ namespace Portakal
 			DEV_LOG("EditorResourceAPI", "Failed to get .png files");
 			return;
 		}
-		return;
+
 		for (const String& file : pngFiles)
 		{
 			//Get name

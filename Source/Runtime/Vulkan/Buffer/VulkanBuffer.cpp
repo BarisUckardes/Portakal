@@ -34,7 +34,7 @@ namespace Portakal
             DEV_LOG("VulkanBuffer", "Handle: %llu, Aligned handle: %llu, Alignment: %llu, Offset: %llu", memoryHandle, alignedHandle,requirements.alignment,alignmentOffset);
         }
         //Bind memory
-        DEV_ASSERT(vkBindBufferMemory(mLogicalDevice, mBuffer, pHeap->GetVkMemory(), memoryHandle) == VK_SUCCESS,"VulkanBuffer","Failed to bind memory");
+        DEV_ASSERT(vkBindBufferMemory(mLogicalDevice, mBuffer, pHeap->GetVkMemory(), alignedHandle) == VK_SUCCESS,"VulkanBuffer","Failed to bind memory");
 
         //Set aligned handle
         SetMemoryProperties(memoryHandle, alignedHandle);

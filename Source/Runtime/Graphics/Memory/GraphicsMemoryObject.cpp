@@ -27,6 +27,6 @@ namespace Portakal
 	void GraphicsMemoryObject::SetMemoryProperties(const MemoryHandle handle, const MemoryHandle alignedHandle)
 	{
 		mMemory = handle;
-		mAlignedMemory = handle;
+		mAlignedMemory = alignedHandle;
 	}
 }
