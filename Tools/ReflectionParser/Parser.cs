@@ -103,16 +103,17 @@ namespace Portakal
                 {
                     case FileType.Class:
                         {
-                            forwardLineContent = $@"#undef PCLASS(){Environment.NewLine}#define PCLASS()\{Environment.NewLine} class {file.Name};\";
+                            forwardLineContent = $@"#undef PCLASS(){Environment.NewLine}#define PCLASS(...)\{Environment.NewLine} class {file.Name};\";
                             break;
                         }
                     case FileType.Enum:
                         {
-                            forwardLineContent = @$"#undef PENUM(){Environment.NewLine}#define PENUM()\{Environment.NewLine} enum class {file.Name} : Int64;\";
+                            forwardLineContent = @$"#undef PENUM(){Environment.NewLine}#define PENUM(...)\{Environment.NewLine} enum class {file.Name} : Int64;\";
                             break;
                         }
                 }
-                string reflectedFileContent = $@"
+                string reflectedFileContent = $@"#pragma warning(push)
+#pragma warning( disable : 4067)
 {forwardLineContent}
 	template<>\
 	class TypeAccessor<{file.Name}>\
@@ -137,6 +138,7 @@ namespace Portakal
 	}};
     #undef GENERATE_OBJECT;
     #define GENERATE_OBJECT virtual Type* GetType() const noexcept override {{return typeof({file.Name});}}
+    #pragma warning( pop )
 ";
 
                 File.WriteAllText(filePath, reflectedFileContent);
