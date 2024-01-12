@@ -26,6 +26,7 @@ namespace Portakal
 		void DeleteFolder(const SharedHeap<DomainFolder>& pFolder);
 		void DeleteSelections();
 		void ClearSelections();
+		void OpenFile(DomainFile* pFile);
 		void OpenFolder(DomainFolder* pFolder);
 
 		// Inherited via GUIWindow
@@ -40,8 +41,8 @@ namespace Portakal
 		Array<SharedHeap<DomainFile>> mSelectedFiles;
 		Array<IContextMenuItem*> mContextCreateActions;
 		Array<IContextMenuItem*> mTickingContextCreateActions;
-		SharedHeap<EditorTextureResource> mFolderIcon;
 		SharedHeap<ImGuiTextureBinding> mFolderIconBinding;
+		SharedHeap<ImGuiTextureBinding> mDefaultItemIconBinding;
 		DomainFolder* mContextMenuFolder;
 		bool mFolderChanged;
 		float mFolderSize;

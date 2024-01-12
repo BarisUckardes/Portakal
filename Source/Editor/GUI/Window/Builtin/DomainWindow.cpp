@@ -43,6 +43,9 @@ namespace Portakal
 		mSelectedFiles.Clear();
 		mSelectedFolders.Clear();
 	}
+	void DomainWindow::OpenFile(DomainFile* pFile)
+	{
+	}
 	void DomainWindow::OpenFolder(DomainFolder* pFolder)
 	{
 		mTargetFolder = pFolder;
@@ -91,15 +94,11 @@ namespace Portakal
 
 				//Check if requested selection
 				if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl) && bClicked)
-				{
 					SelectFolder(pFolder);
-				}
 
 				//Check if requested to open folder
 				if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
-				{
 					OpenFolder(pFolder.GetHeap());
-				}
 
 				//Check if requested to open folder context menu
 				if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsItemHovered())
@@ -128,7 +127,48 @@ namespace Portakal
 		}
 
 		//Render files
+		const Array<SharedHeap<DomainFile>>& files = mTargetFolder->GetFiles();
+		{
+			for (const SharedHeap<DomainFile>& pFile : files)
+			{
+				//Get if selected
+				const bool bSelected = mSelectedFiles.Has(pFile);
 
+				//Create selectable
+				ImGui::SetCursorPos(itemPos);
+				ImGui::PushID(*pFile->GetName());
+				const bool bClicked = ImGui::Selectable("", bSelected,ImGuiSelectableFlags_DontClosePopups, { mFileSize,mFileSize });
+				ImGui::PopID();
+
+				//Check if requested selection
+				if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl) && bClicked)
+					SelectFile(pFile);
+
+				//Check if requested to open file
+				if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
+					OpenFile(pFile.GetHeap());
+
+				//Check if requested to open file context menu
+				if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsItemHovered())
+				{
+
+				}
+
+				//Create image
+				ImGui::SetCursorPos(itemPos);
+				ImGui::Image(mDefaultItemIconBinding->GetTable(), { mFileSize,mFileSize });
+
+				//Draw text
+				ImGui::SetCursorPos({ itemPos.x,itemPos.y + mFileSize });
+				ImGui::Text(*pFile->GetName());
+
+				//Move next
+				itemPos.x += (mFileSize + mItemGap);
+
+				//Reset same line
+				ImGui::SameLine();
+			}
+		}
 		
 		//Handle events
 		if (ImGui::IsKeyPressed(ImGuiKey_Backspace)) // wants to go back to the previous folder
@@ -242,13 +282,16 @@ namespace Portakal
 		}
 
 		//Get folder icon
-		mFolderIcon = EditorResourceAPI::GetResource("FolderIcon").QueryAs<EditorTextureResource>();
-		mFolderIconBinding =  ImGuiAPI::GetRenderer()->GetOrCreateTextureBinding(mFolderIcon->GetTexture());
+		SharedHeap<EditorTextureResource> pFolderIcon = EditorResourceAPI::GetResource("FolderIcon").QueryAs<EditorTextureResource>();
+		mFolderIconBinding =  ImGuiAPI::GetRenderer()->GetOrCreateTextureBinding(pFolderIcon->GetTexture());
+
+		//Get default icon
+		SharedHeap<EditorTextureResource> pDefaultIcon = EditorResourceAPI::GetResource("DefaultIcon").QueryAs<EditorTextureResource>();
+		mDefaultItemIconBinding = ImGuiAPI::GetRenderer()->GetOrCreateTextureBinding(pDefaultIcon->GetTexture());
 
 		//Setup defaults
 		mFolderSize = 64;
 		mFileSize = 64;
 		mItemGap = 16;
-
 	}
 }

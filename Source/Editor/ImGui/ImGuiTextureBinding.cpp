@@ -41,7 +41,7 @@ namespace Portakal
 		ResourceTableUpdateDesc updateDesc = {};
 		updateDesc.Entries.Add(
 			{
-					.pResource = pTexture->GetView(0,0).GetHeap(),
+					.pResource = pTexture->GetView(0, 0).QueryAs<GraphicsDeviceObject>(),
 					.Type = GraphicsResourceType::SampledTexture,
 					.Count = 1,
 					.ArrayElement = 0,
