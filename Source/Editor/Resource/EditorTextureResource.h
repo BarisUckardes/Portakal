@@ -11,21 +11,20 @@ namespace Portakal
 		~EditorTextureResource() = default;
 
 
-		virtual void OnShutdown() override;
-	private:
+		FORCEINLINE SharedHeap<TextureResource> GetTexture() const noexcept
+		{
+			return mTexture;
+		}
 		EditorResourceType GetResourceType() const noexcept override final
 		{
 			return EditorResourceType::Texture;
 		}
-		SharedHeap<ResourceSubObject> GetResource()  noexcept override final
-		{
-			return mTexture.QueryAs<ResourceSubObject>();
-		}
+		virtual void OnShutdown() override;
+	private:
 	private:
 		SharedHeap<TextureResource> mTexture;
 		SharedHeap<GraphicsMemoryHeap> mHostHeap;
 		SharedHeap<GraphicsMemoryHeap> mDeviceHeap;
 
-		// Inherited via EditorResource
 	};
 }
