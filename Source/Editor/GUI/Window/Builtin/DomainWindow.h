@@ -3,6 +3,8 @@
 #include <Editor/Domain/DomainFolder.h>
 #include <Editor/Domain/DomainFile.h>
 #include <Editor/GUI/IContextMenuItem.h>
+#include <Editor/ImGui/ImGuiRenderer.h>
+#include <Editor/Resource/EditorTextureResource.h>
 #include "DomainWindow.reflected.h"
 
 namespace Portakal
@@ -38,6 +40,8 @@ namespace Portakal
 		Array<SharedHeap<DomainFile>> mSelectedFiles;
 		Array<IContextMenuItem*> mContextCreateActions;
 		Array<IContextMenuItem*> mTickingContextCreateActions;
+		SharedHeap<EditorTextureResource> mFolderIcon;
+		SharedHeap<ImGuiTextureBinding> mFolderIconBinding;
 		DomainFolder* mContextMenuFolder;
 		bool mFolderChanged;
 	};

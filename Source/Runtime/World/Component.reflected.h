@@ -1,6 +1,7 @@
-
+#pragma warning(push)
+#pragma warning( disable : 4067)
 #undef PCLASS()
-#define PCLASS()\
+#define PCLASS(...)\
  class Component;\
 	template<>\
 	class TypeAccessor<Component>\
@@ -25,3 +26,4 @@
 	};
     #undef GENERATE_OBJECT;
     #define GENERATE_OBJECT virtual Type* GetType() const noexcept override {return typeof(Component);}
+    #pragma warning( pop )

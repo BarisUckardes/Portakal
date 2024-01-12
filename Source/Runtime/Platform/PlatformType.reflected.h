@@ -1,6 +1,7 @@
-
+#pragma warning(push)
+#pragma warning( disable : 4067)
 #undef PENUM()
-#define PENUM()\
+#define PENUM(...)\
  enum class PlatformType : Int64;\
 	template<>\
 	class TypeAccessor<PlatformType>\
@@ -25,3 +26,4 @@
 	};
     #undef GENERATE_OBJECT;
     #define GENERATE_OBJECT virtual Type* GetType() const noexcept override {return typeof(PlatformType);}
+    #pragma warning( pop )

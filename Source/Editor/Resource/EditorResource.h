@@ -20,7 +20,6 @@ namespace Portakal
 		}
 
 		virtual EditorResourceType GetResourceType() const noexcept = 0;
-		virtual SharedHeap<ResourceSubObject> GetResource()  noexcept = 0;
 	private:
 		const String mPath;
 	};
