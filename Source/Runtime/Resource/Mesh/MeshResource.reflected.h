@@ -1,7 +1,6 @@
-#pragma warning(push)
-#pragma warning( disable : 4067)
+
 #undef PCLASS()
-#define PCLASS(...)\
+#define PCLASS()\
  class MeshResource;\
 	template<>\
 	class TypeAccessor<MeshResource>\
@@ -26,4 +25,3 @@
 	};
     #undef GENERATE_OBJECT;
     #define GENERATE_OBJECT virtual Type* GetType() const noexcept override {return typeof(MeshResource);}
-    #pragma warning( pop )

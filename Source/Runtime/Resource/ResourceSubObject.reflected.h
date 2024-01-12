@@ -1,7 +1,6 @@
-#pragma warning(push)
-#pragma warning( disable : 4067)
+
 #undef PCLASS()
-#define PCLASS(...)\
+#define PCLASS()\
  class ResourceSubObject;\
 	template<>\
 	class TypeAccessor<ResourceSubObject>\
@@ -26,4 +25,3 @@
 	};
     #undef GENERATE_OBJECT;
     #define GENERATE_OBJECT virtual Type* GetType() const noexcept override {return typeof(ResourceSubObject);}
-    #pragma warning( pop )

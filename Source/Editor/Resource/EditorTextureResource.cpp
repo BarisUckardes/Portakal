@@ -36,12 +36,12 @@ namespace Portakal
 		//Create heaps
 		GraphicsMemoryHeapDesc deviceHeapDesc = {};
 		deviceHeapDesc.Type = GraphicsMemoryType::Device;
-		deviceHeapDesc.SizeInBytes = textureSizeInBytes*2;
+		deviceHeapDesc.SizeInBytes = textureSizeInBytes * 2;
 		mDeviceHeap = pDevice->CreateMemoryHeap(deviceHeapDesc);
 
 		GraphicsMemoryHeapDesc hostHeapDesc = {};
 		hostHeapDesc.Type = GraphicsMemoryType::Host;
-		hostHeapDesc.SizeInBytes = textureSizeInBytes*2;
+		hostHeapDesc.SizeInBytes = textureSizeInBytes * 2;
 		mHostHeap = pDevice->CreateMemoryHeap(hostHeapDesc);
 
 		//Create texture
@@ -51,7 +51,7 @@ namespace Portakal
 		desc.Format = TextureFormat::R8_G8_B8_A8_UNorm;
 		desc.ArrayLevels = 1;
 		desc.MipLevels = 1;
-		desc.Size = { result.Size.X,result.Size.Y,1};
+		desc.Size = { result.Size.X,result.Size.Y, 1};
 		desc.SampleCount = TextureSampleCount::SAMPLE_COUNT_1;
 		desc.Usage = TextureUsage::Sampled | TextureUsage::TransferDestination;
 		desc.pHeap = mDeviceHeap;

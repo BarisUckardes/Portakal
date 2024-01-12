@@ -1,7 +1,6 @@
-#pragma warning(push)
-#pragma warning( disable : 4067)
+
 #undef PCLASS()
-#define PCLASS(...)\
+#define PCLASS()\
  class TextureResource;\
 	template<>\
 	class TypeAccessor<TextureResource>\
@@ -26,4 +25,3 @@
 	};
     #undef GENERATE_OBJECT;
     #define GENERATE_OBJECT virtual Type* GetType() const noexcept override {return typeof(TextureResource);}
-    #pragma warning( pop )

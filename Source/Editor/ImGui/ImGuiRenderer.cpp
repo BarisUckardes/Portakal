@@ -412,11 +412,11 @@ namespace Portakal
         samplerDesc.MinFilter = SamplerFiltering::Linear;
         samplerDesc.MagFilter = SamplerFiltering::Linear;
         samplerDesc.MipLodBias = 0;
-        samplerDesc.CompareOperation = CompareOperation::Never;
+        samplerDesc.CompareOperation = CompareOperation::Always;
         samplerDesc.ComparisonEnabled = false;
         samplerDesc.MinLod = 0;
-        samplerDesc.MaxLod = 0;
-        samplerDesc.MaxAnisotropy = 0;
+        samplerDesc.MaxLod = 1;
+        samplerDesc.MaxAnisotropy = 16;
 
         mSampler = mDevice->CreateSampler(samplerDesc);
 
@@ -433,7 +433,7 @@ namespace Portakal
         ResourceTableLayoutDesc dynamicResourceLayoutDesc = {};
         dynamicResourceLayoutDesc.Entries =
         {
-            {GraphicsResourceType::SampledTexture,ShaderStage::FragmentStage,0}
+            {GraphicsResourceType::SampledTexture, ShaderStage::FragmentStage,0}
         };
         mFontResourceLayout = mDevice->CreateResourceTableLayout(dynamicResourceLayoutDesc);
 
@@ -495,13 +495,13 @@ namespace Portakal
         mDevice->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, mFence.GetHeap());
         mDevice->WaitFences(mFence.GetHeapAddress(), 1);
 
-        //Create resource table pool
+        //Create resource table pool for static and dynamic resource tables
         ResourceTablePoolDesc tablePoolDesc = {};
         tablePoolDesc.Entries =
         {
             {GraphicsResourceType::ConstantBuffer,1},
             {GraphicsResourceType::Sampler,1},
-            {GraphicsResourceType::SampledTexture,1}
+            {GraphicsResourceType::SampledTexture,1},
         };
         tablePoolDesc.MaxTables = IMGUI_MAX_RESOURCE_TABLES;
         mResourcePool = mDevice->CreateResourceTablePool(tablePoolDesc);
@@ -523,9 +523,16 @@ namespace Portakal
         staticTableUpdateDesc.Entries =
         {
             {mConstantBuffer.QueryAs<GraphicsDeviceObject>(),GraphicsResourceType::ConstantBuffer,1,0,0,0},
-            {mSampler.QueryAs<GraphicsDeviceObject>(),GraphicsResourceType::Sampler,1,0,1,1}
+            {mSampler.QueryAs<GraphicsDeviceObject>(),GraphicsResourceType::Sampler,1,0,1,1},
         };
         mDevice->UpdateResourceTable(mStaticResourceTable.GetHeap(), staticTableUpdateDesc);
+
+        //Update dynamic resource table
+        ResourceTableUpdateDesc dynamicTableUpdateDesc = {};
+        dynamicTableUpdateDesc.Entries =
+        {
+            {}
+        };
 
         //Update font resource table
         SharedHeap<TextureView> pFontTextureView = mDefaultFontTexture->GetView(0, 0);
