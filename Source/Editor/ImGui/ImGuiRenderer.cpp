@@ -527,13 +527,6 @@ namespace Portakal
         };
         mDevice->UpdateResourceTable(mStaticResourceTable.GetHeap(), staticTableUpdateDesc);
 
-        //Update dynamic resource table
-        ResourceTableUpdateDesc dynamicTableUpdateDesc = {};
-        dynamicTableUpdateDesc.Entries =
-        {
-            {}
-        };
-
         //Update font resource table
         SharedHeap<TextureView> pFontTextureView = mDefaultFontTexture->GetView(0, 0);
         ResourceTableUpdateDesc fontTableUpdateDesc = {};
