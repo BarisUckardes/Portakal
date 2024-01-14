@@ -412,11 +412,11 @@ namespace Portakal
         samplerDesc.MinFilter = SamplerFiltering::Linear;
         samplerDesc.MagFilter = SamplerFiltering::Linear;
         samplerDesc.MipLodBias = 0;
-        samplerDesc.CompareOperation = CompareOperation::Always;
+        samplerDesc.CompareOperation = CompareOperation::Never ;
         samplerDesc.ComparisonEnabled = false;
         samplerDesc.MinLod = 0;
-        samplerDesc.MaxLod = 1;
-        samplerDesc.MaxAnisotropy = 16;
+        samplerDesc.MaxLod = 0;
+        samplerDesc.MaxAnisotropy = 0;
 
         mSampler = mDevice->CreateSampler(samplerDesc);
 

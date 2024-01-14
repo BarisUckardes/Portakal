@@ -7,6 +7,7 @@ include(${CMAKE_SOURCE_DIR}/Scripts/CMake/FetchLibraries.cmake)
 # ---------------------- CMAKE FETCH -------------------------
 FetchContent_MakeAvailable(stbi)
 FetchContent_MakeAvailable(yaml-cpp)
+FetchContent_MakeAvailable(freetype)
 # ------------------------------------------------------------
 
 # ---------------------- FILE ADDITION -----------------------
@@ -54,6 +55,11 @@ else ()
     target_compile_definitions(Runtime PUBLIC STB_IMAGE_IMPLEMENTATION=0)
 endif ()
 # ------------------------------------------------------------
+
+# ----------------- FREETYPE IMPLEMENTATION ------------------
+if (freetype_POPULATED) 
+	target_link_libraries(Runtime PUBLIC freetype)
+endif ()
 
 # ------------------- VULKAN IMPLEMENTATION ------------------
 target_include_directories(Runtime PUBLIC "${CMAKE_SOURCE_DIR}/External/Vulkan/Include")
