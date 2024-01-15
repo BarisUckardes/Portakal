@@ -45,7 +45,7 @@ namespace Portakal
 		ImGui::SetNextWindowPos(pViewport->Pos);
 		ImGui::SetNextWindowSize(pViewport->Size);
 		ImGui::SetNextWindowViewport(pViewport->ID);
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 2.0f);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 		bool open = true;
@@ -70,7 +70,7 @@ namespace Portakal
 			ImGuiID dockLeftNode = ImGui::DockBuilderSplitNode(dockOppositeNode, ImGuiDir_Left, 0.20f, NULL, &dockOppositeNode);
 			ImGuiID dockRightNode = ImGui::DockBuilderSplitNode(dockOppositeNode, ImGuiDir_Right, 0.20f, NULL, &dockOppositeNode);
 			ImGuiID dockUpNode = ImGui::DockBuilderSplitNode(dockOppositeNode, ImGuiDir_Up, 0.20f, NULL, &dockOppositeNode);
-			ImGuiID dockBottomNode = ImGui::DockBuilderSplitNode(dockOppositeNode, ImGuiDir_Down, 0.20f, NULL, &dockOppositeNode);
+			ImGuiID dockBottomNode = ImGui::DockBuilderSplitNode(dockOppositeNode, ImGuiDir_Down, 0.30f, NULL, &dockOppositeNode);
 			const UInt32 nodes[] = { dockOppositeNode,dockLeftNode,dockRightNode,dockUpNode,dockBottomNode };
 
 			for (const SharedHeap<GUIWindow>& pWindow : mWindows)

@@ -27,7 +27,7 @@ namespace Portakal
 
 		//Collect and load textures
 		Array<String> pngFiles;
-		if (!PlatformDirectory::GetFileNamesViaExtension(path,".png", pngFiles))
+		if (!PlatformDirectory::GetFileNamesViaExtension(path + "Icons\\", ".png", pngFiles))
 		{
 			DEV_LOG("EditorResourceAPI", "Failed to get .png files");
 			return;
