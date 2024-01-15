@@ -5,6 +5,7 @@
 #include <Editor/GUI/IContextMenuItem.h>
 #include <Editor/ImGui/ImGuiRenderer.h>
 #include <Editor/Resource/EditorTextureResource.h>
+#include <Editor/GUI/IThumbnail.h>
 #include "DomainWindow.reflected.h"
 
 namespace Portakal
@@ -28,6 +29,10 @@ namespace Portakal
 		void ClearSelections();
 		void OpenFile(DomainFile* pFile);
 		void OpenFolder(DomainFolder* pFolder);
+		void ProcessDragDrops(const Array<String>& items);
+		void InitializeThumbnail(const SharedHeap<DomainFile>& pFile);
+		SharedHeap<TextureResource> GetThumbnailImage(const SharedHeap<DomainFile>& pFile);
+		void ClearThumbnails();
 
 		// Inherited via GUIWindow
 		void OnShutdown() override;
@@ -39,8 +44,6 @@ namespace Portakal
 		DomainFolder* mTargetFolder;
 		Array<SharedHeap<DomainFolder>> mSelectedFolders;
 		Array<SharedHeap<DomainFile>> mSelectedFiles;
-		Array<IContextMenuItem*> mContextCreateActions;
-		Array<IContextMenuItem*> mTickingContextCreateActions;
 		SharedHeap<ImGuiTextureBinding> mFolderIconBinding;
 		SharedHeap<ImGuiTextureBinding> mDefaultItemIconBinding;
 		DomainFolder* mContextMenuFolder;
@@ -48,6 +51,13 @@ namespace Portakal
 		float mFolderSize;
 		float mFileSize;
 		float mItemGap;
+
+		//Context menu item variables
+		Array<IContextMenuItem*> mContextCreateActions;
+		Array<IContextMenuItem*> mTickingContextCreateActions;
+
+		//Thumbnail variables
+		HashMap<SharedHeap<DomainFile>, SharedHeap<IThumbnail>> mThumnails;
 	};
 }
 

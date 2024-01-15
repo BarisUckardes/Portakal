@@ -1,23 +1,23 @@
 #pragma once
 #include <Runtime/Reflection/Reflection.h>
-#include "ResourceDeserializerAttribute.reflected.h"
+#include "CustomResourceDeserializer.reflected.h"
 
 namespace Portakal
 {
 	PCLASS();
-	class RUNTIME_API ResourceDeserializerAttribute : public Attribute
+	class RUNTIME_API CustomResourceDeserializer : public Attribute
 	{
 		GENERATE_OBJECT;
 	public:
-		ResourceDeserializerAttribute(const String& type) : mType(type)
+		CustomResourceDeserializer(const String& type) : mType(type)
 		{
 
 		}
-		ResourceDeserializerAttribute() : mType("")
+		CustomResourceDeserializer() : mType("")
 		{
 
 		}
-		~ResourceDeserializerAttribute() = default;
+		~CustomResourceDeserializer() = default;
 
 		FORCEINLINE String GetResourceType() const noexcept
 		{
@@ -27,6 +27,7 @@ namespace Portakal
 		const String mType;
 	};
 }
+
 
 
 

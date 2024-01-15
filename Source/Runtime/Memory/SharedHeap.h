@@ -59,10 +59,13 @@ namespace Portakal
             mData = nullptr;
             mReferenceCount = nullptr;
         }
-        void Shutdown() const
+        void Shutdown()
         {
+            //Shutdown the underlying data
             if (mData != nullptr)
                 mData->Shutdown();
+
+            Deference();
         }
 
         T* operator->() const noexcept

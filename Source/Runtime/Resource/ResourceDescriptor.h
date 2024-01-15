@@ -5,14 +5,10 @@
 namespace Portakal
 {
 	PCLASS();
-	class RUNTIME_API ResourceDescriptor
+	struct RUNTIME_API ResourceDescriptor
 	{
-	public:
-		ResourceDescriptor() = default;
-		~ResourceDescriptor() = default;
-
 		PFIELD();
-		String Path;
+		String SourcePath;
 		PFIELD();
 		String ResourceType;
 		PFIELD();

@@ -4,7 +4,7 @@
 
 namespace Portakal
 {
-	PATTRIBUTE(ContextMenuItem, "Create Folder");
+	PATTRIBUTE(CustomContextMenuItem, "Create Folder");
 	PCLASS();
 	class EDITOR_API CreateFolderContextMenuItem : public IContextMenuItem
 	{

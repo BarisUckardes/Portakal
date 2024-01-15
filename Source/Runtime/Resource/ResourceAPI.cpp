@@ -3,11 +3,11 @@
 #include <Runtime/Yaml/Yaml.h>
 #include <Runtime/Reflection/ReflectionAPI.h>
 #include <Runtime/Resource/IResourceDeserializer.h>
-#include <Runtime/Resource/ResourceDeserializerAttribute.h>
+#include <Runtime/Resource/CustomResourceDeserializer.h>
 
 namespace Portakal
 {
-	SharedHeap<Resource> ResourceAPI::RegisterResource(const String& descriptorPath)
+	SharedHeap<Resource> ResourceAPI::RegisterResource(const ResourceDescriptor& descriptor)
 	{
 		//Check API
 		ResourceAPI* pAPI = GetUnderlyingAPI();
@@ -18,35 +18,9 @@ namespace Portakal
 		}
 
 		//Check file if exists
-		if (!PlatformFile::Exists(descriptorPath))
+		if (!PlatformFile::Exists(descriptor.SourcePath))
 		{
 			DEV_LOG("ResourceAPI", "Given descriptor file path does not exist");
-			return nullptr;
-		}
-
-		//Load descriptor
-		String fileContent;
-		if (!PlatformFile::Read(descriptorPath, fileContent))
-		{
-			DEV_LOG("ResourceAPI", "Failed to load the given descriptor file");
-			return nullptr;
-		}
-
-		//Convert descriptor
-		ResourceDescriptor descriptor = {};
-		Yaml::ToObject<ResourceDescriptor>(fileContent,&descriptor);
-
-		//Check resource name and id
-		if (descriptor.Name == "" || descriptor.ID == Guid::Zero())
-		{
-			DEV_LOG("ResourceAPI", "Descriptor name or ID is invalid!");
-			return nullptr;
-		}
-
-		//Check resource file path
-		if (!PlatformFile::Exists(descriptor.Path))
-		{
-			DEV_LOG("ResourceAPI", "Given resource descriptor does not point to a valid resource!");
 			return nullptr;
 		}
 
@@ -61,7 +35,10 @@ namespace Portakal
 		for (Type* pType : types)
 		{
 			//Get attribute
-			const ResourceDeserializerAttribute* pAttribute = pType->GetAttribute<ResourceDeserializerAttribute>();
+			const CustomResourceDeserializer* pAttribute = pType->GetAttribute<CustomResourceDeserializer>();
+			if (pAttribute == nullptr)
+				continue;
+
 			if (pAttribute->GetResourceType() == descriptor.ResourceType)
 			{
 				pFoundDeserializer = pType;
@@ -93,7 +70,7 @@ namespace Portakal
 		//Search for the name
 		for (UInt32 i = 0;i< pAPI->mResources.GetSize();i++)
 		{
-			const SharedHeap<Resource>& resource = pAPI->mResources[i];
+			SharedHeap<Resource>& resource = pAPI->mResources[i];
 			if (resource->GetName() == name)
 			{
 				resource.Shutdown();
@@ -112,7 +89,7 @@ namespace Portakal
 		//Search for the name
 		for (UInt32 i = 0; i < pAPI->mResources.GetSize(); i++)
 		{
-			const SharedHeap<Resource>& resource = pAPI->mResources[i];
+			SharedHeap<Resource>& resource = pAPI->mResources[i];
 			if (resource->GetID() == id)
 			{
 				resource.Shutdown();
@@ -157,11 +134,13 @@ namespace Portakal
 	}
 	ResourceAPI::ResourceAPI()
 	{
-		mResources.Reserve(1000);
+
 	}
 	ResourceAPI::~ResourceAPI()
 	{
-		for (const SharedHeap<Resource>& resource : mResources)
+		for (SharedHeap<Resource>& resource : mResources)
 			resource.Shutdown();
+
+		mResources.Clear();
 	}
 }

@@ -73,7 +73,10 @@ namespace Portakal
 
     String PlatformFile::GetNameWithoutExtension(const String& path)
     {
-        return PlatformAbstraction::GetNameWithoutExtension(path);
+        const Int32 index = path.FindIndex('.');
+        if (index == -1)
+            return path;
+        return PlatformFile::GetName(path.GetSubset(0, index));
     }
 
     String PlatformFile::GetDirectory(const String& path)

@@ -1,6 +1,7 @@
 #pragma once
 #include <Runtime/Memory/MemoryView.h>
 #include <Runtime/Reflection/Reflection.h>
+#include <Runtime/Resource/CustomResourceDeserializer.h>
 #include "IResourceDeserializer.reflected.h"
 
 namespace Portakal

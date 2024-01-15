@@ -1,4 +1,4 @@
-#include "Win32File.h"
+﻿#include "Win32File.h"
 #include <Windows.h>
 #include <Shlwapi.h>
 #include <stdio.h>
@@ -220,14 +220,31 @@ namespace Portakal
         const Char* pData = PathFindFileNameA(*path);
         return pData;
     }
-    String Win32File::GetNameWithoutExtension(const String& path)
-    {
-        char buffer[MAX_PATH];
-        Memory::Copy(buffer, *path, path.GetSize());
-        PathStripPathA(buffer);
-        PathRemoveExtensionA(buffer);
-        return buffer;
-    }
+   
+//#ifdef UNICODE //Test to see if we're using wchar_ts or not.
+//    typedef std::wstring StringType;
+//#else
+//    typedef std::string StringType;
+//#endif
+//
+//    StringType GetBaseFilename(const TCHAR* filename)
+//    {
+//        StringType fName(filename);
+//        size_t pos = fName.rfind(("."));
+//        if (pos == StringType::npos)  //No extension.
+//            return fName;
+//
+//        if (pos == 0)    //. is at the front. Not an extension.
+//            return fName;
+//
+//        return fName.substr(0, pos);
+//    }
+//    String Win32File::GetNameWithoutExtension(const String& path)
+//    {
+//        StringType t = GetBaseFilename(*path);
+//        PathStripPath((char*)t.c_str());
+//        return t.c_str();
+//    }
     String Win32File::GetDirectory(const String& path)
     {
         String name = GetName(path);

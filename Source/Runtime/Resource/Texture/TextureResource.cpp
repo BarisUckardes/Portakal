@@ -248,7 +248,7 @@ namespace Portakal
         //Clear views
         for (const Array<MipData>& arrayLevel : mData)
         {
-            for (const MipData& mipData : arrayLevel)
+            for (MipData& mipData : arrayLevel)
             {
                 mipData.pStageBuffer.Shutdown();
                 mipData.pView.Shutdown();

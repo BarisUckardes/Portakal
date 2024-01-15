@@ -4,6 +4,7 @@
 
 namespace Portakal
 {
+	PATTRIBUTE(CustomResourceDeserializer,"texture")
 	PCLASS();
 	class RUNTIME_API TextureDeserializer : public IResourceDeserializer
 	{

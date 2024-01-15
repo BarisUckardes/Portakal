@@ -90,7 +90,7 @@ namespace Portakal
 		//Render each window
 		for (Int32 i = 0; i < mWindows.GetSize(); i++) 
 		{
-			const SharedHeap<GUIWindow>& pWindow = mWindows[i];
+			SharedHeap<GUIWindow>& pWindow = mWindows[i];
 
 			//Get former visibility
 			const bool bFormerVisibility = pWindow->IsVisible();

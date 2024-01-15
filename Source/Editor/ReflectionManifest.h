@@ -3,19 +3,23 @@
 #include <Runtime/Reflection/Reflection.h>
 #include <Runtime/Reflection/ReflectionManifest.h>
 #include <Runtime/Reflection/TypeDispatcher.h>
+#include "Domain\DomainFileDescriptor.h"
 #include "Domain\DomainModule.h"
-#include "GUI\ContextMenuItem.h"
 #include "GUI\CreateFolderContextMenuItem.h"
+#include "GUI\CustomContextMenuItem.h"
+#include "GUI\CustomThumbnail.h"
 #include "GUI\GUIDirection.h"
 #include "GUI\IContextMenuItem.h"
+#include "GUI\IThumbnail.h"
+#include "GUI\TextureThumbnail.h"
 #include "ImGui\ImGuiModule.h"
 #include "ImGui\ImGuiRenderEndModule.h"
 #include "ImGui\ImGuiRenderStartModule.h"
 #include "Project\ProjectDescriptor.h"
 #include "Project\ProjectModule.h"
+#include "Resource\CustomResourceSerializer.h"
 #include "Resource\EditorResourceModule.h"
 #include "Resource\IResourceSerializer.h"
-#include "Resource\ResourceSerializerAttribute.h"
 #include "GUI\Window\GUIWindow.h"
 #include "GUI\Window\GUIWindowDescriptor.h"
 #include "GUI\Window\GUIWindowModule.h"
@@ -40,19 +44,23 @@
 		void* CreateFloat32() {return new Portakal::Float32();}
 		void* CreateFloat64() {return new Portakal::Float64();}
 		void* CreateString() {return new Portakal::String();}
+		void* CreateDomainFileDescriptor() {return new Portakal::DomainFileDescriptor();}
 		void* CreateDomainModule() {return new Portakal::DomainModule();}
-		void* CreateContextMenuItem() {return new Portakal::ContextMenuItem();}
 		void* CreateCreateFolderContextMenuItem() {return new Portakal::CreateFolderContextMenuItem();}
+		void* CreateCustomContextMenuItem() {return new Portakal::CustomContextMenuItem();}
+		void* CreateCustomThumbnail() {return new Portakal::CustomThumbnail();}
 		void* CreateGUIDirection() {return new Portakal::GUIDirection();}
 		void* CreateIContextMenuItem() {return nullptr;}
+		void* CreateIThumbnail() {return new Portakal::IThumbnail();}
+		void* CreateTextureThumbnail() {return new Portakal::TextureThumbnail();}
 		void* CreateImGuiModule() {return new Portakal::ImGuiModule();}
 		void* CreateImGuiRenderEndModule() {return new Portakal::ImGuiRenderEndModule();}
 		void* CreateImGuiRenderStartModule() {return new Portakal::ImGuiRenderStartModule();}
 		void* CreateProjectDescriptor() {return new Portakal::ProjectDescriptor();}
 		void* CreateProjectModule() {return new Portakal::ProjectModule();}
+		void* CreateCustomResourceSerializer() {return new Portakal::CustomResourceSerializer();}
 		void* CreateEditorResourceModule() {return new Portakal::EditorResourceModule();}
 		void* CreateIResourceSerializer() {return nullptr;}
-		void* CreateResourceSerializerAttribute() {return new Portakal::ResourceSerializerAttribute();}
 		void* CreateGUIWindow() {return nullptr;}
 		void* CreateGUIWindowDescriptor() {return new Portakal::GUIWindowDescriptor();}
 		void* CreateGUIWindowModule() {return new Portakal::GUIWindowModule();}
@@ -95,16 +103,24 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::Float64>(pFloat64);
 		Portakal::Type* pString = Portakal::TypeDispatcher::CreateType("String",sizeof(Portakal::String),Portakal::TypeModes::Class,Portakal::TypeCodes::String,CreateString,Portakal::TypeDispatcher::GetTypeAddress<Portakal::String>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::String>(pString);
-		Portakal::Type* pDomainModule = Portakal::TypeDispatcher::CreateType("DomainModule",sizeof(Portakal::DomainModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateDomainModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::DomainModule>());
+		Portakal::Type* pDomainFileDescriptor = Portakal::TypeDispatcher::CreateType("DomainFileDescriptor",sizeof(Portakal::DomainFileDescriptor),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateDomainFileDescriptor,Portakal::TypeDispatcher::GetTypeAddress<Portakal::DomainFileDescriptor>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::DomainFileDescriptor>(pDomainFileDescriptor);
+;		Portakal::Type* pDomainModule = Portakal::TypeDispatcher::CreateType("DomainModule",sizeof(Portakal::DomainModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateDomainModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::DomainModule>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::DomainModule>(pDomainModule);
-;		Portakal::Type* pContextMenuItem = Portakal::TypeDispatcher::CreateType("ContextMenuItem",sizeof(Portakal::ContextMenuItem),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateContextMenuItem,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ContextMenuItem>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ContextMenuItem>(pContextMenuItem);
 ;		Portakal::Type* pCreateFolderContextMenuItem = Portakal::TypeDispatcher::CreateType("CreateFolderContextMenuItem",sizeof(Portakal::CreateFolderContextMenuItem),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateCreateFolderContextMenuItem,Portakal::TypeDispatcher::GetTypeAddress<Portakal::CreateFolderContextMenuItem>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::CreateFolderContextMenuItem>(pCreateFolderContextMenuItem);
+;		Portakal::Type* pCustomContextMenuItem = Portakal::TypeDispatcher::CreateType("CustomContextMenuItem",sizeof(Portakal::CustomContextMenuItem),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateCustomContextMenuItem,Portakal::TypeDispatcher::GetTypeAddress<Portakal::CustomContextMenuItem>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::CustomContextMenuItem>(pCustomContextMenuItem);
+;		Portakal::Type* pCustomThumbnail = Portakal::TypeDispatcher::CreateType("CustomThumbnail",sizeof(Portakal::CustomThumbnail),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateCustomThumbnail,Portakal::TypeDispatcher::GetTypeAddress<Portakal::CustomThumbnail>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::CustomThumbnail>(pCustomThumbnail);
 ;		Portakal::Type* pGUIDirection = Portakal::TypeDispatcher::CreateType("GUIDirection",sizeof(Portakal::GUIDirection),Portakal::TypeModes::Enum,Portakal::TypeCodes::Composed,CreateGUIDirection,Portakal::TypeDispatcher::GetTypeAddress<Portakal::GUIDirection>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::GUIDirection>(pGUIDirection);
 ;		Portakal::Type* pIContextMenuItem = Portakal::TypeDispatcher::CreateType("IContextMenuItem",sizeof(Portakal::IContextMenuItem),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateIContextMenuItem,Portakal::TypeDispatcher::GetTypeAddress<Portakal::IContextMenuItem>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::IContextMenuItem>(pIContextMenuItem);
+;		Portakal::Type* pIThumbnail = Portakal::TypeDispatcher::CreateType("IThumbnail",sizeof(Portakal::IThumbnail),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateIThumbnail,Portakal::TypeDispatcher::GetTypeAddress<Portakal::IThumbnail>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::IThumbnail>(pIThumbnail);
+;		Portakal::Type* pTextureThumbnail = Portakal::TypeDispatcher::CreateType("TextureThumbnail",sizeof(Portakal::TextureThumbnail),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateTextureThumbnail,Portakal::TypeDispatcher::GetTypeAddress<Portakal::TextureThumbnail>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::TextureThumbnail>(pTextureThumbnail);
 ;		Portakal::Type* pImGuiModule = Portakal::TypeDispatcher::CreateType("ImGuiModule",sizeof(Portakal::ImGuiModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateImGuiModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ImGuiModule>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ImGuiModule>(pImGuiModule);
 ;		Portakal::Type* pImGuiRenderEndModule = Portakal::TypeDispatcher::CreateType("ImGuiRenderEndModule",sizeof(Portakal::ImGuiRenderEndModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateImGuiRenderEndModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ImGuiRenderEndModule>());
@@ -115,12 +131,12 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ProjectDescriptor>(pProjectDescriptor);
 ;		Portakal::Type* pProjectModule = Portakal::TypeDispatcher::CreateType("ProjectModule",sizeof(Portakal::ProjectModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateProjectModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ProjectModule>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ProjectModule>(pProjectModule);
+;		Portakal::Type* pCustomResourceSerializer = Portakal::TypeDispatcher::CreateType("CustomResourceSerializer",sizeof(Portakal::CustomResourceSerializer),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateCustomResourceSerializer,Portakal::TypeDispatcher::GetTypeAddress<Portakal::CustomResourceSerializer>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::CustomResourceSerializer>(pCustomResourceSerializer);
 ;		Portakal::Type* pEditorResourceModule = Portakal::TypeDispatcher::CreateType("EditorResourceModule",sizeof(Portakal::EditorResourceModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateEditorResourceModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::EditorResourceModule>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::EditorResourceModule>(pEditorResourceModule);
 ;		Portakal::Type* pIResourceSerializer = Portakal::TypeDispatcher::CreateType("IResourceSerializer",sizeof(Portakal::IResourceSerializer),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateIResourceSerializer,Portakal::TypeDispatcher::GetTypeAddress<Portakal::IResourceSerializer>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::IResourceSerializer>(pIResourceSerializer);
-;		Portakal::Type* pResourceSerializerAttribute = Portakal::TypeDispatcher::CreateType("ResourceSerializerAttribute",sizeof(Portakal::ResourceSerializerAttribute),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateResourceSerializerAttribute,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ResourceSerializerAttribute>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ResourceSerializerAttribute>(pResourceSerializerAttribute);
 ;		Portakal::Type* pGUIWindow = Portakal::TypeDispatcher::CreateType("GUIWindow",sizeof(Portakal::GUIWindow),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateGUIWindow,Portakal::TypeDispatcher::GetTypeAddress<Portakal::GUIWindow>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::GUIWindow>(pGUIWindow);
 ;		Portakal::Type* pGUIWindowDescriptor = Portakal::TypeDispatcher::CreateType("GUIWindowDescriptor",sizeof(Portakal::GUIWindowDescriptor),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateGUIWindowDescriptor,Portakal::TypeDispatcher::GetTypeAddress<Portakal::GUIWindowDescriptor>());
@@ -150,6 +166,9 @@ extern "C"
 		Portakal::TypeDispatcher::RegisterEnum("Down",3,pGUIDirection);
 
         //Register fields here
+		Portakal::TypeDispatcher::RegisterField("Target",offsetof(Portakal::DomainFileDescriptor,Target),typeof(Portakal::String),Portakal::FieldMode::Normal,pDomainFileDescriptor);
+		Portakal::TypeDispatcher::RegisterField("Type",offsetof(Portakal::DomainFileDescriptor,Type),typeof(Portakal::String),Portakal::FieldMode::Normal,pDomainFileDescriptor);
+		Portakal::TypeDispatcher::RegisterField("ID",offsetof(Portakal::DomainFileDescriptor,ID),typeof(Portakal::Guid),Portakal::FieldMode::Normal,pDomainFileDescriptor);
 		Portakal::TypeDispatcher::RegisterField("Name",offsetof(Portakal::ProjectDescriptor,Name),typeof(Portakal::String),Portakal::FieldMode::Normal,pProjectDescriptor);
 		Portakal::TypeDispatcher::RegisterField("ID",offsetof(Portakal::ProjectDescriptor,ID),typeof(Portakal::Guid),Portakal::FieldMode::Normal,pProjectDescriptor);
 		Portakal::TypeDispatcher::RegisterField("VersionMajor",offsetof(Portakal::ProjectDescriptor,VersionMajor),typeof(Portakal::UInt32),Portakal::FieldMode::Normal,pProjectDescriptor);
@@ -163,19 +182,23 @@ extern "C"
 		Portakal::TypeDispatcher::RegisterField("Settings",offsetof(Portakal::GUIWindowSettings,Settings),typeof(Portakal::GUIWindowDescriptor),Portakal::FieldMode::Array,pGUIWindowSettings);
 
         //Register attributes here
-		Portakal::TypeDispatcher::RegisterAttribute<Portakal::ContextMenuItem>(pCreateFolderContextMenuItem, "Create Folder");
-		Portakal::TypeDispatcher::RegisterAttribute<Portakal::ResourceSerializerAttribute>(pTextureSerializer, "texture");
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomContextMenuItem>(pCreateFolderContextMenuItem, "Create Folder");
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomThumbnail>(pTextureThumbnail, "texture");
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomResourceSerializer>(pTextureSerializer, "texture",STRARRAY(".png",".jpg"));
 
         //Register base types here
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::DomainModule),typeof(Portakal::ApplicationModule));
-		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ContextMenuItem),typeof(Portakal::Attribute));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::CreateFolderContextMenuItem),typeof(Portakal::IContextMenuItem));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::CustomContextMenuItem),typeof(Portakal::Attribute));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::CustomThumbnail),typeof(Portakal::Attribute));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::IThumbnail),typeof(Portakal::Object));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureThumbnail),typeof(Portakal::IThumbnail));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ImGuiModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ImGuiRenderEndModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ImGuiRenderStartModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ProjectModule),typeof(Portakal::ApplicationModule));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::CustomResourceSerializer),typeof(Portakal::Attribute));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::EditorResourceModule),typeof(Portakal::ApplicationModule));
-		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ResourceSerializerAttribute),typeof(Portakal::Attribute));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::GUIWindowModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureSerializer),typeof(Portakal::IResourceSerializer));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::DomainWindow),typeof(Portakal::GUIWindow));
@@ -185,7 +208,7 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::WorldWindow),typeof(Portakal::GUIWindow));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {pDomainModule,pContextMenuItem,pCreateFolderContextMenuItem,pGUIDirection,pIContextMenuItem,pImGuiModule,pImGuiRenderEndModule,pImGuiRenderStartModule,pProjectDescriptor,pProjectModule,pEditorResourceModule,pIResourceSerializer,pResourceSerializerAttribute,pGUIWindow,pGUIWindowDescriptor,pGUIWindowModule,pGUIWindowSettings,pTextureSerializer,pDomainWindow,pGameWindow,pObjectWindow,pSceneWindow,pWorldWindow,};
+		Portakal::Array<Portakal::Type*> types = {pDomainFileDescriptor,pDomainModule,pCreateFolderContextMenuItem,pCustomContextMenuItem,pCustomThumbnail,pGUIDirection,pIContextMenuItem,pIThumbnail,pTextureThumbnail,pImGuiModule,pImGuiRenderEndModule,pImGuiRenderStartModule,pProjectDescriptor,pProjectModule,pCustomResourceSerializer,pEditorResourceModule,pIResourceSerializer,pGUIWindow,pGUIWindowDescriptor,pGUIWindowModule,pGUIWindowSettings,pTextureSerializer,pDomainWindow,pGameWindow,pObjectWindow,pSceneWindow,pWorldWindow,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;

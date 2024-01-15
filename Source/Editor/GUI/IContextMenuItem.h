@@ -1,5 +1,5 @@
 #pragma once
-#include <Editor/GUI/ContextMenuItem.h>
+#include <Editor/GUI/CustomContextMenuItem.h>
 #include <Editor/Domain/DomainFolder.h>
 #include <Runtime/Memory/SharedHeap.h>
 #include "IContextMenuItem.reflected.h"

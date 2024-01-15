@@ -30,7 +30,7 @@ namespace Portakal
 
 		void Invalidate();
 		Entry CreateEntry(const SharedHeap<PlatformLibrary>& pLibrary,const Bool8 bMain);
-		void DeleteEntry(const Entry& entry,const Bool8 bMain);
+		void DeleteEntry(Entry& entry,const Bool8 bMain);
 		void Normalize(Assembly* pAssembly);
 	private:
 		Array<Entry> mEntries;

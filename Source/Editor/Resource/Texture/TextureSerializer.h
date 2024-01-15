@@ -1,12 +1,12 @@
 #pragma once
 #include <Editor/Resource/IResourceSerializer.h>
 #include <Runtime/Resource/Texture/TextureResource.h>
-#include <Editor/Resource/ResourceSerializerAttribute.h>
+#include <Editor/Resource/CustomResourceSerializer.h>
 #include "TextureSerializer.reflected.h"
 
 namespace Portakal
 {
-	PATTRIBUTE(ResourceSerializerAttribute, "texture");
+	PATTRIBUTE(CustomResourceSerializer, "texture",STRARRAY(".png",".jpg"));
 	PCLASS();
 	class EDITOR_API TextureSerializer : public IResourceSerializer
 	{

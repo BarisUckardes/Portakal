@@ -13,9 +13,12 @@ namespace Portakal
 		{
 		case WM_CREATE:
 		{
+			//Set user data ptr
 			Win32Window* pWindow = (Win32Window*)((LPCREATESTRUCT)lParam)->lpCreateParams;
-
 			SetWindowLongPtr(hwnd, -21, (LONG_PTR)pWindow);
+
+			//Accept files
+			DragAcceptFiles(hwnd, TRUE);
 			break;
 		}
 		case WM_DESTROY:
@@ -161,7 +164,30 @@ namespace Portakal
 			/*
 			* Check if any input device has been removed!
 			*/
+			break;
+		}
+		case WM_DROPFILES:
+		{
+			//Get drop handle
+			HDROP dropHandle = (HDROP)wParam;
 
+			//Get item count
+			const UInt32 itemCount = DragQueryFile(dropHandle, 0xFFFFFFFF, NULL, 0);
+
+			//Create window event header
+			WindowEventData event = {};
+			event.Type = WindowEventType::DragDrop;
+
+			//Collect items
+			for (UInt32 i = 0; i < itemCount; i++)
+			{
+				char buffer[MAX_PATH];
+				DragQueryFile(dropHandle, i, buffer, MAX_PATH);
+				event.DropItems.Add(buffer);
+			}
+
+			Win32Window* pWindow = GetUserWindowData(hwnd);
+			pWindow->DispatchWin32Event(event);
 			break;
 		}
 		default:

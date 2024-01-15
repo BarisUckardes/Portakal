@@ -8,7 +8,7 @@ namespace Portakal
 		if (pAPI == nullptr)
 			return;
 
-		pAPI->mRootFolder->Invalidate();
+		//TODO:
 	}
 	SharedHeap<DomainFolder> DomainAPI::GetRootFolder()
 	{

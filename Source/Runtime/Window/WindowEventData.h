@@ -4,6 +4,8 @@
 #include <Runtime/Window/WindowEventType.h>
 #include <Runtime/Input/KeyboardKeys.h>
 #include <Runtime/Input/MouseButtons.h>
+#include <Runtime/Containers/String.h>
+#include <Runtime/Containers/Array.h>
 
 namespace Portakal
 {
@@ -27,5 +29,7 @@ namespace Portakal
 
 		Bool8 Handled;
 		Byte WindowIndex;
+
+		Array<String> DropItems;
 	};
 }

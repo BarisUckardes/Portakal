@@ -1,6 +1,13 @@
 #include "DomainFolder.h"
 #include <Runtime/Platform/PlatformDirectory.h>
+#include <Runtime/Platform/PlatformFile.h>
+#include <Runtime/Reflection/ReflectionAPI.h>
+#include <Editor/Resource/CustomResourceSerializer.h>
 #include <Editor/Domain/DomainFile.h>
+#include <Editor/Domain/DomainFileDescriptor.h>
+#include <Editor/GUI/IThumbnail.h>
+#include <Runtime/Yaml/Yaml.h>
+#include <Editor/GUI/CustomThumbnail.h>
 
 namespace Portakal
 {
@@ -29,6 +36,104 @@ namespace Portakal
 
 		return pFolder;
 	}
+	SharedHeap<DomainFile> DomainFolder::ImportExternalFile(const String& outerPath)
+	{
+		//Get the extension
+		const String name = PlatformFile::GetName(outerPath);
+		const String nameWExtension = PlatformFile::GetNameWithoutExtension(outerPath);
+		const String extension = PlatformFile::GetExtension(outerPath);
+		const String descriptorPath = mPath + "\\" + nameWExtension + ".pfd";
+		const String sourceFilePath = mPath + "\\" + name;
+
+		//Check path
+		if (PlatformFile::Exists(descriptorPath))
+		{
+			DEV_LOG("DomainFolder", "Descriptor file already exists for: %s", *descriptorPath);
+			return nullptr;
+		}
+
+		//Find some serializers with this extension
+		const Array<Type*> subTypes = ReflectionAPI::GetSubTypes(typeof(IResourceSerializer));
+		Type* pSelectedType = nullptr;
+		String selectedResourceType;
+		for (Type* pType : subTypes)
+		{
+			//Get attribute
+			CustomResourceSerializer* pAttribute = pType->GetAttribute<CustomResourceSerializer>();
+			if (pAttribute == nullptr)
+				continue;
+
+			//Check if resource extensions matches
+			const Array<String> extensions = pAttribute->GetImportExtensions();
+			if (extensions.Has(extension))
+			{
+				pSelectedType = pType;
+				selectedResourceType = pAttribute->GetResourceType();
+				break;
+			}
+		}
+
+		//Check if selected a type
+		if (pSelectedType == nullptr)
+			return nullptr;
+
+		//Find thumbnail type
+		Type* pThumbnailType = GetThumbnailType(selectedResourceType);
+
+		//Create file descriptor
+		DomainFileDescriptor descriptor = {};
+		descriptor.ID = Guid::Create();
+		descriptor.Type = selectedResourceType;
+		descriptor.Target = name;
+
+		const String descriptorYamlString = Yaml::ToYaml<DomainFileDescriptor>(&descriptor);
+		if (!PlatformFile::Create(descriptorPath))
+		{
+			DEV_LOG("DomainFolder", "Failed to create %s DomainFile", *descriptorPath);
+			return nullptr;
+		}
+		if (!PlatformFile::Write(descriptorPath, descriptorYamlString))
+		{
+			DEV_LOG("DomainFolder", "Failed to write to %s", *descriptorPath);
+			PlatformFile::Delete(descriptorPath);
+			return nullptr;
+		}
+
+		//Copy the target file
+		if (!PlatformFile::Copy(outerPath, sourceFilePath))
+		{
+			DEV_LOG("DomainFolder", "Failed to copy for import! %s",*descriptorPath);
+			PlatformFile::Delete(descriptorPath);
+			return nullptr;
+		}
+
+		//Create serializer
+		IResourceSerializer* pSerializer = (IResourceSerializer*)pSelectedType->CreateDefaultHeapObject();
+
+		
+		//Create domain file
+		SharedHeap<DomainFile> pFile = new DomainFile(this,selectedResourceType,nameWExtension,descriptor.ID,descriptorPath,sourceFilePath,pSerializer, pThumbnailType);
+		pFile->SetName(nameWExtension);
+		pFile->OverrideID(descriptor.ID);
+
+		mFiles.Add(pFile);
+
+		return pFile;
+	}
+	bool DomainFolder::CheckIfFileExistsViaName(const String& name)
+	{
+		for (const SharedHeap<DomainFile>& pFile : mFiles)
+			if (pFile->GetName() == name)
+				return true;
+		return false;
+	}
+	bool DomainFolder::CheckIfDescriptorExists(const String& descriptorPath)
+	{
+		for (const SharedHeap<DomainFile>& pFile : mFiles)
+			if (pFile->GetDescriptorPath() == descriptorPath)
+				return true;
+		return false;
+	}
 	void DomainFolder::Delete()
 	{
 		if (IsShutdown())
@@ -52,6 +157,10 @@ namespace Portakal
 		DEV_LOG("DomainFolder", "Found folder: %s", *path);
 
 		//Search for files
+		Array<String> files;
+		PlatformDirectory::GetFileNamesViaExtension(path + "\\",".pfd",files);
+		for (const String& file : files)
+			ImportExistingFile(file);
 
 		//Search for folders
 		Array<String> folders;
@@ -60,114 +169,84 @@ namespace Portakal
 			mFolders.Add(new DomainFolder(this, folderPath));
 	}
 	
-	void DomainFolder::Invalidate()
+	void DomainFolder::ImportExistingFile(const String& descriptorPath)
 	{
-		//Get directories and check if there's missing or new folders
-		Array<String> folders;
-		if (!PlatformDirectory::GetFolderNames(mPath,folders))
+		//Check if this descriptor file is already registered
+		if (CheckIfDescriptorExists(descriptorPath))
+			return;
+
+		//Load descriptor file
+		String fileContent;
+		if (!PlatformFile::Read(descriptorPath, fileContent))
 		{
-			DEV_LOG("DomainFolder", "Failed to get folder names!");
+			DEV_LOG("DomainFolder", "Failed to reimport %s", descriptorPath);
 			return;
 		}
 
-		//Look for new folders
-		for (const String& folder : folders)
+		DomainFileDescriptor descriptor;
+		Yaml::ToObject<DomainFileDescriptor>(fileContent, &descriptor);
+
+		//Check if source file exists
+		const String sourcePath = mPath + "\\" + descriptor.Target;
+		if (!PlatformFile::Exists(sourcePath))
 		{
-			bool bNewFolder = true;
-			for (const SharedHeap<DomainFolder>& pFolder : mFolders)
-			{
-				if (pFolder->GetPath() == folder)
-				{
-					bNewFolder = false;
-					break;
-				}
-			}
-
-			if (bNewFolder)
-			{
-				SharedHeap<DomainFolder> pFolder = new DomainFolder(this, folder);
-				mFolders.Add(pFolder);
-			}
-		}
-
-		//Look for missing folders
-		for (const SharedHeap<DomainFolder>& pFolder : mFolders)
-		{
-			const String path = pFolder->GetPath();
-
-			bool bMissingFolder = true;
-			for (const String& folder : folders)
-			{
-				if (path == folder)
-				{
-					bMissingFolder = false;
-					break;
-				}
-			}
-
-			if (bMissingFolder)
-			{
-				pFolder.Shutdown();
-				mFolders.Remove(pFolder);
-			}
-		}
-
-		//Get files and check if there's missing or new files
-		Array<String> files;
-		if (!PlatformDirectory::GetFileNamesViaExtension(mPath,".pfd", files))
-		{
-			DEV_LOG("DomainFolder", "Failed to get file names");
+			DEV_LOG("DomainFolder", "Cannot reimport since source file does not exists");
+			PlatformFile::Delete(descriptorPath);
 			return;
 		}
 
-		//Look for new files
-		for (const String& file : files)
+		//Get serializer type
+		Type* pSerializerType = GetSerializerType(descriptor.Type);
+		if (pSerializerType == nullptr)
 		{
-			bool bNewFile = true;
-			for (const SharedHeap<DomainFile>& pFile : mFiles)
-			{
-				if (pFile->GetDescriptorPath() == file)
-				{
-					bNewFile = false;
-					break;
-				}
-			}
-
-			if (bNewFile)
-			{
-				SharedHeap<DomainFile> pFile = new DomainFile(this, file);
-				mFiles.Add(pFile);
-			}
+			DEV_LOG("DomainFolder", "Cannot reimport since serializer implementation for resource type %s was absent", descriptor.Type);
+			return;
 		}
 
-		//Look for missing files
-		for (const SharedHeap<DomainFile>& pFile : mFiles)
+		//Find thumbnail type
+		Type* pThumbnailType = GetThumbnailType(descriptor.Type);
+
+		//Register DomainFile
+		SharedHeap<DomainFile> pFile = new DomainFile(this,descriptor.Type,PlatformFile::GetNameWithoutExtension(descriptor.Target),descriptor.ID, descriptorPath, sourcePath, (IResourceSerializer*)pSerializerType->CreateDefaultHeapObject(),pThumbnailType);
+		pFile->SetName(PlatformFile::GetNameWithoutExtension(descriptorPath));
+		pFile->OverrideID(descriptor.ID);
+		mFiles.Add(pFile);
+	}
+
+	Type* DomainFolder::GetSerializerType(const String& resourceType)
+	{
+		const Array<Type*> subTypes = ReflectionAPI::GetSubTypes(typeof(IResourceSerializer));
+		for (Type* pType : subTypes)
 		{
-			const String path = pFile->GetDescriptorPath();
+			//Get attribute
+			CustomResourceSerializer* pAttribute = pType->GetAttribute<CustomResourceSerializer>();
+			if (pAttribute == nullptr)
+				continue;
 
-			bool bMissingFile = true;
-			for (const String& file : files)
-			{
-				if (path == file)
-				{
-					bMissingFile = false;
-					break;
-				}
-			}
-
-			if (bMissingFile)
-			{
-				pFile.Shutdown();
-				mFiles.Remove(pFile);
-			}
+			//Check type
+			if (pAttribute->GetResourceType() == resourceType)
+				return pType;
 		}
 
-		//Check if file source contents are changed
-		for (const SharedHeap<DomainFile>& pFile : mFiles)
+		return nullptr;
+	}
+
+	Type* DomainFolder::GetThumbnailType(const String& resourceType)
+	{
+		//Find thumbnail type
+		const Array<Type*> thumbnailTypes = ReflectionAPI::GetSubTypes(typeof(IThumbnail));
+		for (Type* pType : thumbnailTypes)
 		{
-			if (pFile->UpdateLastChangeTimeCheck()) // file seems to be edited
-				pFile->Invalidate();
+			//Get attribute
+			CustomThumbnail* pAttribute = pType->GetAttribute<CustomThumbnail>();
+			if (pAttribute == nullptr)
+				continue;
+
+			if (pAttribute->GetResourceType() == resourceType)
+				return pType;
 		}
+
+		return nullptr;
 	}
 
 	void DomainFolder::_OnSubFolderDeleted(const DomainFolder* pTargetFolder)
@@ -189,11 +268,11 @@ namespace Portakal
 		}
 
 		//Shutdown files
-		for (const SharedHeap<DomainFile>& pFile : mFiles)
+		for (SharedHeap<DomainFile>& pFile : mFiles)
 			pFile.Shutdown();
 
 		//Shutdown folders
-		for (const SharedHeap<DomainFolder>& pFolder : mFolders)
+		for (SharedHeap<DomainFolder>& pFolder : mFolders)
 			pFolder.Shutdown();
 
 		mFolders.Clear();

@@ -17,7 +17,7 @@ namespace Portakal
 		}
 		else
 		{
-			if (!PlatformFile::Read(mPath, memory, mFileOffset, mFileSize))
+			if (!PlatformFile::Read(mSourcePath, memory, mFileOffset, mFileSize))
 			{
 				DEV_LOG("Resource", "Failed to load the file");
 				return;
@@ -27,11 +27,10 @@ namespace Portakal
 		//Deserialize
 		mSubObject = mOptimized ? mDeserializer->DeserializeOptimized(memory) : mDeserializer->Deserialize(memory);
 		mSubObject->_SetOwnerResource(this);
+		mLoaded = true;
+		DEV_LOG("Resource", "Loaded resource %s", *GetName());
 	}
-	void Resource::LoadAsync()
-	{
-
-	}
+	
 	void Resource::UnloadSync()
 	{
 		//Abort if not loaded at all
@@ -41,10 +40,7 @@ namespace Portakal
 		//Shutdown resource sub object
 		mSubObject.Shutdown();
 	}
-	void Resource::UnloadAsync()
-	{
-
-	}
+	
 	void Resource::CacheSync()
 	{
 		//Check if already cached
@@ -53,17 +49,14 @@ namespace Portakal
 
 		//Load the data from the dis
 		MemoryView memory;
-		if (!PlatformFile::Read(mPath, memory, mFileOffset, mFileSize))
+		if (!PlatformFile::Read(mSourcePath, memory, mFileOffset, mFileSize))
 		{
 			DEV_LOG("Resource", "Failed to load the cached data from the file");
 			return;
 		}
 		mCachedData = new MemoryOwnedView(memory.GetMemory(),memory.GetSize());
 	}
-	void Resource::CacheAsync()
-	{
-
-	}
+	
 	void Resource::FreeCacheSync()
 	{
 		//Check if have cache
@@ -77,10 +70,7 @@ namespace Portakal
 		delete mCachedData;
 		mCachedData = nullptr;
 	}
-	void Resource::FreeCacheAsync()
-	{
-
-	}
+	
 	void Resource::OnShutdown()
 	{
 		//Unload sync
@@ -92,7 +82,7 @@ namespace Portakal
 		mDeserializer = nullptr;
 	}
 	Resource::Resource(const ResourceDescriptor& descriptor,IResourceDeserializer* pDeserializer) :
-		mPath(descriptor.Name), mType(descriptor.ResourceType), mFileOffset(descriptor.FileOffset), mFileSize(descriptor.FileSize), mOptimized(descriptor.bOptimized),mDeserializer(pDeserializer),
+		mSourcePath(descriptor.SourcePath), mType(descriptor.ResourceType), mFileOffset(descriptor.FileOffset), mFileSize(descriptor.FileSize), mOptimized(descriptor.bOptimized),mDeserializer(pDeserializer),
 		mCached(false), mLoaded(false), mCachedData(nullptr)
 	{
 		//Find resource deserializer

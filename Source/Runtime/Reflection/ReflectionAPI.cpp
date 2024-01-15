@@ -100,7 +100,7 @@ namespace Portakal
     {
         //Free and record each
         Array<String> libraryPaths;
-        for (const Entry& entry : mEntries)
+        for (Entry& entry : mEntries)
         {
             //Cache path
             libraryPaths.Add(entry.pLibrary->GetPath());
@@ -158,7 +158,7 @@ namespace Portakal
 
         return entry;
     }
-    void ReflectionAPI::DeleteEntry(const Entry& entry, const Bool8 bMain)
+    void ReflectionAPI::DeleteEntry(Entry& entry, const Bool8 bMain)
     {
         //Delete
         delete entry.pAssembly;

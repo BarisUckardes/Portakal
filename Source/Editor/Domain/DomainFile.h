@@ -17,35 +17,31 @@ namespace Portakal
 		}
 		FORCEINLINE String GetDescriptorPath() const noexcept
 		{
-			return mPath;
+			return mDescriptorPath;
 		}
 		FORCEINLINE String GetSourcePath() const noexcept
 		{
 			return mSourcePath;
 		}
-
-		FORCEINLINE TimeStamp GetLastChangeTime() noexcept;
+		FORCEINLINE Type* GetThumbnailType() const noexcept
+		{
+			return mThumbnailType;
+		}
 
 		void SaveSync();
-		void SaveAsync();
 		void LoadSnyc();
-		void LoadAsync();
 		void Delete();
 	private:
-		DomainFile(DomainFolder* pOwnerFolder,const String& path);
+		DomainFile(DomainFolder* pOwnerFolder, const String& resourceType,const String& name,const Guid& id,const String& descriptorPath,const String& sourcePath,IResourceSerializer* pSerializer,Type* pThumnailType);
 		~DomainFile() = default;
 
-		void UpdateLastChangeTime();
-		bool UpdateLastChangeTimeCheck();
-		void Invalidate();
-		Type* FindSerializer(const String& target);
-		void RefreshFiles();
 		virtual void OnShutdown() override;
 	private:
 		SharedHeap<Resource> mResource;
 		DomainFolder* mOwnerFolder;
 		IResourceSerializer* mSerializer;
-		String mPath;
+		Type* mThumbnailType;
+		String mDescriptorPath;
 		String mSourcePath;
 		TimeStamp mLastChangeTime;
 	};

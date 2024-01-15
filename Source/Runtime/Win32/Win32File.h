@@ -20,7 +20,7 @@ namespace Portakal
 		static String RemoveExtension(const String& path);
 		static Bool8 GetSize(const String& path, UInt64& sizeInBytesOut);
 		static String GetName(const String& path);
-		static String GetNameWithoutExtension(const String& path);
+		//static String GetNameWithoutExtension(const String& path);
 		static String GetDirectory(const String& path);
 		static Bool8 GetFileLastChangeTime(const String& path,TimeStamp& timeSOut);
 		static Bool8 GetFileCreateTime(const String& path,TimeStamp& timesOut);

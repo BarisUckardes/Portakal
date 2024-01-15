@@ -4,6 +4,11 @@
 #include <Runtime/Reflection/ReflectionAPI.h>
 #include <Editor/Resource/EditorResourceAPI.h>
 #include <Editor/ImGui/ImGuiAPI.h>
+#include <Runtime/Window/WindowAPI.h>
+#include <Runtime/Platform/PlatformWindow.h>
+#include <Runtime/Platform/PlatformFile.h>
+#include <Editor/Resource/CustomResourceSerializer.h>
+#include <Editor/GUI/IThumbnail.h>
 
 namespace Portakal
 {
@@ -49,6 +54,33 @@ namespace Portakal
 	void DomainWindow::OpenFolder(DomainFolder* pFolder)
 	{
 		mTargetFolder = pFolder;
+		ClearSelections();
+		ClearThumbnails();
+	}
+	void DomainWindow::ProcessDragDrops(const Array<String>& items)
+	{
+		//Iterate
+		for (const String& itemPath : items)
+			mTargetFolder->ImportExternalFile(itemPath);
+	}
+	void DomainWindow::InitializeThumbnail(const SharedHeap<DomainFile>& pFile)
+	{
+		//Check if this domain file already exists
+		if (mThumnails.FindIndex(pFile) == -1)
+		{
+			IThumbnail* pThumbnail = (IThumbnail*)pFile->GetThumbnailType()->CreateDefaultHeapObject();
+			pThumbnail->OnInitialize();
+			mThumnails.Insert(pFile, pThumbnail);
+		}
+	}
+	SharedHeap<TextureResource> DomainWindow::GetThumbnailImage(const SharedHeap<DomainFile>& pFile)
+	{
+		SharedHeap<IThumbnail>* pThumbnail = mThumnails.Find(pFile);
+		return (*pThumbnail)->GetThumbnailTexture(pFile.GetHeap());
+	}
+	void DomainWindow::ClearThumbnails()
+	{
+		mThumnails.Clear();
 	}
 	void DomainWindow::OnShutdown()
 	{
@@ -64,6 +96,18 @@ namespace Portakal
 	}
 	void DomainWindow::OnPaint()
 	{
+		//First check window events for drag drops
+		if (ImGui::IsWindowFocused())
+		{
+			//Get window events
+			SharedHeap<PlatformWindow> pWindow = WindowAPI::GetDefaultWindow();
+			const Array<WindowEventData>& events = pWindow->GetEvents();
+			for (const WindowEventData& event : events)
+			{
+				if (event.Type == WindowEventType::DragDrop)
+					ProcessDragDrops(event.DropItems);
+			}
+		}
 		//Create&Reset states
 		mFolderChanged = false;
 
@@ -89,7 +133,7 @@ namespace Portakal
 				//Create selectable
 				ImGui::SetCursorPos(itemPos);
 				ImGui::PushID(*pFolder->GetName());
-				const bool bClicked = ImGui::Selectable("", bSelected, ImGuiSelectableFlags_DontClosePopups, {mFolderSize,mFolderSize});
+				const bool bClicked = ImGui::Selectable("", bSelected, ImGuiSelectableFlags_DontClosePopups, { mFolderSize,mFolderSize });
 				ImGui::PopID();
 
 				//Check if requested selection
@@ -109,14 +153,14 @@ namespace Portakal
 
 				//Create image
 				ImGui::SetCursorPos(itemPos);
-				ImGui::Image(mFolderIconBinding->GetTable(),{ mFolderSize,mFolderSize });
+				ImGui::Image(mFolderIconBinding->GetTable(), { mFolderSize,mFolderSize });
 
 				//Draw text
 				ImGui::SetCursorPos({ itemPos.x,itemPos.y + mFolderSize });
 				ImGui::Text(*pFolder->GetName());
 
 				//Move next
-				itemPos.x += (mFolderSize+mItemGap);
+				itemPos.x += (mFolderSize + mItemGap);
 
 				//Reset same line
 				ImGui::SameLine();
@@ -137,7 +181,7 @@ namespace Portakal
 				//Create selectable
 				ImGui::SetCursorPos(itemPos);
 				ImGui::PushID(*pFile->GetName());
-				const bool bClicked = ImGui::Selectable("", bSelected,ImGuiSelectableFlags_DontClosePopups, { mFileSize,mFileSize });
+				const bool bClicked = ImGui::Selectable("", bSelected, ImGuiSelectableFlags_DontClosePopups, { mFileSize,mFileSize });
 				ImGui::PopID();
 
 				//Check if requested selection
@@ -154,9 +198,15 @@ namespace Portakal
 
 				}
 
+				//Thumbnail work
+				InitializeThumbnail(pFile);
+
+				SharedHeap<TextureResource> pTexture = GetThumbnailImage(pFile);
+				SharedHeap<ImGuiTextureBinding> pBinding = ImGuiAPI::GetRenderer()->GetOrCreateTextureBinding(pTexture);
+
 				//Create image
 				ImGui::SetCursorPos(itemPos);
-				ImGui::Image(mDefaultItemIconBinding->GetTable(), { mFileSize,mFileSize });
+				ImGui::Image(pBinding->GetTable(), { mFileSize,mFileSize });
 
 				//Draw text
 				ImGui::SetCursorPos({ itemPos.x,itemPos.y + mFileSize });
@@ -169,7 +219,7 @@ namespace Portakal
 				ImGui::SameLine();
 			}
 		}
-		
+
 		//Handle events
 		if (ImGui::IsKeyPressed(ImGuiKey_Backspace)) // wants to go back to the previous folder
 		{
@@ -236,7 +286,7 @@ namespace Portakal
 		}
 
 		//Tick context actions
-		for (Int32 i = 0;i<mTickingContextCreateActions.GetSize();i++)
+		for (Int32 i = 0; i < mTickingContextCreateActions.GetSize(); i++)
 		{
 			IContextMenuItem* pAction = mTickingContextCreateActions[i];
 
@@ -252,7 +302,7 @@ namespace Portakal
 
 				//Create new instnace
 				IContextMenuItem* pNewAction = (IContextMenuItem*)pAction->GetType()->CreateDefaultHeapObject();
-				pNewAction->SetName(pNewAction->GetType()->GetAttribute<ContextMenuItem>()->GetName());
+				pNewAction->SetName(pNewAction->GetType()->GetAttribute<CustomContextMenuItem>()->GetName());
 				mContextCreateActions.Add(pNewAction);
 
 				//Shutdown and delete
@@ -277,13 +327,13 @@ namespace Portakal
 		for (Type* pType : contextCreateActionTypes)
 		{
 			IContextMenuItem* pAction = (IContextMenuItem*)pType->CreateDefaultHeapObject();
-			pAction->SetName(pType->GetAttribute<ContextMenuItem>()->GetName());
+			pAction->SetName(pType->GetAttribute<CustomContextMenuItem>()->GetName());
 			mContextCreateActions.Add(pAction);
 		}
 
 		//Get folder icon
 		SharedHeap<EditorTextureResource> pFolderIcon = EditorResourceAPI::GetResource("FolderIcon").QueryAs<EditorTextureResource>();
-		mFolderIconBinding =  ImGuiAPI::GetRenderer()->GetOrCreateTextureBinding(pFolderIcon->GetTexture());
+		mFolderIconBinding = ImGuiAPI::GetRenderer()->GetOrCreateTextureBinding(pFolderIcon->GetTexture());
 
 		//Get default icon
 		SharedHeap<EditorTextureResource> pDefaultIcon = EditorResourceAPI::GetResource("DefaultIcon").QueryAs<EditorTextureResource>();

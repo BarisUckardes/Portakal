@@ -21,9 +21,9 @@ namespace Portakal
 		{
 			return mCachedData;
 		}
-		FORCEINLINE String GetPath() const noexcept
+		FORCEINLINE String GetSourcePath() const noexcept
 		{
-			return mPath;
+			return mSourcePath;
 		}
 		FORCEINLINE String GetResourceType() const noexcept
 		{
@@ -51,13 +51,9 @@ namespace Portakal
 		}
 
 		void LoadSync();
-		void LoadAsync();
 		void UnloadSync();
-		void UnloadAsync();
 		void CacheSync();
-		void CacheAsync();
 		void FreeCacheSync();
-		void FreeCacheAsync();
 		virtual void OnShutdown() override;
 	private:
 		Resource(const ResourceDescriptor& descriptor,IResourceDeserializer* pDeserializer);
@@ -66,7 +62,7 @@ namespace Portakal
 		SharedHeap<ResourceSubObject> mSubObject;
 		MemoryOwnedView* mCachedData;
 		IResourceDeserializer* mDeserializer;
-		String mPath;
+		String mSourcePath;
 		String mType;
 		UInt64 mFileOffset;
 		UInt64 mFileSize;

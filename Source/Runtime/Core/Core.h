@@ -28,6 +28,7 @@ namespace Portakal
 #define PENUM(...)
 #define PFIELD(...)
 #define PATTRIBUTE(target,...)
+#define STRARRAY(...) Portakal::Array<Portakal::String>({__VA_ARGS__})
 #define GENERATE_OBJECT(...);
 
 }

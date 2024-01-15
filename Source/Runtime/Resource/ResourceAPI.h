@@ -10,7 +10,7 @@ namespace Portakal
 	{
 		friend class ResourceModule;
 	public:
-		static SharedHeap<Resource> RegisterResource(const String& descriptorPath);
+		static SharedHeap<Resource> RegisterResource(const ResourceDescriptor& descriptor);
 		static void RemoveResource(const String& name);
 		static void RemoveResource(const Guid& id);
 		static SharedHeap<Resource> GetResource(const String& name);
