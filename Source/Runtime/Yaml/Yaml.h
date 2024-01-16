@@ -1,6 +1,7 @@
 #pragma once
 #include <Runtime/Containers/String.h>
 #include <Runtime/Yaml/YamlDefaultSerializer.h>
+#include <Runtime/Memory/SharedHeap.h>
 
 namespace Portakal
 {
@@ -17,6 +18,11 @@ namespace Portakal
 		static String ToYaml(const void* pObject)
 		{
 			return YamlDefaultSerializer::ToYaml(pObject,typeof(T));
+		}
+
+		static String ToYaml(Type* pType,const void* pObject)
+		{
+			return YamlDefaultSerializer::ToYaml(pObject,pType);
 		}
 
 		static Bool8 IsYaml(const String& yaml)

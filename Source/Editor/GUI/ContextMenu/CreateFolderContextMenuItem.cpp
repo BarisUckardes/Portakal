@@ -31,6 +31,7 @@ namespace Portakal
             {
                 //Create folder
                 pFolder->CreateFolder(mName);
+
                 ImGui::EndPopup();
                 return false;
             }

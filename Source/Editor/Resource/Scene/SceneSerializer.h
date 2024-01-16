@@ -16,8 +16,8 @@ namespace Portakal
 
 	private:
 		// Inherited via IResourceSerializer
-		void Serialize(const Object* pObject, MemoryOwnedView** ppView) override;
-		void SerializeOptimized(const Object* pObject, MemoryOwnedView** ppView) override;
+		void Serialize(DomainFile* pFile,const Object* pObject, MemoryOwnedView** ppView) override;
+		void SerializeOptimized(DomainFile* pFile,const Object* pObject, MemoryOwnedView** ppView) override;
 	};
 }
 

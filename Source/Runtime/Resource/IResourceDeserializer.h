@@ -16,8 +16,8 @@ namespace Portakal
 		IResourceDeserializer() = default;
 		~IResourceDeserializer() = default;
 
-		virtual ResourceSubObject* Deserialize(const MemoryView& view) = 0;
-		virtual ResourceSubObject* DeserializeOptimized(const MemoryView& view) = 0;
+		virtual ResourceSubObject* Deserialize(const MemoryView& view,const String& metaData) = 0;
+		virtual ResourceSubObject* DeserializeOptimized(const MemoryView& view,const String& metaData) = 0;
 	};
 }
 

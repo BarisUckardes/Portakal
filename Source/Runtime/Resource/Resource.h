@@ -54,6 +54,7 @@ namespace Portakal
 		void UnloadSync();
 		void CacheSync();
 		void FreeCacheSync();
+		void SetMetaData(const String& metaData);
 		virtual void OnShutdown() override;
 	private:
 		Resource(const ResourceDescriptor& descriptor,IResourceDeserializer* pDeserializer);
@@ -69,5 +70,7 @@ namespace Portakal
 		Bool8 mLoaded;
 		Bool8 mCached;
 		Bool8 mOptimized;
+		String mMetaData;
+
 	};
 }

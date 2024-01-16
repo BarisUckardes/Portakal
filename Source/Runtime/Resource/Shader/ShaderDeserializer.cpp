@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	ResourceSubObject* ShaderDeserializer::Deserialize(const MemoryView& view)
+	ResourceSubObject* ShaderDeserializer::Deserialize(const MemoryView& view,const String& metaData)
 	{
 		ShaderResource* pShader = new ShaderResource();
 
@@ -13,7 +13,7 @@ namespace Portakal
 
 		return pShader;
 	}
-	ResourceSubObject* ShaderDeserializer::DeserializeOptimized(const MemoryView& view)
+	ResourceSubObject* ShaderDeserializer::DeserializeOptimized(const MemoryView& view,const String& metaData)
 	{
 		return nullptr;
 	}

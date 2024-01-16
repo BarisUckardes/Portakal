@@ -5,13 +5,15 @@
 #include <Runtime/Resource/ResourceAPI.h>
 #include <Editor/Resource/CustomResourceSerializer.h>
 #include <Runtime/Platform/PlatformFile.h>
+#include <Editor/Domain/DomainFolder.h>
 
 namespace Portakal
 {
-	
 	void DomainFile::SaveSync()
 	{
-
+		//Serialize to memory view
+		MemoryOwnedView* pMemoryView = {};
+		mSerializer->Serialize(this, mResource->GetSubObject().GetHeap(),&pMemoryView);
 	}
 	void DomainFile::LoadSnyc()
 	{
@@ -23,6 +25,21 @@ namespace Portakal
 		if (IsShutdown())
 			return;
 	}
+
+	void DomainFile::WriteMeta(const String& meta)
+	{
+		//Validate meta path
+		if (!PlatformFile::Exists(mMetaPath))
+			PlatformFile::Create(mMetaPath);
+
+		//Write yaml to meta
+		if (!PlatformFile::Write(mMetaPath, meta))
+			DEV_LOG("DomainFile", "Failed to write to meta");
+
+		//Set resource meta
+		mResource->SetMetaData(meta);
+	}
+
 
 	DomainFile::DomainFile(DomainFolder* pOwnerFolder, const String& resourceType,const String& name, const Guid& id,const String& descriptorPath,const String& sourcePath,IResourceSerializer* pSerializer, Type* pThumnailType,Type* pOpenActionType) :
 		mDescriptorPath(descriptorPath),mSourcePath(sourcePath), mOwnerFolder(pOwnerFolder), mSerializer(pSerializer),mThumbnailType(pThumnailType),mOpenActionType(pOpenActionType)
@@ -45,6 +62,20 @@ namespace Portakal
 		{
 			DEV_LOG("DomainFile", "Failed to create Runtime::Resource");
 			return;
+		}
+
+		//Get meta data
+		const String metaPath = mOwnerFolder->GetPath() + "\\" + GetName() + ".pmeta";
+		mMetaPath = metaPath;
+
+		//Try load meta data
+		if (PlatformFile::Exists(metaPath))
+		{
+			String metaContent;
+			if (!PlatformFile::Read(mMetaPath, metaContent))
+				DEV_LOG("DomainFile", "Failed to write meta");
+
+			mResource->SetMetaData(metaContent);
 		}
 	}
 

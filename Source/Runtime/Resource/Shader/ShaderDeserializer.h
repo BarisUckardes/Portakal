@@ -13,8 +13,8 @@ namespace Portakal
 		ShaderDeserializer() = default;
 		~ShaderDeserializer() = default;
 
-		virtual ResourceSubObject* Deserialize(const MemoryView& view) override;
-		virtual ResourceSubObject* DeserializeOptimized(const MemoryView& view) override;
+		virtual ResourceSubObject* Deserialize(const MemoryView& view,const String& metaData) override;
+		virtual ResourceSubObject* DeserializeOptimized(const MemoryView& view,const String& metaData) override;
 	};
 }
 

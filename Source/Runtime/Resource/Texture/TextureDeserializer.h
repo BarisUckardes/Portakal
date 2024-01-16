@@ -15,8 +15,8 @@ namespace Portakal
 
 	private:
 		// Inherited via IResourceDeserializer
-		ResourceSubObject* Deserialize(const MemoryView& view) override;
-		ResourceSubObject* DeserializeOptimized(const MemoryView& view) override;
+		ResourceSubObject* Deserialize(const MemoryView& view,const String& metaData) override;
+		ResourceSubObject* DeserializeOptimized(const MemoryView& view,const String& metaData) override;
 	};
 }
 

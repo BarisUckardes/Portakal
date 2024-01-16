@@ -31,9 +31,11 @@ namespace Portakal
 		{
 			return mOpenActionType;
 		}
+
 		void SaveSync();
 		void LoadSnyc();
 		void Delete();
+		void WriteMeta(const String& meta);
 	private:
 		DomainFile(DomainFolder* pOwnerFolder, const String& resourceType,const String& name,const Guid& id,const String& descriptorPath,const String& sourcePath,IResourceSerializer* pSerializer,Type* pThumnailType,Type* openActionType);
 		~DomainFile() = default;
@@ -47,6 +49,7 @@ namespace Portakal
 		Type* mOpenActionType;
 		String mDescriptorPath;
 		String mSourcePath;
+		String mMetaPath;
 		TimeStamp mLastChangeTime;
 	};
 }

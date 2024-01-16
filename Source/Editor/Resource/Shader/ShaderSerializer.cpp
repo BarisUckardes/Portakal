@@ -1,4 +1,6 @@
 #include "ShaderSerializer.h"
+#include <Editor/Domain/DomainFile.h>
+#include <Runtime/Yaml/Yaml.h>
 
 namespace Portakal
 {
@@ -6,11 +8,11 @@ namespace Portakal
 	{
 
 	}
-	void ShaderSerializer::Serialize(const Object* pObject, MemoryOwnedView** ppView)
+	void ShaderSerializer::Serialize(DomainFile* pFile,const Object* pObject, MemoryOwnedView** ppView)
 	{
 
 	}
-	void ShaderSerializer::SerializeOptimized(const Object* pObject, MemoryOwnedView** ppView)
+	void ShaderSerializer::SerializeOptimized(DomainFile* pFile,const Object* pObject, MemoryOwnedView** ppView)
 	{
 
 	}

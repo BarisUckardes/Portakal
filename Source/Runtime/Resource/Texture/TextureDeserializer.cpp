@@ -4,7 +4,7 @@
 #include <Runtime/Graphics/GraphicsAPI.h>
 namespace Portakal
 {
-	ResourceSubObject* TextureDeserializer::Deserialize(const MemoryView& view)
+	ResourceSubObject* TextureDeserializer::Deserialize(const MemoryView& view,const String& metaData)
 	{
 		//Get default device
 		SharedHeap<GraphicsDevice> pDefaultDevice = GraphicsAPI::GetDefaultDevice();
@@ -55,7 +55,7 @@ namespace Portakal
 
 		return pTexture;
 	}
-	ResourceSubObject* TextureDeserializer::DeserializeOptimized(const MemoryView& view)
+	ResourceSubObject* TextureDeserializer::DeserializeOptimized(const MemoryView& view,const String& metaData)
 	{
 		//Create texture
 		TextureResource* pTexture = new TextureResource();

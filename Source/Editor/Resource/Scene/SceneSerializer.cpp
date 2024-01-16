@@ -2,11 +2,11 @@
 
 namespace Portakal
 {
-	void SceneSerializer::Serialize(const Object* pObject, MemoryOwnedView** ppView)
+	void SceneSerializer::Serialize(DomainFile* pFile,const Object* pObject, MemoryOwnedView** ppView)
 	{
 
 	}
-	void SceneSerializer::SerializeOptimized(const Object* pObject, MemoryOwnedView** ppView)
+	void SceneSerializer::SerializeOptimized(DomainFile* pFile,const Object* pObject, MemoryOwnedView** ppView)
 	{
 
 	}

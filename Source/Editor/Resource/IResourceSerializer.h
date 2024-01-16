@@ -5,6 +5,8 @@
 
 namespace Portakal
 {
+	class DomainFile;
+
 	PCLASS(Virtual);
 	class EDITOR_API IResourceSerializer : public Object
 	{
@@ -13,8 +15,8 @@ namespace Portakal
 		IResourceSerializer() = default;
 		~IResourceSerializer() = default;
 
-		virtual void Serialize(const Object* pObject, MemoryOwnedView** ppView) = 0;
-		virtual void SerializeOptimized(const Object* pObject, MemoryOwnedView** ppView) = 0;
+		virtual void Serialize(DomainFile* pFile,const Object* pObject, MemoryOwnedView** ppView) = 0;
+		virtual void SerializeOptimized(DomainFile* pFile,const Object* pObject, MemoryOwnedView** ppView) = 0;
 	};
 }
 

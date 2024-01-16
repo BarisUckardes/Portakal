@@ -4,7 +4,7 @@
 
 namespace Portakal
 {
-	PATTRIBUTE(CustomThumbnail,"scene")
+	PATTRIBUTE(CustomThumbnail,"cene")
 	PCLASS();
 	class EDITOR_API SceneThumbnail : public IThumbnail
 	{

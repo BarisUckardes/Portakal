@@ -2,7 +2,7 @@
 
 namespace Portakal
 {
-	ResourceSubObject* SceneDeserializer::Deserialize(const MemoryView& view)
+	ResourceSubObject* SceneDeserializer::Deserialize(const MemoryView& view,const String& metaData)
 	{
 		SceneResource* pScene = new SceneResource();
 
@@ -10,7 +10,7 @@ namespace Portakal
 
 		return pScene;
 	}
-	ResourceSubObject* SceneDeserializer::DeserializeOptimized(const MemoryView& view)
+	ResourceSubObject* SceneDeserializer::DeserializeOptimized(const MemoryView& view,const String& metaData)
 	{
 		return nullptr;
 	}

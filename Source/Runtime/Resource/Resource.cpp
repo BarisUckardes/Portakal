@@ -25,7 +25,7 @@ namespace Portakal
 		}
 
 		//Deserialize
-		mSubObject = mOptimized ? mDeserializer->DeserializeOptimized(memory) : mDeserializer->Deserialize(memory);
+		mSubObject = mOptimized ? mDeserializer->DeserializeOptimized(memory,mMetaData) : mDeserializer->Deserialize(memory,mMetaData);
 		mSubObject->_SetOwnerResource(this);
 		mLoaded = true;
 		DEV_LOG("Resource", "Loaded resource %s", *GetName());
@@ -69,6 +69,11 @@ namespace Portakal
 
 		delete mCachedData;
 		mCachedData = nullptr;
+	}
+
+	void Resource::SetMetaData(const String& metaData)
+	{
+		mMetaData = metaData;
 	}
 	
 	void Resource::OnShutdown()
