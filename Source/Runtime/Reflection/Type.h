@@ -47,6 +47,9 @@ namespace Portakal
 			return mEnums;
 		}
 
+		String GetEnumName(const Int64 value) const noexcept;
+
+
 		template<typename T>
 		T* GetAttribute() const noexcept
 		{

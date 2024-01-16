@@ -11,6 +11,7 @@
 #include <Editor/GUI/Thumbnail/IThumbnail.h>
 #include <Editor/GUI/Object/EditorObjectAPI.h>
 #include <Editor/GUI/OpenAction/IFileOpenAction.h>
+#include <Editor/GUI/Thumbnail/Builtin/DefaultThumbnail.h>
 
 namespace Portakal
 {
@@ -80,7 +81,18 @@ namespace Portakal
 		//Check if this domain file already exists
 		if (mThumnails.FindIndex(pFile) == -1)
 		{
-			IThumbnail* pThumbnail = (IThumbnail*)pFile->GetThumbnailType()->CreateDefaultHeapObject();
+			Type* pType = pFile->GetThumbnailType();
+			IThumbnail* pThumbnail = nullptr;
+			if (pType == nullptr)
+			{
+				pThumbnail = new DefaultThumbnail();
+			}
+			else
+			{
+				pThumbnail = (IThumbnail*)pFile->GetThumbnailType()->CreateDefaultHeapObject();
+				
+			}
+			
 			pThumbnail->OnInitialize();
 			mThumnails.Insert(pFile, pThumbnail);
 		}
@@ -281,7 +293,7 @@ namespace Portakal
 			ImGui::Separator();
 			ImGui::Spacing();
 
-			for (IContextMenuItem* pAction : mContextCreateActions)
+			for (SharedHeap<IContextMenuItem> pAction : mContextCreateActions)
 			{
 				const String title = pAction->GetName();
 				if (ImGui::Selectable(*title))
@@ -300,7 +312,7 @@ namespace Portakal
 		//Tick context actions
 		for (Int32 i = 0; i < mTickingContextCreateActions.GetSize(); i++)
 		{
-			IContextMenuItem* pAction = mTickingContextCreateActions[i];
+			SharedHeap<IContextMenuItem> pAction = mTickingContextCreateActions[i];
 
 			//Tick and check if close requested
 			if (!pAction->OnTick(mTargetFolder))
@@ -318,8 +330,7 @@ namespace Portakal
 				mContextCreateActions.Add(pNewAction);
 
 				//Shutdown and delete
-				pAction->Shutdown();
-				delete pAction;
+				pAction.Shutdown();
 
 				i--;
 			}

@@ -1,8 +1,8 @@
 #pragma once
 #include <Runtime/Resource/Texture/TextureResource.h>
 #include <Editor/GUI/Object/IObjectPainter.h>
-#include "TextureObjectPainter.reflected.h"
 #include <Editor/ImGui/ImGuiTextureBinding.h>
+#include "TextureObjectPainter.reflected.h"
 
 namespace Portakal
 {

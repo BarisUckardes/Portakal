@@ -1,9 +1,11 @@
 #pragma once
 #include <Runtime/Core/Core.h>
+#include "ShaderLanguage.reflected.h"
 
 namespace Portakal
 {
-    enum class RUNTIME_API ShaderLanguage : Byte
+    PENUM();
+    enum class RUNTIME_API ShaderLanguage : Int64
     {
         Unknown,
         GLSL,
@@ -11,3 +13,4 @@ namespace Portakal
         MSL
     };
 }
+

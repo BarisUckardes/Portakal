@@ -53,8 +53,8 @@ namespace Portakal
 		float mItemGap;
 
 		//Context menu item variables
-		Array<IContextMenuItem*> mContextCreateActions;
-		Array<IContextMenuItem*> mTickingContextCreateActions;
+		Array<SharedHeap<IContextMenuItem>> mContextCreateActions;
+		Array<SharedHeap<IContextMenuItem>> mTickingContextCreateActions;
 
 		//Thumbnail variables
 		HashMap<SharedHeap<DomainFile>, SharedHeap<IThumbnail>> mThumnails;

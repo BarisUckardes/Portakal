@@ -3,6 +3,13 @@
 
 namespace Portakal
 {
+    String Type::GetEnumName(const Int64 value) const noexcept
+    {
+        for (const EnumValue& enumValue : mEnums)
+            if (enumValue.Value == value)
+                return enumValue.Name;
+        return "";
+    }
     void* Type::CreateDefaultHeapObject() const noexcept
     {
         return mDefaultObjectGenerator();

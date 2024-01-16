@@ -1,9 +1,11 @@
 #pragma once
 #include <Runtime/Core/Core.h>
+#include "ShaderStage.reflected.h"
 
 namespace Portakal
 {
-    enum class RUNTIME_API ShaderStage : Byte
+    PENUM();
+    enum class RUNTIME_API ShaderStage : Int64
     {
         VertexStage = 1,
         FragmentStage = 2,
@@ -12,3 +14,4 @@ namespace Portakal
 
     GENERATE_FLAGS(ShaderStage, Byte)
 }
+
