@@ -3,6 +3,7 @@
 #include <Runtime/Input/MouseButtons.h>
 #include <Runtime/Reflection/Reflection.h>
 #include <imgui.h>
+#include <misc/cpp/imgui_stdlib.h>
 
 namespace Portakal
 {
@@ -36,7 +37,8 @@ namespace Portakal
 
 			return (T)selectedValue.Value;
 		}
-
+		static String TextField(const String& name, const String input);
+		static String MultiTextField(const String& name, const String input);
 	public:
 		ImGuiUtils() = delete;
 		~ImGuiUtils() = delete;

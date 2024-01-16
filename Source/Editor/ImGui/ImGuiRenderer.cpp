@@ -394,11 +394,13 @@ namespace Portakal
         ShaderDesc vertexShaderDesc = {};
         vertexShaderDesc.Stage = ShaderStage::VertexStage;
         vertexShaderDesc.ByteCode = pVertexShaderSpirv;
+        vertexShaderDesc.Language = ShaderLanguage::HLSL;
         vertexShaderDesc.EntryPoint = "main";
 
         ShaderDesc fragmentShaderDesc = {};
         fragmentShaderDesc.Stage = ShaderStage::FragmentStage;
         fragmentShaderDesc.ByteCode = pFragmentShaderSpirv;
+        fragmentShaderDesc.Language = ShaderLanguage::HLSL;
         fragmentShaderDesc.EntryPoint = "main";
 
         mVertexShader = mDevice->CreateShader(vertexShaderDesc);

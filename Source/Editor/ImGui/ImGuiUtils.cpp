@@ -269,6 +269,18 @@ namespace Portakal
 			return ImGuiMouseButton_Middle;
 		}
 	}
+	String ImGuiUtils::TextField(const String& name, const String input)
+	{
+		std::string temp(input.GetSource(), input.GetSize());
+		ImGui::InputText(*name, &temp);
+		return temp.c_str();
+	}
+	String ImGuiUtils::MultiTextField(const String& name, const String input)
+	{
+		std::string temp(input.GetSource(), input.GetSize());
+		ImGui::InputTextMultiline(*name, &temp);
+		return temp.c_str();
+	}
 }
 
 #pragma warning(pop)

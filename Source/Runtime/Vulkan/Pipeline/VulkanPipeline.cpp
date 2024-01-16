@@ -15,24 +15,6 @@ namespace Portakal
 	VulkanPipeline::VulkanPipeline(const GraphicsPipelineDesc& desc, VulkanDevice* pDevice) : Pipeline(desc), mLayout(VK_NULL_HANDLE), mPipeline(VK_NULL_HANDLE), mLogicalDevice(VK_NULL_HANDLE)
 	{
 		/**
-		* Create shader stages
-		*/
-		Array<VkPipelineShaderStageCreateInfo> shaderStageCreateInformation;
-		for (UInt32 shaderIndex = 0; shaderIndex < desc.GraphicsShaders.GetSize(); shaderIndex++)
-		{
-			const VulkanShader* pShader = (const VulkanShader*)desc.GraphicsShaders[shaderIndex].GetHeap();
-
-			VkPipelineShaderStageCreateInfo createInfo = {};
-			createInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-			createInfo.pNext = nullptr;
-			createInfo.module = pShader->GetVkShader();
-			createInfo.pSpecializationInfo = nullptr;
-			createInfo.stage = (VkShaderStageFlagBits)VulkanPipelineUtils::GetShaderStage(pShader->GetStage());
-
-			shaderStageCreateInformation.Add(createInfo);
-		}
-
-		/**
 		* Create input layout
 		*/
 		Array<VkVertexInputBindingDescription> inputBindingDescriptions;
@@ -205,18 +187,21 @@ namespace Portakal
 		* Get shader stage info
 		*/
 		VkPipelineShaderStageCreateInfo vkShaderStageInfos[8];
+		String vkShaderStageNameCache[8];
 		for (Byte shaderIndex = 0; shaderIndex < desc.GraphicsShaders.GetSize(); shaderIndex++)
 		{
 			const VulkanShader* pShader = (const VulkanShader*)desc.GraphicsShaders[shaderIndex].GetHeap();
 
+			//Cache entry point
+			vkShaderStageNameCache[shaderIndex] = pShader->GetEntryPoint();
+
 			VkPipelineShaderStageCreateInfo info = {};
 			info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 			info.module = pShader->GetVkShader();
-			info.pSpecializationInfo = nullptr;
-			info.pName = pShader->GetEntryPoint().GetSource();
+			info.pName = *vkShaderStageNameCache[shaderIndex];
 			info.stage = (VkShaderStageFlagBits)VulkanShaderUtils::GetShaderFlags(pShader->GetStage());
+			info.pSpecializationInfo = nullptr;
 			info.pNext = nullptr;
-
 			vkShaderStageInfos[shaderIndex] = info;
 		}
 
@@ -257,6 +242,7 @@ namespace Portakal
 
 		DEV_ASSERT(vkCreateGraphicsPipelines(pDevice->GetVkLogicalDevice(), VK_NULL_HANDLE, 1, &pipelineCreateInfo, nullptr, &mPipeline) == VK_SUCCESS, "VulkanPipeline", "Failed to create graphics pipeline");
 
+		//Clean up the trash
 		mBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
 		mLogicalDevice = pDevice->GetVkLogicalDevice();
 	}

@@ -14,8 +14,12 @@ namespace Portakal
 		//Serialize to memory view
 		MemoryOwnedView* pMemoryView = {};
 		mSerializer->Serialize(this, mResource->GetSubObject().GetHeap(),&pMemoryView);
+
+		//Write memory view
+		if (!PlatformFile::Write(mSourcePath, pMemoryView))
+			DEV_LOG("DomainFile", "Failed to save resource file");
 	}
-	void DomainFile::LoadSnyc()
+	void DomainFile::LoadSync()
 	{
 		mResource->LoadSync();
 	}

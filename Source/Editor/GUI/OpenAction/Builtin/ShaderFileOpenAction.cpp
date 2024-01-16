@@ -8,7 +8,7 @@ namespace Portakal
 	void ShaderFileOpenAction::OnOpen(DomainFile* pFile)
 	{
 		//First load scene
-		pFile->LoadSnyc();
+		pFile->LoadSync();
 
 		//Get sub resource and mark primal
 		EditorObjectAPI::SignalObject(pFile->GetSubObject().QueryAs<Object>());

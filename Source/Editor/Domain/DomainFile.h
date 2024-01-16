@@ -33,7 +33,7 @@ namespace Portakal
 		}
 
 		void SaveSync();
-		void LoadSnyc();
+		void LoadSync();
 		void Delete();
 		void WriteMeta(const String& meta);
 	private:

@@ -12,7 +12,7 @@ namespace Portakal
 	SharedHeap<TextureResource> TextureThumbnail::GetThumbnailTexture(DomainFile* pFile)
 	{
 		//First make sure it's loaded
-		pFile->LoadSnyc();
+		pFile->LoadSync();
 
 		//Get sub object
 		SharedHeap<TextureResource> pTexture = pFile->GetSubObject().QueryAs<TextureResource>();

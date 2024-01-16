@@ -20,6 +20,10 @@ namespace Portakal
 		void OnPaint() override;
 	private:
 		SharedHeap<ShaderResource> mShader;
+		ShaderLanguage mLanguage;
+		ShaderStage mStage;
+		String mEntryPoint;
+		String mSource;
 	};
 }
 

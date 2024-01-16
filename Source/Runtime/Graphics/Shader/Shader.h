@@ -6,23 +6,24 @@ namespace Portakal
 {
     class RUNTIME_API Shader : public GraphicsDeviceObject {
     public:
-        Shader(const ShaderDesc& desc) : mStage(desc.Stage), mEntryPoint(desc.EntryPoint), mByteCode(desc.ByteCode) {}
+        Shader(const ShaderDesc& desc) : mStage(desc.Stage), mEntryPoint(desc.EntryPoint),mLanguage(desc.Language)
+        {
+
+        }
 
         virtual ~Shader() = default;
 
-        FORCEINLINE const ShaderStage GetStage() const { return mStage; }
-
-        FORCEINLINE const String& GetEntryPoint() const { return mEntryPoint; }
-
-        FORCEINLINE const MemoryView& GetByteCode() const { return mByteCode; }
+        FORCEINLINE ShaderStage GetStage() const { return mStage; }
+        FORCEINLINE ShaderLanguage GetLanguage() const noexcept { return mLanguage; }
+        FORCEINLINE String GetEntryPoint() const { return mEntryPoint; }
 
         FORCEINLINE virtual GraphicsDeviceObjectType
         GetObjectType() const noexcept override { return GraphicsDeviceObjectType::Shader; }
 
     private:
         const ShaderStage mStage;
+        const ShaderLanguage mLanguage;
         const String mEntryPoint;
-        const MemoryView mByteCode;
     };
 
 }
