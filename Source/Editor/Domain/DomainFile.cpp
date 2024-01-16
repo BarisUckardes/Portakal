@@ -24,8 +24,8 @@ namespace Portakal
 			return;
 	}
 
-	DomainFile::DomainFile(DomainFolder* pOwnerFolder, const String& resourceType,const String& name, const Guid& id,const String& descriptorPath,const String& sourcePath,IResourceSerializer* pSerializer, Type* pThumnailType) :
-		mDescriptorPath(descriptorPath),mSourcePath(sourcePath), mOwnerFolder(pOwnerFolder), mSerializer(pSerializer),mThumbnailType(pThumnailType)
+	DomainFile::DomainFile(DomainFolder* pOwnerFolder, const String& resourceType,const String& name, const Guid& id,const String& descriptorPath,const String& sourcePath,IResourceSerializer* pSerializer, Type* pThumnailType,Type* pOpenActionType) :
+		mDescriptorPath(descriptorPath),mSourcePath(sourcePath), mOwnerFolder(pOwnerFolder), mSerializer(pSerializer),mThumbnailType(pThumnailType),mOpenActionType(pOpenActionType)
 	{
 		//Override name and id
 		SetName(name);

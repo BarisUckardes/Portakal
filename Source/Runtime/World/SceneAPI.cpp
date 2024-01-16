@@ -26,9 +26,6 @@ namespace Portakal
 
 		pAPI->mScenes.Add(pScene);
 		pAPI->mMap.Insert(pScene.GetHeap(), pScene);
-
-		if (pAPI->mScenes.GetSize() == 1)
-			pAPI->mPrimalScene = pScene;
 	}
 	void SceneAPI::_RemoveScene(Scene* pScene)
 	{
@@ -43,8 +40,10 @@ namespace Portakal
 		pAPI->mMap.Remove(pScene);
 		pAPI->mScenes.RemoveAt(index);
 
-		if (pAPI->mScenes.GetSize() == 1)
-			pAPI->mPrimalScene = pAPI->mScenes[0];
+		if (pScene == pAPI->mPrimalScene.GetHeap())
+			pAPI->mPrimalScene = nullptr;
+
+		pScene->_SetPrimalState(false);
 	}
 	void SceneAPI::_SetScenePrimal(Scene* pScene)
 	{
@@ -56,11 +55,13 @@ namespace Portakal
 		if (index == -1) // WTF
 			return;
 
-		//TODO: Remove the primal mark of the previous primal scene
+		//Remove the primal mark of the previous primal scene
 		if (!pAPI->mPrimalScene.IsShutdown())
-		{
+			pAPI->mPrimalScene->_SetPrimalState(false);
 
-		}
+		//Set scene primal
+		pAPI->mPrimalScene = pAPI->mMap[index].GetValue();
+		pAPI->mPrimalScene->_SetPrimalState(true);
 	}
 	SceneAPI::SceneAPI()
 	{

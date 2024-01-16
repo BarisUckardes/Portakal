@@ -7,8 +7,10 @@ namespace Portakal
 	}
 	void TextureSerializer::Serialize(const Object* pObject, MemoryOwnedView** ppView)
 	{
+
 	}
 	void TextureSerializer::SerializeOptimized(const Object* pObject, MemoryOwnedView** ppView)
 	{
+
 	}
 }

@@ -1,5 +1,5 @@
 #pragma once
-#include <Editor/GUI/IThumbnail.h>
+#include <Editor/GUI/Thumbnail/IThumbnail.h>
 #include "TextureThumbnail.reflected.h"
 
 namespace Portakal

@@ -10,13 +10,23 @@ namespace Portakal
 	class Entity;
 	class RUNTIME_API Scene : public Object
 	{
+		friend class SceneAPI;
 	public:
-		Scene();
+		static SharedHeap<Scene> Create();
+	public:
 		~Scene();
 
 		FORCEINLINE Bool8 IsPrimal() const noexcept
 		{
 			return mPrimal;
+		}
+		FORCEINLINE const Array<SharedHeap<Entity>>& GetEntities() const noexcept
+		{
+			return mEntities;
+		}
+		FORCEINLINE const Array<SharedHeap<SceneAspect>>& GetAspects() const noexcept
+		{
+			return mAspects;
 		}
 
 		SharedHeap<Entity> CreateEntity();
@@ -46,6 +56,10 @@ namespace Portakal
 			return nullptr;
 		}
 		void MarkPrimal();
+		virtual void OnShutdown() override;
+	private:
+		Scene();
+		void _SetPrimalState(const Bool8 state);
 	private:
 		Array<SharedHeap<Entity>> mEntities;
 		Array<SharedHeap<SceneAspect>> mAspects;

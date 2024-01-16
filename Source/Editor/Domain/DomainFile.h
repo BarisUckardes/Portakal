@@ -27,12 +27,15 @@ namespace Portakal
 		{
 			return mThumbnailType;
 		}
-
+		FORCEINLINE Type* GetOpenActionType() const noexcept
+		{
+			return mOpenActionType;
+		}
 		void SaveSync();
 		void LoadSnyc();
 		void Delete();
 	private:
-		DomainFile(DomainFolder* pOwnerFolder, const String& resourceType,const String& name,const Guid& id,const String& descriptorPath,const String& sourcePath,IResourceSerializer* pSerializer,Type* pThumnailType);
+		DomainFile(DomainFolder* pOwnerFolder, const String& resourceType,const String& name,const Guid& id,const String& descriptorPath,const String& sourcePath,IResourceSerializer* pSerializer,Type* pThumnailType,Type* openActionType);
 		~DomainFile() = default;
 
 		virtual void OnShutdown() override;
@@ -41,6 +44,7 @@ namespace Portakal
 		DomainFolder* mOwnerFolder;
 		IResourceSerializer* mSerializer;
 		Type* mThumbnailType;
+		Type* mOpenActionType;
 		String mDescriptorPath;
 		String mSourcePath;
 		TimeStamp mLastChangeTime;

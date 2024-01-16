@@ -1,7 +1,7 @@
 #pragma once
 #include <Runtime/Core/Core.h>
 #include <Runtime/Memory/SharedHeap.h>
-#include <Editor/GUI/CustomThumbnail.h>
+#include <Editor/GUI/Thumbnail/CustomThumbnail.h>
 #include <Runtime/Resource/Texture/TextureResource.h>
 #include "IThumbnail.reflected.h"
 

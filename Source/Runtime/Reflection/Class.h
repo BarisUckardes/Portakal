@@ -7,6 +7,6 @@ namespace Portakal
 	class RUNTIME_API Class
 	{
 	public:
-		FORCEINLINE virtual const Type* GetType() const noexcept { return nullptr; }
+		FORCEINLINE virtual Type* GetType() const noexcept { return nullptr; }
 	};
 }

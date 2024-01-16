@@ -9,6 +9,7 @@ namespace Portakal
 	class RUNTIME_API SceneAPI : public API<SceneAPI>
 	{
 		friend class SceneModule;
+		friend class Scene;
 	public:
 		static SharedHeap<Scene> GetPrimalScene();
 		static Array<SharedHeap<Scene>> GetScenes();

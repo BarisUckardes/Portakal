@@ -73,23 +73,25 @@ namespace Portakal
 
 		//Add core modules
 		pApplication->RegisterModule<ReflectionModule>(0);
-		pApplication->RegisterModule<WindowModule>(1);
-		pApplication->RegisterModule<GraphicsModule>(2);
-		pApplication->RegisterModule<ResourceModule>(3);
-		pApplication->RegisterModule<ProjectModule>(4, cmdArguments[1]);
-		pApplication->RegisterModule<DomainModule>(5);
+		pApplication->RegisterModule<SceneModule>(1);
+		pApplication->RegisterModule<WindowModule>(2);
+		pApplication->RegisterModule<GraphicsModule>(3);
+		pApplication->RegisterModule<ResourceModule>(4);
+		pApplication->RegisterModule<ProjectModule>(5, cmdArguments[1]);
+		pApplication->RegisterModule<DomainModule>(6);
 
 		//Add create-only modules
-		pApplication->RegisterModule<EditorPlayerProjectModule>(6);
-		pApplication->RegisterModule<EditorPlayerWindowModule>(7);
-		pApplication->RegisterModule<EditorPlayerGDeviceModule>(8);
-		pApplication->RegisterModule<EditorResourceModule>(9);
-		pApplication->RegisterModule<ImGuiModule>(10);
+		pApplication->RegisterModule<EditorPlayerProjectModule>(7);
+		pApplication->RegisterModule<EditorPlayerWindowModule>(8);
+		pApplication->RegisterModule<EditorPlayerGDeviceModule>(9);
+		pApplication->RegisterModule<EditorResourceModule>(10);
+		pApplication->RegisterModule<EditorObjectModule>(11);
+		pApplication->RegisterModule<ImGuiModule>(12);
 		
 		//GUI modules
-		pApplication->RegisterModule<ImGuiRenderStartModule>(11);
-		pApplication->RegisterModule<GUIWindowModule>(12);
-		pApplication->RegisterModule<ImGuiRenderEndModule>(13);
+		pApplication->RegisterModule<ImGuiRenderStartModule>(13);
+		pApplication->RegisterModule<GUIWindowModule>(14);
+		pApplication->RegisterModule<ImGuiRenderEndModule>(15);
 
 		//Run
 		pApplication->Run();

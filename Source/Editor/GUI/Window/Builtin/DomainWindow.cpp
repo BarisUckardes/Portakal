@@ -8,7 +8,9 @@
 #include <Runtime/Platform/PlatformWindow.h>
 #include <Runtime/Platform/PlatformFile.h>
 #include <Editor/Resource/CustomResourceSerializer.h>
-#include <Editor/GUI/IThumbnail.h>
+#include <Editor/GUI/Thumbnail/IThumbnail.h>
+#include <Editor/GUI/Object/EditorObjectAPI.h>
+#include <Editor/GUI/OpenAction/IFileOpenAction.h>
 
 namespace Portakal
 {
@@ -50,6 +52,16 @@ namespace Portakal
 	}
 	void DomainWindow::OpenFile(DomainFile* pFile)
 	{
+		Type* pActionType = pFile->GetOpenActionType();
+		if (pActionType == nullptr)
+		{
+			DEV_LOG("DomainWindow", "Cannot open file %s, no open action defined", *pFile->GetName());
+			return;
+		}
+
+		IFileOpenAction* pAction = (IFileOpenAction*)pActionType->CreateDefaultHeapObject();
+		pAction->OnOpen(pFile);
+		delete pAction;
 	}
 	void DomainWindow::OpenFolder(DomainFolder* pFolder)
 	{

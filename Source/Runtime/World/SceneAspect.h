@@ -9,8 +9,9 @@ namespace Portakal
 	PCLASS(Virtual);
 	class RUNTIME_API SceneAspect : public Object
 	{
-		GENERATE_OBJECT;
 		friend class Scene;
+	public:
+		GENERATE_OBJECT;
 	public:
 		virtual void OnInitialize() = 0;
 		virtual void OnExecute() = 0;

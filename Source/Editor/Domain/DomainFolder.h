@@ -42,6 +42,7 @@ namespace Portakal
 		void ImportExistingFile(const String& descriptorPath);
 		Type* GetSerializerType(const String& resourceType);
 		Type* GetThumbnailType(const String& resourceType);
+		Type* GetOpenActionType(const String& resourceType);
 		void _OnSubFolderDeleted(const DomainFolder* pFolder);
 		void _OnSubFileDeleted(const DomainFile* pFile);
 		virtual void OnShutdown() override;

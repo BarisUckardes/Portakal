@@ -1,9 +1,16 @@
 #include "Scene.h"
+#include <Runtime/World/SceneAPI.h>
 
 namespace Portakal
 {
-    Scene::Scene()
+    Scene::Scene() : mPrimal(false)
     {
+    }
+    SharedHeap<Scene> Scene::Create()
+    {
+        SharedHeap<Scene> pScene = new Scene();
+        SceneAPI::_RegisterScene(pScene);
+        return pScene;
     }
     Scene::~Scene()
     {
@@ -22,5 +29,14 @@ namespace Portakal
     }
     void Scene::MarkPrimal()
     {
+        SceneAPI::_SetScenePrimal(this);
+    }
+    void Scene::OnShutdown()
+    {
+        SceneAPI::_RemoveScene(this);
+    }
+    void Scene::_SetPrimalState(const Bool8 state)
+    {
+        mPrimal = state;
     }
 }

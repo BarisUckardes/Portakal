@@ -1,5 +1,6 @@
 #pragma once
 #include <Editor/GUI/Window/GUIWindow.h>
+#include <Runtime/World/Scene.h>
 #include "WorldWindow.reflected.h"
 
 namespace Portakal
@@ -13,14 +14,15 @@ namespace Portakal
 		~WorldWindow() = default;
 
 	private:
+		void OnSceneChanged(const SharedHeap<Scene>& pScene);
 		// Inherited via GUIWindow
-		void OnShutdown() override;
-		void OnShow() override;
-		void OnHide() override;
-		void OnPaint() override;
-		void OnInitialize() override;
+		virtual void OnShutdown() override;
+		virtual void OnShow() override;
+		virtual void OnHide() override;
+		virtual void OnPaint() override;
+		virtual void OnInitialize() override;
 	private:
-
+		SharedHeap<Scene> mTargetScene;
 	};
 }
 

@@ -7,6 +7,7 @@ namespace Portakal
 {
 	void TextureThumbnail::OnInitialize()
 	{
+
 	}
 	SharedHeap<TextureResource> TextureThumbnail::GetThumbnailTexture(DomainFile* pFile)
 	{

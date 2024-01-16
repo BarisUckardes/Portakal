@@ -5,9 +5,9 @@
 #include <Editor/Resource/CustomResourceSerializer.h>
 #include <Editor/Domain/DomainFile.h>
 #include <Editor/Domain/DomainFileDescriptor.h>
-#include <Editor/GUI/IThumbnail.h>
+#include <Editor/GUI/Thumbnail/IThumbnail.h>
+#include <Editor/GUI/OpenAction/IFileOpenAction.h>
 #include <Runtime/Yaml/Yaml.h>
-#include <Editor/GUI/CustomThumbnail.h>
 
 namespace Portakal
 {
@@ -54,7 +54,7 @@ namespace Portakal
 
 		//Find some serializers with this extension
 		const Array<Type*> subTypes = ReflectionAPI::GetSubTypes(typeof(IResourceSerializer));
-		Type* pSelectedType = nullptr;
+		Type* pSelectedSerializerType = nullptr;
 		String selectedResourceType;
 		for (Type* pType : subTypes)
 		{
@@ -67,18 +67,17 @@ namespace Portakal
 			const Array<String> extensions = pAttribute->GetImportExtensions();
 			if (extensions.Has(extension))
 			{
-				pSelectedType = pType;
+				pSelectedSerializerType = pType;
 				selectedResourceType = pAttribute->GetResourceType();
 				break;
 			}
 		}
 
 		//Check if selected a type
-		if (pSelectedType == nullptr)
+		if (pSelectedSerializerType == nullptr)
 			return nullptr;
 
-		//Find thumbnail type
-		Type* pThumbnailType = GetThumbnailType(selectedResourceType);
+		
 
 		//Create file descriptor
 		DomainFileDescriptor descriptor = {};
@@ -108,11 +107,16 @@ namespace Portakal
 		}
 
 		//Create serializer
-		IResourceSerializer* pSerializer = (IResourceSerializer*)pSelectedType->CreateDefaultHeapObject();
+		IResourceSerializer* pSerializer = (IResourceSerializer*)pSelectedSerializerType->CreateDefaultHeapObject();
 
-		
+		//Find thumbnail type
+		Type* pThumbnailType = GetThumbnailType(selectedResourceType);
+
+		//Find open action type
+		Type* pOpenActionType = GetOpenActionType(selectedResourceType);
+
 		//Create domain file
-		SharedHeap<DomainFile> pFile = new DomainFile(this,selectedResourceType,nameWExtension,descriptor.ID,descriptorPath,sourceFilePath,pSerializer, pThumbnailType);
+		SharedHeap<DomainFile> pFile = new DomainFile(this,selectedResourceType,nameWExtension,descriptor.ID,descriptorPath,sourceFilePath,pSerializer, pThumbnailType, pOpenActionType);
 		pFile->SetName(nameWExtension);
 		pFile->OverrideID(descriptor.ID);
 
@@ -206,8 +210,11 @@ namespace Portakal
 		//Find thumbnail type
 		Type* pThumbnailType = GetThumbnailType(descriptor.Type);
 
+		//Find open action type
+		Type* openActionType = GetOpenActionType(descriptor.Type);
+
 		//Register DomainFile
-		SharedHeap<DomainFile> pFile = new DomainFile(this,descriptor.Type,PlatformFile::GetNameWithoutExtension(descriptor.Target),descriptor.ID, descriptorPath, sourcePath, (IResourceSerializer*)pSerializerType->CreateDefaultHeapObject(),pThumbnailType);
+		SharedHeap<DomainFile> pFile = new DomainFile(this,descriptor.Type,PlatformFile::GetNameWithoutExtension(descriptor.Target),descriptor.ID, descriptorPath, sourcePath, (IResourceSerializer*)pSerializerType->CreateDefaultHeapObject(),pThumbnailType, openActionType);
 		pFile->SetName(PlatformFile::GetNameWithoutExtension(descriptorPath));
 		pFile->OverrideID(descriptor.ID);
 		mFiles.Add(pFile);
@@ -239,6 +246,23 @@ namespace Portakal
 		{
 			//Get attribute
 			CustomThumbnail* pAttribute = pType->GetAttribute<CustomThumbnail>();
+			if (pAttribute == nullptr)
+				continue;
+
+			if (pAttribute->GetResourceType() == resourceType)
+				return pType;
+		}
+
+		return nullptr;
+	}
+
+	Type* DomainFolder::GetOpenActionType(const String& resourceType)
+	{
+		const Array<Type*> actionTypes = ReflectionAPI::GetSubTypes(typeof(IFileOpenAction));
+		for (Type* pType : actionTypes)
+		{
+			//Get attribute
+			CustomFileOpenAction* pAttribute = pType->GetAttribute<CustomFileOpenAction>();
 			if (pAttribute == nullptr)
 				continue;
 

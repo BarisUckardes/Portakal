@@ -25,19 +25,19 @@
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Window\WindowModule.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\World\Component.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\World\SceneAspect.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\World\SceneDescriptor.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\World\SceneModule.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Mesh\MeshResource.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\RenderTarget\RenderTarget.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Scene\SceneDeserializer.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Scene\SceneResource.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Shader\ShaderDeserializer.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Shader\ShaderResource.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Texture\TextureDeserializer.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Texture\TextureResource.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Domain\DomainFileDescriptor.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Domain\DomainModule.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\CreateFolderContextMenuItem.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\CustomContextMenuItem.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\CustomThumbnail.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\GUIDirection.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\IContextMenuItem.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\IThumbnail.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\TextureThumbnail.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\ImGui\ImGuiModule.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\ImGui\ImGuiRenderEndModule.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\ImGui\ImGuiRenderStartModule.h"
@@ -46,11 +46,29 @@
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Resource\CustomResourceSerializer.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Resource\EditorResourceModule.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Resource\IResourceSerializer.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\ContextMenu\CreateFolderContextMenuItem.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\ContextMenu\CreateSceneContextMenuItem.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\ContextMenu\CustomContextMenuItem.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\ContextMenu\IContextMenuItem.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Object\CustomObjectPainter.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Object\EditorObjectModule.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Object\IObjectPainter.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\OpenAction\CustomFileOpenAction.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\OpenAction\IFileOpenAction.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Thumbnail\CustomThumbnail.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Thumbnail\IThumbnail.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Thumbnail\SceneThumbnail.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Thumbnail\TextureThumbnail.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Window\GUIWindow.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Window\GUIWindowDescriptor.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Window\GUIWindowModule.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Window\GUIWindowSettings.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Resource\Scene\SceneSerializer.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Resource\Shader\ShaderSerializer.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Resource\Texture\TextureSerializer.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Object\Builtin\TextureObjectPainter.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\OpenAction\Builtin\SceneFileOpenAction.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\OpenAction\Builtin\TextureFileOpenAction.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Window\Builtin\DomainWindow.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Window\Builtin\GameWindow.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Window\Builtin\ObjectWindow.h"
@@ -95,19 +113,19 @@
 		void* CreateWindowModule() {return new Portakal::WindowModule();}
 		void* CreateComponent() {return nullptr;}
 		void* CreateSceneAspect() {return nullptr;}
+		void* CreateSceneDescriptor() {return new Portakal::SceneDescriptor();}
+		void* CreateSceneModule() {return new Portakal::SceneModule();}
 		void* CreateMeshResource() {return new Portakal::MeshResource();}
 		void* CreateRenderTarget() {return new Portakal::RenderTarget();}
+		void* CreateSceneDeserializer() {return new Portakal::SceneDeserializer();}
+		void* CreateSceneResource() {return new Portakal::SceneResource();}
+		void* CreateShaderDeserializer() {return new Portakal::ShaderDeserializer();}
+		void* CreateShaderResource() {return new Portakal::ShaderResource();}
 		void* CreateTextureDeserializer() {return new Portakal::TextureDeserializer();}
 		void* CreateTextureResource() {return new Portakal::TextureResource();}
 		void* CreateDomainFileDescriptor() {return new Portakal::DomainFileDescriptor();}
 		void* CreateDomainModule() {return new Portakal::DomainModule();}
-		void* CreateCreateFolderContextMenuItem() {return new Portakal::CreateFolderContextMenuItem();}
-		void* CreateCustomContextMenuItem() {return new Portakal::CustomContextMenuItem();}
-		void* CreateCustomThumbnail() {return new Portakal::CustomThumbnail();}
 		void* CreateGUIDirection() {return new Portakal::GUIDirection();}
-		void* CreateIContextMenuItem() {return nullptr;}
-		void* CreateIThumbnail() {return new Portakal::IThumbnail();}
-		void* CreateTextureThumbnail() {return new Portakal::TextureThumbnail();}
 		void* CreateImGuiModule() {return new Portakal::ImGuiModule();}
 		void* CreateImGuiRenderEndModule() {return new Portakal::ImGuiRenderEndModule();}
 		void* CreateImGuiRenderStartModule() {return new Portakal::ImGuiRenderStartModule();}
@@ -116,11 +134,29 @@
 		void* CreateCustomResourceSerializer() {return new Portakal::CustomResourceSerializer();}
 		void* CreateEditorResourceModule() {return new Portakal::EditorResourceModule();}
 		void* CreateIResourceSerializer() {return nullptr;}
+		void* CreateCreateFolderContextMenuItem() {return new Portakal::CreateFolderContextMenuItem();}
+		void* CreateCreateSceneContextMenuItem() {return new Portakal::CreateSceneContextMenuItem();}
+		void* CreateCustomContextMenuItem() {return new Portakal::CustomContextMenuItem();}
+		void* CreateIContextMenuItem() {return nullptr;}
+		void* CreateCustomObjectPainter() {return new Portakal::CustomObjectPainter();}
+		void* CreateEditorObjectModule() {return new Portakal::EditorObjectModule();}
+		void* CreateIObjectPainter() {return nullptr;}
+		void* CreateCustomFileOpenAction() {return new Portakal::CustomFileOpenAction();}
+		void* CreateIFileOpenAction() {return nullptr;}
+		void* CreateCustomThumbnail() {return new Portakal::CustomThumbnail();}
+		void* CreateIThumbnail() {return new Portakal::IThumbnail();}
+		void* CreateSceneThumbnail() {return new Portakal::SceneThumbnail();}
+		void* CreateTextureThumbnail() {return new Portakal::TextureThumbnail();}
 		void* CreateGUIWindow() {return nullptr;}
 		void* CreateGUIWindowDescriptor() {return new Portakal::GUIWindowDescriptor();}
 		void* CreateGUIWindowModule() {return new Portakal::GUIWindowModule();}
 		void* CreateGUIWindowSettings() {return new Portakal::GUIWindowSettings();}
+		void* CreateSceneSerializer() {return new Portakal::SceneSerializer();}
+		void* CreateShaderSerializer() {return new Portakal::ShaderSerializer();}
 		void* CreateTextureSerializer() {return new Portakal::TextureSerializer();}
+		void* CreateTextureObjectPainter() {return new Portakal::TextureObjectPainter();}
+		void* CreateSceneFileOpenAction() {return new Portakal::SceneFileOpenAction();}
+		void* CreateTextureFileOpenAction() {return new Portakal::TextureFileOpenAction();}
 		void* CreateDomainWindow() {return new Portakal::DomainWindow();}
 		void* CreateGameWindow() {return new Portakal::GameWindow();}
 		void* CreateObjectWindow() {return new Portakal::ObjectWindow();}
@@ -205,10 +241,22 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::Component>(pComponent);
 ;		Portakal::Type* pSceneAspect = Portakal::TypeDispatcher::CreateType("SceneAspect",sizeof(Portakal::SceneAspect),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSceneAspect,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneAspect>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneAspect>(pSceneAspect);
+;		Portakal::Type* pSceneDescriptor = Portakal::TypeDispatcher::CreateType("SceneDescriptor",sizeof(Portakal::SceneDescriptor),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSceneDescriptor,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneDescriptor>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneDescriptor>(pSceneDescriptor);
+;		Portakal::Type* pSceneModule = Portakal::TypeDispatcher::CreateType("SceneModule",sizeof(Portakal::SceneModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSceneModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneModule>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneModule>(pSceneModule);
 ;		Portakal::Type* pMeshResource = Portakal::TypeDispatcher::CreateType("MeshResource",sizeof(Portakal::MeshResource),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateMeshResource,Portakal::TypeDispatcher::GetTypeAddress<Portakal::MeshResource>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::MeshResource>(pMeshResource);
 ;		Portakal::Type* pRenderTarget = Portakal::TypeDispatcher::CreateType("RenderTarget",sizeof(Portakal::RenderTarget),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateRenderTarget,Portakal::TypeDispatcher::GetTypeAddress<Portakal::RenderTarget>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::RenderTarget>(pRenderTarget);
+;		Portakal::Type* pSceneDeserializer = Portakal::TypeDispatcher::CreateType("SceneDeserializer",sizeof(Portakal::SceneDeserializer),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSceneDeserializer,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneDeserializer>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneDeserializer>(pSceneDeserializer);
+;		Portakal::Type* pSceneResource = Portakal::TypeDispatcher::CreateType("SceneResource",sizeof(Portakal::SceneResource),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSceneResource,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneResource>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneResource>(pSceneResource);
+;		Portakal::Type* pShaderDeserializer = Portakal::TypeDispatcher::CreateType("ShaderDeserializer",sizeof(Portakal::ShaderDeserializer),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateShaderDeserializer,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ShaderDeserializer>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ShaderDeserializer>(pShaderDeserializer);
+;		Portakal::Type* pShaderResource = Portakal::TypeDispatcher::CreateType("ShaderResource",sizeof(Portakal::ShaderResource),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateShaderResource,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ShaderResource>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ShaderResource>(pShaderResource);
 ;		Portakal::Type* pTextureDeserializer = Portakal::TypeDispatcher::CreateType("TextureDeserializer",sizeof(Portakal::TextureDeserializer),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateTextureDeserializer,Portakal::TypeDispatcher::GetTypeAddress<Portakal::TextureDeserializer>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::TextureDeserializer>(pTextureDeserializer);
 ;		Portakal::Type* pTextureResource = Portakal::TypeDispatcher::CreateType("TextureResource",sizeof(Portakal::TextureResource),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateTextureResource,Portakal::TypeDispatcher::GetTypeAddress<Portakal::TextureResource>());
@@ -217,20 +265,8 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::DomainFileDescriptor>(pDomainFileDescriptor);
 ;		Portakal::Type* pDomainModule = Portakal::TypeDispatcher::CreateType("DomainModule",sizeof(Portakal::DomainModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateDomainModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::DomainModule>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::DomainModule>(pDomainModule);
-;		Portakal::Type* pCreateFolderContextMenuItem = Portakal::TypeDispatcher::CreateType("CreateFolderContextMenuItem",sizeof(Portakal::CreateFolderContextMenuItem),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateCreateFolderContextMenuItem,Portakal::TypeDispatcher::GetTypeAddress<Portakal::CreateFolderContextMenuItem>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::CreateFolderContextMenuItem>(pCreateFolderContextMenuItem);
-;		Portakal::Type* pCustomContextMenuItem = Portakal::TypeDispatcher::CreateType("CustomContextMenuItem",sizeof(Portakal::CustomContextMenuItem),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateCustomContextMenuItem,Portakal::TypeDispatcher::GetTypeAddress<Portakal::CustomContextMenuItem>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::CustomContextMenuItem>(pCustomContextMenuItem);
-;		Portakal::Type* pCustomThumbnail = Portakal::TypeDispatcher::CreateType("CustomThumbnail",sizeof(Portakal::CustomThumbnail),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateCustomThumbnail,Portakal::TypeDispatcher::GetTypeAddress<Portakal::CustomThumbnail>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::CustomThumbnail>(pCustomThumbnail);
 ;		Portakal::Type* pGUIDirection = Portakal::TypeDispatcher::CreateType("GUIDirection",sizeof(Portakal::GUIDirection),Portakal::TypeModes::Enum,Portakal::TypeCodes::Composed,CreateGUIDirection,Portakal::TypeDispatcher::GetTypeAddress<Portakal::GUIDirection>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::GUIDirection>(pGUIDirection);
-;		Portakal::Type* pIContextMenuItem = Portakal::TypeDispatcher::CreateType("IContextMenuItem",sizeof(Portakal::IContextMenuItem),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateIContextMenuItem,Portakal::TypeDispatcher::GetTypeAddress<Portakal::IContextMenuItem>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::IContextMenuItem>(pIContextMenuItem);
-;		Portakal::Type* pIThumbnail = Portakal::TypeDispatcher::CreateType("IThumbnail",sizeof(Portakal::IThumbnail),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateIThumbnail,Portakal::TypeDispatcher::GetTypeAddress<Portakal::IThumbnail>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::IThumbnail>(pIThumbnail);
-;		Portakal::Type* pTextureThumbnail = Portakal::TypeDispatcher::CreateType("TextureThumbnail",sizeof(Portakal::TextureThumbnail),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateTextureThumbnail,Portakal::TypeDispatcher::GetTypeAddress<Portakal::TextureThumbnail>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::TextureThumbnail>(pTextureThumbnail);
 ;		Portakal::Type* pImGuiModule = Portakal::TypeDispatcher::CreateType("ImGuiModule",sizeof(Portakal::ImGuiModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateImGuiModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ImGuiModule>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ImGuiModule>(pImGuiModule);
 ;		Portakal::Type* pImGuiRenderEndModule = Portakal::TypeDispatcher::CreateType("ImGuiRenderEndModule",sizeof(Portakal::ImGuiRenderEndModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateImGuiRenderEndModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ImGuiRenderEndModule>());
@@ -247,6 +283,32 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::EditorResourceModule>(pEditorResourceModule);
 ;		Portakal::Type* pIResourceSerializer = Portakal::TypeDispatcher::CreateType("IResourceSerializer",sizeof(Portakal::IResourceSerializer),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateIResourceSerializer,Portakal::TypeDispatcher::GetTypeAddress<Portakal::IResourceSerializer>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::IResourceSerializer>(pIResourceSerializer);
+;		Portakal::Type* pCreateFolderContextMenuItem = Portakal::TypeDispatcher::CreateType("CreateFolderContextMenuItem",sizeof(Portakal::CreateFolderContextMenuItem),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateCreateFolderContextMenuItem,Portakal::TypeDispatcher::GetTypeAddress<Portakal::CreateFolderContextMenuItem>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::CreateFolderContextMenuItem>(pCreateFolderContextMenuItem);
+;		Portakal::Type* pCreateSceneContextMenuItem = Portakal::TypeDispatcher::CreateType("CreateSceneContextMenuItem",sizeof(Portakal::CreateSceneContextMenuItem),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateCreateSceneContextMenuItem,Portakal::TypeDispatcher::GetTypeAddress<Portakal::CreateSceneContextMenuItem>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::CreateSceneContextMenuItem>(pCreateSceneContextMenuItem);
+;		Portakal::Type* pCustomContextMenuItem = Portakal::TypeDispatcher::CreateType("CustomContextMenuItem",sizeof(Portakal::CustomContextMenuItem),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateCustomContextMenuItem,Portakal::TypeDispatcher::GetTypeAddress<Portakal::CustomContextMenuItem>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::CustomContextMenuItem>(pCustomContextMenuItem);
+;		Portakal::Type* pIContextMenuItem = Portakal::TypeDispatcher::CreateType("IContextMenuItem",sizeof(Portakal::IContextMenuItem),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateIContextMenuItem,Portakal::TypeDispatcher::GetTypeAddress<Portakal::IContextMenuItem>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::IContextMenuItem>(pIContextMenuItem);
+;		Portakal::Type* pCustomObjectPainter = Portakal::TypeDispatcher::CreateType("CustomObjectPainter",sizeof(Portakal::CustomObjectPainter),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateCustomObjectPainter,Portakal::TypeDispatcher::GetTypeAddress<Portakal::CustomObjectPainter>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::CustomObjectPainter>(pCustomObjectPainter);
+;		Portakal::Type* pEditorObjectModule = Portakal::TypeDispatcher::CreateType("EditorObjectModule",sizeof(Portakal::EditorObjectModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateEditorObjectModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::EditorObjectModule>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::EditorObjectModule>(pEditorObjectModule);
+;		Portakal::Type* pIObjectPainter = Portakal::TypeDispatcher::CreateType("IObjectPainter",sizeof(Portakal::IObjectPainter),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateIObjectPainter,Portakal::TypeDispatcher::GetTypeAddress<Portakal::IObjectPainter>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::IObjectPainter>(pIObjectPainter);
+;		Portakal::Type* pCustomFileOpenAction = Portakal::TypeDispatcher::CreateType("CustomFileOpenAction",sizeof(Portakal::CustomFileOpenAction),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateCustomFileOpenAction,Portakal::TypeDispatcher::GetTypeAddress<Portakal::CustomFileOpenAction>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::CustomFileOpenAction>(pCustomFileOpenAction);
+;		Portakal::Type* pIFileOpenAction = Portakal::TypeDispatcher::CreateType("IFileOpenAction",sizeof(Portakal::IFileOpenAction),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateIFileOpenAction,Portakal::TypeDispatcher::GetTypeAddress<Portakal::IFileOpenAction>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::IFileOpenAction>(pIFileOpenAction);
+;		Portakal::Type* pCustomThumbnail = Portakal::TypeDispatcher::CreateType("CustomThumbnail",sizeof(Portakal::CustomThumbnail),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateCustomThumbnail,Portakal::TypeDispatcher::GetTypeAddress<Portakal::CustomThumbnail>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::CustomThumbnail>(pCustomThumbnail);
+;		Portakal::Type* pIThumbnail = Portakal::TypeDispatcher::CreateType("IThumbnail",sizeof(Portakal::IThumbnail),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateIThumbnail,Portakal::TypeDispatcher::GetTypeAddress<Portakal::IThumbnail>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::IThumbnail>(pIThumbnail);
+;		Portakal::Type* pSceneThumbnail = Portakal::TypeDispatcher::CreateType("SceneThumbnail",sizeof(Portakal::SceneThumbnail),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSceneThumbnail,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneThumbnail>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneThumbnail>(pSceneThumbnail);
+;		Portakal::Type* pTextureThumbnail = Portakal::TypeDispatcher::CreateType("TextureThumbnail",sizeof(Portakal::TextureThumbnail),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateTextureThumbnail,Portakal::TypeDispatcher::GetTypeAddress<Portakal::TextureThumbnail>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::TextureThumbnail>(pTextureThumbnail);
 ;		Portakal::Type* pGUIWindow = Portakal::TypeDispatcher::CreateType("GUIWindow",sizeof(Portakal::GUIWindow),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateGUIWindow,Portakal::TypeDispatcher::GetTypeAddress<Portakal::GUIWindow>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::GUIWindow>(pGUIWindow);
 ;		Portakal::Type* pGUIWindowDescriptor = Portakal::TypeDispatcher::CreateType("GUIWindowDescriptor",sizeof(Portakal::GUIWindowDescriptor),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateGUIWindowDescriptor,Portakal::TypeDispatcher::GetTypeAddress<Portakal::GUIWindowDescriptor>());
@@ -255,8 +317,18 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::GUIWindowModule>(pGUIWindowModule);
 ;		Portakal::Type* pGUIWindowSettings = Portakal::TypeDispatcher::CreateType("GUIWindowSettings",sizeof(Portakal::GUIWindowSettings),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateGUIWindowSettings,Portakal::TypeDispatcher::GetTypeAddress<Portakal::GUIWindowSettings>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::GUIWindowSettings>(pGUIWindowSettings);
+;		Portakal::Type* pSceneSerializer = Portakal::TypeDispatcher::CreateType("SceneSerializer",sizeof(Portakal::SceneSerializer),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSceneSerializer,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneSerializer>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneSerializer>(pSceneSerializer);
+;		Portakal::Type* pShaderSerializer = Portakal::TypeDispatcher::CreateType("ShaderSerializer",sizeof(Portakal::ShaderSerializer),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateShaderSerializer,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ShaderSerializer>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ShaderSerializer>(pShaderSerializer);
 ;		Portakal::Type* pTextureSerializer = Portakal::TypeDispatcher::CreateType("TextureSerializer",sizeof(Portakal::TextureSerializer),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateTextureSerializer,Portakal::TypeDispatcher::GetTypeAddress<Portakal::TextureSerializer>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::TextureSerializer>(pTextureSerializer);
+;		Portakal::Type* pTextureObjectPainter = Portakal::TypeDispatcher::CreateType("TextureObjectPainter",sizeof(Portakal::TextureObjectPainter),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateTextureObjectPainter,Portakal::TypeDispatcher::GetTypeAddress<Portakal::TextureObjectPainter>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::TextureObjectPainter>(pTextureObjectPainter);
+;		Portakal::Type* pSceneFileOpenAction = Portakal::TypeDispatcher::CreateType("SceneFileOpenAction",sizeof(Portakal::SceneFileOpenAction),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSceneFileOpenAction,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneFileOpenAction>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneFileOpenAction>(pSceneFileOpenAction);
+;		Portakal::Type* pTextureFileOpenAction = Portakal::TypeDispatcher::CreateType("TextureFileOpenAction",sizeof(Portakal::TextureFileOpenAction),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateTextureFileOpenAction,Portakal::TypeDispatcher::GetTypeAddress<Portakal::TextureFileOpenAction>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::TextureFileOpenAction>(pTextureFileOpenAction);
 ;		Portakal::Type* pDomainWindow = Portakal::TypeDispatcher::CreateType("DomainWindow",sizeof(Portakal::DomainWindow),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateDomainWindow,Portakal::TypeDispatcher::GetTypeAddress<Portakal::DomainWindow>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::DomainWindow>(pDomainWindow);
 ;		Portakal::Type* pGameWindow = Portakal::TypeDispatcher::CreateType("GameWindow",sizeof(Portakal::GameWindow),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateGameWindow,Portakal::TypeDispatcher::GetTypeAddress<Portakal::GameWindow>());
@@ -327,11 +399,20 @@ extern "C"
 
         //Register attributes here
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::MyAttribute>(pTestClass);
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomResourceDeserializer>(pSceneDeserializer,"scene");
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomResourceDeserializer>(pShaderDeserializer, "shader");
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomResourceDeserializer>(pTextureDeserializer,"texture");
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::ResourceAttribute>(pTextureResource, "texture");
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomContextMenuItem>(pCreateFolderContextMenuItem, "Create Folder");
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomContextMenuItem>(pCreateSceneContextMenuItem,"Create Scene");
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomThumbnail>(pSceneThumbnail,"scene");
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomThumbnail>(pTextureThumbnail, "texture");
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomResourceSerializer>(pSceneSerializer, "scene",STRARRAY(".pscene"));
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomResourceSerializer>(pShaderSerializer,"shader",STRARRAY(".pshader"));
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomResourceSerializer>(pTextureSerializer, "texture",STRARRAY(".png",".jpg"));
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomObjectPainter>(pTextureObjectPainter, typeof(Portakal::TextureResource));
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomFileOpenAction>(pSceneFileOpenAction,"scene");
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomFileOpenAction>(pTextureFileOpenAction, "texture");
 
         //Register base types here
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::MyAttribute),typeof(Portakal::Attribute));
@@ -341,24 +422,39 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::CustomResourceDeserializer),typeof(Portakal::Attribute));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ResourceModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::WindowModule),typeof(Portakal::ApplicationModule));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::SceneModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::MeshResource),typeof(Portakal::ResourceSubObject));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::RenderTarget),typeof(Portakal::ResourceSubObject));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::SceneDeserializer),typeof(Portakal::IResourceDeserializer));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::SceneResource),typeof(Portakal::ResourceSubObject));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ShaderDeserializer),typeof(Portakal::IResourceDeserializer));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ShaderResource),typeof(Portakal::ResourceSubObject));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureDeserializer),typeof(Portakal::IResourceDeserializer));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureResource),typeof(Portakal::ResourceSubObject));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::DomainModule),typeof(Portakal::ApplicationModule));
-		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::CreateFolderContextMenuItem),typeof(Portakal::IContextMenuItem));
-		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::CustomContextMenuItem),typeof(Portakal::Attribute));
-		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::CustomThumbnail),typeof(Portakal::Attribute));
-		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::IThumbnail),typeof(Portakal::Object));
-		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureThumbnail),typeof(Portakal::IThumbnail));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ImGuiModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ImGuiRenderEndModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ImGuiRenderStartModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ProjectModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::CustomResourceSerializer),typeof(Portakal::Attribute));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::EditorResourceModule),typeof(Portakal::ApplicationModule));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::CreateFolderContextMenuItem),typeof(Portakal::IContextMenuItem));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::CreateSceneContextMenuItem),typeof(Portakal::IContextMenuItem));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::CustomContextMenuItem),typeof(Portakal::Attribute));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::CustomObjectPainter),typeof(Portakal::Attribute));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::EditorObjectModule),typeof(Portakal::ApplicationModule));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::CustomFileOpenAction),typeof(Portakal::Attribute));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::CustomThumbnail),typeof(Portakal::Attribute));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::IThumbnail),typeof(Portakal::Object));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::SceneThumbnail),typeof(Portakal::IThumbnail));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureThumbnail),typeof(Portakal::IThumbnail));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::GUIWindowModule),typeof(Portakal::ApplicationModule));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::SceneSerializer),typeof(Portakal::IResourceSerializer));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ShaderSerializer),typeof(Portakal::IResourceSerializer));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureSerializer),typeof(Portakal::IResourceSerializer));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureObjectPainter),typeof(Portakal::IObjectPainter));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::SceneFileOpenAction),typeof(Portakal::IFileOpenAction));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureFileOpenAction),typeof(Portakal::IFileOpenAction));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::DomainWindow),typeof(Portakal::GUIWindow));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::GameWindow),typeof(Portakal::GUIWindow));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ObjectWindow),typeof(Portakal::GUIWindow));
@@ -369,7 +465,7 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::EditorPlayerWindowModule),typeof(Portakal::ApplicationModule));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {pMyAttribute,pTestClass,pApplicationModule,pGuid,pVector2F,pVector2I,pVector2UI,pVector2US,pObject,pPlatformType,pAttribute,pReflectionModule,pRenderGraph,pRenderOperation,pCustomResourceDeserializer,pIResourceDeserializer,pResourceDescriptor,pResourceModule,pResourceSubObject,pWindowModule,pComponent,pSceneAspect,pMeshResource,pRenderTarget,pTextureDeserializer,pTextureResource,pDomainFileDescriptor,pDomainModule,pCreateFolderContextMenuItem,pCustomContextMenuItem,pCustomThumbnail,pGUIDirection,pIContextMenuItem,pIThumbnail,pTextureThumbnail,pImGuiModule,pImGuiRenderEndModule,pImGuiRenderStartModule,pProjectDescriptor,pProjectModule,pCustomResourceSerializer,pEditorResourceModule,pIResourceSerializer,pGUIWindow,pGUIWindowDescriptor,pGUIWindowModule,pGUIWindowSettings,pTextureSerializer,pDomainWindow,pGameWindow,pObjectWindow,pSceneWindow,pWorldWindow,pEditorPlayerGDeviceModule,pEditorPlayerProjectModule,pEditorPlayerWindowModule,};
+		Portakal::Array<Portakal::Type*> types = {pMyAttribute,pTestClass,pApplicationModule,pGuid,pVector2F,pVector2I,pVector2UI,pVector2US,pObject,pPlatformType,pAttribute,pReflectionModule,pRenderGraph,pRenderOperation,pCustomResourceDeserializer,pIResourceDeserializer,pResourceDescriptor,pResourceModule,pResourceSubObject,pWindowModule,pComponent,pSceneAspect,pSceneDescriptor,pSceneModule,pMeshResource,pRenderTarget,pSceneDeserializer,pSceneResource,pShaderDeserializer,pShaderResource,pTextureDeserializer,pTextureResource,pDomainFileDescriptor,pDomainModule,pGUIDirection,pImGuiModule,pImGuiRenderEndModule,pImGuiRenderStartModule,pProjectDescriptor,pProjectModule,pCustomResourceSerializer,pEditorResourceModule,pIResourceSerializer,pCreateFolderContextMenuItem,pCreateSceneContextMenuItem,pCustomContextMenuItem,pIContextMenuItem,pCustomObjectPainter,pEditorObjectModule,pIObjectPainter,pCustomFileOpenAction,pIFileOpenAction,pCustomThumbnail,pIThumbnail,pSceneThumbnail,pTextureThumbnail,pGUIWindow,pGUIWindowDescriptor,pGUIWindowModule,pGUIWindowSettings,pSceneSerializer,pShaderSerializer,pTextureSerializer,pTextureObjectPainter,pSceneFileOpenAction,pTextureFileOpenAction,pDomainWindow,pGameWindow,pObjectWindow,pSceneWindow,pWorldWindow,pEditorPlayerGDeviceModule,pEditorPlayerProjectModule,pEditorPlayerWindowModule,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;

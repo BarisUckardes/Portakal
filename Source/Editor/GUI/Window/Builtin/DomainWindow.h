@@ -2,10 +2,10 @@
 #include <Editor/GUI/Window/GUIWindow.h>
 #include <Editor/Domain/DomainFolder.h>
 #include <Editor/Domain/DomainFile.h>
-#include <Editor/GUI/IContextMenuItem.h>
+#include <Editor/GUI/ContextMenu/IContextMenuItem.h>
 #include <Editor/ImGui/ImGuiRenderer.h>
 #include <Editor/Resource/EditorTextureResource.h>
-#include <Editor/GUI/IThumbnail.h>
+#include <Editor/GUI/Thumbnail/IThumbnail.h>
 #include "DomainWindow.reflected.h"
 
 namespace Portakal

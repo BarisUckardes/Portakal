@@ -40,7 +40,7 @@ namespace Portakal
 		return true;
 	}
 
-	Bool8 ShaderCompiler::CompileToSPIRV(const MemoryOwnedView* pView, const String& entryMethodName, const ShaderStage stage, const ShaderLanguage language, MemoryOwnedView** ppViewOut)
+	Bool8 ShaderCompiler::CompileToSPIRV(const MemoryView& view, const String& entryMethodName, const ShaderStage stage, const ShaderLanguage language, MemoryOwnedView** ppViewOut)
 	{
 		DEV_ASSERT(language != ShaderLanguage::Unknown, "ShaderCompiler", "Invalid shader language");
 
@@ -49,7 +49,7 @@ namespace Portakal
 
 		compileOptions.SetSourceLanguage(ShaderCompilerUtils::GetLanguage(language));
 
-		shaderc::SpvCompilationResult module = compiler.CompileGlslToSpv((const Char*)pView->GetMemory(), ShaderCompilerUtils::GetShaderKind(stage), "", compileOptions);
+		shaderc::SpvCompilationResult module = compiler.CompileGlslToSpv((const Char*)view.GetMemory(), ShaderCompilerUtils::GetShaderKind(stage), "", compileOptions);
 
 		if (module.GetCompilationStatus() != shaderc_compilation_status_success)
 		{

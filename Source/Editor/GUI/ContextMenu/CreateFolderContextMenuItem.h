@@ -1,5 +1,5 @@
 #pragma once
-#include <Editor/GUI/IContextMenuItem.h>
+#include <Editor/GUI/ContextMenu/IContextMenuItem.h>
 #include "CreateFolderContextMenuItem.reflected.h"
 
 namespace Portakal
