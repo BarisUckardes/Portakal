@@ -23,6 +23,7 @@ namespace Portakal
 		virtual void OnInitialize() override;
 	private:
 		SharedHeap<Scene> mTargetScene;
+		Array<Type*> mAspectTypes;
 	};
 }
 

@@ -38,6 +38,7 @@
 #include "Resource\Shader\ShaderResource.h"
 #include "Resource\Texture\TextureDeserializer.h"
 #include "Resource\Texture\TextureResource.h"
+#include "World\Aspects\DisplayAspect.h"
 
 
 		void* CreateBool8() {return new Portakal::Bool8();}
@@ -87,6 +88,7 @@
 		void* CreateShaderResource() {return new Portakal::ShaderResource();}
 		void* CreateTextureDeserializer() {return new Portakal::TextureDeserializer();}
 		void* CreateTextureResource() {return new Portakal::TextureResource();}
+		void* CreateDisplayAspect() {return new Portakal::DisplayAspect();}
 
 extern "C"
 {
@@ -189,6 +191,8 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::TextureDeserializer>(pTextureDeserializer);
 ;		Portakal::Type* pTextureResource = Portakal::TypeDispatcher::CreateType("TextureResource",sizeof(Portakal::TextureResource),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateTextureResource,Portakal::TypeDispatcher::GetTypeAddress<Portakal::TextureResource>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::TextureResource>(pTextureResource);
+;		Portakal::Type* pDisplayAspect = Portakal::TypeDispatcher::CreateType("DisplayAspect",sizeof(Portakal::DisplayAspect),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateDisplayAspect,Portakal::TypeDispatcher::GetTypeAddress<Portakal::DisplayAspect>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::DisplayAspect>(pDisplayAspect);
 ;
         //Register enums here
 		Portakal::TypeDispatcher::RegisterEnum("Windows",112,pPlatformType);
@@ -257,9 +261,10 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ShaderResource),typeof(Portakal::ResourceSubObject));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureDeserializer),typeof(Portakal::IResourceDeserializer));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureResource),typeof(Portakal::ResourceSubObject));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::DisplayAspect),typeof(Portakal::SceneAspect));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {pMyAttribute,pTestClass,pApplicationModule,pGuid,pVector2F,pVector2I,pVector2UI,pVector2US,pObject,pPlatformType,pAttribute,pReflectionModule,pRenderGraph,pRenderOperation,pCustomResourceDeserializer,pIResourceDeserializer,pResourceDescriptor,pResourceModule,pResourceSubObject,pWindowModule,pComponent,pSceneAspect,pSceneDescriptor,pSceneModule,pShaderLanguage,pShaderStage,pMeshResource,pRenderTarget,pSceneDeserializer,pSceneResource,pShaderDescriptor,pShaderDeserializer,pShaderResource,pTextureDeserializer,pTextureResource,};
+		Portakal::Array<Portakal::Type*> types = {pMyAttribute,pTestClass,pApplicationModule,pGuid,pVector2F,pVector2I,pVector2UI,pVector2US,pObject,pPlatformType,pAttribute,pReflectionModule,pRenderGraph,pRenderOperation,pCustomResourceDeserializer,pIResourceDeserializer,pResourceDescriptor,pResourceModule,pResourceSubObject,pWindowModule,pComponent,pSceneAspect,pSceneDescriptor,pSceneModule,pShaderLanguage,pShaderStage,pMeshResource,pRenderTarget,pSceneDeserializer,pSceneResource,pShaderDescriptor,pShaderDeserializer,pShaderResource,pTextureDeserializer,pTextureResource,pDisplayAspect,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;

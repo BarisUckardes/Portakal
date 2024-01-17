@@ -39,6 +39,9 @@ namespace Portakal
 			//Set owner scene
 			pAspect->_SetOwnerScene(this);
 
+			//Initialize
+			pAspect->OnInitialize();
+
 			//Register
 			mAspects.Add(pAspect);
 		}
@@ -55,6 +58,8 @@ namespace Portakal
 
 			return nullptr;
 		}
+
+		void CreateAspect(const Type* pType);
 		void MarkPrimal();
 		virtual void OnShutdown() override;
 	private:

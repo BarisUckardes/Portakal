@@ -6,4 +6,8 @@ namespace Portakal
 	{
 		mOwnerScene = pScene;
 	}
+	void Entity::OnShutdown()
+	{
+
+	}
 }

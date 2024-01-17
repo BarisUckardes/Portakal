@@ -1,6 +1,7 @@
 #include "WorldWindow.h"
 #include <imgui.h>
 #include <Runtime/World/SceneAPI.h>
+#include <Runtime/Reflection/ReflectionAPI.h>
 
 namespace Portakal
 {
@@ -40,15 +41,39 @@ namespace Portakal
 		{
 			const Array<SharedHeap<SceneAspect>>& aspects = mTargetScene->GetAspects();
 			for (const SharedHeap<SceneAspect>& pAspect : aspects)
+			{
 				ImGui::Text(*pAspect->GetType()->GetName());
+			}
+			if (ImGui::Button("+"))
+			{
+				ImGui::OpenPopup("CreateAspectPopup");
+			}
 		}
+
 		if (ImGui::CollapsingHeader("Entities"))
 		{
+			const Array<SharedHeap<Entity>>& entities = mTargetScene->GetEntities();
+			for (const SharedHeap<Entity>& pEntity : entities)
+			{
+				ImGui::Text(*pEntity->GetName());
+			}
+		}
 
+		//Handle popups
+		if (ImGui::BeginPopup("CreateAspectPopup"))
+		{
+			for (const Type* pType : mAspectTypes)
+			{
+				if (ImGui::Selectable(*pType->GetName()))
+				{
+					mTargetScene->CreateAspect(pType);
+				}
+			}
+			ImGui::EndPopup();
 		}
 	}
 	void WorldWindow::OnInitialize()
 	{
-
+		mAspectTypes = ReflectionAPI::GetSubTypes(typeof(SceneAspect));
 	}
 }

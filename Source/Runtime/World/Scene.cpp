@@ -27,6 +27,20 @@ namespace Portakal
 
         return pEntity;
     }
+    void Scene::CreateAspect(const Type* pType)
+    {
+        //Create aspect
+        SharedHeap<SceneAspect> pAspect = (SceneAspect*)pType->CreateDefaultHeapObject();
+
+        //Set owner scene
+        pAspect->_SetOwnerScene(this);
+
+        //Initialize
+        pAspect->OnInitialize();
+
+        //Register
+        mAspects.Add(pAspect);
+    }
     void Scene::MarkPrimal()
     {
         SceneAPI::_SetScenePrimal(this);

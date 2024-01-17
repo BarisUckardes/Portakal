@@ -6,7 +6,7 @@
 namespace Portakal
 {
 	class Scene;
-	class RUNTIME_API Entity final
+	class RUNTIME_API Entity final : public Object
 	{
 		friend class Scene;
 	public:
@@ -60,6 +60,7 @@ namespace Portakal
 		}
 	private:
 		void _SetOwnerScene(Scene* pScene);
+		virtual void OnShutdown() override;
 	private:
 		Array<SharedHeap<Entity>> mEntities;
 		Array<SharedHeap<Component>> mComponents;
