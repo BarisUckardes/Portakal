@@ -27,6 +27,8 @@ namespace Portakal
 		//Deserialize
 		mSubObject = mOptimized ? mDeserializer->DeserializeOptimized(memory,mMetaData) : mDeserializer->Deserialize(memory,mMetaData);
 		mSubObject->_SetOwnerResource(this);
+		mSubObject->SetName(GetName());
+		mSubObject->OverrideID(GetID());
 		mLoaded = true;
 		DEV_LOG("Resource", "Loaded resource %s", *GetName());
 	}

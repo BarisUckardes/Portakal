@@ -22,7 +22,7 @@ namespace Portakal
 		FORCEINLINE Guid GetID() const noexcept { return mID; }
 
 		void SetName(const String& name);
-		void OverrideID(const Guid& id) { mID = id; }
+		void OverrideID(const Guid& id);
 		void Shutdown();
 	protected:
 		virtual void OnShutdown()
@@ -30,7 +30,7 @@ namespace Portakal
 
 		}
 		virtual void OnNameChange(const String& name) {}
-		virtual void OnIdChanged(const Guid& id) {}
+		virtual void OnIDChange(const Guid& id) {}
 	private:
 		String mName;
 		Guid mID;

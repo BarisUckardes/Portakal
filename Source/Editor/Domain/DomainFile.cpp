@@ -18,6 +18,10 @@ namespace Portakal
 		//Write memory view
 		if (!PlatformFile::Write(mSourcePath, pMemoryView))
 			DEV_LOG("DomainFile", "Failed to save resource file");
+
+		//Free memory
+		if (pMemoryView != nullptr)
+			delete pMemoryView;
 	}
 	void DomainFile::LoadSync()
 	{

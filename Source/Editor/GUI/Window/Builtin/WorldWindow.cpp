@@ -2,6 +2,8 @@
 #include <imgui.h>
 #include <Runtime/World/SceneAPI.h>
 #include <Runtime/Reflection/ReflectionAPI.h>
+#include <Editor/Domain/DomainAPI.h>
+#include <Editor/Domain/DomainFile.h>
 
 namespace Portakal
 {
@@ -70,6 +72,20 @@ namespace Portakal
 				}
 			}
 			ImGui::EndPopup();
+		}
+
+		if (ImGui::Button("Save"))
+		{
+			//Get domain file
+			const SharedHeap<DomainFile> pFile = DomainAPI::GetFile(mTargetScene->GetName());
+			if(pFile.IsShutdown())
+			{
+				DEV_LOG("WorldWindow", "No such DomainFile is found!");
+				return;
+			}
+
+			//Save the file
+			pFile->SaveSync();
 		}
 	}
 	void WorldWindow::OnInitialize()

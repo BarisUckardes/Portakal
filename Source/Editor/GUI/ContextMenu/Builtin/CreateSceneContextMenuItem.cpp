@@ -3,7 +3,7 @@
 #include <misc/cpp/imgui_stdlib.h>
 #include <Runtime/Platform/PlatformFile.h>
 #include <Runtime/Platform/PlatformPaths.h>
-#include <Runtime/World/SceneDescriptor.h>
+#include <Runtime/Resource/Scene/SceneDescriptor.h>
 #include <Runtime/Yaml/Yaml.h>
 
 namespace Portakal

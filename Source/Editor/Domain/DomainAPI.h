@@ -12,6 +12,8 @@ namespace Portakal
 	public:
 		static void Invalidate();
 		static SharedHeap<DomainFolder> GetRootFolder();
+		static SharedHeap<DomainFile> GetFile(const String& name);
+		static SharedHeap<DomainFile> GetFile(const Guid& id);
 	private:
 		DomainAPI(const String& folderPath);
 		~DomainAPI();

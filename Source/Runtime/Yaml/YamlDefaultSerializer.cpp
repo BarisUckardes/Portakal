@@ -11,7 +11,6 @@ namespace Portakal
 	{
 		switch (pType->GetCode())
 		{
-
 			case TypeCodes::Composed:
 			{
 				break;
@@ -119,38 +118,46 @@ namespace Portakal
 		emitter << YAML::BeginMap;
 
 		const Array<Field*> fields = pType->GetFields();
-		for (const Field* pField : fields)
+		if (!fields.IsEmpty())
 		{
-			const Type* pFieldType = pField->GetType();
-			void* pLocation = (Byte*)pObject + pField->GetOffset();
+			for (const Field* pField : fields)
+			{
+				const Type* pFieldType = pField->GetType();
+				void* pLocation = (Byte*)pObject + pField->GetOffset();
 
-			emitter << YAML::Key << *pField->GetName();
+				emitter << YAML::Key << *pField->GetName();
 
-			if (pField->GetMode() == FieldMode::Array) // array
-			{
-				GenerateArrayYAML(emitter, pLocation, pField->GetType());
-				continue;
-			}
-			else if (pField->GetMode() == FieldMode::Object)
-			{
-				GenerateObjectYAML(emitter, pLocation, pFieldType);
-			}
-			else
-			{
-				if (pFieldType->GetCode() != TypeCodes::Composed)
+				if (pField->GetMode() == FieldMode::Array) // array
 				{
-					GeneratePrimitiveYAML(emitter, pLocation, pFieldType);
+					GenerateArrayYAML(emitter, pLocation, pField->GetType());
+					continue;
 				}
-				else if (pFieldType->GetMode() == TypeModes::Enum)
-				{
-					GenerateEnumYAML(emitter, pLocation);
-				}
-				else
+				else if (pField->GetMode() == FieldMode::Object)
 				{
 					GenerateObjectYAML(emitter, pLocation, pFieldType);
 				}
+				else
+				{
+					if (pFieldType->GetCode() != TypeCodes::Composed)
+					{
+						GeneratePrimitiveYAML(emitter, pLocation, pFieldType);
+					}
+					else if (pFieldType->GetMode() == TypeModes::Enum)
+					{
+						GenerateEnumYAML(emitter, pLocation);
+					}
+					else
+					{
+						GenerateObjectYAML(emitter, pLocation, pFieldType);
+					}
+				}
 			}
 		}
+		else
+		{
+			GeneratePrimitiveYAML(emitter, pObject, pType);
+		}
+		
 
 		emitter << YAML::EndMap;
 	}
@@ -172,6 +179,9 @@ namespace Portakal
 
 	void LoadAsPrimitive(const YAML::Node& node, void* pObject, const Type* pType)
 	{
+		if (node.IsNull())
+			return;
+
 		switch (pType->GetCode())
 		{
 		case TypeCodes::Composed:
@@ -269,7 +279,6 @@ namespace Portakal
 		pArray->Clear();
 		pArray->CreateIndirect(elementCount);
 
-
 		/*
 		* Iterate and fill
 		*/
@@ -293,46 +302,53 @@ namespace Portakal
 	{
 		const Array<Field*> fields = pType->GetFields();
 
-		for (const Field* pField : fields)
+		if (!fields.IsEmpty())
 		{
-			const Type* pFieldType = pField->GetType();
-			const UInt32 offsetInBytes = pField->GetOffset();
-			void* pLocation = (Byte*)pObject + offsetInBytes;
+			for (const Field* pField : fields)
+			{
+				const Type* pFieldType = pField->GetType();
+				const UInt32 offsetInBytes = pField->GetOffset();
+				void* pLocation = (Byte*)pObject + offsetInBytes;
 
-			/*
-			* Validate if this map has a valid field name
-			*/
-			const YAML::Node fieldNode = node[*pField->GetName()];
-			if (!fieldNode.IsDefined())
-				continue;
+				/*
+				* Validate if this map has a valid field name
+				*/
+				const YAML::Node fieldNode = node[*pField->GetName()];
+				if (!fieldNode.IsDefined())
+					continue;
 
-			/*
-			* Check if field is a array type
-			*/
-			if (pField->GetMode() == FieldMode::Array)
-			{
-				LoadAsArray(fieldNode, pLocation, pField->GetType());
-				continue;
-			}
-			else if (pField->GetMode() == FieldMode::Object)
-			{
-				LoadAsObject(fieldNode, pLocation, pFieldType);
-			}
-			else
-			{
-				if (pFieldType->GetCode() != TypeCodes::Composed)
+				/*
+				* Check if field is a array type
+				*/
+				if (pField->GetMode() == FieldMode::Array)
 				{
-					LoadAsPrimitive(fieldNode, pLocation, pFieldType);
+					LoadAsArray(fieldNode, pLocation, pField->GetType());
+					continue;
 				}
-				else if (pFieldType->GetMode() == TypeModes::Enum)
-				{
-					LoadAsEnum(fieldNode, pLocation, pFieldType);
-				}
-				else
+				else if (pField->GetMode() == FieldMode::Object)
 				{
 					LoadAsObject(fieldNode, pLocation, pFieldType);
 				}
+				else
+				{
+					if (pFieldType->GetCode() != TypeCodes::Composed)
+					{
+						LoadAsPrimitive(fieldNode, pLocation, pFieldType);
+					}
+					else if (pFieldType->GetMode() == TypeModes::Enum)
+					{
+						LoadAsEnum(fieldNode, pLocation, pFieldType);
+					}
+					else
+					{
+						LoadAsObject(fieldNode, pLocation, pFieldType);
+					}
+				}
 			}
+		}
+		else
+		{
+			LoadAsPrimitive(node, pObject, pType);
 		}
 	}
 	void YamlDefaultSerializer::ToObject(const String& yamlString, void* pObject, const Type* pType)

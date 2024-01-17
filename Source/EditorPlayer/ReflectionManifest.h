@@ -14,6 +14,7 @@
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Object\Object.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Platform\PlatformType.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Reflection\Attribute.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Reflection\FieldMode.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Reflection\ReflectionModule.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Rendering\RenderGraph.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Rendering\RenderOperation.h"
@@ -25,13 +26,17 @@
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Window\WindowModule.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\World\Component.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\World\SceneAspect.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\World\SceneDescriptor.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\World\SceneModule.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Graphics\Shader\ShaderLanguage.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Graphics\Shader\ShaderStage.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Mesh\MeshResource.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\RenderTarget\RenderTarget.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Scene\SceneComponentDescriptor.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Scene\SceneComponentFieldDescriptor.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Scene\SceneComponentFieldType.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Scene\SceneDescriptor.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Scene\SceneDeserializer.h"
+#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Scene\SceneEntityDescriptor.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Scene\SceneResource.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Shader\ShaderDescriptor.h"
 #include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Shader\ShaderDeserializer.h"
@@ -111,6 +116,7 @@
 		void* CreateObject() {return nullptr;}
 		void* CreatePlatformType() {return new Portakal::PlatformType();}
 		void* CreateAttribute() {return new Portakal::Attribute();}
+		void* CreateFieldMode() {return new Portakal::FieldMode();}
 		void* CreateReflectionModule() {return new Portakal::ReflectionModule();}
 		void* CreateRenderGraph() {return new Portakal::RenderGraph();}
 		void* CreateRenderOperation() {return nullptr;}
@@ -122,13 +128,17 @@
 		void* CreateWindowModule() {return new Portakal::WindowModule();}
 		void* CreateComponent() {return nullptr;}
 		void* CreateSceneAspect() {return nullptr;}
-		void* CreateSceneDescriptor() {return new Portakal::SceneDescriptor();}
 		void* CreateSceneModule() {return new Portakal::SceneModule();}
 		void* CreateShaderLanguage() {return new Portakal::ShaderLanguage();}
 		void* CreateShaderStage() {return new Portakal::ShaderStage();}
 		void* CreateMeshResource() {return new Portakal::MeshResource();}
 		void* CreateRenderTarget() {return new Portakal::RenderTarget();}
+		void* CreateSceneComponentDescriptor() {return new Portakal::SceneComponentDescriptor();}
+		void* CreateSceneComponentFieldDescriptor() {return new Portakal::SceneComponentFieldDescriptor();}
+		void* CreateSceneComponentFieldType() {return new Portakal::SceneComponentFieldType();}
+		void* CreateSceneDescriptor() {return new Portakal::SceneDescriptor();}
 		void* CreateSceneDeserializer() {return new Portakal::SceneDeserializer();}
+		void* CreateSceneEntityDescriptor() {return new Portakal::SceneEntityDescriptor();}
 		void* CreateSceneResource() {return new Portakal::SceneResource();}
 		void* CreateShaderDescriptor() {return new Portakal::ShaderDescriptor();}
 		void* CreateShaderDeserializer() {return new Portakal::ShaderDeserializer();}
@@ -237,6 +247,8 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::PlatformType>(pPlatformType);
 ;		Portakal::Type* pAttribute = Portakal::TypeDispatcher::CreateType("Attribute",sizeof(Portakal::Attribute),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateAttribute,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Attribute>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::Attribute>(pAttribute);
+;		Portakal::Type* pFieldMode = Portakal::TypeDispatcher::CreateType("FieldMode",sizeof(Portakal::FieldMode),Portakal::TypeModes::Enum,Portakal::TypeCodes::Composed,CreateFieldMode,Portakal::TypeDispatcher::GetTypeAddress<Portakal::FieldMode>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::FieldMode>(pFieldMode);
 ;		Portakal::Type* pReflectionModule = Portakal::TypeDispatcher::CreateType("ReflectionModule",sizeof(Portakal::ReflectionModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateReflectionModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ReflectionModule>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ReflectionModule>(pReflectionModule);
 ;		Portakal::Type* pRenderGraph = Portakal::TypeDispatcher::CreateType("RenderGraph",sizeof(Portakal::RenderGraph),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateRenderGraph,Portakal::TypeDispatcher::GetTypeAddress<Portakal::RenderGraph>());
@@ -259,8 +271,6 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::Component>(pComponent);
 ;		Portakal::Type* pSceneAspect = Portakal::TypeDispatcher::CreateType("SceneAspect",sizeof(Portakal::SceneAspect),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSceneAspect,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneAspect>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneAspect>(pSceneAspect);
-;		Portakal::Type* pSceneDescriptor = Portakal::TypeDispatcher::CreateType("SceneDescriptor",sizeof(Portakal::SceneDescriptor),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSceneDescriptor,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneDescriptor>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneDescriptor>(pSceneDescriptor);
 ;		Portakal::Type* pSceneModule = Portakal::TypeDispatcher::CreateType("SceneModule",sizeof(Portakal::SceneModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSceneModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneModule>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneModule>(pSceneModule);
 ;		Portakal::Type* pShaderLanguage = Portakal::TypeDispatcher::CreateType("ShaderLanguage",sizeof(Portakal::ShaderLanguage),Portakal::TypeModes::Enum,Portakal::TypeCodes::Composed,CreateShaderLanguage,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ShaderLanguage>());
@@ -271,8 +281,18 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::MeshResource>(pMeshResource);
 ;		Portakal::Type* pRenderTarget = Portakal::TypeDispatcher::CreateType("RenderTarget",sizeof(Portakal::RenderTarget),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateRenderTarget,Portakal::TypeDispatcher::GetTypeAddress<Portakal::RenderTarget>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::RenderTarget>(pRenderTarget);
+;		Portakal::Type* pSceneComponentDescriptor = Portakal::TypeDispatcher::CreateType("SceneComponentDescriptor",sizeof(Portakal::SceneComponentDescriptor),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSceneComponentDescriptor,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneComponentDescriptor>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneComponentDescriptor>(pSceneComponentDescriptor);
+;		Portakal::Type* pSceneComponentFieldDescriptor = Portakal::TypeDispatcher::CreateType("SceneComponentFieldDescriptor",sizeof(Portakal::SceneComponentFieldDescriptor),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSceneComponentFieldDescriptor,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneComponentFieldDescriptor>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneComponentFieldDescriptor>(pSceneComponentFieldDescriptor);
+;		Portakal::Type* pSceneComponentFieldType = Portakal::TypeDispatcher::CreateType("SceneComponentFieldType",sizeof(Portakal::SceneComponentFieldType),Portakal::TypeModes::Enum,Portakal::TypeCodes::Composed,CreateSceneComponentFieldType,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneComponentFieldType>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneComponentFieldType>(pSceneComponentFieldType);
+;		Portakal::Type* pSceneDescriptor = Portakal::TypeDispatcher::CreateType("SceneDescriptor",sizeof(Portakal::SceneDescriptor),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSceneDescriptor,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneDescriptor>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneDescriptor>(pSceneDescriptor);
 ;		Portakal::Type* pSceneDeserializer = Portakal::TypeDispatcher::CreateType("SceneDeserializer",sizeof(Portakal::SceneDeserializer),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSceneDeserializer,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneDeserializer>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneDeserializer>(pSceneDeserializer);
+;		Portakal::Type* pSceneEntityDescriptor = Portakal::TypeDispatcher::CreateType("SceneEntityDescriptor",sizeof(Portakal::SceneEntityDescriptor),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSceneEntityDescriptor,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneEntityDescriptor>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneEntityDescriptor>(pSceneEntityDescriptor);
 ;		Portakal::Type* pSceneResource = Portakal::TypeDispatcher::CreateType("SceneResource",sizeof(Portakal::SceneResource),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSceneResource,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneResource>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneResource>(pSceneResource);
 ;		Portakal::Type* pShaderDescriptor = Portakal::TypeDispatcher::CreateType("ShaderDescriptor",sizeof(Portakal::ShaderDescriptor),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateShaderDescriptor,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ShaderDescriptor>());
@@ -388,6 +408,9 @@ extern "C"
 		Portakal::TypeDispatcher::RegisterEnum("Mac",155,pPlatformType);
 		Portakal::TypeDispatcher::RegisterEnum("PS5",156,pPlatformType);
 		Portakal::TypeDispatcher::RegisterEnum("Switch",157,pPlatformType);
+		Portakal::TypeDispatcher::RegisterEnum("Normal",0,pFieldMode);
+		Portakal::TypeDispatcher::RegisterEnum("Object",1,pFieldMode);
+		Portakal::TypeDispatcher::RegisterEnum("Array",2,pFieldMode);
 		Portakal::TypeDispatcher::RegisterEnum("Unknown",0,pShaderLanguage);
 		Portakal::TypeDispatcher::RegisterEnum("GLSL",1,pShaderLanguage);
 		Portakal::TypeDispatcher::RegisterEnum("HLSL",2,pShaderLanguage);
@@ -395,6 +418,8 @@ extern "C"
 		Portakal::TypeDispatcher::RegisterEnum("VertexStage",1,pShaderStage);
 		Portakal::TypeDispatcher::RegisterEnum("FragmentStage",2,pShaderStage);
 		Portakal::TypeDispatcher::RegisterEnum("ComputeStage",4,pShaderStage);
+		Portakal::TypeDispatcher::RegisterEnum("EntityComponent",0,pSceneComponentFieldType);
+		Portakal::TypeDispatcher::RegisterEnum("Resource",1,pSceneComponentFieldType);
 		Portakal::TypeDispatcher::RegisterEnum("None",-1,pGUIDirection);
 		Portakal::TypeDispatcher::RegisterEnum("Left",0,pGUIDirection);
 		Portakal::TypeDispatcher::RegisterEnum("Right",1,pGUIDirection);
@@ -425,6 +450,19 @@ extern "C"
 		Portakal::TypeDispatcher::RegisterField("FileOffset",offsetof(Portakal::ResourceDescriptor,FileOffset),typeof(Portakal::UInt64),Portakal::FieldMode::Normal,pResourceDescriptor);
 		Portakal::TypeDispatcher::RegisterField("FileSize",offsetof(Portakal::ResourceDescriptor,FileSize),typeof(Portakal::UInt64),Portakal::FieldMode::Normal,pResourceDescriptor);
 		Portakal::TypeDispatcher::RegisterField("bOptimized",offsetof(Portakal::ResourceDescriptor,bOptimized),typeof(Portakal::Bool8),Portakal::FieldMode::Normal,pResourceDescriptor);
+		Portakal::TypeDispatcher::RegisterField("Name",offsetof(Portakal::SceneComponentDescriptor,Name),typeof(Portakal::String),Portakal::FieldMode::Normal,pSceneComponentDescriptor);
+		Portakal::TypeDispatcher::RegisterField("ID",offsetof(Portakal::SceneComponentDescriptor,ID),typeof(Portakal::Guid),Portakal::FieldMode::Normal,pSceneComponentDescriptor);
+		Portakal::TypeDispatcher::RegisterField("TypeName",offsetof(Portakal::SceneComponentDescriptor,TypeName),typeof(Portakal::String),Portakal::FieldMode::Normal,pSceneComponentDescriptor);
+		Portakal::TypeDispatcher::RegisterField("Fields",offsetof(Portakal::SceneComponentDescriptor,Fields),typeof(Portakal::SceneComponentFieldDescriptor),Portakal::FieldMode::Array,pSceneComponentDescriptor);
+		Portakal::TypeDispatcher::RegisterField("FieldName",offsetof(Portakal::SceneComponentFieldDescriptor,FieldName),typeof(Portakal::String),Portakal::FieldMode::Normal,pSceneComponentFieldDescriptor);
+		Portakal::TypeDispatcher::RegisterField("Mode",offsetof(Portakal::SceneComponentFieldDescriptor,Mode),typeof(Portakal::FieldMode),Portakal::FieldMode::Normal,pSceneComponentFieldDescriptor);
+		Portakal::TypeDispatcher::RegisterField("FieldValue",offsetof(Portakal::SceneComponentFieldDescriptor,FieldValue),typeof(Portakal::String),Portakal::FieldMode::Normal,pSceneComponentFieldDescriptor);
+		Portakal::TypeDispatcher::RegisterField("Entities",offsetof(Portakal::SceneDescriptor,Entities),typeof(Portakal::SceneEntityDescriptor),Portakal::FieldMode::Array,pSceneDescriptor);
+		Portakal::TypeDispatcher::RegisterField("Resources",offsetof(Portakal::SceneDescriptor,Resources),typeof(Portakal::Guid),Portakal::FieldMode::Array,pSceneDescriptor);
+		Portakal::TypeDispatcher::RegisterField("Aspects",offsetof(Portakal::SceneDescriptor,Aspects),typeof(Portakal::String),Portakal::FieldMode::Array,pSceneDescriptor);
+		Portakal::TypeDispatcher::RegisterField("Name",offsetof(Portakal::SceneEntityDescriptor,Name),typeof(Portakal::String),Portakal::FieldMode::Normal,pSceneEntityDescriptor);
+		Portakal::TypeDispatcher::RegisterField("ID",offsetof(Portakal::SceneEntityDescriptor,ID),typeof(Portakal::Guid),Portakal::FieldMode::Normal,pSceneEntityDescriptor);
+		Portakal::TypeDispatcher::RegisterField("Components",offsetof(Portakal::SceneEntityDescriptor,Components),typeof(Portakal::SceneComponentDescriptor),Portakal::FieldMode::Array,pSceneEntityDescriptor);
 		Portakal::TypeDispatcher::RegisterField("Source",offsetof(Portakal::ShaderDescriptor,Source),typeof(Portakal::String),Portakal::FieldMode::Normal,pShaderDescriptor);
 		Portakal::TypeDispatcher::RegisterField("EntryMethodName",offsetof(Portakal::ShaderDescriptor,EntryMethodName),typeof(Portakal::String),Portakal::FieldMode::Normal,pShaderDescriptor);
 		Portakal::TypeDispatcher::RegisterField("Stage",offsetof(Portakal::ShaderDescriptor,Stage),typeof(Portakal::ShaderStage),Portakal::FieldMode::Normal,pShaderDescriptor);
@@ -522,7 +560,7 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::EditorPlayerWindowModule),typeof(Portakal::ApplicationModule));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {pMyAttribute,pTestClass,pApplicationModule,pGuid,pVector2F,pVector2I,pVector2UI,pVector2US,pObject,pPlatformType,pAttribute,pReflectionModule,pRenderGraph,pRenderOperation,pCustomResourceDeserializer,pIResourceDeserializer,pResourceDescriptor,pResourceModule,pResourceSubObject,pWindowModule,pComponent,pSceneAspect,pSceneDescriptor,pSceneModule,pShaderLanguage,pShaderStage,pMeshResource,pRenderTarget,pSceneDeserializer,pSceneResource,pShaderDescriptor,pShaderDeserializer,pShaderResource,pTextureDeserializer,pTextureResource,pDisplayAspect,pDomainFileDescriptor,pDomainModule,pGUIDirection,pImGuiModule,pImGuiRenderEndModule,pImGuiRenderStartModule,pProjectDescriptor,pProjectModule,pCustomResourceSerializer,pEditorResourceModule,pIResourceSerializer,pCustomContextMenuItem,pIContextMenuItem,pCustomObjectPainter,pEditorObjectModule,pIObjectPainter,pCustomFileOpenAction,pIFileOpenAction,pCustomThumbnail,pIThumbnail,pGUIWindow,pGUIWindowDescriptor,pGUIWindowModule,pGUIWindowSettings,pSceneSerializer,pShaderSerializer,pTextureSerializer,pCreateFolderContextMenuItem,pCreateSceneContextMenuItem,pCreateShaderContextMenuItem,pShaderObjectPainter,pTextureObjectPainter,pSceneFileOpenAction,pShaderFileOpenAction,pTextureFileOpenAction,pDefaultThumbnail,pSceneThumbnail,pShaderThumbnail,pTextureThumbnail,pDomainWindow,pGameWindow,pObjectWindow,pSceneWindow,pWorldWindow,pEditorPlayerGDeviceModule,pEditorPlayerProjectModule,pEditorPlayerWindowModule,};
+		Portakal::Array<Portakal::Type*> types = {pMyAttribute,pTestClass,pApplicationModule,pGuid,pVector2F,pVector2I,pVector2UI,pVector2US,pObject,pPlatformType,pAttribute,pFieldMode,pReflectionModule,pRenderGraph,pRenderOperation,pCustomResourceDeserializer,pIResourceDeserializer,pResourceDescriptor,pResourceModule,pResourceSubObject,pWindowModule,pComponent,pSceneAspect,pSceneModule,pShaderLanguage,pShaderStage,pMeshResource,pRenderTarget,pSceneComponentDescriptor,pSceneComponentFieldDescriptor,pSceneComponentFieldType,pSceneDescriptor,pSceneDeserializer,pSceneEntityDescriptor,pSceneResource,pShaderDescriptor,pShaderDeserializer,pShaderResource,pTextureDeserializer,pTextureResource,pDisplayAspect,pDomainFileDescriptor,pDomainModule,pGUIDirection,pImGuiModule,pImGuiRenderEndModule,pImGuiRenderStartModule,pProjectDescriptor,pProjectModule,pCustomResourceSerializer,pEditorResourceModule,pIResourceSerializer,pCustomContextMenuItem,pIContextMenuItem,pCustomObjectPainter,pEditorObjectModule,pIObjectPainter,pCustomFileOpenAction,pIFileOpenAction,pCustomThumbnail,pIThumbnail,pGUIWindow,pGUIWindowDescriptor,pGUIWindowModule,pGUIWindowSettings,pSceneSerializer,pShaderSerializer,pTextureSerializer,pCreateFolderContextMenuItem,pCreateSceneContextMenuItem,pCreateShaderContextMenuItem,pShaderObjectPainter,pTextureObjectPainter,pSceneFileOpenAction,pShaderFileOpenAction,pTextureFileOpenAction,pDefaultThumbnail,pSceneThumbnail,pShaderThumbnail,pTextureThumbnail,pDomainWindow,pGameWindow,pObjectWindow,pSceneWindow,pWorldWindow,pEditorPlayerGDeviceModule,pEditorPlayerProjectModule,pEditorPlayerWindowModule,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;
