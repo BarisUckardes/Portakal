@@ -1,4 +1,6 @@
 #include "SceneAPI.h"
+#include <Runtime/Resource/ResourceAPI.h>
+#include <Runtime/Resource/Scene/SceneResource.h>
 
 namespace Portakal
 {
@@ -17,6 +19,23 @@ namespace Portakal
 			return {};
 
 		return pAPI->mScenes;
+	}
+	void SceneAPI::TransitionSync(const String& resourceName)
+	{
+		SceneAPI* pAPI = GetUnderlyingAPI();
+		if (pAPI == nullptr)
+			return;
+
+		//Get resource
+		SharedHeap<Resource> sceneResource = ResourceAPI::GetResource(resourceName);
+		if (sceneResource.IsShutdown())
+			return;
+
+		//Load scene
+		sceneResource->LoadSync();
+
+		//Set scene primal
+		sceneResource.QueryAs<SceneResource>()->GetScene()->MarkPrimal();
 	}
 	void SceneAPI::_RegisterScene(const SharedHeap<Scene>& pScene)
 	{

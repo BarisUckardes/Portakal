@@ -56,6 +56,9 @@ namespace Portakal
         VkDevice mLogicalDevice;
         VkCommandPool mCommandPool;
         VkCommandBuffer mCommandBuffer;
+
+        // Inherited via CommandList
+        void ClearTextureCore(const Texture* pTexture, const Color4F clearColor) override;
     };
 
 }

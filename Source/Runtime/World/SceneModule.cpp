@@ -13,5 +13,8 @@ namespace Portakal
 	}
 	void SceneModule::OnTick()
 	{
+		for (const SharedHeap<Scene>& pScene : mAPI->mScenes)
+			for (const SharedHeap<SceneAspect>& pAspect : pScene->GetAspects())
+				pAspect->OnExecute();
 	}
 }

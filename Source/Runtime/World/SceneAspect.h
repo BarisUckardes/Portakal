@@ -15,7 +15,6 @@ namespace Portakal
 	public:
 		virtual void OnInitialize() = 0;
 		virtual void OnExecute() = 0;
-		virtual void OnFinalize() = 0;
 	protected:
 		FORCEINLINE Scene* GetOwnerScene() const noexcept
 		{

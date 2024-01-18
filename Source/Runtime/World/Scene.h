@@ -53,7 +53,7 @@ namespace Portakal
 			for (const SharedHeap<SceneAspect>& pAspect : mAspects)
 			{
 				if (pAspect->GetType() == pTargetType)
-					return pAspect.GetHeap();
+					return (T*)pAspect.GetHeap();
 			}
 
 			return nullptr;

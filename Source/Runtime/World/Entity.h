@@ -2,35 +2,30 @@
 #include <Runtime/World/Component.h>
 #include <Runtime/Memory/SharedHeap.h>
 #include <Runtime/Containers/Array.h>
+#include "Entity.reflected.h"
 
 namespace Portakal
 {
 	class Scene;
+	PCLASS();
 	class RUNTIME_API Entity final : public Object
 	{
+		GENERATE_OBJECT;
 		friend class Scene;
 	public:
-		FORCEINLINE const Array<SharedHeap<Entity>>& GetEntities() const noexcept
-		{
-			return mEntities;
-		}
 		FORCEINLINE const Array<SharedHeap<Component>>& GetComponents() const noexcept
 		{
 			return mComponents;
-		}
-		FORCEINLINE Entity* GetOwnerEntity() const noexcept
-		{
-			return mOwnerEntity;
 		}
 		FORCEINLINE Scene* GetOwnerScene() const noexcept
 		{
 			return mOwnerScene;
 		}
 
-		void SetOwnerEntity(const SharedHeap<Entity>& pOwnerEntity);
+		Bool8 HasComponent(const Type* pType) const noexcept;
 		SharedHeap<Component> AddComponent(const Type* pType);
 		Bool8 RemoveComponent(const Type* pType);
-		Bool8 HasComponent(const Type* pType) const noexcept;
+
 		template<typename T,typename... TArgs>
 		SharedHeap<T> AddComponent(TArgs... args)
 		{
@@ -38,7 +33,7 @@ namespace Portakal
 			SharedHeap<T> pComponent = new T(args...);
 
 			//Set owner entity
-			SharedHeap<Component> pRawComponent = pComponent.QueryAs<Component>(pComponent);
+			SharedHeap<Component> pRawComponent = pComponent.QueryAs<Component>();
 			pRawComponent->_SetOwnerEntity(this);
 
 			//Register component
@@ -46,6 +41,7 @@ namespace Portakal
 
 			return pComponent;
 		}
+
 		template<typename T>
 		Bool8 HasComponent() const noexcept
 		{
@@ -62,9 +58,9 @@ namespace Portakal
 		void _SetOwnerScene(Scene* pScene);
 		virtual void OnShutdown() override;
 	private:
-		Array<SharedHeap<Entity>> mEntities;
 		Array<SharedHeap<Component>> mComponents;
 		Entity* mOwnerEntity;
 		Scene* mOwnerScene;
 	};
 }
+

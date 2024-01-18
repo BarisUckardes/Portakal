@@ -196,10 +196,26 @@ namespace Portakal
 	{
 		vkFreeCommandBuffers(mLogicalDevice, mCommandPool, 1, &mCommandBuffer);
 	}
+	void VulkanCommandList::ClearTextureCore(const Texture* pTexture, const Color4F clearColor)
+	{
+		VulkanTexture* pVkTexture = (VulkanTexture*)pTexture;
+		VkClearColorValue clearValue = {};
+		clearValue.float32[0] = clearColor.R;
+		clearValue.float32[1] = clearColor.G;
+		clearValue.float32[2] = clearColor.B;
+		clearValue.float32[3] = clearColor.A;
+		VkImageSubresourceRange range = {};
+		range.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		range.baseArrayLayer = 0;
+		range.baseMipLevel = 0;
+		range.layerCount = pTexture->GetArrayLevels();
+		range.levelCount = pTexture->GetMipLevels();
+		vkCmdClearColorImage(mCommandBuffer, pVkTexture->GetVkImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,&clearValue,1,&range);
+	}
 	void VulkanCommandList::BeginRenderPassCore(const RenderPass* pRenderPass, const Color4F& clearColor, const Byte subFramebufferIndex = 0)
 	{
 		const VulkanRenderPass* pVkPass = (const VulkanRenderPass*)pRenderPass;
-		const VkFramebuffer framebuffer = pVkPass->GetvkSwapchainFramebuffers()[subFramebufferIndex];
+		const VkFramebuffer framebuffer = pRenderPass->IsSwapchain() ? pVkPass->GetvkSwapchainFramebuffers()[subFramebufferIndex] : pVkPass->GetVkFramebuffer();
 		VkRenderPassBeginInfo renderPassInfo = {};
 		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 		renderPassInfo.renderPass = pVkPass->GetVkRenderPass();

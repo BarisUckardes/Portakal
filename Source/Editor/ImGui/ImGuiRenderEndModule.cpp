@@ -13,7 +13,7 @@ namespace Portakal
     }
     void ImGuiRenderEndModule::OnFinalize()
     {
-        for (SharedHeap<RenderTarget>& pRenderTarget : mRenderTargets)
+        for (SharedHeap<RenderTargetResource>& pRenderTarget : mRenderTargets)
             pRenderTarget.Shutdown();
 
         mRenderTargets.Clear();
@@ -97,7 +97,7 @@ namespace Portakal
             subpassDesc.DepthStencilInput = 0;
             desc.Subpasses.Add(subpassDesc);
 
-            SharedHeap<RenderTarget> pRenderTarget = new RenderTarget();
+            SharedHeap<RenderTargetResource> pRenderTarget = new RenderTargetResource();
             pRenderTarget->Create(desc);
             mRenderTargets.Add(pRenderTarget);
         }

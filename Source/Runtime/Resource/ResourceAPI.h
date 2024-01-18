@@ -15,6 +15,7 @@ namespace Portakal
 		static void RemoveResource(const Guid& id);
 		static SharedHeap<Resource> GetResource(const String& name);
 		static SharedHeap<Resource> GetResource(const Guid& id);
+		static void GetResources(const String& type,Array<SharedHeap<Resource>>& resourcesOut);
 	private:
 		ResourceAPI();
 		~ResourceAPI();

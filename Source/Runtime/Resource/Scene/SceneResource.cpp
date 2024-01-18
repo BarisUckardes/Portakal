@@ -26,11 +26,6 @@ namespace Portakal
                 }
             }
         }
-
-        //Get the sub entities
-        const Array<SharedHeap<Entity>> subEntities = pEntity->GetEntities();
-        for (const SharedHeap<Entity>& pSubEntity : subEntities)
-            EntityCollectResource(pSubEntity, descriptor);
     }
     void CollectComponent(const SharedHeap<Component>& pComponent, SceneEntityDescriptor& entityDescriptor)
     {

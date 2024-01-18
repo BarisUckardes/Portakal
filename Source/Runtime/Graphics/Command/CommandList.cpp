@@ -155,4 +155,8 @@ namespace Portakal
 		*/
 		CommitResourcesCore(ppTables,count);
 	}
+	void CommandList::ClearTexture(const Texture* pTexture, const Color4F clearColor)
+	{
+		ClearTextureCore(pTexture, clearColor);
+	}
 }

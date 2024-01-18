@@ -55,7 +55,7 @@ namespace Portakal
 		IResourceDeserializer* pDeserializer = (IResourceDeserializer*)pFoundDeserializer->CreateDefaultHeapObject();
 
 		//Create resource
-		SharedHeap<Resource> pResource = new Resource(descriptor,pDeserializer);
+		SharedHeap<Resource> pResource = new Resource(descriptor, pDeserializer);
 		pAPI->mResources.Add(pResource);
 
 		return pResource;
@@ -68,7 +68,7 @@ namespace Portakal
 			return;
 
 		//Search for the name
-		for (UInt32 i = 0;i< pAPI->mResources.GetSize();i++)
+		for (UInt32 i = 0; i < pAPI->mResources.GetSize(); i++)
 		{
 			SharedHeap<Resource>& resource = pAPI->mResources[i];
 			if (resource->GetName() == name)
@@ -132,6 +132,19 @@ namespace Portakal
 
 		return nullptr;
 	}
+	void ResourceAPI::GetResources(const String& type, Array<SharedHeap<Resource>>& resourcesOut)
+	{
+		//Get and validate API
+		ResourceAPI* pAPI = GetUnderlyingAPI();
+		if (pAPI == nullptr)
+			return;
+
+		//Search for the resource
+		for (const SharedHeap<Resource>& pResource : pAPI->mResources)
+			if (pResource->GetResourceType() == type)
+				resourcesOut.Add(pResource);
+	}
+
 	ResourceAPI::ResourceAPI()
 	{
 

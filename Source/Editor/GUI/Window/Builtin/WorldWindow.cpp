@@ -4,6 +4,7 @@
 #include <Runtime/Reflection/ReflectionAPI.h>
 #include <Editor/Domain/DomainAPI.h>
 #include <Editor/Domain/DomainFile.h>
+#include <Editor/GUI/Object/EditorObjectAPI.h>
 
 namespace Portakal
 {
@@ -55,9 +56,18 @@ namespace Portakal
 		if (ImGui::CollapsingHeader("Entities"))
 		{
 			const Array<SharedHeap<Entity>>& entities = mTargetScene->GetEntities();
-			for (const SharedHeap<Entity>& pEntity : entities)
+			for (SharedHeap<Entity>& pEntity : entities)
 			{
-				ImGui::Text(*pEntity->GetName());
+				if (ImGui::Selectable(*pEntity->GetName()))
+				{
+					EditorObjectAPI::SignalObject(pEntity.QueryAs<Object>());
+				}
+			}
+
+			if (ImGui::Button("+"))
+			{
+				SharedHeap<Entity> pEntity =mTargetScene->CreateEntity();
+				pEntity->SetName("Empty Entity");
 			}
 		}
 

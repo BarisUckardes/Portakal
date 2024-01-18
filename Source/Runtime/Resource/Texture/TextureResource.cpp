@@ -5,15 +5,32 @@
 
 namespace Portakal
 {
-    TextureResource::TextureResource(const SharedHeap<GraphicsDevice>& pDevice)
+    TextureResource::TextureResource(const SharedHeap<GraphicsDevice>& pDevice) : mWrapped(false)
     {
         mDevice = pDevice;
         CreateInternalResources();
     }
-    TextureResource::TextureResource()
+    TextureResource::TextureResource() : mWrapped(false)
     {
         mDevice = GraphicsAPI::GetDefaultDevice();
         CreateInternalResources();
+    }
+    void TextureResource::Wrap(const SharedHeap<Texture>& pTexture)
+    {
+        mTexture = pTexture;
+        mWrapped = true;
+
+        for (UInt32 arrayIndex = 0; arrayIndex < pTexture->GetArrayLevels(); arrayIndex++)
+        {
+            Array<MipData> mips;
+            for (UInt32 mipIndex = 0; mipIndex < pTexture->GetMipLevels(); mipIndex++)
+            {
+                MipData mipData = {};
+                mips.Add(mipData);
+            }
+
+            mData.Add(mips);
+        }
     }
     void TextureResource::AllocateTexture(const TextureDesc& desc, const SharedHeap<GraphicsMemoryHeap>& pHostHeap, const Bool8 bAllocateStagebuffersUpfront,const Bool8 bCreateViewsUpfront)
     {
@@ -72,6 +89,7 @@ namespace Portakal
         //Set properties
         mDesc = desc;
         mHostHeap = pHostHeap;
+        mWrapped = false;
     }
     SharedHeap<TextureView> TextureResource::CreateView(const Byte mipLevel, const Byte arrayLevel)
     {
@@ -257,7 +275,8 @@ namespace Portakal
         mData.Clear();
 
         //Destroy texture
-        mTexture.Shutdown();
+        if(!mWrapped)
+            mTexture.Shutdown();
     }
     void TextureResource::OnShutdown()
     {

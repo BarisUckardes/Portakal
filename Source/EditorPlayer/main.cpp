@@ -73,7 +73,7 @@ namespace Portakal
 
 		//Add core modules
 		pApplication->RegisterModule<ReflectionModule>(0);
-		pApplication->RegisterModule<SceneModule>(1);
+		pApplication->RegisterModule<SceneModule>(1); // tick 0
 		pApplication->RegisterModule<WindowModule>(2);
 		pApplication->RegisterModule<GraphicsModule>(3);
 		pApplication->RegisterModule<ResourceModule>(4);

@@ -63,5 +63,8 @@ namespace Portakal
 	private:
 		ComPtr<ID3D12GraphicsCommandList> mCommandList;
 		ComPtr<ID3D12CommandAllocator> mCommandPool;
+
+		// Inherited via CommandList
+		void ClearTextureCore(const Texture* pTexture, const Color4F clearColor) override;
 	};
 }

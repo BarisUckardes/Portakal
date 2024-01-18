@@ -13,6 +13,7 @@ namespace Portakal
 	public:
 		static SharedHeap<Scene> GetPrimalScene();
 		static Array<SharedHeap<Scene>> GetScenes();
+		static void TransitionSync(const String& resourceName);
 	private:
 		static void _RegisterScene(const SharedHeap<Scene>& pScene);
 		static void _RemoveScene(Scene* pScene);

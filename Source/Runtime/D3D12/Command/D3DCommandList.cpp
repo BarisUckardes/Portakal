@@ -73,4 +73,7 @@ namespace Portakal
 	void D3DCommandList::OnShutdown()
 	{
 	}
+	void D3DCommandList::ClearTextureCore(const Texture* pTexture, const Color4F clearColor)
+	{
+	}
 }

@@ -41,7 +41,8 @@ namespace Portakal
             Deference();
         }
 
-        FORCEINLINE const Bool8 IsShutdown() const noexcept { return (mData == nullptr || mData->IsShutdown()); }
+        FORCEINLINE Bool8 IsShutdown() const noexcept { return (mData == nullptr || mData->IsShutdown()); }
+        FORCEINLINE Bool8 IsAlive() const noexcept { return (mData != nullptr && !mData->IsShutdown()); }
         FORCEINLINE Bool8 IsValid() const noexcept { return mData != nullptr; }
         FORCEINLINE T* GetHeap() const noexcept { return (T*)mData; }
         FORCEINLINE T** GetHeapAddress() const noexcept { return (T**)&mData; }

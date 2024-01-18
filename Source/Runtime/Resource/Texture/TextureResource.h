@@ -37,7 +37,9 @@ namespace Portakal
 		{
 			return mDesc;
 		}
-		void AllocateTexture(const TextureDesc& desc, const SharedHeap<GraphicsMemoryHeap>& pHostHeap, const Bool8 bAllocateStagebuffersUpfront = false,const Bool8 bCreateViewsUpfront = false);
+
+		void Wrap(const SharedHeap<Texture>& pTexture);
+		void AllocateTexture(const TextureDesc& desc, const SharedHeap<GraphicsMemoryHeap>& pHostHeap = nullptr, const Bool8 bAllocateStagebuffersUpfront = false,const Bool8 bCreateViewsUpfront = false);
 		SharedHeap<TextureView> CreateView(const Byte mipLevel, const Byte arrayLevel);
 		SharedHeap<TextureView> GetView(const Byte mipLevel, const Byte arrayLevel);
 		void Update(const MemoryView& memory,const Vector3US offset,const TextureMemoryLayout inputMemoryLayout,const GraphicsMemoryAccessFlags inputAccessFlags,const PipelineStageFlags inputPipelineFlags,const GraphicsQueueType inputQueueType,const Byte mipLevel,const Byte arrayLevel);
@@ -54,6 +56,7 @@ namespace Portakal
 		SharedHeap<Fence> mFence;
 		SharedHeap<GraphicsMemoryHeap> mHostHeap;
 		TextureDesc mDesc;
+		bool mWrapped;
 	};
 }
 

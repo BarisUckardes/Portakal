@@ -118,7 +118,7 @@ namespace Portakal
 		info.pDependencies = subpassDependencies.GetData();;
 		info.pNext = nullptr;
 
-		DEV_ASSERT(vkCreateRenderPass(mLogicalDevice, &info, nullptr, &mRenderPass), "VulkanRenderPass", "Failed to create render pass!");
+		DEV_ASSERT(vkCreateRenderPass(mLogicalDevice, &info, nullptr, &mRenderPass) == VK_SUCCESS, "VulkanRenderPass", "Failed to create render pass!");
 
 		//Create framebuffer
 		if (desc.bSwapchain)
@@ -164,7 +164,7 @@ namespace Portakal
 			framebufferInfo.flags = VkFramebufferCreateFlags();
 			framebufferInfo.pNext = nullptr;
 
-			DEV_ASSERT(vkCreateFramebuffer(mLogicalDevice, &framebufferInfo, nullptr, &mFramebuffer), "VulkanRenderPass", "Failed to create normal framebuffer!");
+			DEV_ASSERT(vkCreateFramebuffer(mLogicalDevice, &framebufferInfo, nullptr, &mFramebuffer) == VK_SUCCESS, "VulkanRenderPass", "Failed to create normal framebuffer!");
 		}
 	}
 	void VulkanRenderPass::OnShutdown()

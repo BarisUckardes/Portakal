@@ -3,18 +3,18 @@
 #include <Runtime/Graphics/Device/GraphicsDevice.h>
 #include <Runtime/Graphics/RenderPass/RenderPass.h>
 #include <Runtime/Resource/Texture/TextureResource.h>
-#include "RenderTarget.reflected.h"
+#include "RenderTargetResource.reflected.h"
 
 namespace Portakal
 {
 	PCLASS();
-	class RUNTIME_API RenderTarget : public ResourceSubObject
+	class RUNTIME_API RenderTargetResource : public ResourceSubObject
 	{
 		GENERATE_OBJECT;
 	public:
-		RenderTarget(const SharedHeap<GraphicsDevice>& pDevice);
-		RenderTarget();
-		~RenderTarget() = default;
+		RenderTargetResource(const SharedHeap<GraphicsDevice>& pDevice);
+		RenderTargetResource();
+		~RenderTargetResource() = default;
 
 		FORCEINLINE Array<SharedHeap<Texture>> GetColorTargets() const noexcept
 		{
@@ -45,6 +45,7 @@ namespace Portakal
 		Vector2US mRenderRegionSize;
 	};
 }
+
 
 
 

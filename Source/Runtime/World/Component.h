@@ -11,13 +11,12 @@ namespace Portakal
 	{
 		friend class Entity;
 	public:
-		FORCEINLINE SharedHeap<Entity> GetOwnerEntity() const noexcept
+		FORCEINLINE Entity* GetOwnerEntity() const noexcept
 		{
 			return mOwnerEntity;
 		}
 
 		virtual void OnInitialize() = 0;
-		virtual void OnFinalize() = 0;
 	private:
 		void _SetOwnerEntity(Entity* pEntity);
 	private:
