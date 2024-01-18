@@ -1,6 +1,7 @@
 #include "String.h"
 #include <Runtime/Memory/Memory.h>
-
+#include <string>
+#include <iostream>
 namespace Portakal
 {
 	UInt64 GetCharPointerSize(const Char* target)
@@ -17,6 +18,67 @@ namespace Portakal
 		while (*ptr)
 			++ptr;
 		return ptr - target;
+	}
+
+	Int32 String::ToInt32(const String& text)
+	{
+		
+		return std::stoi(*text);
+	}
+
+	UInt32 String::ToUInt32(const String& text)
+	{
+		return std::stoul(*text);
+	}
+
+	Int64 String::ToInt64(const String& text)
+	{
+		return std::stoll(*text);
+	}
+
+	UInt64 String::ToUInt64(const String& text)
+	{
+		return std::stoull(*text);
+	}
+
+	Float32 String::ToFloat32(const String& text)
+	{
+		return std::stof(*text);
+	}
+
+	Float64 String::ToFloat64(const String& text)
+	{
+		return std::stod(*text);
+	}
+
+	String String::FromInt32(const Int32 value)
+	{
+		return std::to_string(value).c_str();
+	}
+
+	String String::FromUInt32(const UInt32 value)
+	{
+		return std::to_string(value).c_str();
+	}
+
+	String String::FromInt64(const Int64 value)
+	{
+		return std::to_string(value).c_str();
+	}
+
+	String String::FromUInt64(const UInt64 value)
+	{
+		return std::to_string(value).c_str();
+	}
+
+	String String::FromFloat32(const Float32 value)
+	{
+		return std::to_string(value).c_str();
+	}
+
+	String String::FromFloat64(const Float64 value)
+	{
+		return std::to_string(value).c_str();
 	}
 
 	String::String(const Char* pData, const UInt64 sizeInBytes)

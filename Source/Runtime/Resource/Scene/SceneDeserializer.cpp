@@ -65,6 +65,59 @@ namespace Portakal
 				SharedHeap<Component> pComponent = pEntity->AddComponent(pType);
 				pComponent->SetName(component.Name);
 				pComponent->OverrideID(component.ID);
+
+				//Set variables
+				for (const SceneComponentFieldDescriptor& field : component.Fields)
+				{
+					const Field* pField = pType->GetField(field.FieldName);
+					const Type* pFieldType = pField->GetType();
+
+					if (field.Mode == FieldMode::Normal)
+					{
+						if (pFieldType == typeof(Int32))
+						{
+							const Int32 value = String::ToInt32(field.FieldValue);
+							pField->SetValue<Int32>(pComponent.GetHeap(), value);
+						}
+						else if (pFieldType == typeof(UInt32))
+						{
+							const UInt32 value = String::ToUInt32(field.FieldValue);
+							pField->SetValue<UInt32>(pComponent.GetHeap(), value);
+						}
+						else if (pFieldType == typeof(Int64))
+						{
+							const Int64 value = String::ToInt64(field.FieldValue);
+							pField->SetValue<Int64>(pComponent.GetHeap(), value);
+						}
+						else if (pFieldType == typeof(UInt64))
+						{
+							const UInt64 value = String::ToUInt64(field.FieldValue);
+							pField->SetValue<UInt64>(pComponent.GetHeap(), value);
+						}
+						else if (pFieldType == typeof(Float32))
+						{
+							const Float32 value = String::ToFloat32(field.FieldValue);
+							pField->SetValue<Float32>(pComponent.GetHeap(), value);
+						}
+						else if (pFieldType == typeof(Float64))
+						{
+							const Float64 value = String::ToFloat64(field.FieldValue);
+							pField->SetValue<Float64>(pComponent.GetHeap(), value);
+						}
+						else if (pFieldType == typeof(String))
+						{
+							pField->SetValue<String>(pComponent.GetHeap(), field.FieldValue);
+						}
+					}
+					else if (field.Mode == FieldMode::Array)
+					{
+
+					}
+					else if (field.Mode == FieldMode::Object)
+					{
+
+					}
+				}
 			}
 		}
 

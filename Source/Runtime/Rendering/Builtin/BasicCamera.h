@@ -20,24 +20,31 @@ namespace Portakal
 		{
 			return mRenderTarget;
 		}
-		FORCEINLINE float GetFieldOfView() const noexcept
+		FORCEINLINE Float32 GetFieldOfView() const noexcept
 		{
 			return mFieldOfView;
 		}
-		FORCEINLINE float GetNearPlane() const noexcept
+		FORCEINLINE Float32 GetNearPlane() const noexcept
 		{
 			return mNearPlane;
 		}
-		FORCEINLINE float GetFarPlane() const noexcept
+		FORCEINLINE Float32 GetFarPlane() const noexcept
 		{
 			return mFarPlane;
 		}
 
 		void TestCreateDisplay();
-		void SetFieldOfView(const float value);
-		void SetNearPlane(const float value);
-		void SetFarPlane(const float value);
+		void SetFieldOfView(const Float32 value);
+		void SetNearPlane(const Float32 value);
+		void SetFarPlane(const Float32 value);
 		void SetRenderTarget(const SharedHeap<RenderTargetResource>& pResource);
+	public:
+		PFIELD();
+		Float32 mFieldOfView;
+		PFIELD();
+		Float32 mNearPlane;
+		PFIELD();
+		Float32 mFarPlane;
 	private:
 		// Inherited via Component
 		virtual void OnInitialize() override;
@@ -46,10 +53,6 @@ namespace Portakal
 		SharedHeap<RenderTargetResource> mRenderTarget;
 		SharedHeap<TextureResource> mTestTexture;
 		SharedHeap<GraphicsMemoryHeap> mTestHeap;
-		float mFieldOfView;
-		float mNearPlane;
-		float mFarPlane;
-
 	};
 }
 

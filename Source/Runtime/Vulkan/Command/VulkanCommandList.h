@@ -48,6 +48,9 @@ namespace Portakal
         // Inherited via CommandList
         void BeginRenderPassCore(const RenderPass* pRenderPass, const Color4F& clearColor, const Byte subFramebufferIndex) override;
         void EndRenderPassCore() override;
+
+        // Inherited via CommandList
+        void ClearTextureCore(const Texture* pTexture,const Byte arrayIndex,const Byte mipIndex, const Color4F clearColor) override;
     private:
         Byte GetQueueFamilyIndex(const GraphicsQueueType type);
 
@@ -57,8 +60,6 @@ namespace Portakal
         VkCommandPool mCommandPool;
         VkCommandBuffer mCommandBuffer;
 
-        // Inherited via CommandList
-        void ClearTextureCore(const Texture* pTexture, const Color4F clearColor) override;
     };
 
 }

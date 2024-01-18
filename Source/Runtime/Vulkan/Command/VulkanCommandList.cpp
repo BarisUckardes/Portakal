@@ -196,7 +196,7 @@ namespace Portakal
 	{
 		vkFreeCommandBuffers(mLogicalDevice, mCommandPool, 1, &mCommandBuffer);
 	}
-	void VulkanCommandList::ClearTextureCore(const Texture* pTexture, const Color4F clearColor)
+	void VulkanCommandList::ClearTextureCore(const Texture* pTexture,const Byte arrayIndex,const Byte mipIndex, const Color4F clearColor)
 	{
 		VulkanTexture* pVkTexture = (VulkanTexture*)pTexture;
 		VkClearColorValue clearValue = {};
@@ -204,10 +204,11 @@ namespace Portakal
 		clearValue.float32[1] = clearColor.G;
 		clearValue.float32[2] = clearColor.B;
 		clearValue.float32[3] = clearColor.A;
+
 		VkImageSubresourceRange range = {};
 		range.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-		range.baseArrayLayer = 0;
-		range.baseMipLevel = 0;
+		range.baseArrayLayer = arrayIndex;
+		range.baseMipLevel = mipIndex;
 		range.layerCount = pTexture->GetArrayLevels();
 		range.levelCount = pTexture->GetMipLevels();
 		vkCmdClearColorImage(mCommandBuffer, pVkTexture->GetVkImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,&clearValue,1,&range);

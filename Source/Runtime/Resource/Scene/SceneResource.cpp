@@ -38,10 +38,38 @@ namespace Portakal
         const Array<Field*> fields = pComponent->GetType()->GetFields();
         for (const Field* pField : fields)
         {
+            const Type* pFieldType = pField->GetType();
             SceneComponentFieldDescriptor fieldDescriptor = {};
             fieldDescriptor.FieldName = pField->GetName();
             fieldDescriptor.Mode = pField->GetMode();
-            //TODO: fieldDescriptor.FieldValue = ;
+            if (pFieldType == typeof(Int32))
+            {
+                fieldDescriptor.FieldValue = String::FromInt32(pField->GetValue<Int32>(pComponent.GetHeap()));
+            }
+            else if (pFieldType == typeof(UInt32))
+            {
+                fieldDescriptor.FieldValue = String::FromUInt32(pField->GetValue<UInt32>(pComponent.GetHeap()));
+            }
+            else if (pFieldType == typeof(Int64))
+            {
+                fieldDescriptor.FieldValue = String::FromInt64(pField->GetValue<Int64>(pComponent.GetHeap()));
+            }
+            else if (pFieldType == typeof(UInt64))
+            {
+                fieldDescriptor.FieldValue = String::FromUInt64(pField->GetValue<UInt64>(pComponent.GetHeap()));
+            }
+            else if (pFieldType == typeof(Float32))
+            {
+                fieldDescriptor.FieldValue = String::FromFloat32(pField->GetValue<Float32>(pComponent.GetHeap()));
+            }
+            else if (pFieldType == typeof(Float64))
+            {
+                fieldDescriptor.FieldValue = String::FromFloat64(pField->GetValue<Float64>(pComponent.GetHeap()));
+            }
+            else if (pFieldType == typeof(String))
+            {
+                fieldDescriptor.FieldValue = pField->GetValue<String>(pComponent.GetHeap());
+            }
             componentDescriptor.Fields.Add(fieldDescriptor);
         }
 

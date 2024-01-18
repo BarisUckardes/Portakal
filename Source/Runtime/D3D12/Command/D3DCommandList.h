@@ -65,6 +65,6 @@ namespace Portakal
 		ComPtr<ID3D12CommandAllocator> mCommandPool;
 
 		// Inherited via CommandList
-		void ClearTextureCore(const Texture* pTexture, const Color4F clearColor) override;
+		void ClearTextureCore(const Texture* pTexture,const Byte arrayIndex,const Byte mipIndex, const Color4F clearColor) override;
 	};
 }

@@ -26,6 +26,11 @@ namespace Portakal
 	private:
 		Array<const BasicCamera*> mCameras;
 		Array<const BasicRenderable*> mRenderables;
+		SharedHeap<TextureResource> mTexture;
+		SharedHeap<CommandPool> mCmdPool;
+		SharedHeap<CommandList> mCmdList;
+		SharedHeap<Shader> mVertexShader;
+		SharedHeap<Shader> mFragmentShader;
 	};
 }
 

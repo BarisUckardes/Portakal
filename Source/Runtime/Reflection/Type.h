@@ -48,7 +48,7 @@ namespace Portakal
 		}
 
 		String GetEnumName(const Int64 value) const noexcept;
-
+		Field* GetField(const String& name) const noexcept;
 
 		template<typename T>
 		T* GetAttribute() const noexcept

@@ -269,6 +269,9 @@ extern "C"
 		Portakal::TypeDispatcher::RegisterField("FileOffset",offsetof(Portakal::ResourceDescriptor,FileOffset),typeof(Portakal::UInt64),Portakal::FieldMode::Normal,pResourceDescriptor);
 		Portakal::TypeDispatcher::RegisterField("FileSize",offsetof(Portakal::ResourceDescriptor,FileSize),typeof(Portakal::UInt64),Portakal::FieldMode::Normal,pResourceDescriptor);
 		Portakal::TypeDispatcher::RegisterField("bOptimized",offsetof(Portakal::ResourceDescriptor,bOptimized),typeof(Portakal::Bool8),Portakal::FieldMode::Normal,pResourceDescriptor);
+		Portakal::TypeDispatcher::RegisterField("mFieldOfView",offsetof(Portakal::BasicCamera,mFieldOfView),typeof(Portakal::Float32),Portakal::FieldMode::Normal,pBasicCamera);
+		Portakal::TypeDispatcher::RegisterField("mNearPlane",offsetof(Portakal::BasicCamera,mNearPlane),typeof(Portakal::Float32),Portakal::FieldMode::Normal,pBasicCamera);
+		Portakal::TypeDispatcher::RegisterField("mFarPlane",offsetof(Portakal::BasicCamera,mFarPlane),typeof(Portakal::Float32),Portakal::FieldMode::Normal,pBasicCamera);
 		Portakal::TypeDispatcher::RegisterField("Name",offsetof(Portakal::SceneComponentDescriptor,Name),typeof(Portakal::String),Portakal::FieldMode::Normal,pSceneComponentDescriptor);
 		Portakal::TypeDispatcher::RegisterField("ID",offsetof(Portakal::SceneComponentDescriptor,ID),typeof(Portakal::Guid),Portakal::FieldMode::Normal,pSceneComponentDescriptor);
 		Portakal::TypeDispatcher::RegisterField("TypeName",offsetof(Portakal::SceneComponentDescriptor,TypeName),typeof(Portakal::String),Portakal::FieldMode::Normal,pSceneComponentDescriptor);

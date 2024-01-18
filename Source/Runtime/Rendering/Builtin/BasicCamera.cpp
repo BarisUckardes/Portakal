@@ -62,15 +62,15 @@ namespace Portakal
 		//Register
 		pAspect->RegisterDisplay(mRenderTarget);
 	}
-	void BasicCamera::SetFieldOfView(const float value)
+	void BasicCamera::SetFieldOfView(const Float32 value)
 	{
 		mFieldOfView = value;
 	}
-	void BasicCamera::SetNearPlane(const float value)
+	void BasicCamera::SetNearPlane(const Float32 value)
 	{
 		mNearPlane = value;
 	}
-	void BasicCamera::SetFarPlane(const float value)
+	void BasicCamera::SetFarPlane(const Float32 value)
 	{
 		mFarPlane = value;
 	}
@@ -80,6 +80,7 @@ namespace Portakal
 	}
 	void BasicCamera::OnInitialize()
 	{
+		TestCreateDisplay();
 		GetOwnerEntity()->GetOwnerScene()->GetAspect<BasicRenderAspect>()->RegisterCamera(this);
 	}
 	void BasicCamera::OnShutdown()

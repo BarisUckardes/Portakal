@@ -34,6 +34,19 @@ namespace Portakal
 	class RUNTIME_API String final
 	{
 	public:
+		static Int32 ToInt32(const String& text);
+		static UInt32 ToUInt32(const String& text);
+		static Int64 ToInt64(const String& text);
+		static UInt64 ToUInt64(const String& text);
+		static Float32 ToFloat32(const String& text);
+		static Float64 ToFloat64(const String& text);
+		static String FromInt32(const Int32 value);
+		static String FromUInt32(const UInt32 value);
+		static String FromInt64(const Int64 value);
+		static String FromUInt64(const UInt64 value);
+		static String FromFloat32(const Float32 value);
+		static String FromFloat64(const Float64 value);
+	public:
 		String(const Char* pData, const UInt64 sizeInBytes);
 		String(const Byte* pData, const UInt64 sizeInBytes);
 		String(const wchar_t* pData);

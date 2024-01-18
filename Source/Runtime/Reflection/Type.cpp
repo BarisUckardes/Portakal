@@ -10,6 +10,13 @@ namespace Portakal
                 return enumValue.Name;
         return "";
     }
+    Field* Type::GetField(const String& name) const noexcept
+    {
+        for (Field* pField : mFields)
+            if (pField->GetName() == name)
+                return pField;
+        return nullptr;
+    }
     void* Type::CreateDefaultHeapObject() const noexcept
     {
         return mDefaultObjectGenerator();

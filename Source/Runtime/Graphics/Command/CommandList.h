@@ -58,7 +58,7 @@ namespace Portakal
 		void SetTextureMemoryBarrier(const Texture* pTexture, const CommandListTextureMemoryBarrierDesc& desc);
 		void SetBufferMemoryBarrier(const GraphicsBuffer* pBuffer, const BufferBarrierDesc& desc);
 		void CommitResources(ResourceTable** ppTables,const UInt32 count);
-		void ClearTexture(const Texture* pTexture, const Color4F clearColor);
+		void ClearTexture(const Texture* pTexture,const Byte arrayIndex,const Byte mipIndex, const Color4F clearColor);
 	protected:
 		virtual void BeginRecordingCore() = 0;
 		virtual void EndRecordingCore() = 0;
@@ -77,7 +77,7 @@ namespace Portakal
 		virtual void SetTextureMemoryBarrierCore(const Texture* pTexture, const CommandListTextureMemoryBarrierDesc& desc) = 0;
 		virtual void SetBufferMemoryBarrierCore(const GraphicsBuffer* pBuffer, const BufferBarrierDesc& desc) = 0;
 		virtual void CommitResourcesCore(ResourceTable** ppTables, const UInt32 count) = 0;
-		virtual void ClearTextureCore(const Texture* pTexture, const Color4F clearColor) = 0;
+		virtual void ClearTextureCore(const Texture* pTexture,const Byte arrayIndex,const Byte mipIndex, const Color4F clearColor) = 0;
 	private:
 		const SharedHeap<CommandPool> mCmdPool;
 		SharedHeap<GraphicsBuffer> mBoundVertexBuffer;
