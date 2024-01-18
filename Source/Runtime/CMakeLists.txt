@@ -7,7 +7,7 @@ include(${CMAKE_SOURCE_DIR}/Scripts/CMake/FetchLibraries.cmake)
 # ---------------------- CMAKE FETCH -------------------------
 FetchContent_MakeAvailable(stbi)
 FetchContent_MakeAvailable(yaml-cpp)
-FetchContent_MakeAvailable(freetype)
+FetchContent_MakeAvailable(assimp)
 # ------------------------------------------------------------
 
 # ---------------------- FILE ADDITION -----------------------
@@ -21,6 +21,7 @@ target_include_directories(Runtime PRIVATE "${CMAKE_SOURCE_DIR}/Source")
 target_include_directories(Runtime PUBLIC "${yaml-cpp_SOURCE_DIR}/include")
 
 target_link_libraries(Runtime PUBLIC yaml-cpp)
+target_link_libraries(Runtime PUBLIC assimp)
 # ------------------------------------------------------------
 
 # ------------------ FORCE SHADER DIRECTORY ------------------
@@ -55,11 +56,6 @@ else ()
     target_compile_definitions(Runtime PUBLIC STB_IMAGE_IMPLEMENTATION=0)
 endif ()
 # ------------------------------------------------------------
-
-# ----------------- FREETYPE IMPLEMENTATION ------------------
-if (freetype_POPULATED) 
-	target_link_libraries(Runtime PUBLIC freetype)
-endif ()
 
 # ------------------- VULKAN IMPLEMENTATION ------------------
 target_include_directories(Runtime PUBLIC "${CMAKE_SOURCE_DIR}/External/Vulkan/Include")

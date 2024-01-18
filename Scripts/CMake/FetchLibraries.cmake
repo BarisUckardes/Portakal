@@ -34,17 +34,8 @@ FetchContent_Declare(
 	GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
 )
 
-# FREE-TYPE library
-FetchContent_Declare(
-    freetype
-    GIT_REPOSITORY https://gitlab.freedesktop.org/freetype/freetype.git
-    GIT_TAG       master
-)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared libraries" FORCE)
+set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "Assimp build tests" FORCE)
+set(ASSIMP_INSTALL OFF CACHE BOOL "Assimp install" FORCE)
+set(ASSIMP_INSTALL_PDB OFF CACHE BOOL "Assimp install PDB" FORCE)
 
-# If assimp declared successfully, set installation options
-if(assimp_ADDED)
-    set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared libraries" FORCE)
-    set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "Assimp build tests" FORCE)
-    set(ASSIMP_INSTALL OFF CACHE BOOL "Assimp install" FORCE)
-    set(ASSIMP_INSTALL_PDB OFF CACHE BOOL "Assimp install PDB" FORCE)
-endif()
