@@ -158,5 +158,6 @@ namespace Portakal
 		mCmdList->SetTextureMemoryBarrier(mTexture->GetTexture().GetHeap(), postMemoryBarrierDesc);
 		mCmdList->EndRecording();
 		GraphicsAPI::GetDefaultDevice()->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, nullptr);
+
     }
 }

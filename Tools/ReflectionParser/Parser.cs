@@ -137,7 +137,7 @@ namespace Portakal
 		static inline Type* sType = nullptr;\
 	}};
     #undef GENERATE_OBJECT;
-    #define GENERATE_OBJECT virtual Type* GetType() const noexcept override {{return typeof({file.Name});}}
+    #define GENERATE_OBJECT friend ReflectionManifest* ::GenerateModuleManifest(); virtual Type* GetType() const noexcept override {{return typeof({file.Name});}}
     #pragma warning( pop )
 ";
 

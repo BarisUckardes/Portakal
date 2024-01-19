@@ -29,6 +29,13 @@ namespace Portakal
 			T* pAttribute = new T(args...);
 			pTargetType->_RegisterAttribute(pAttribute);
 		}
+
+		template <typename T1, typename T2>
+		static inline size_t constexpr OffsetOf(T1 T2::* member)
+		{
+			T2 object{};
+			return size_t(&(object.*member)) - size_t(&object);
+		}
 	public:
 		TypeDispatcher() = delete;
 		~TypeDispatcher() = delete;

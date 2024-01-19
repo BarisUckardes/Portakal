@@ -1,7 +1,9 @@
 #pragma once
 #include <Runtime/World/Component.h>
 #include <Runtime/Resource/RenderTarget/RenderTargetResource.h>
+#include <Runtime/Reflection/ReflectionManifest.h>
 #include "BasicCamera.reflected.h"
+
 
 namespace Portakal
 {
@@ -38,13 +40,6 @@ namespace Portakal
 		void SetNearPlane(const Float32 value);
 		void SetFarPlane(const Float32 value);
 		void SetRenderTarget(const SharedHeap<RenderTargetResource>& pResource);
-	public:
-		PFIELD();
-		Float32 mFieldOfView;
-		PFIELD();
-		Float32 mNearPlane;
-		PFIELD();
-		Float32 mFarPlane;
 	private:
 		// Inherited via Component
 		virtual void OnInitialize() override;
@@ -53,6 +48,12 @@ namespace Portakal
 		SharedHeap<RenderTargetResource> mRenderTarget;
 		SharedHeap<TextureResource> mTestTexture;
 		SharedHeap<GraphicsMemoryHeap> mTestHeap;
+		PFIELD();
+		Float32 mFieldOfView;
+		PFIELD();
+		Float32 mNearPlane;
+		PFIELD();
+		Float32 mFarPlane;
 	};
 }
 
