@@ -115,3 +115,12 @@ namespace Portakal
 #define SECONDS_TO_MS(seconds) seconds * 1000.0f
 #define SECONDS_TO_NANO(seconds) seconds * 1000000000.0f
 #define MS_TO_NANO(ms) ms * 1000000.0f
+
+namespace Portakal
+{
+	class ReflectionManifest;
+}
+extern "C"
+{
+	__declspec(dllexport) Portakal::ReflectionManifest* GenerateModuleManifest();
+}
