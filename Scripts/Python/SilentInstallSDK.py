@@ -208,6 +208,13 @@ with open(externalPath + "/External/Vulkan/Include/vulkan_core.h", "w") as file:
 
 print(Fore.GREEN + "[SUCCESS] -- " + Style.RESET_ALL + "Needed files has been edited.")
 
+# Build ReflectionParserTool 
+print(Fore.CYAN + "[INFO] -- " + Style.RESET_ALL + "Building ReflectionParserTool at " + externalPath + "Tools/ReflectionParser/ReflectionParser.csproj")
+
+subprocess.run(["dotnet", "build", externalPath + "/Tools/ReflectionParser/ReflectionParser.csproj"])
+
+print(Fore.GREEN + "[SUCCESS] -- " + Style.RESET_ALL + "ReflectionParserTool has been built.")
+
 print(Fore.YELLOW + "[WARNING] -- " + Style.RESET_ALL + "If you still get compiler error during the build, please check the Portakal/wiki/Home from github.com")
 time.sleep(sleepTime)
 exit()
