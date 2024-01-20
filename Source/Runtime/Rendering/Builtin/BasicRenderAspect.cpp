@@ -37,10 +37,10 @@ PS_INPUT main(VS_INPUT input)
 {
     PS_INPUT output;
     output.pos = float4(input.pos, 1.0f)*Mvp;
+    output.uv = input.uv;
 	output.normal = input.normal;
 	output.tangent = input.tangent;
 	output.bitangent = input.bitangent;
-    output.uv = input.uv;
     return output;
 }
 )"""";;    static const Char gTestFragmentShader[] = R""""(
@@ -49,6 +49,8 @@ PS_INPUT main(VS_INPUT input)
 				float4 pos : SV_POSITION;
 				float2 uv : TEXCOORD0;
 				float3 normal : TEXCOORD1;
+				float3 tangent : TEXCOORD2;
+				float3 bitangent : TEXCOORD3;
 			};
 
           
@@ -79,7 +81,7 @@ PS_INPUT main(VS_INPUT input)
     {
         //Load test mesh
 		MeshLoadResult meshLoadResult = {};
-		MeshLoader::LoadMesh(R"(D:\Projects\glTF-Sample-Models\2.0\DamagedHelmet\glTF\DamagedHelmet.gltf)",meshLoadResult);
+		MeshLoader::LoadMesh("C:\\Users\\Roveldo\\Documents\\Megascans Library\\Downloaded\\3d\\food_baked goods_wfzjegjs\\wfzjegjs_LOD0.fbx",meshLoadResult);
 
         //Load test textures
 		TextureLoadResult colorTextureResult = {};
