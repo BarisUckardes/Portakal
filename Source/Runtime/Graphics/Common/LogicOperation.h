@@ -1,9 +1,11 @@
 #pragma once
 #include <Runtime/Core/Core.h>
+#include "LogicOperation.reflected.h"
 
 namespace Portakal
 {
-	enum class RUNTIME_API LogicOperation : Byte
+	PENUM();
+	enum class RUNTIME_API LogicOperation : Int64
 	{
 		Clear,
 		Set,
@@ -22,4 +24,7 @@ namespace Portakal
 		OrReverse,
 		OrInverted
 	};
+
+	GENERATE_FLAGS(LogicOperation, Byte);
 }
+

@@ -1,9 +1,11 @@
 #pragma once
 #include <Runtime/Core/Core.h>
+#include "CompareOperation.reflected.h"
 
 namespace Portakal
 {
-	enum class RUNTIME_API CompareOperation : Byte
+	PENUM();
+	enum class RUNTIME_API CompareOperation : Int64
 	{
 		Never,
 		Less,
@@ -14,4 +16,7 @@ namespace Portakal
 		GreaterEqual,
 		Always
 	};
+
+	GENERATE_FLAGS(CompareOperation, Byte);
 }
+

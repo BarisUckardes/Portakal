@@ -79,11 +79,11 @@ PS_INPUT main(VS_INPUT input)
     {
         //Load test mesh
 		MeshLoadResult meshLoadResult = {};
-		MeshLoader::LoadMesh("C:\\Users\\Roveldo\\Downloads\\new\\new\\new.glb",meshLoadResult);
+		MeshLoader::LoadMesh(R"(D:\Projects\glTF-Sample-Models\2.0\DamagedHelmet\glTF\DamagedHelmet.gltf)",meshLoadResult);
 
         //Load test textures
 		TextureLoadResult colorTextureResult = {};
-		TextureLoader::LoadFromPath("C:\\Users\\Roveldo\\Documents\\Megascans Library\\Downloaded\\3d\\food_baked goods_wfzjegjs\\wfzjegjs_2K_Albedo.jpg", colorTextureResult);
+		TextureLoader::LoadFromPath(R"(D:\Projects\glTF-Sample-Models\2.0\DamagedHelmet\glTF\Default_albedo.jpg)", colorTextureResult);
 
         //Load&Create test shaders
 		MemoryOwnedView* pVertexSPIRVBytes = nullptr;
