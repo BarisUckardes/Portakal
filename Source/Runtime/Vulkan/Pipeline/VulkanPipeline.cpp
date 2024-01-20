@@ -27,7 +27,6 @@ namespace Portakal
 			vkBindingDescription.inputRate = VulkanPipelineUtils::GetInputRate(binding.StepRate);
 			vkBindingDescription.binding = bindingIndex;
 
-
 			UInt32 inputOffset = 0;
 			for (UInt32 attributeIndex = 0; attributeIndex < binding.Elements.GetSize(); attributeIndex++)
 			{

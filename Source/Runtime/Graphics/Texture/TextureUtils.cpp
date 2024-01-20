@@ -17,6 +17,10 @@ namespace Portakal
             return 1;
         case TextureFormat::R16_UNorm:
             return 2;
+        case TextureFormat::R32_G32_B32_Float:
+        case TextureFormat::R32_G32_B32_UInt:
+        case TextureFormat::R32_G32_B32_SInt:
+            return 12;
         case TextureFormat::R32_G32_B32_A32_Float:
             return 16;
         case TextureFormat::R32_Float:
