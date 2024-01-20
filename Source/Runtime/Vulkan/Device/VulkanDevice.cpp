@@ -21,6 +21,9 @@
 
 namespace Portakal
 {
+	PFN_vkCmdBeginRenderingKHR VulkanDevice::vkCmdBeginRenderingKHR = NULL;
+	PFN_vkCmdEndRenderingKHR VulkanDevice::vkCmdEndRenderingKHR = NULL;
+
 	VulkanDevice::VulkanDevice(const GraphicsDeviceDesc& desc) : GraphicsDevice(desc), mPhysicalDevice(((const VulkanAdapter*)desc.pAdapter)->GetVkPhysicalDevice())
 	{
 		//Get queue families
@@ -108,6 +111,11 @@ namespace Portakal
 		logicalDeviceInfo.ppEnabledLayerNames = nullptr;
 
 		DEV_ASSERT(vkCreateDevice(mPhysicalDevice, &logicalDeviceInfo, nullptr, &mLogicalDevice) == VK_SUCCESS, "VulkanDevice", "Failed to create logical device!");
+
+		//Get dynamic rendering
+		vkCmdBeginRenderingKHR = (PFN_vkCmdBeginRenderingKHR)vkGetDeviceProcAddr(mLogicalDevice, "vkCmdBeginRenderingKHR");
+		vkCmdEndRenderingKHR = (PFN_vkCmdEndRenderingKHR)vkGetDeviceProcAddr(mLogicalDevice, "vkCmdEndRenderingKHR");
+		DEV_ASSERT(vkCmdBeginRenderingKHR != NULL && vkCmdEndRenderingKHR != NULL, "VulkanGraphicsDevice", "Failed to load dynamic rendering functions");
 
 		//Get default queues
 		vkGetDeviceQueue(mLogicalDevice, mGraphicsQueueFamily.FamilyIndex, 0, &mGraphicsQueueFamily.DefaultQueue);

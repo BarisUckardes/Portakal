@@ -71,22 +71,42 @@ namespace Portakal
 		for (const RenderPassSubpassDesc& subpassDesc : desc.Subpasses)
 		{
 			VkAttachmentReference colorAttachmentsReferences[16];
+			for (Byte i = 0; i < subpassDesc.Attachments.GetSize();i++)
+			{
+				const Byte attachmentIndex = subpassDesc.Attachments[i];
+				colorAttachmentsReferences[i] = references[attachmentIndex];
+			}
 			VkAttachmentReference inputAttachmentReferences[16];
+			for (Byte i = 0; i < subpassDesc.Inputs.GetSize(); i++)
+			{
+				const Byte attachmentIndex = subpassDesc.Inputs[i];
+				inputAttachmentReferences[i] = references[attachmentIndex];
+			}
 			VkAttachmentReference multiSampleAttachmentReferences[16];
+			for (Byte i = 0; i < subpassDesc.MultisampleInputs.GetSize(); i++)
+			{
+				const Byte attachmentIndex = subpassDesc.MultisampleInputs[i];
+				multiSampleAttachmentReferences[i] = references[attachmentIndex];
+			}
 			UInt32 preserveAttachmentReferences[16];
+			for (Byte i = 0; i < subpassDesc.PreserveAttachments.GetSize(); i++)
+			{
+				const Byte attachmentIndex = subpassDesc.PreserveAttachments[i];
+				preserveAttachmentReferences[i] = attachmentIndex;
+			}
 
 			VkSubpassDescription subpass = {};
 			subpass.pipelineBindPoint = subpassDesc.BindPoint == PipelineBindPoint::Graphics ? VK_PIPELINE_BIND_POINT_GRAPHICS : VK_PIPELINE_BIND_POINT_COMPUTE;
-			subpass.preserveAttachmentCount = 0;
+			subpass.preserveAttachmentCount = subpassDesc.PreserveAttachments.GetSize();;
 			subpass.pPreserveAttachments = preserveAttachmentReferences;
 
-			subpass.colorAttachmentCount = 0;
+			subpass.colorAttachmentCount = subpassDesc.Attachments.GetSize();
 			subpass.pColorAttachments = colorAttachmentsReferences;
 
-			subpass.inputAttachmentCount = 0;
+			subpass.inputAttachmentCount = subpassDesc.Inputs.GetSize();
 			subpass.pInputAttachments = inputAttachmentReferences;
 
-			subpass.pResolveAttachments = multiSampleAttachmentReferences;
+			subpass.pResolveAttachments = nullptr;
 
 			subpasses.Add(subpass);
 		}
@@ -121,51 +141,25 @@ namespace Portakal
 		DEV_ASSERT(vkCreateRenderPass(mLogicalDevice, &info, nullptr, &mRenderPass) == VK_SUCCESS, "VulkanRenderPass", "Failed to create render pass!");
 
 		//Create framebuffer
-		if (desc.bSwapchain)
+		VkImageView imageViews[8] = {};
+		for (Byte i = 0; i < desc.AttachmentViews.GetSize(); i++)
 		{
-			for (Byte i = 0; i < desc.AttachmentViews.GetSize(); i++)
-			{
-				const VulkanTextureView* pView = (const VulkanTextureView*)desc.AttachmentViews[i].GetHeap();
-				VkImageView imageView = pView->GetVkImageView();
-
-				VkFramebufferCreateInfo framebufferInfo = {};
-				framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-				framebufferInfo.width = desc.Size.X;
-				framebufferInfo.height = desc.Size.Y;
-				framebufferInfo.renderPass = mRenderPass;
-				framebufferInfo.layers = 1;
-				framebufferInfo.attachmentCount = desc.ColorAttachments.GetSize();
-				framebufferInfo.pAttachments = &imageView;
-				framebufferInfo.flags = VkFramebufferCreateFlags();
-				framebufferInfo.pNext = nullptr;
-
-				VkFramebuffer framebuffer = VK_NULL_HANDLE;
-				DEV_ASSERT(vkCreateFramebuffer(mLogicalDevice, &framebufferInfo, nullptr, &framebuffer), "VulkanRenderPass", "Failed to create normal framebuffer!");
-				mSwapchainFramebuffers.Add(framebuffer);
-			}
+			const VulkanTextureView* pView = (const VulkanTextureView*)desc.AttachmentViews[i].GetHeap();
+			imageViews[i] = pView->GetVkImageView();
 		}
-		else
-		{
-			VkImageView imageViews[8] = {};
-			for (Byte i = 0; i < desc.AttachmentViews.GetSize(); i++)
-			{
-				const VulkanTextureView* pView = (const VulkanTextureView*)desc.AttachmentViews[i].GetHeap();
-				imageViews[i] = pView->GetVkImageView();
-			}
 
-			VkFramebufferCreateInfo framebufferInfo = {};
-			framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-			framebufferInfo.width = desc.Size.X;
-			framebufferInfo.height = desc.Size.Y;
-			framebufferInfo.renderPass = mRenderPass;
-			framebufferInfo.layers = 1;
-			framebufferInfo.attachmentCount = desc.ColorAttachments.GetSize();
-			framebufferInfo.pAttachments = imageViews;
-			framebufferInfo.flags = VkFramebufferCreateFlags();
-			framebufferInfo.pNext = nullptr;
+		VkFramebufferCreateInfo framebufferInfo = {};
+		framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+		framebufferInfo.width = desc.Size.X;
+		framebufferInfo.height = desc.Size.Y;
+		framebufferInfo.renderPass = mRenderPass;
+		framebufferInfo.layers = 1;
+		framebufferInfo.attachmentCount = desc.ColorAttachments.GetSize();
+		framebufferInfo.pAttachments = imageViews;
+		framebufferInfo.flags = VkFramebufferCreateFlags();
+		framebufferInfo.pNext = nullptr;
 
-			DEV_ASSERT(vkCreateFramebuffer(mLogicalDevice, &framebufferInfo, nullptr, &mFramebuffer) == VK_SUCCESS, "VulkanRenderPass", "Failed to create normal framebuffer!");
-		}
+		DEV_ASSERT(vkCreateFramebuffer(mLogicalDevice, &framebufferInfo, nullptr, &mFramebuffer) == VK_SUCCESS, "VulkanRenderPass", "Failed to create normal framebuffer!");
 	}
 	void VulkanRenderPass::OnShutdown()
 	{

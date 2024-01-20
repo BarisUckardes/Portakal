@@ -21,8 +21,8 @@ namespace Portakal
 		//First create color texture
 		TextureDesc textureDesc = {};
 		textureDesc.Type = TextureType::Texture2D;
-		textureDesc.Format = TextureFormat::B8_G8_R8_A8_UNorm;
-		textureDesc.Usage = TextureUsage::Sampled | TextureUsage::ColorAttachment | TextureUsage::TransferDestination;
+		textureDesc.Format = TextureFormat::R8_G8_B8_A8_UNorm;
+		textureDesc.Usage = TextureUsage::Sampled | TextureUsage::ColorAttachment;
 		textureDesc.ArrayLevels = 1;
 		textureDesc.MipLevels = 1;
 		textureDesc.SampleCount = TextureSampleCount::SAMPLE_COUNT_1;
@@ -30,12 +30,14 @@ namespace Portakal
 		textureDesc.pHeap = mTestHeap;
 		mTestTexture = new TextureResource();
 		mTestTexture->AllocateTexture(textureDesc);
+		mTestTexture->CreateView(0, 0);
 
 		//Create render target
 		mRenderTarget = new RenderTargetResource();
 		RenderPassDesc renderPassDesc = {};
 		renderPassDesc.bSwapchain = false;
 		renderPassDesc.Size = { 512,512 };
+
 		RenderPassAttachmentDesc attachmentDesc = {};
 		attachmentDesc.ArrayLevel = 0;
 		attachmentDesc.MipLevel = 0;
@@ -44,18 +46,16 @@ namespace Portakal
 		attachmentDesc.InputLayout = TextureMemoryLayout::Unknown;
 		attachmentDesc.OutputLayout = TextureMemoryLayout::ShaderReadOnly;
 		attachmentDesc.StencilLoadOperation = RenderPassLoadOperation::Clear;
-		attachmentDesc.StencilStoreOperation = RenderPassStoreOperation::Ignore;
+		attachmentDesc.StencilStoreOperation = RenderPassStoreOperation::Store;
 		attachmentDesc.pTexture = mTestTexture->GetTexture();
+
 		renderPassDesc.ColorAttachments.Add(attachmentDesc);
-		mTestTexture->CreateView(0, 0);
 		renderPassDesc.AttachmentViews.Add(mTestTexture->GetView(0, 0));
 
 		RenderPassSubpassDesc subpassDesc = {};
 		subpassDesc.BindPoint = PipelineBindPoint::Graphics;
-		subpassDesc.DepthStencilInput = {};
-		subpassDesc.Inputs = {0};
-		subpassDesc.MultisampleInputs = {};
-		subpassDesc.PreserveAttachments = {};
+		subpassDesc.DepthStencilInput = 0;
+		subpassDesc.Attachments = { 0 };
 		renderPassDesc.Subpasses.Add(subpassDesc);
 		mRenderTarget->Create(renderPassDesc);
 

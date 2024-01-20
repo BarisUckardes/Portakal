@@ -26,6 +26,12 @@ namespace Portakal
                 return VK_FORMAT_R8_UNORM;
             case TextureFormat::R16_UNorm:
                 return VK_FORMAT_R16_UNORM;
+            case TextureFormat::R32_G32_B32_Float:
+                return VK_FORMAT_R32G32B32_SFLOAT;
+            case TextureFormat::R32_G32_B32_UInt:
+                return VK_FORMAT_R32G32B32_UINT;
+            case TextureFormat::R32_G32_B32_SInt:
+                return VK_FORMAT_R32G32B32_SINT;
             case TextureFormat::R32_G32_B32_A32_Float:
                 return VK_FORMAT_R32G32B32A32_SFLOAT;
             case TextureFormat::R32_Float:

@@ -27,10 +27,20 @@ namespace Portakal
 		Array<const BasicCamera*> mCameras;
 		Array<const BasicRenderable*> mRenderables;
 		SharedHeap<TextureResource> mTexture;
+		SharedHeap<MeshResource> mMesh;
+		SharedHeap<GraphicsMemoryHeap> mDeviceHeap;
+		SharedHeap<GraphicsMemoryHeap> mHostHeap;
+		SharedHeap<GraphicsBuffer> mConstantBufferDevice;
+		SharedHeap<GraphicsBuffer> mConstantBufferHost;
 		SharedHeap<CommandPool> mCmdPool;
 		SharedHeap<CommandList> mCmdList;
+		SharedHeap<Fence> mFence;
 		SharedHeap<Shader> mVertexShader;
 		SharedHeap<Shader> mFragmentShader;
+		SharedHeap<Pipeline> mPipeline;
+		SharedHeap<ResourceTableLayout> mResourceLayout;
+		SharedHeap<ResourceTable> mResourceTable;
+		SharedHeap<ResourceTablePool> mResourceTablePool;
 	};
 }
 

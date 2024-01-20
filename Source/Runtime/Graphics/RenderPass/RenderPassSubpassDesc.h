@@ -8,9 +8,10 @@ namespace Portakal
 	struct RUNTIME_API RenderPassSubpassDesc
 	{
 		PipelineBindPoint BindPoint;
+		Array<Byte> Attachments;
 		Array<Byte> Inputs;
 		Array<Byte> MultisampleInputs;
-		Byte DepthStencilInput;
 		Array<Byte> PreserveAttachments;
+		Byte DepthStencilInput;
 	};
 }

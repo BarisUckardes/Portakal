@@ -45,6 +45,9 @@ namespace Portakal
             Array<VkQueue> FreeQueues;
             VkBool32 CanPresent;
         };
+    public:
+        static PFN_vkCmdBeginRenderingKHR vkCmdBeginRenderingKHR;
+        static PFN_vkCmdEndRenderingKHR vkCmdEndRenderingKHR;
 	public:
 		VulkanDevice(const GraphicsDeviceDesc& desc);
         ~VulkanDevice()

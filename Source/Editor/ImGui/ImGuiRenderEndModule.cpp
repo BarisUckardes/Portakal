@@ -95,6 +95,7 @@ namespace Portakal
             RenderPassSubpassDesc subpassDesc = {};
             subpassDesc.BindPoint = PipelineBindPoint::Graphics;
             subpassDesc.DepthStencilInput = 0;
+            subpassDesc.Attachments.Add(0);
             desc.Subpasses.Add(subpassDesc);
 
             SharedHeap<RenderTargetResource> pRenderTarget = new RenderTargetResource();

@@ -48,6 +48,9 @@ namespace Portakal
          * @brief RGBA component order. Each component is a 32-bit unsigned integer.
          */
         R32_G32_B32_A32_UInt,
+        R32_G32_B32_Float,
+        R32_G32_B32_UInt,
+        R32_G32_B32_SInt,
         /**
          * @brief RG component order. Each component is an 8-bit normalized integer.
          */

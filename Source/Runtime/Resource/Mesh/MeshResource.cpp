@@ -1,15 +1,16 @@
 #include "MeshResource.h"
+#include <Runtime/Graphics/GraphicsAPI.h>
 
 namespace Portakal
 {
-	MeshResource::MeshResource(const SharedHeap<GraphicsDevice>& pDevice)
+	MeshResource::MeshResource(const SharedHeap<GraphicsDevice>& pDevice) : mIndexCount(0),mVertexCount(0)
 	{
 		mDevice = pDevice;
 		CreateInternalResources();
 	}
 	MeshResource::MeshResource()
 	{
-		mDevice = nullptr;
+		mDevice = GraphicsAPI::GetDefaultDevice();
 		CreateInternalResources();
 	}
 	void MeshResource::AllocateVertexes(const UInt32 count, const UInt32 elementSize, const SharedHeap<GraphicsMemoryHeap>& pDeviceHeap, const SharedHeap<GraphicsMemoryHeap>& pHostHeap, const Bool8 bAllocateStagebufferUpfront)
@@ -43,6 +44,7 @@ namespace Portakal
 
 		//Set properties
 		mVertexHostHeap = pHostHeap;
+		mVertexCount = count;
 	}
 	void MeshResource::AllocateIndexes(const UInt32 count, const UInt32 elementSize, const SharedHeap<GraphicsMemoryHeap>& pDeviceHeap, const SharedHeap<GraphicsMemoryHeap>& pHostHeap, const Bool8 bAllocateStagebufferUpfront)
 	{
@@ -75,6 +77,7 @@ namespace Portakal
 
 		//Set properties
 		mIndexHostHeap = pHostHeap;
+		mIndexCount = count;
 	}
 	void MeshResource::UpdateVertexes(const MemoryView memory, const UInt32 offset)
 	{
