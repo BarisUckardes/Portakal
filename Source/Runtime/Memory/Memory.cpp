@@ -3,7 +3,7 @@
 namespace Portakal
 {
 #ifdef PORTAKAL_PLATFORM_WINDOWS
-	void Memory::Copy(void* __restrict pDestination, const void* __restrict pSource, const UInt64 sizeInBytes)
+	void Memory::Copy(void* pDestination, const void* pSource, const UInt64 sizeInBytes)
 	{
 		for (UInt64 i = 0; i < sizeInBytes; i++)
 			((Byte*)(pDestination))[i] = ((Byte*)(pSource))[i];

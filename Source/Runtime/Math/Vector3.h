@@ -21,6 +21,15 @@ namespace Portakal
 		{
 			return x.X * y.X + x.Y * y.Y + x.Z * y.Z;
 		}
+		static Vector3 Cross(const Vector3& x, const Vector3& y)
+		{
+			return
+			{
+				x.Y* y.Z - y.Y * x.Z,
+				x.Z* y.X - y.Z * x.X,
+				x.X* y.Y - y.X * x.Y
+			};
+		}
 
 	public:
 		Vector3(const T x, const T y, const T z) : X(x), Y(y), Z(z)
@@ -53,15 +62,6 @@ namespace Portakal
 			return { X / length,Y / length ,Z / length };
 		}
 
-		FORCEINLINE Vector3 Cross(const Vector3& other) const noexcept
-		{
-			return { Y * other.Z - Z * other.Y,Z * other.X - X * other.Z,X * other.Y - Y * other.X };
-		}
-
-		FORCEINLINE float Dot(const Vector3& other) const noexcept
-		{
-			return X * other.X + Y * other.Y + Z * other.Z;
-		}
 
 		T operator[](const UInt32 index) const
 		{

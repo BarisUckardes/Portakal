@@ -62,16 +62,7 @@ namespace Portakal
 				0,0,0,1
 			};
 		}
-		static Matrix4x4 Ortho(const T left, const T right, const T bottom, const T top, const T n, const T f)
-		{
-			return
-			{
-				(T)(2) / (right - left),0,0,0,
-				0,(T)(2) / (top - bottom),0,0,
-				0,0,(T)(2) / (f - n),0,
-				0,0,0,0
-			};
-		}
+		
 		static Matrix4x4 Ortho(const T left, const T right, const T bottom, const T top, const T n, const T f, const T aspectRatio)
 		{
 			return
@@ -82,16 +73,43 @@ namespace Portakal
 				(right + left) / (right - left),(top + bottom) / (top - bottom), (f + n) / (f - n),1
 			};
 		}
-		static Matrix4x4 Perspective(const T f, const T n, const T aspect, const T fov)
+		
+		static Matrix4x4 Perspective(T fovy, T aspect, T zNear, T zFar)
 		{
-			const T tanh2 = Math::Tan(fov / 2);
-			return
-			{
-				1/(aspect*tanh2),0,0,0,
-				0,1/tanh2,0,0,
-				0,0,-((f+n)/(f-n)),-(2*(f*n)/(f-n)),
-				0,0,-1,0
-			};
+			T const tanHalfFovy = tan(fovy / static_cast<T>(2));
+
+			Matrix4x4 result = Matrix4x4::Identity();
+			result[0] = static_cast<T>(1) / (aspect * tanHalfFovy);
+			result[5] = static_cast<T>(1) / (tanHalfFovy);
+			result[10] = -(zFar + zNear) / (zFar - zNear);
+			result[11] = -static_cast<T>(1);
+			result[14] = -(static_cast<T>(2) * zFar * zNear) / (zFar - zNear);
+			return result;
+		}
+		//0 1 2 3
+		//4 5 6 7
+		//8 9 10 11
+		//12 13 14 15
+		static Matrix4x4 LookAt(Vector3<T> const& eye, Vector3<T> const& center, Vector3<T> const& up)
+		{
+			Vector3<T> const f((center - eye).GetNormalized());
+			Vector3<T> const s(Vector3<T>::Cross(f, up).GetNormalized());
+			Vector3<T> const u(Vector3<T>::Cross(s, f));
+
+			Matrix4x4 result = Matrix4x4::Identity();
+			result[0] = s.X;
+			result[4] = s.Y;
+			result[8] = s.Z;
+			result[1] = u.X;
+			result[5] = u.Y;
+			result[9] = u.Z;
+			result[2] = -f.X;
+			result[6] = -f.Y;
+			result[10] = -f.Z;
+			result[12] = -Vector3<T>::Dot(s, eye);
+			result[13] = -Vector3<T>::Dot(u, eye);
+			result[14] = Vector3<T>::Dot(f, eye);
+			return result;
 		}
 		static const Matrix4x4 Identity()
 		{
@@ -113,7 +131,7 @@ namespace Portakal
 
 	public:
 		Matrix4x4() = default;
-		Matrix4x4(std::initializer_list<float> pList)
+		Matrix4x4(std::initializer_list<T> pList)
 		{
 			for (Byte i = 0; i < 16; ++i)
 				mData[i] = *(pList.begin() + i);
@@ -130,15 +148,15 @@ namespace Portakal
 			}
 		}
 
-		Matrix4x4(Matrix4x4& other)
+		Matrix4x4(const Matrix4x4& other)
 		{
-			Memory::Copy(mData, other.mData, sizeof(float) * 16);
+			Memory::Copy(mData, other.mData, sizeof(T) * 16);
 		}
 
-		Matrix4x4(float a11, float a21, float a31, float a41,
-				   float a12, float a22, float a32, float a42,
-				   float a13, float a23, float a33, float a43,
-				   float a14, float a24, float a34, float a44)
+		Matrix4x4(T a11, T a21, T a31, T a41,
+				   T a12, float a22, T a32, T a42,
+				   T a13, T a23, T a33, T a43,
+				   T a14, T a24, T a34, T a44)
 		{
 			mData[0] = a11; mData[1] = a21; mData[2] = a31; mData[3] = a41;
 			mData[4] = a12; mData[5] = a22; mData[6] = a32; mData[7] = a42;
@@ -146,10 +164,76 @@ namespace Portakal
 			mData[12] = a14; mData[13] = a24; mData[14] = a34; mData[15] = a44;
 		}
 
+		/// <summary>
+		/// Transposes this matrix
+		/// </summary>
+		FORCEINLINE void Transpose()
+		{
+			const T snapShot[16];
+			Memory::Copy(mData, snapShot, 16 * sizeof(T));
+
+			mData[0] = snapShot[0];
+			mData[1] = snapShot[4];
+			mData[2] = snapShot[8];
+			mData[3] = snapShot[12];
+
+			mData[4] = snapShot[1];
+			mData[5] = snapShot[5];
+			mData[6] = snapShot[9];
+			mData[7] = snapShot[13];
+
+			mData[8] = snapShot[2];
+			mData[9] = snapShot[6];
+			mData[10] = snapShot[10];
+			mData[11] = snapShot[14];
+
+			mData[12] = snapShot[3];
+			mData[13] = snapShot[7];
+			mData[14] = snapShot[11];
+			mData[15] = snapShot[15];
+		}
+
+		/// <summary>
+		/// Returns the transposed matrix
+		/// </summary>
+		/// <returns></returns>
+		FORCEINLINE Matrix4x4 GetTransposed() const
+		{
+			T snapShot[16];
+			Memory::Copy((void*)mData, (void*)snapShot, 16 * sizeof(T));
+
+			snapShot[0] = mData[0];
+			snapShot[1] = mData[4];
+			snapShot[2] = mData[8];
+			snapShot[3] = mData[12];
+
+			snapShot[4] = mData[1];
+			snapShot[5] = mData[5];
+			snapShot[6] = mData[9];
+			snapShot[7] = mData[13];
+
+			snapShot[8] = mData[2];
+			snapShot[9] = mData[6];
+			snapShot[10] = mData[10];
+			snapShot[11] = mData[14];
+
+			snapShot[12] = mData[3];
+			snapShot[13] = mData[7];
+			snapShot[14] = mData[11];
+			snapShot[15] = mData[15];
+
+			Matrix4x4<T> output = {};
+#pragma unroll
+			for (unsigned int i = 0; i < 16; i++)
+				output.mData[i] = snapShot[i];
+
+			return output;
+		}
+
 		Matrix4x4 operator=(Matrix4x4& other)
 		{
 			Matrix4x4 result = Matrix4x4::Identity();
-			Memory::Copy(result.mData, other.mData, sizeof(float) * 16);
+			Memory::Copy(result.mData, other.mData, sizeof(T) * 16);
 
 			return result;
 		}
@@ -181,7 +265,7 @@ namespace Portakal
 			return *this;
 		}
 
-		Matrix4x4& operator*=(float scalar)
+		Matrix4x4& operator*=(T scalar)
 		{
 			for (Byte i = 0; i < 4; i++)
 				for (Byte j = 0; j < 4; j++)
@@ -189,7 +273,7 @@ namespace Portakal
 			return *this;
 		}
 
-		Matrix4x4& operator/=(float scalar)
+		Matrix4x4& operator/=(T scalar)
 		{
 			for (Byte i = 0; i < 4; i++)
 				for (Byte j = 0; j < 4; j++)
@@ -197,40 +281,12 @@ namespace Portakal
 			return *this;
 		}
 
-		float& operator[](Byte index) { return mData[index]; }
-		const float& operator[](Byte index) const { return mData[index]; }
-		float& operator()(Byte row, Byte column) { return mData[row * 4 + column]; }
-
-		float* GetData() { return mData; }
-
-		Vector4<float> GetRow(Byte index) const
-		{
-			return Vector4<float>(mData[index * 4], mData[index * 4 + 1], mData[index * 4 + 2], mData[index * 4 + 3]);
-		}
-
-		Vector4<float> GetColumn(Byte index) const
-		{
-			return Vector4<float>(mData[index], mData[index + 4], mData[index + 8], mData[index + 12]);
-		}
-
-		void SetRow(Byte index, const Vector4<float>& row)
-		{
-			mData[index * 4] = row[0];
-			mData[index * 4 + 1] = row[1];
-			mData[index * 4 + 2] = row[2];
-			mData[index * 4 + 3] = row[3];
-		}
-
-		void SetColumn(Byte index, const Vector4<float>& column)
-		{
-			mData[index] = column[0];
-			mData[index + 4] = column[1];
-			mData[index + 8] = column[2];
-			mData[index + 12] = column[3];
-		}
+		T& operator[](Byte index) { return mData[index]; }
+		const T& operator[](Byte index) const { return mData[index]; }
+		T* GetData() { return mData; }
 
 	private:
-		float mData[16];
+		T mData[16];
 	};
 
 	template<typename T>
@@ -267,7 +323,7 @@ namespace Portakal
 		return result;
 	}
 	template<typename T>
-	Matrix4x4<T> operator*(Matrix4x4<T> const& left, float scalar)
+	Matrix4x4<T> operator*(Matrix4x4<T> const& left, T scalar)
 	{
 		Matrix4x4<T> result = Matrix4x4::Identity();
 		for (Byte i = 0; i < 16; ++i)
@@ -276,7 +332,7 @@ namespace Portakal
 		return result;
 	}
 	template<typename T>
-	Matrix4x4<T> operator*(float scalar, Matrix4x4<T> const& right)
+	Matrix4x4<T> operator*(T scalar, Matrix4x4<T> const& right)
 	{
 		Matrix4x4<T> result = Matrix4x4::Identity();
 		for (Byte i = 0; i < 16; ++i)
@@ -285,7 +341,7 @@ namespace Portakal
 		return result;
 	}
 	template<typename T>
-	Matrix4x4<T> operator/(Matrix4x4<T> const& left, float scalar)
+	Matrix4x4<T> operator/(Matrix4x4<T> const& left, T scalar)
 	{
 		Matrix4x4<T> result = Matrix4x4::Identity();
 		for (Byte i = 0; i < 16; ++i)
@@ -294,7 +350,7 @@ namespace Portakal
 		return result;
 	}
 	template<typename T>
-	Matrix4x4<T> operator/(float scalar, Matrix4x4<T> const& right)
+	Matrix4x4<T> operator/(T scalar, Matrix4x4<T> const& right)
 	{
 		Matrix4x4<T> result = Matrix4x4::Identity();
 		for (Byte i = 0; i < 16; ++i)

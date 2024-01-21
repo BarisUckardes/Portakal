@@ -44,6 +44,10 @@ PS_INPUT main(VS_INPUT input)
     return output;
 }
 )"""";;    static const Char gTestFragmentShader[] = R""""(
+			
+
+            layout(set=0,binding=1) Texture2D texture0;
+			layout(set=0,binding=2) sampler sampler0;
 			struct PS_INPUT
 			{
 				float4 pos : SV_POSITION;
@@ -56,7 +60,7 @@ PS_INPUT main(VS_INPUT input)
           
 			float4 main(PS_INPUT input) : SV_Target
 			{
-				float4 out_col = float4(input.normal,1.0f);
+				float4 out_col = texture0.Sample(sampler0,input.uv);
 				return out_col;
 			}
 )"""";;
@@ -150,6 +154,19 @@ PS_INPUT main(VS_INPUT input)
 		mMesh->UpdateIndexes({ indexes.GetData(),indexes.GetSize() * sizeof(UInt32) }, 0);
 
         //Create textures
+		mTexture = new TextureResource();
+		TextureDesc textureDesc = {};
+		textureDesc.Type = TextureType::Texture2D;
+		textureDesc.Format = TextureFormat::R8_G8_B8_A8_UNorm;
+		textureDesc.Usage = TextureUsage::Sampled | TextureUsage::TransferDestination;
+		textureDesc.ArrayLevels = 1;
+		textureDesc.MipLevels = 1;
+		textureDesc.Size = { colorTextureResult.Size.X,colorTextureResult.Size.Y,1 };
+		textureDesc.SampleCount = TextureSampleCount::SAMPLE_COUNT_1;
+		textureDesc.pHeap = mDeviceHeap;
+		
+		mTexture->AllocateTexture(textureDesc,mHostHeap,true,true);
+		mTexture->Update(colorTextureResult.pView, { 0,0,0 }, TextureMemoryLayout::Unknown, GraphicsMemoryAccessFlags::TransferWrite, PipelineStageFlags::Transfer, GraphicsQueueType::Graphics, 0, 0);
 
 		//Command list and fences
 		CommandPoolDesc cmdPoolDesc = {};
@@ -181,11 +198,15 @@ PS_INPUT main(VS_INPUT input)
 		ResourceTablePoolDesc tablePoolDesc = {};
 		tablePoolDesc.MaxTables = 1;
 		tablePoolDesc.Entries.Add({GraphicsResourceType::ConstantBuffer,1});
+		tablePoolDesc.Entries.Add({ GraphicsResourceType::SampledTexture,1 });
+		tablePoolDesc.Entries.Add({ GraphicsResourceType::Sampler,1 });
 		mResourceTablePool = GraphicsAPI::GetDefaultDevice()->CreateResourceTablePool(tablePoolDesc);
 
 		//Create resource views
 		ResourceTableLayoutDesc tableLayoutDesc = {};
 		tableLayoutDesc.Entries.Add({GraphicsResourceType::ConstantBuffer,ShaderStage::VertexStage,0});
+		tableLayoutDesc.Entries.Add({ GraphicsResourceType::SampledTexture,ShaderStage::FragmentStage,1 });
+		tableLayoutDesc.Entries.Add({ GraphicsResourceType::Sampler,ShaderStage::FragmentStage,2 });
 		mResourceLayout = GraphicsAPI::GetDefaultDevice()->CreateResourceTableLayout(tableLayoutDesc);
 
 		//Create tables
@@ -197,10 +218,13 @@ PS_INPUT main(VS_INPUT input)
 		//Update resource table
 		ResourceTableUpdateDesc tableUpdateDesc = {};
 		tableUpdateDesc.Entries.Add({mConstantBufferDevice.QueryAs<GraphicsDeviceObject>(),GraphicsResourceType::ConstantBuffer,1,0,0,0});
+		tableUpdateDesc.Entries.Add({ mTexture->GetView(0,0).QueryAs<GraphicsDeviceObject>(),GraphicsResourceType::SampledTexture,1,0,0,1 });
+
 		GraphicsAPI::GetDefaultDevice()->UpdateResourceTable(mResourceTable.GetHeap(), tableUpdateDesc);
 	}
 
 	bool bInitialized = false;
+	float a = 0;
     void BasicRenderAspect::OnExecute()
     {
 		Scene* pScene = GetOwnerScene();
@@ -239,13 +263,13 @@ PS_INPUT main(VS_INPUT input)
 
 			//Rasterizer
 			RasterizerStateDesc rasterizerState = {};
-			rasterizerState.IsFrontCounterClockwise = true;
+			rasterizerState.IsFrontCounterClockwise = false;
 			rasterizerState.FillMode = PolygonMode::Fill;
 			rasterizerState.DepthBiasSlope = 0;
 			rasterizerState.DepthBiasFactor = 0;
 			rasterizerState.DepthBiasEnabled = false;
 			rasterizerState.DepthBiasClamp = 0;
-			rasterizerState.CullFlags = FaceCullMode::None;
+			rasterizerState.CullFlags = FaceCullMode::Back;
 			pipelineDesc.RasterizerState = rasterizerState;
 
 			//Depth stencil
@@ -299,25 +323,25 @@ PS_INPUT main(VS_INPUT input)
 		}
 
 		//Update mvp buffer host information
-		const Vector3F modelPosition = { 0,0,5 };
-		const Vector3F modelRotation = { 0,0,0 };
+		const Vector3F modelPosition = { 0,0,0 };
+		const Vector3F modelRotation = { 180,0,0 };
 		const Vector3F modelScale = { 1,1,1 };
-		const Vector3F cameraPosition = { 0,0,0 };
-		const Vector3F cameraLookDirection = { 0,0,1 };
-
+		const Vector3F cameraPosition = { 0,2+(Math::Sin(a)*14),-10};
+		const Vector3F cameraLookDirection = { 0,0,1};
+		a += 0.001f;
 		const Matrix4x4F modelMatrix =
-			Matrix4x4F::Translation(modelPosition) *
 			Matrix4x4F::Scale(modelScale) *
-			Matrix4x4F::RotationX(modelRotation.X) *
-			Matrix4x4F::RotationY(modelRotation.Y) *
-			Matrix4x4F::RotationZ(modelRotation.Z);
-		const Matrix4x4F viewMatrix = Matrix4x4F::Identity();
-		const Matrix4x4F projectionMatrix = Matrix4x4F::Perspective(1000, 0.1f, 1.0f, 1.0f);
-		const Matrix4x4F mvp = modelMatrix * viewMatrix * projectionMatrix;
-		const Matrix4x4F test = Matrix4x4F::Identity();
+			Matrix4x4F::RotationX(modelRotation.X * Math::DegToRad) *
+			Matrix4x4F::RotationY(modelRotation.Y * Math::DegToRad) *
+			Matrix4x4F::RotationZ(modelRotation.Z * Math::DegToRad) *
+			Matrix4x4F::Translation(modelPosition);
+
+		const Matrix4x4F viewMatrix = Matrix4x4F::LookAt(cameraPosition, cameraPosition+ cameraLookDirection,{0,1,0});
+		const Matrix4x4F projectionMatrix = Matrix4x4F::Perspective(Math::DegToRad*120,1.0f,0.1f,1000.0f);
+		const Matrix4x4F mvp =projectionMatrix*viewMatrix*modelMatrix;
 		GraphicsBufferHostUpdateDesc constantHostBufferUpdateDesc = {};
 		constantHostBufferUpdateDesc.OffsetInBytes = 0;
-		constantHostBufferUpdateDesc.View = { (Byte*) & test,sizeof(test)};
+		constantHostBufferUpdateDesc.View = { (Byte*) &mvp,sizeof(mvp)};
 		GraphicsAPI::GetDefaultDevice()->UpdateHostBuffer(mConstantBufferHost.GetHeap(), constantHostBufferUpdateDesc);
 
 		mCmdList->BeginRecording();
