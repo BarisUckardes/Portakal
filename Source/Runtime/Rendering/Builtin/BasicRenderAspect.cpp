@@ -89,7 +89,7 @@ PS_INPUT main(VS_INPUT input)
 
         //Load test textures
 		TextureLoadResult colorTextureResult = {};
-		TextureLoader::LoadFromPath("C:\\Users\\Roveldo\\Documents\\Megascans Library\\Downloaded\\3d\\food_baked goods_wfzjegjs\\wfzjegjs_2K_Albedo.jpg", colorTextureResult);
+		TextureLoader::LoadFromPath(R"(D:\Projects\glTF-Sample-Models\2.0\DamagedHelmet\glTF\Default_albedo.jpg)", colorTextureResult);
 
         //Load&Create test shaders
 		MemoryOwnedView* pVertexSPIRVBytes = nullptr;

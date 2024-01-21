@@ -1,9 +1,11 @@
 #pragma once
 #include <Runtime/Core/Core.h>
+#include "SamplerAddressMode.reflected.h"
 
 namespace Portakal
 {
-    enum class RUNTIME_API SamplerAddressMode : Byte
+    PENUM();
+    enum class RUNTIME_API SamplerAddressMode : Int64
     {
         Repeat,
         MirroredRepeat,
@@ -11,4 +13,7 @@ namespace Portakal
         ClampToBorder,
         MirrorClampToEdge
     };
+
+    GENERATE_FLAGS(SamplerAddressMode, Byte);
 }
+

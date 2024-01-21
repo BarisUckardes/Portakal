@@ -3,11 +3,15 @@
 #include <Runtime/Graphics/Device/GraphicsDevice.h>
 #include <Runtime/Graphics/Command/CommandList.h>
 #include <Runtime/Graphics/Command/CommandPool.h>
+#include "SamplerResource.reflected.h"
 
 namespace Portakal
 {
+	PATTRIBUTE(ResourceAttribute, "sampler");
+	PCLASS();
 	class RUNTIME_API SamplerResource : public ResourceSubObject
 	{
+		GENERATE_OBJECT;
 	public:
 		SamplerResource(const SharedHeap<GraphicsDevice>& pDevice);
 		SamplerResource();
@@ -27,3 +31,4 @@ namespace Portakal
 		SharedHeap<Sampler> mSampler;
 	};
 }
+

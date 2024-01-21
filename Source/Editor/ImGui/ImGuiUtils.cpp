@@ -281,6 +281,30 @@ namespace Portakal
 		ImGui::InputTextMultiline(*name, &temp);
 		return temp.c_str();
 	}
+	Bool8 ImGuiUtils::Checkbox(const String& name, bool& value)
+	{
+		std::string temp(name.GetSource(), name.GetSize());
+		return ImGui::Checkbox(temp.c_str(), &value);
+		return value;
+	}
+	Int32 ImGuiUtils::IntField(const String& name, Int32 value)
+	{
+		std::string temp(name.GetSource(), name.GetSize());
+		ImGui::InputInt(temp.c_str(), &value);
+		return value;
+	}
+	Float32 ImGuiUtils::FloatField(const String& name, Float32 value)
+	{
+		std::string temp(name.GetSource(), name.GetSize());
+		ImGui::InputFloat(temp.c_str(), &value);
+		return value;
+	}
+	Float64 ImGuiUtils::DoubleField(const String& name, Float64 value)
+	{
+		std::string temp(name.GetSource(), name.GetSize());
+		ImGui::InputDouble(temp.c_str(), &value);
+		return value;
+	}
 }
 
 #pragma warning(pop)

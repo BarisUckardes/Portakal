@@ -1,12 +1,17 @@
 #pragma once
 #include <Runtime/Core/Core.h>
+#include "SamplerBorderColor.reflected.h"
 
 namespace Portakal
 {
-    enum class RUNTIME_API SamplerBorderColor : Byte
+    PENUM();
+    enum class RUNTIME_API SamplerBorderColor : Int64
     {
         TransparentBlack,
         OpaqueBlack,
         OpaqueWhite
     };
+
+    GENERATE_FLAGS(SamplerBorderColor, Byte);
 }
+
