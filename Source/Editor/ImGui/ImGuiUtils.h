@@ -39,7 +39,7 @@ namespace Portakal
 		}
 		static String TextField(const String& name, const String input);
 		static String MultiTextField(const String& name, const String input);
-		static Bool8 Checkbox(const String& name, bool& value);
+		static Bool8 Checkbox(const String& name, Bool8 value);
 		static Int32 IntField(const String& name, Int32 value);
 		static Float32 FloatField(const String& name, Float32 value);
 		static Float64 DoubleField(const String& name, Float64 value);

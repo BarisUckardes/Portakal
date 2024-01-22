@@ -281,7 +281,7 @@ namespace Portakal
 		ImGui::InputTextMultiline(*name, &temp);
 		return temp.c_str();
 	}
-	Bool8 ImGuiUtils::Checkbox(const String& name, bool& value)
+	Bool8 ImGuiUtils::Checkbox(const String& name, Bool8 value)
 	{
 		std::string temp(name.GetSource(), name.GetSize());
 		return ImGui::Checkbox(temp.c_str(), &value);
