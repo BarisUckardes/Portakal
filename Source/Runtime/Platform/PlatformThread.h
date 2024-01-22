@@ -20,6 +20,7 @@ namespace Portakal
 			return Dispatch(stackSize, pJob);
 		}
 		static void SleepCurrentThread(const UInt64 ms);
+		static UInt64 GetCurrentThreadID();
 	private:
 		static SharedHeap<PlatformThread> Dispatch(const UInt64 stackSize, const SharedHeap<ThreadJob>& pJob);
 	public:

@@ -21,7 +21,6 @@ namespace Portakal
 			SharedHeap<GraphicsBuffer> pStageBuffer;
 		};
 	public:
-		TextureResource(const SharedHeap<GraphicsDevice>& pDevice);
 		TextureResource();
 		~TextureResource() = default;
 
@@ -49,9 +48,9 @@ namespace Portakal
 		void Clear();
 		virtual void OnShutdown() override;
 	private:
+		SharedHeap<GraphicsDevice> mDevice;
 		Array<Array<MipData>> mData;
 		SharedHeap<Texture> mTexture;
-		SharedHeap<GraphicsDevice> mDevice;
 		SharedHeap<CommandList> mCmdList;
 		SharedHeap<CommandPool> mCmdPool;
 		SharedHeap<Fence> mFence;

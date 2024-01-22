@@ -74,7 +74,6 @@ namespace Portakal
 		SharedHeap<ResourceTableLayout> mStaticResourceLayout;
 		SharedHeap<ResourceTableLayout> mFontResourceLayout;
 
-		SharedHeap<ResourceTablePool> mResourcePool;
 		SharedHeap<ResourceTable> mStaticResourceTable;
 		SharedHeap<ResourceTable> mFontResourceTable;
 

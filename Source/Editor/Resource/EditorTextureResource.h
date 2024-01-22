@@ -20,7 +20,6 @@ namespace Portakal
 		}
 		virtual void OnShutdown() override;
 	private:
-	private:
 		SharedHeap<TextureResource> mTexture;
 	};
 }

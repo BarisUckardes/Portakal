@@ -2,10 +2,6 @@
 
 namespace Portakal
 {
-	SamplerResource::SamplerResource(const SharedHeap<GraphicsDevice>& pDevice)
-	{
-		mDevice = pDevice;
-	}
 	SamplerResource::SamplerResource()
 	{
 

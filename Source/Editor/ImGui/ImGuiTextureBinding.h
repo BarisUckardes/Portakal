@@ -22,7 +22,7 @@ namespace Portakal
 			return mTable.GetHeap();
 		}
 	private:
-		ImGuiTextureBinding(const SharedHeap<TextureResource>& pTexture, const SharedHeap<ResourceTableLayout>& pLayout, const SharedHeap<ResourceTablePool>& pPool);
+		ImGuiTextureBinding(const SharedHeap<TextureResource>& pTexture, const SharedHeap<ResourceTableLayout>& pLayout);
 
 		virtual void OnShutdown() override;
 	private:

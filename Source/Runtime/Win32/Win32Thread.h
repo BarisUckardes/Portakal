@@ -8,6 +8,7 @@ namespace Portakal
 	{
 	public:
 		static void SleepCurrentThread(const UInt64 ms);
+		static UInt64 GetCurrentThreadID();
 	private:
 		static void DispatchThread(void* pSelf);
 	public:

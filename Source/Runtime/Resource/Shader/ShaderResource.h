@@ -12,7 +12,6 @@ namespace Portakal
 	{
 		GENERATE_OBJECT;
 	public:
-		ShaderResource(const SharedHeap<GraphicsDevice>& pDevice);
 		ShaderResource();
 		~ShaderResource() = default;
 

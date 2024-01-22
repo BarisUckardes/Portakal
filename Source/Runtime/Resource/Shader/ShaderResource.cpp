@@ -4,10 +4,6 @@
 
 namespace Portakal
 {
-	ShaderResource::ShaderResource(const SharedHeap<GraphicsDevice>& pDevice)
-	{
-		mDevice = pDevice;
-	}
 	ShaderResource::ShaderResource()
 	{
 		mDevice = GraphicsAPI::GetDefaultDevice();

@@ -5,11 +5,6 @@
 
 namespace Portakal
 {
-    TextureResource::TextureResource(const SharedHeap<GraphicsDevice>& pDevice) : mWrapped(false)
-    {
-        mDevice = pDevice;
-        CreateInternalResources();
-    }
     TextureResource::TextureResource() : mWrapped(false)
     {
         mDevice = GraphicsAPI::GetDefaultDevice();

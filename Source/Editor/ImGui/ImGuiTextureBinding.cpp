@@ -5,10 +5,11 @@
 #include <Runtime/Graphics/Resource/ResourceTableLayout.h>
 #include <Runtime/Graphics/Resource/ResourceTablePool.h>
 #include <Runtime/Resource/Texture/TextureResource.h>
+#include <Runtime/Graphics/GraphicsAPI.h>
 
 namespace Portakal
 {
-	ImGuiTextureBinding::ImGuiTextureBinding(const SharedHeap<TextureResource>& pTexture, const SharedHeap<ResourceTableLayout>& pLayout, const SharedHeap<ResourceTablePool>& pPool) : mTexture(pTexture)
+	ImGuiTextureBinding::ImGuiTextureBinding(const SharedHeap<TextureResource>& pTexture, const SharedHeap<ResourceTableLayout>& pLayout) : mTexture(pTexture)
 	{
 		//Check given texture
 		if (pTexture.IsShutdown())
@@ -24,16 +25,10 @@ namespace Portakal
 			return;
 		}
 
-		//Check pool
-		if (pPool.IsShutdown())
-		{
-			DEV_LOG("ImGuiTextureBinding", "Given resource table pool is invalid!");
-			return;
-		}
-
+		
 		//Create resource table
 		ResourceTableDesc tableDesc = {};
-		tableDesc.pOwnerPool = pPool.GetHeap();
+		tableDesc.pOwnerPool = GraphicsAPI::GetDefaultTablePool().GetHeap();
 		tableDesc.pTargetLayout = pLayout.GetHeap();
 		mTable = pTexture->GetDevice()->CreateResourceTable(tableDesc);
 

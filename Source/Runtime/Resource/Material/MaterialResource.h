@@ -10,10 +10,12 @@ namespace Portakal
 	class RUNTIME_API MaterialResource : public ResourceSubObject
 	{
 	public:
+		MaterialResource();
+		~MaterialResource() = default;
 
+		void SetMemoryProfile(const SharedHeap<ResourceTablePool>& pPool);
 	private:
-		//Textures
-		//Samplers
-		//Buffers
+		SharedHeap<GraphicsDevice> mDevice;
+		SharedHeap<ResourceTablePool> mTablePool;
 	};
 }

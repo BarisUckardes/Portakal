@@ -12,7 +12,6 @@ namespace Portakal
 	{
 		GENERATE_OBJECT;
 	public:
-		RenderTargetResource(const SharedHeap<GraphicsDevice>& pDevice);
 		RenderTargetResource();
 		~RenderTargetResource() = default;
 

@@ -31,7 +31,7 @@ namespace Portakal
 		}
 
 		//Create texture
-		mTexture = new TextureResource(pDevice);
+		mTexture = new TextureResource();
 
 		//Set memory profile
 		mTexture->SetMemoryProfile(GraphicsAPI::GetDefaultDeviceHeap(), GraphicsAPI::GetDefaultHostHeap());

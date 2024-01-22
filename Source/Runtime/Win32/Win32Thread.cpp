@@ -7,6 +7,10 @@ namespace Portakal
 	{
 		Sleep(ms);
 	}
+	UInt64 Win32Thread::GetCurrentThreadID()
+	{
+		return GetCurrentThreadId();
+	}
 	void Win32Thread::DispatchThread(void* pSelf)
 	{
 		ThreadJob* pJob = (ThreadJob*)pSelf;

@@ -11,6 +11,10 @@ namespace Portakal
 	{
 		PlatformAbstraction::SleepCurrentThread(ms);
 	}
+	UInt64 PlatformThread::GetCurrentThreadID()
+	{
+		return PlatformAbstraction::GetCurrentThreadID();
+	}
 	SharedHeap<PlatformThread> PlatformThread::Dispatch(const UInt64 stackSize, const SharedHeap<ThreadJob>& pJob)
 	{
 		return new PlatformAbstraction(stackSize,pJob);

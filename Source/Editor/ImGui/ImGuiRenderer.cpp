@@ -94,7 +94,6 @@ namespace Portakal
         mStaticResourceTable.Shutdown();
         mFontResourceLayout.Shutdown();
         mStaticResourceLayout.Shutdown();
-        mResourcePool.Shutdown();
         mDefaultFontTexture.Shutdown();
         mSampler.Shutdown();
         mVertexShader.Shutdown();
@@ -295,7 +294,7 @@ namespace Portakal
             }
 
             //Create new entry
-            SharedHeap<ImGuiTextureBinding> pBinding = new ImGuiTextureBinding(pTexture,mFontResourceLayout,mResourcePool);
+            SharedHeap<ImGuiTextureBinding> pBinding = new ImGuiTextureBinding(pTexture,mFontResourceLayout);
             mTextureBindings.Insert(pTexture, pBinding);
             return pBinding;
         }
@@ -458,7 +457,7 @@ namespace Portakal
         defaultFontTextureDesc.SampleCount = TextureSampleCount::SAMPLE_COUNT_1;
         defaultFontTextureDesc.pHeap = nullptr;
 
-        mDefaultFontTexture = new TextureResource(mDevice);
+        mDefaultFontTexture = new TextureResource();
         mDefaultFontTexture->SetMemoryProfile(GraphicsAPI::GetDefaultDeviceHeap(), GraphicsAPI::GetDefaultHostHeap());
         mDefaultFontTexture->AllocateTexture(defaultFontTextureDesc, true, true);
         mDefaultFontTexture->Update(MemoryView(pFontData, width* height * 4), { 0,0,0 },TextureMemoryLayout::Unknown,GraphicsMemoryAccessFlags::Unknown,PipelineStageFlags::TopOfPipe,GraphicsQueueType::Graphics,0,0);
@@ -485,26 +484,15 @@ namespace Portakal
         mDevice->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, mFence.GetHeap());
         mDevice->WaitFences(mFence.GetHeapAddress(), 1);
 
-        //Create resource table pool for static and dynamic resource tables
-        ResourceTablePoolDesc tablePoolDesc = {};
-        tablePoolDesc.Entries =
-        {
-            {GraphicsResourceType::ConstantBuffer,1},
-            {GraphicsResourceType::Sampler,1},
-            {GraphicsResourceType::SampledTexture,1},
-        };
-        tablePoolDesc.MaxTables = IMGUI_MAX_RESOURCE_TABLES;
-        mResourcePool = mDevice->CreateResourceTablePool(tablePoolDesc);
-
         // Create static resource set
         ResourceTableDesc staticResourceTableDesc = {};
-        staticResourceTableDesc.pOwnerPool = mResourcePool.GetHeap();
+        staticResourceTableDesc.pOwnerPool = GraphicsAPI::GetDefaultTablePool().GetHeap();
         staticResourceTableDesc.pTargetLayout = mStaticResourceLayout.GetHeap();
         mStaticResourceTable = mDevice->CreateResourceTable(staticResourceTableDesc);
 
         //Create font resource table
         ResourceTableDesc fontResourceTableDesc = {};
-        fontResourceTableDesc.pOwnerPool = mResourcePool.GetHeap();
+        fontResourceTableDesc.pOwnerPool = GraphicsAPI::GetDefaultTablePool().GetHeap();
         fontResourceTableDesc.pTargetLayout = mFontResourceLayout.GetHeap();
         mFontResourceTable = mDevice->CreateResourceTable(fontResourceTableDesc);
 
@@ -527,7 +515,7 @@ namespace Portakal
         mDevice->UpdateResourceTable(mFontResourceTable.GetHeap(), fontTableUpdateDesc);
 
         //Create mesh
-        mMesh = new MeshResource(mDevice);
+        mMesh = new MeshResource();
 
         //Allocate vertex and index buffer
         mMesh->SetMemoryProfile(GraphicsAPI::GetDefaultDeviceHeap(), GraphicsAPI::GetDefaultHostHeap(), true);

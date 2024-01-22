@@ -3,10 +3,6 @@
 
 namespace Portakal
 {
-	RenderTargetResource::RenderTargetResource(const SharedHeap<GraphicsDevice>& pDevice)
-	{
-		mDevice = pDevice;
-	}
 	RenderTargetResource::RenderTargetResource()
 	{
 		mDevice = GraphicsAPI::GetDefaultDevice();

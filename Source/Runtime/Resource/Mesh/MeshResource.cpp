@@ -3,11 +3,6 @@
 
 namespace Portakal
 {
-	MeshResource::MeshResource(const SharedHeap<GraphicsDevice>& pDevice) : mAllocateStagebuffersUpfront(false)
-	{
-		mDevice = pDevice;
-		CreateInternalResources();
-	}
 	MeshResource::MeshResource() : mAllocateStagebuffersUpfront(true)
 	{
 		mDevice = GraphicsAPI::GetDefaultDevice();

@@ -21,7 +21,6 @@ namespace Portakal
 			SharedHeap<GraphicsBuffer> pIndexStageBuffer;
 		};
 	public:
-		MeshResource(const SharedHeap<GraphicsDevice>& pDevice);
 		MeshResource();
 		~MeshResource() = default;
 

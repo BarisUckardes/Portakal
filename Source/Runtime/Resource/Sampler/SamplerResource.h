@@ -13,7 +13,6 @@ namespace Portakal
 	{
 		GENERATE_OBJECT;
 	public:
-		SamplerResource(const SharedHeap<GraphicsDevice>& pDevice);
 		SamplerResource();
 		~SamplerResource() = default;
 
