@@ -4,7 +4,6 @@
 #include <Runtime/Graphics/Device/GraphicsDevice.h>
 #include <Runtime/Graphics/Fence/Fence.h>
 #include <Runtime/Graphics/Buffer/GraphicsBuffer.h>
-#include <Runtime/Resource/Mesh/SubMeshResource.h>
 #include "MeshResource.reflected.h"
 
 namespace Portakal
@@ -13,6 +12,14 @@ namespace Portakal
 	class RUNTIME_API MeshResource : public ResourceSubObject
 	{
 		GENERATE_OBJECT;
+	private:
+		struct RUNTIME_API SubMeshResource
+		{
+			SharedHeap<GraphicsBuffer> pVertexBuffer;
+			SharedHeap<GraphicsBuffer> pIndexBuffer;
+			SharedHeap<GraphicsBuffer> pVertexStageBuffer;
+			SharedHeap<GraphicsBuffer> pIndexStageBuffer;
+		};
 	public:
 		MeshResource(const SharedHeap<GraphicsDevice>& pDevice);
 		MeshResource();
