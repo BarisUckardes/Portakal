@@ -1,6 +1,7 @@
 #pragma once
 #include <Runtime/Containers/String.h>
 #include <Runtime/Resource/Mesh/MeshLoadResult.h>
+#include <Runtime/Memory/MemoryView.h>
 
 namespace Portakal
 {
@@ -10,6 +11,7 @@ namespace Portakal
 		MeshLoader() = delete;
 		~MeshLoader() = delete;
 
-		static void LoadMesh(const String& path,MeshLoadResult& resultOut);
+		static bool LoadMesh(const String& path,MeshLoadResult& resultOut);
+		static bool LoadMeshFromMemory(const MemoryView& memory, MeshLoadResult& resultOut);
 	};
 }
