@@ -15,7 +15,7 @@ namespace Portakal
 		//Create memory heap
 		GraphicsMemoryHeapDesc heapDesc = {};
 		heapDesc.Type = GraphicsMemoryType::Device;
-		heapDesc.SizeInBytes = 4096 + (4 * 512 * 512);
+		heapDesc.SizeInBytes = 4096 + (4 * 2048 * 2048);
 		mTestHeap = GraphicsAPI::GetDefaultDevice()->CreateMemoryHeap(heapDesc);
 
 		//First create color texture
@@ -26,7 +26,7 @@ namespace Portakal
 		textureDesc.ArrayLevels = 1;
 		textureDesc.MipLevels = 1;
 		textureDesc.SampleCount = TextureSampleCount::SAMPLE_COUNT_1;
-		textureDesc.Size = { 512,512,1 };
+		textureDesc.Size = { 2048,2048,1 };
 		textureDesc.pHeap = mTestHeap;
 		mTestTexture = new TextureResource();
 		mTestTexture->AllocateTexture(textureDesc);
@@ -36,7 +36,7 @@ namespace Portakal
 		mRenderTarget = new RenderTargetResource();
 		RenderPassDesc renderPassDesc = {};
 		renderPassDesc.bSwapchain = false;
-		renderPassDesc.Size = { 512,512 };
+		renderPassDesc.Size = { 2048,2048 };
 
 		RenderPassAttachmentDesc attachmentDesc = {};
 		attachmentDesc.ArrayLevel = 0;
