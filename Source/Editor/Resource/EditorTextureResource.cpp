@@ -30,25 +30,11 @@ namespace Portakal
 			return;
 		}
 
-		//Calculate texture size
-		const UInt64 textureSizeInBytes = result.Size.X * result.Size.Y * 4;
-
-		//Create heaps
-		GraphicsMemoryHeapDesc deviceHeapDesc = {};
-		deviceHeapDesc.Type = GraphicsMemoryType::Device;
-		deviceHeapDesc.SizeInBytes = textureSizeInBytes * 2;
-		mDeviceHeap = pDevice->CreateMemoryHeap(deviceHeapDesc);
-
-		GraphicsMemoryHeapDesc hostHeapDesc = {};
-		hostHeapDesc.Type = GraphicsMemoryType::Host;
-		hostHeapDesc.SizeInBytes = textureSizeInBytes * 2;
-		mHostHeap = pDevice->CreateMemoryHeap(hostHeapDesc);
-
 		//Create texture
 		mTexture = new TextureResource(pDevice);
 
 		//Set memory profile
-		mTexture->SetMemoryProfile(mDeviceHeap, mHostHeap);
+		mTexture->SetMemoryProfile(GraphicsAPI::GetDefaultDeviceHeap(), GraphicsAPI::GetDefaultHostHeap());
 
 		//Allocate texture
 		TextureDesc desc = {};
@@ -59,7 +45,7 @@ namespace Portakal
 		desc.Size = { result.Size.X,result.Size.Y, 1};
 		desc.SampleCount = TextureSampleCount::SAMPLE_COUNT_1;
 		desc.Usage = TextureUsage::Sampled | TextureUsage::TransferDestination;
-		desc.pHeap = mDeviceHeap;
+		desc.pHeap = nullptr;
 
 		mTexture->AllocateTexture(desc, true, true);
 
@@ -80,7 +66,5 @@ namespace Portakal
 	void EditorTextureResource::OnShutdown()
 	{
 		mTexture.Shutdown();
-		mDeviceHeap.Shutdown();
-		mHostHeap.Shutdown();
 	}
 }

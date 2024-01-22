@@ -11,9 +11,11 @@ namespace Portakal
 
 		//Get memory view
 		MemoryView memory = {};
+		bool bUsedCachedData = false;
 		if (mCached)
 		{
 			memory = mCachedData;
+			bUsedCachedData = true;
 		}
 		else
 		{
@@ -31,6 +33,10 @@ namespace Portakal
 		mSubObject->OverrideID(GetID());
 		mLoaded = true;
 		DEV_LOG("Resource", "Loaded resource %s", *GetName());
+
+		//Delete the intermediate data if it's not cached data
+		if(!bUsedCachedData)
+			delete memory.GetMemory();
 	}
 	
 	void Resource::UnloadSync()

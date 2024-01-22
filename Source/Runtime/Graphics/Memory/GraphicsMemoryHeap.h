@@ -22,6 +22,10 @@ namespace Portakal
 		{
 			return mSize;
 		}
+		FORCEINLINE UInt64 GetOccupiedSize() const noexcept
+		{
+			return mOccupiedSize;
+		}
 		FORCEINLINE GraphicsMemoryType GetMemoryType() const noexcept
 		{
 			return mType;
@@ -30,6 +34,7 @@ namespace Portakal
 		{
 			return GraphicsDeviceObjectType::MemoryHeap;
 		}
+
 		MemoryHandle Allocate(const UInt64 sizeInBytes);
 		void Free(const MemoryHandle handle);
 	protected:

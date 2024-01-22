@@ -10,7 +10,6 @@ namespace Portakal
 		EditorTextureResource(const String& path);
 		~EditorTextureResource() = default;
 
-
 		FORCEINLINE SharedHeap<TextureResource> GetTexture() const noexcept
 		{
 			return mTexture;
@@ -23,7 +22,5 @@ namespace Portakal
 	private:
 	private:
 		SharedHeap<TextureResource> mTexture;
-		SharedHeap<GraphicsMemoryHeap> mHostHeap;
-		SharedHeap<GraphicsMemoryHeap> mDeviceHeap;
 	};
 }
