@@ -59,8 +59,6 @@ namespace Portakal
 
 		SharedHeap<CommandList> mCmdList;
 		SharedHeap<CommandPool> mCmdPool;
-		SharedHeap<GraphicsMemoryHeap> mDeviceMemory;
-		SharedHeap<GraphicsMemoryHeap> mHostMemory;
 
 		SharedHeap<GraphicsBuffer> mStagingBuffer;
 		SharedHeap<GraphicsBuffer> mConstantBuffer;

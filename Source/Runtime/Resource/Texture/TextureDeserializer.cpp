@@ -20,22 +20,11 @@ namespace Portakal
 		}
 		const UInt64 totalSize = loadResult.Size.X * loadResult.Size.Y * 4;
 
-		//Create dedicated memory heaps
-		GraphicsMemoryHeapDesc deviceHeapDesc = {};
-		deviceHeapDesc.SizeInBytes = totalSize*2;
-		deviceHeapDesc.Type = GraphicsMemoryType::Device;
-		SharedHeap<GraphicsMemoryHeap> deviceHeap = pDefaultDevice->CreateMemoryHeap(deviceHeapDesc);
-
-		GraphicsMemoryHeapDesc hostHeapDesc = {};
-		hostHeapDesc.SizeInBytes = totalSize*2;
-		hostHeapDesc.Type = GraphicsMemoryType::Host;
-		SharedHeap<GraphicsMemoryHeap> hostHeap = pDefaultDevice->CreateMemoryHeap(hostHeapDesc);
-
 		//Create texture
 		TextureResource* pTexture = new TextureResource();
 
 		//Set memory profile
-		pTexture->SetMemoryProfile(deviceHeap, hostHeap);
+		pTexture->SetMemoryProfile(GraphicsAPI::GetDefaultDeviceHeap(), GraphicsAPI::GetDefaultHostHeap());
 
 		//Allocate texture
 		TextureDesc textureDesc = {};
@@ -46,7 +35,7 @@ namespace Portakal
 		textureDesc.ArrayLevels = 1;
 		textureDesc.MipLevels = 1;
 		textureDesc.SampleCount = TextureSampleCount::SAMPLE_COUNT_1;
-		textureDesc.pHeap = deviceHeap;
+		textureDesc.pHeap = nullptr;
 		pTexture->AllocateTexture(textureDesc, true, true);
 
 		//Update texture data

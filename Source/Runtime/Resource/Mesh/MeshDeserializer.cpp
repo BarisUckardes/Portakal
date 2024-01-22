@@ -1,6 +1,7 @@
 #include "MeshDeserializer.h"
 #include <Runtime/Resource/Mesh/MeshLoader.h>
 #include <Runtime/Rendering/Builtin/BasicMeshVertex.h>
+#include <Runtime/Graphics/GraphicsAPI.h>
 
 namespace Portakal
 {
@@ -15,7 +16,7 @@ namespace Portakal
 		MeshResource* pMesh = new MeshResource();
 
 		//Set memory profile
-		pMesh->SetMemoryProfile(nullptr, nullptr, true);
+		pMesh->SetMemoryProfile(GraphicsAPI::GetDefaultDeviceHeap(), GraphicsAPI::GetDefaultHostHeap(), true);
 
 		//Allocate submeshes
 		UInt32 subMeshIndex = 0;

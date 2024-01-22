@@ -104,8 +104,6 @@ namespace Portakal
         mConstantBuffer.Shutdown();
         mCmdList.Shutdown();
         mCmdPool.Shutdown();
-        mHostMemory.Shutdown();
-        mDeviceMemory.Shutdown();
     }
 
     void ImGuiRenderer::StartRendering(const float deltaTimeInMilliseconds)
@@ -350,22 +348,10 @@ namespace Portakal
         io.SetClipboardTextFn = SetClipboardTextCallback;
         io.GetClipboardTextFn = GetClipboardTextCallback;
 
-        //Create device and host memory
-        GraphicsMemoryHeapDesc deviceMemoryDesc = {};
-        deviceMemoryDesc.SizeInBytes = MB_TO_BYTE(128);
-        deviceMemoryDesc.Type = GraphicsMemoryType::Device;
-
-        GraphicsMemoryHeapDesc hostMemoryDesc = {};
-        hostMemoryDesc.SizeInBytes = MB_TO_BYTE(128);
-        hostMemoryDesc.Type = GraphicsMemoryType::Host;
-
-        mDeviceMemory = mDevice->CreateMemoryHeap(deviceMemoryDesc);
-        mHostMemory = mDevice->CreateMemoryHeap(hostMemoryDesc);
-
         //Create staging buffer
         GraphicsBufferDesc stagingBufferDesc = {};
         stagingBufferDesc.Usage = GraphicsBufferUsage::TransferSource;
-        stagingBufferDesc.pHeap = mHostMemory;
+        stagingBufferDesc.pHeap = GraphicsAPI::GetDefaultHostHeap();
         stagingBufferDesc.SubItemCount = 1;
         stagingBufferDesc.SubItemSizeInBytes = MB_TO_BYTE(32);
         mStagingBuffer = mDevice->CreateBuffer(stagingBufferDesc);
@@ -373,7 +359,7 @@ namespace Portakal
         //Create constant buffer
         GraphicsBufferDesc constantBufferDesc = {};
         constantBufferDesc.Usage = GraphicsBufferUsage::ConstantBuffer | GraphicsBufferUsage::TransferDestination;
-        constantBufferDesc.pHeap = mDeviceMemory;
+        constantBufferDesc.pHeap = GraphicsAPI::GetDefaultDeviceHeap();
         constantBufferDesc.SubItemCount = 1;
         constantBufferDesc.SubItemSizeInBytes = 64;
         mConstantBuffer = mDevice->CreateBuffer(constantBufferDesc);
@@ -470,10 +456,10 @@ namespace Portakal
         defaultFontTextureDesc.MipLevels = 1;
         defaultFontTextureDesc.ArrayLevels = 1;
         defaultFontTextureDesc.SampleCount = TextureSampleCount::SAMPLE_COUNT_1;
-        defaultFontTextureDesc.pHeap = mDeviceMemory;
+        defaultFontTextureDesc.pHeap = nullptr;
 
         mDefaultFontTexture = new TextureResource(mDevice);
-        mDefaultFontTexture->SetMemoryProfile(mDeviceMemory, mHostMemory);
+        mDefaultFontTexture->SetMemoryProfile(GraphicsAPI::GetDefaultDeviceHeap(), GraphicsAPI::GetDefaultHostHeap());
         mDefaultFontTexture->AllocateTexture(defaultFontTextureDesc, true, true);
         mDefaultFontTexture->Update(MemoryView(pFontData, width* height * 4), { 0,0,0 },TextureMemoryLayout::Unknown,GraphicsMemoryAccessFlags::Unknown,PipelineStageFlags::TopOfPipe,GraphicsQueueType::Graphics,0,0);
         mDefaultFontTexture->CreateView(0, 0);
@@ -544,7 +530,7 @@ namespace Portakal
         mMesh = new MeshResource(mDevice);
 
         //Allocate vertex and index buffer
-        mMesh->SetMemoryProfile(mDeviceMemory, mHostMemory,true);
+        mMesh->SetMemoryProfile(GraphicsAPI::GetDefaultDeviceHeap(), GraphicsAPI::GetDefaultHostHeap(), true);
         mMesh->AllocateSubMesh(6400, sizeof(ImDrawVert), 6400, sizeof(UInt16));
     }
     void ImGuiRenderer::SetupDefaultTheme()

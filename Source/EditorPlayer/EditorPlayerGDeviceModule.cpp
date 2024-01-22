@@ -2,6 +2,7 @@
 #include <Runtime/Platform/PlatformWindow.h>
 #include <Runtime/Window/WindowAPI.h>
 #include <Runtime/TestClass.h>
+#include <Runtime/Graphics/GraphicsAPI.h>
 
 namespace Portakal
 {
@@ -45,6 +46,9 @@ namespace Portakal
 		swapchainDesc.pWindow = pWindow;
 		swapchainDesc.PresentMode = PresentMode::VsyncImmediate;
 		mSwapchain = mDevice->CreateSwapchain(swapchainDesc);
+
+		//Set memory profile
+		GraphicsAPI::SetMemoryProfile(MB_TO_BYTE(2048), MB_TO_BYTE(2048));
 	}
 	void EditorPlayerGDeviceModule::OnFinalize()
 	{

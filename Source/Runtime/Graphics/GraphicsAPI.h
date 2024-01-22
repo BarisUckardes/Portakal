@@ -10,7 +10,11 @@ namespace Portakal
 		friend class GraphicsDevice;
 		friend class GraphicsAdapter;
 	public:
+		static void SetMemoryProfile(const UInt64 deviceMemorySize, const UInt64 hostMemorySize);
 		static SharedHeap<GraphicsDevice> GetDefaultDevice();
+		static SharedHeap<GraphicsMemoryHeap> GetDefaultDeviceHeap();
+		static SharedHeap<GraphicsMemoryHeap> GetDefaultHostHeap();
+
 	private:
 		static void _SetDevice(const SharedHeap<GraphicsDevice>& pDevice);
 		static void _RemoveDevice();
@@ -19,5 +23,7 @@ namespace Portakal
 		~GraphicsAPI() = default;
 	private:
 		SharedHeap<GraphicsDevice> mDevice;
+		SharedHeap<GraphicsMemoryHeap> mHeapDevice;
+		SharedHeap<GraphicsMemoryHeap> mHeapHost;
 	};
 }
