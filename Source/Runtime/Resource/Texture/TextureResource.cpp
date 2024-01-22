@@ -32,7 +32,17 @@ namespace Portakal
             mData.Add(mips);
         }
     }
-    void TextureResource::AllocateTexture(const TextureDesc& desc, const SharedHeap<GraphicsMemoryHeap>& pHostHeap, const Bool8 bAllocateStagebuffersUpfront,const Bool8 bCreateViewsUpfront)
+    void TextureResource::SetMemoryProfile(const SharedHeap<GraphicsMemoryHeap>& pHeapDevice, const SharedHeap<GraphicsMemoryHeap>& pHeapHost)
+    {
+        //First clear
+        Clear();
+
+        //Set memory profiles
+        mHeapDevice = pHeapDevice;
+        mHeapHost = pHeapHost;
+
+    }
+    void TextureResource::AllocateTexture(const TextureDesc& desc, const Bool8 bAllocateStagebuffersUpfront,const Bool8 bCreateViewsUpfront)
     {
         //Validate if shutdown
         if (IsShutdown())
@@ -45,11 +55,18 @@ namespace Portakal
         if (mDevice.IsShutdown())
             return;
 
+        if (mHeapDevice.IsShutdown())
+            return;
+        if (mHeapHost.IsShutdown())
+            return;
+
         //Clear former texture setup
         Clear();
 
         //Create texture
-        mTexture = mDevice->CreateTexture(desc);
+        TextureDesc descTemp = desc;
+        descTemp.pHeap = mHeapDevice;
+        mTexture = mDevice->CreateTexture(descTemp);
 
         //Create mip data
         for (UInt32 arrayIndex = 0; arrayIndex < desc.ArrayLevels; arrayIndex++)
@@ -73,7 +90,7 @@ namespace Portakal
                 if (bAllocateStagebuffersUpfront)
                 {
                     GraphicsBufferDesc bufferDesc = {};
-                    bufferDesc.pHeap = pHostHeap;
+                    bufferDesc.pHeap = mHeapHost;
                     bufferDesc.SubItemCount = 1;
                     bufferDesc.SubItemSizeInBytes = TextureUtils::GetFormatSize(desc.Format)*desc.Size.X*desc.Size.Y*desc.Size.Z;
                     bufferDesc.Usage = GraphicsBufferUsage::TransferSource;
@@ -87,8 +104,7 @@ namespace Portakal
         }
 
         //Set properties
-        mDesc = desc;
-        mHostHeap = pHostHeap;
+        mDesc = descTemp;
         mWrapped = false;
     }
     SharedHeap<TextureView> TextureResource::CreateView(const Byte mipLevel, const Byte arrayLevel)
@@ -187,7 +203,7 @@ namespace Portakal
             desc.SubItemCount = 1;
             desc.SubItemSizeInBytes = 1;
             desc.Usage = GraphicsBufferUsage::TransferSource;
-            desc.pHeap = mHostHeap;
+            desc.pHeap = mHeapHost;
 
             mipData.pStageBuffer = mDevice->CreateBuffer(desc);
         }

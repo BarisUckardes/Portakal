@@ -194,7 +194,7 @@ namespace Portakal
     void GraphicsDevice::OnShutdown()
     {
         //Unregister
-        GraphicsAPI::_RemoveDevice(this);
+        GraphicsAPI::_RemoveDevice();
 
         //Delete all device objects
     }

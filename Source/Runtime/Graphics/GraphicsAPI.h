@@ -11,15 +11,13 @@ namespace Portakal
 		friend class GraphicsAdapter;
 	public:
 		static SharedHeap<GraphicsDevice> GetDefaultDevice();
-		static Array<SharedHeap<GraphicsDevice>> GetDevices();
 	private:
-		static void _RegisterDevice(const SharedHeap<GraphicsDevice>& pDevice);
-		static void _RemoveDevice(GraphicsDevice* pDevice);
+		static void _SetDevice(const SharedHeap<GraphicsDevice>& pDevice);
+		static void _RemoveDevice();
 	public:
 		GraphicsAPI() = default;
 		~GraphicsAPI() = default;
 	private:
-		HashMap<GraphicsDevice*, SharedHeap<GraphicsDevice>> mMap;
-		Array<SharedHeap<GraphicsDevice>> mDevices;
+		SharedHeap<GraphicsDevice> mDevice;
 	};
 }

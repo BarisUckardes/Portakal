@@ -35,7 +35,6 @@ namespace Portakal
 			return mFarPlane;
 		}
 
-		void TestCreateDisplay();
 		void SetFieldOfView(const Float32 value);
 		void SetNearPlane(const Float32 value);
 		void SetFarPlane(const Float32 value);
@@ -46,8 +45,6 @@ namespace Portakal
 		virtual void OnShutdown() override;
 	private:
 		SharedHeap<RenderTargetResource> mRenderTarget;
-		SharedHeap<TextureResource> mTestTexture;
-		SharedHeap<GraphicsMemoryHeap> mTestHeap;
 		PFIELD();
 		Float32 mFieldOfView;
 		PFIELD();

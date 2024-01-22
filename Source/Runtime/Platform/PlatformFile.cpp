@@ -50,6 +50,10 @@ namespace Portakal
     {
         return PlatformAbstraction::Copy(sourcePath, destinationPath);
     }
+    Bool8 PlatformFile::Rename(const String& oldPath, const String& newPath)
+    {
+        return PlatformAbstraction::Rename(oldPath, newPath);
+    }
 
     String PlatformFile::GetExtension(const String& path)
     {

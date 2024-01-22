@@ -9,7 +9,7 @@ namespace Portakal
         SharedHeap<GraphicsDevice> pDevice = CreateDeviceCore();
 
         //Try register to api
-        GraphicsAPI::_RegisterDevice(pDevice);
+        GraphicsAPI::_SetDevice(pDevice);
 
         //Register
         mDevices.Add(pDevice);

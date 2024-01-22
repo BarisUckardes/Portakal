@@ -46,6 +46,11 @@ namespace Portakal
 
 		//Create texture
 		mTexture = new TextureResource(pDevice);
+
+		//Set memory profile
+		mTexture->SetMemoryProfile(mDeviceHeap, mHostHeap);
+
+		//Allocate texture
 		TextureDesc desc = {};
 		desc.Type = TextureType::Texture2D;
 		desc.Format = TextureFormat::R8_G8_B8_A8_UNorm;
@@ -56,7 +61,7 @@ namespace Portakal
 		desc.Usage = TextureUsage::Sampled | TextureUsage::TransferDestination;
 		desc.pHeap = mDeviceHeap;
 
-		mTexture->AllocateTexture(desc, mHostHeap, true, true);
+		mTexture->AllocateTexture(desc, true, true);
 
 		//Update texture data
 		mTexture->Update(

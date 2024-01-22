@@ -220,6 +220,10 @@ namespace Portakal
         const Char* pData = PathFindFileNameA(*path);
         return pData;
     }
+    Bool8 Win32File::Rename(const String& oldPath, const String& newPath)
+    {
+       return MoveFile(*oldPath, *newPath);
+    }
    
 //#ifdef UNICODE //Test to see if we're using wchar_ts or not.
 //    typedef std::wstring StringType;

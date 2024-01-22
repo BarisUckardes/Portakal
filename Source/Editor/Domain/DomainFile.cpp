@@ -6,6 +6,7 @@
 #include <Editor/Resource/CustomResourceSerializer.h>
 #include <Runtime/Platform/PlatformFile.h>
 #include <Editor/Domain/DomainFolder.h>
+#include <Editor/Domain/DomainFileDescriptor.h>
 
 namespace Portakal
 {
@@ -46,6 +47,49 @@ namespace Portakal
 
 		//Set resource meta
 		mResource->SetMetaData(meta);
+	}
+
+	void DomainFile::Rename(const String& name)
+	{
+		//Rename source
+		if (PlatformFile::Exists(mSourcePath))
+		{
+			const String path = (mSourcePath.GetSubset(0, mSourcePath.GetSize() - PlatformFile::GetName(mSourcePath).GetSize())) + name + PlatformFile::GetExtension(mSourcePath);
+			PlatformFile::Rename(mSourcePath,path);
+			mSourcePath = path;
+		}
+
+		//Rename descriptor
+		if (PlatformFile::Exists(mDescriptorPath))
+		{
+			//Read descriptor
+			String descriptorContent;
+			PlatformFile::Read(mDescriptorPath, descriptorContent);
+
+			//Convert yaml to descriptor
+			DomainFileDescriptor descriptorOld = {};
+			Yaml::ToObject<DomainFileDescriptor>(descriptorContent, &descriptorOld);
+
+			//Create new descriptor
+			DomainFileDescriptor descriptorNew = {};
+			descriptorNew.ID = descriptorOld.ID;
+			descriptorNew.Type = descriptorOld.Type;
+			descriptorNew.Target = name + PlatformFile::GetExtension(descriptorOld.Target);
+
+			//Write new descriptor
+			const String newDescriptorYAML = Yaml::ToYaml<DomainFileDescriptor>(&descriptorNew);
+			PlatformFile::Write(mDescriptorPath, newDescriptorYAML);
+
+			//Rename
+			String path = (mDescriptorPath.GetSubset(0, mDescriptorPath.GetSize() - PlatformFile::GetName(mDescriptorPath).GetSize())) + name + PlatformFile::GetExtension(mDescriptorPath);
+			PlatformFile::Rename(mDescriptorPath, path);
+			mDescriptorPath = path;
+		}
+
+		//Change name
+		SetName(name);
+		if (!mResource.IsShutdown())
+			mResource->SetName(name);
 	}
 
 

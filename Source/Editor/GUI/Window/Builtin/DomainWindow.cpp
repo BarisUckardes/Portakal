@@ -12,6 +12,7 @@
 #include <Editor/GUI/Object/EditorObjectAPI.h>
 #include <Editor/GUI/OpenAction/IFileOpenAction.h>
 #include <Editor/GUI/Thumbnail/Builtin/DefaultThumbnail.h>
+#include <Editor/ImGui/ImGuiUtils.h>
 
 namespace Portakal
 {
@@ -106,6 +107,16 @@ namespace Portakal
 	{
 		mThumnails.Clear();
 	}
+
+	void DomainWindow::RenameFile(const SharedHeap<DomainFile>& pFile)
+	{
+		mTargetRenameFile = pFile;
+		ImGui::OpenPopup("FileRenameMenu");
+	}
+	void DomainWindow::RenameFolder(const SharedHeap<DomainFolder>& pFolder)
+	{
+
+	}
 	void DomainWindow::OnShutdown()
 	{
 
@@ -172,7 +183,7 @@ namespace Portakal
 				if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsItemHovered())
 				{
 					ImGui::OpenPopup("FolderContextMenu");
-					mContextMenuFolder = pFolder.GetHeap();
+					mContextMenuFolder = pFolder;
 				}
 
 				//Create image
@@ -210,7 +221,16 @@ namespace Portakal
 
 				//Check if requested selection
 				if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl) && bClicked)
+				{
 					SelectFile(pFile);
+					DEV_LOG("a", "Selected0 %d",mSelectedFiles.GetSize());
+				}
+				else if (bClicked)
+				{
+					ClearSelections();
+					SelectFile(pFile);
+					DEV_LOG("a","Selected1 %d",mSelectedFiles.GetSize());
+				}
 
 				//Check if requested to open file
 				if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
@@ -219,7 +239,8 @@ namespace Portakal
 				//Check if requested to open file context menu
 				if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsItemHovered())
 				{
-
+					ImGui::OpenPopup("FileContextMenu");
+					mContextMenuFile = pFile;
 				}
 
 				//Thumbnail work
@@ -265,6 +286,13 @@ namespace Portakal
 		{
 			ImGui::OpenPopup("CreateContext");
 		}
+		if (ImGui::IsKeyPressed(ImGuiKey_F2)) // wants to rename stuff
+		{
+			if(mSelectedFiles.GetSize() == 1)
+				RenameFile(mSelectedFiles[0]);
+			if (!mSelectedFolders.GetSize() == 1)
+				RenameFolder(mSelectedFolders[0]);
+		}
 
 		//Handle popups
 		if (ImGui::BeginPopup("FolderContextMenu"))
@@ -274,7 +302,7 @@ namespace Portakal
 
 			if (ImGui::Selectable("Open"))
 			{
-				OpenFolder(mContextMenuFolder);
+				OpenFolder(mContextMenuFolder.GetHeap());
 			}
 			if (ImGui::Selectable("Delete"))
 			{
@@ -286,6 +314,47 @@ namespace Portakal
 		else
 		{
 			mContextMenuFolder = nullptr;
+		}
+		if (ImGui::BeginPopup("FileContextMenu"))
+		{
+			ImGui::Text("File");
+			ImGui::Separator();
+
+			if (ImGui::Selectable("Open"))
+			{
+				OpenFile(mContextMenuFile.GetHeap());
+			}
+			if (ImGui::Selectable("Rename"))
+			{
+				ImGui::EndPopup();
+				RenameFile(mContextMenuFile);
+			}
+			else
+			{
+				ImGui::EndPopup();
+			}
+		}
+		else
+		{
+			mContextMenuFile = nullptr;
+		}
+		if (ImGui::BeginPopup("FileRenameMenu"))
+		{
+			ImGui::Text("Rename file");
+			ImGui::Separator();
+
+			mFileRenameName = ImGuiUtils::TextField("New name", mFileRenameName);
+			if (ImGui::Button("Apply"))
+			{
+				mTargetRenameFile->Rename(mFileRenameName);
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
+		}
+		else
+		{
+			mFileRenameName = "";
+			mTargetRenameFile = nullptr;
 		}
 		if (ImGui::BeginPopup("CreateContext"))
 		{

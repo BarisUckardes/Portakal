@@ -473,7 +473,8 @@ namespace Portakal
         defaultFontTextureDesc.pHeap = mDeviceMemory;
 
         mDefaultFontTexture = new TextureResource(mDevice);
-        mDefaultFontTexture->AllocateTexture(defaultFontTextureDesc, mHostMemory, true, true);
+        mDefaultFontTexture->SetMemoryProfile(mDeviceMemory, mHostMemory);
+        mDefaultFontTexture->AllocateTexture(defaultFontTextureDesc, true, true);
         mDefaultFontTexture->Update(MemoryView(pFontData, width* height * 4), { 0,0,0 },TextureMemoryLayout::Unknown,GraphicsMemoryAccessFlags::Unknown,PipelineStageFlags::TopOfPipe,GraphicsQueueType::Graphics,0,0);
         mDefaultFontTexture->CreateView(0, 0);
 

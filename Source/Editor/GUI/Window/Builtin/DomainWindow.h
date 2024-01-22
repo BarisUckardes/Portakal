@@ -34,6 +34,9 @@ namespace Portakal
 		SharedHeap<TextureResource> GetThumbnailImage(const SharedHeap<DomainFile>& pFile);
 		void ClearThumbnails();
 
+		void RenameFile(const SharedHeap<DomainFile>& pFile);
+		void RenameFolder(const SharedHeap<DomainFolder>& pFolder);
+
 		// Inherited via GUIWindow
 		void OnShutdown() override;
 		void OnShow() override;
@@ -46,7 +49,8 @@ namespace Portakal
 		Array<SharedHeap<DomainFile>> mSelectedFiles;
 		SharedHeap<ImGuiTextureBinding> mFolderIconBinding;
 		SharedHeap<ImGuiTextureBinding> mDefaultItemIconBinding;
-		DomainFolder* mContextMenuFolder;
+		SharedHeap<DomainFolder> mContextMenuFolder;
+		SharedHeap<DomainFile> mContextMenuFile;
 		bool mFolderChanged;
 		float mFolderSize;
 		float mFileSize;
@@ -58,6 +62,10 @@ namespace Portakal
 
 		//Thumbnail variables
 		HashMap<SharedHeap<DomainFile>, SharedHeap<IThumbnail>> mThumnails;
+
+		//File rename
+		String mFileRenameName;
+		SharedHeap<DomainFile> mTargetRenameFile;
 	};
 }
 

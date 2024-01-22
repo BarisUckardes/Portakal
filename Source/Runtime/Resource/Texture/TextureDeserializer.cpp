@@ -34,6 +34,9 @@ namespace Portakal
 		//Create texture
 		TextureResource* pTexture = new TextureResource();
 
+		//Set memory profile
+		pTexture->SetMemoryProfile(deviceHeap, hostHeap);
+
 		//Allocate texture
 		TextureDesc textureDesc = {};
 		textureDesc.Type = TextureType::Texture2D;
@@ -44,7 +47,7 @@ namespace Portakal
 		textureDesc.MipLevels = 1;
 		textureDesc.SampleCount = TextureSampleCount::SAMPLE_COUNT_1;
 		textureDesc.pHeap = deviceHeap;
-		pTexture->AllocateTexture(textureDesc, hostHeap, true, true);
+		pTexture->AllocateTexture(textureDesc, true, true);
 
 		//Update texture data
 		pTexture->Update(loadResult.pView,{0,0,0},TextureMemoryLayout::Unknown,GraphicsMemoryAccessFlags::TransferWrite,PipelineStageFlags::Transfer,GraphicsQueueType::Graphics,0,0);

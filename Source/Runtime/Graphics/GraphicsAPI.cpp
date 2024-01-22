@@ -8,36 +8,25 @@ namespace Portakal
 		if (pAPI == nullptr)
 			return nullptr;
 
-		return pAPI->mDevices.IsEmpty() ? nullptr : pAPI->mDevices.GetFirst();
+		return pAPI->mDevice;
 	}
-	Array<SharedHeap<GraphicsDevice>> GraphicsAPI::GetDevices()
-	{
-		GraphicsAPI* pAPI = GetUnderlyingAPI();
-		if (pAPI == nullptr)
-			return {};
-
-		return pAPI->mDevices;
-	}
-	void GraphicsAPI::_RegisterDevice(const SharedHeap<GraphicsDevice>& pDevice)
+	
+	void GraphicsAPI::_SetDevice(const SharedHeap<GraphicsDevice>& pDevice)
 	{
 		GraphicsAPI* pAPI = GetUnderlyingAPI();
 		if (pAPI == nullptr)
 			return;
 
-		pAPI->mDevices.Add(pDevice);
-		pAPI->mMap.Insert(pDevice.GetHeap(), pDevice);
+		DEV_ASSERT(pAPI->mDevice.IsShutdown(), "GraphicsAPI", "Cannot have more than one graphics device!");
+
+		pAPI->mDevice = pDevice;
 	}
-	void GraphicsAPI::_RemoveDevice(GraphicsDevice* pDevice)
+	void GraphicsAPI::_RemoveDevice()
 	{
 		GraphicsAPI* pAPI = GetUnderlyingAPI();
 		if (pAPI == nullptr)
 			return;
 
-		const int index = pAPI->mMap.FindIndex(pDevice);
-		if (index == -1)
-			return;
-
-		pAPI->mMap.Remove(pDevice);
-		pAPI->mDevices.RemoveAt(index);
+		pAPI->mDevice = nullptr;
 	}
 }

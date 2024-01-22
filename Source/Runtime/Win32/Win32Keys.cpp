@@ -64,7 +64,7 @@ namespace Portakal
             }
             if (vk_key >= 0x70 && vk_key <= 0x87) // its function keys
             {
-                return (KeyboardKeys)((long long)KeyboardKeys::F + vk_key - 0x70);
+                return (KeyboardKeys)((long long)KeyboardKeys::F1 + vk_key - 0x70);
             }
 
         }

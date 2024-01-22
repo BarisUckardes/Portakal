@@ -16,6 +16,7 @@ namespace Portakal
 		static Bool8 Read(const String& path, String& contentOut, const UInt64 startByte = 0, const UInt64 endByte = 0);
 		static Bool8 Read(const String& path, MemoryView& view, const UInt64 startByte = 0, const UInt64 endByte = 0);
 		static Bool8 Copy(const String& sourcePath, const String& destinationPath);
+		static Bool8 Rename(const String& oldPath, const String& newPath);
 		static String GetExtension(const String& path);
 		static String RemoveExtension(const String& path);
 		static Bool8 GetSize(const String& path, UInt64& sizeInBytesOut);

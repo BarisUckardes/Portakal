@@ -25,9 +25,5 @@ namespace Portakal
         ImGui::SliderFloat("Far plane", &f, -1000, 1000);
         mCamera->SetFarPlane(f);
 
-        if (ImGui::Button("Create display"))
-        {
-            mCamera->TestCreateDisplay();
-        }
     }
 }
