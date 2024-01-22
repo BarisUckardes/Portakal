@@ -3,170 +3,184 @@
 
 namespace Portakal
 {
-	MeshResource::MeshResource(const SharedHeap<GraphicsDevice>& pDevice) : mIndexCount(0),mVertexCount(0)
+	MeshResource::MeshResource(const SharedHeap<GraphicsDevice>& pDevice) : mAllocateStagebuffersUpfront(false)
 	{
 		mDevice = pDevice;
 		CreateInternalResources();
 	}
-	MeshResource::MeshResource()
+	MeshResource::MeshResource() : mAllocateStagebuffersUpfront(true)
 	{
 		mDevice = GraphicsAPI::GetDefaultDevice();
 		CreateInternalResources();
 	}
-	void MeshResource::AllocateVertexes(const UInt32 count, const UInt32 elementSize, const SharedHeap<GraphicsMemoryHeap>& pDeviceHeap, const SharedHeap<GraphicsMemoryHeap>& pHostHeap, const Bool8 bAllocateStagebufferUpfront)
-	{
-		//Check if shutdown
-		if (IsShutdown())
-			return;
 
-		//Check device
+	void MeshResource::SetMemoryProfile(const SharedHeap<GraphicsMemoryHeap>& pHeapDevice, const SharedHeap<GraphicsMemoryHeap>& pHeapHost, bool bAllocateStagebuffersUpfront)
+	{
+		//Clear current setup
+		Clear();
+
+		//Set current memory profile
+		mHeapDevice = pHeapDevice;
+		mHeapHost = pHeapHost;
+		mAllocateStagebuffersUpfront = bAllocateStagebuffersUpfront;
+	}
+
+	void MeshResource::AllocateSubMesh(const UInt32 vertexCount, const UInt32 perVertexSize, const UInt32 indexCount, const UInt32 perIndexSize)
+	{
 		if (mDevice.IsShutdown())
 			return;
+		if (mHeapDevice.IsShutdown())
+			return;
+		if (mHeapHost.IsShutdown())
+			return;
 
-		//Create device buffer
-		GraphicsBufferDesc deviceBufferDesc = {};
-		deviceBufferDesc.SubItemCount = count;
-		deviceBufferDesc.SubItemSizeInBytes = elementSize;
-		deviceBufferDesc.Usage = GraphicsBufferUsage::VertexBuffer | GraphicsBufferUsage::TransferDestination;
-		deviceBufferDesc.pHeap = pDeviceHeap;
-		mVertexDeviceBuffer = mDevice->CreateBuffer(deviceBufferDesc);
+		SubMeshResource subMesh = {};
 
-		//Create stage buffer if required
-		if (bAllocateStagebufferUpfront)
+		//Allocate vertex buffer
+		GraphicsBufferDesc vertexBufferDesc = {};
+		vertexBufferDesc.SubItemCount = vertexCount;
+		vertexBufferDesc.SubItemSizeInBytes = perVertexSize;
+		vertexBufferDesc.Usage = GraphicsBufferUsage::VertexBuffer | GraphicsBufferUsage::TransferDestination;
+		vertexBufferDesc.pHeap = mHeapDevice;
+		subMesh.pVertexBuffer = mDevice->CreateBuffer(vertexBufferDesc);
+
+		//Allocate vertex stage buffer
+		if (mAllocateStagebuffersUpfront)
 		{
 			GraphicsBufferDesc desc = {};
-			desc.SubItemCount = count;
-			desc.SubItemSizeInBytes = elementSize;
+			desc.SubItemCount = vertexCount;
+			desc.SubItemSizeInBytes = perVertexSize;
 			desc.Usage = GraphicsBufferUsage::VertexBuffer | GraphicsBufferUsage::TransferSource;
-			desc.pHeap = pHostHeap;
-			mVertexStageBuffer = mDevice->CreateBuffer(desc);
+			desc.pHeap = mHeapHost;
+			subMesh.pVertexStageBuffer = mDevice->CreateBuffer(desc);
 		}
 
-		//Set properties
-		mVertexHostHeap = pHostHeap;
-		mVertexCount = count;
-	}
-	void MeshResource::AllocateIndexes(const UInt32 count, const UInt32 elementSize, const SharedHeap<GraphicsMemoryHeap>& pDeviceHeap, const SharedHeap<GraphicsMemoryHeap>& pHostHeap, const Bool8 bAllocateStagebufferUpfront)
-	{
-		//Check if shutdown
-		if (IsShutdown())
-			return;
+		//Allocate index buffer
+		GraphicsBufferDesc indexBufferDesc = {};
+		indexBufferDesc.SubItemCount = indexCount;
+		indexBufferDesc.SubItemSizeInBytes = perIndexSize;
+		indexBufferDesc.Usage = GraphicsBufferUsage::IndexBuffer | GraphicsBufferUsage::TransferDestination;
+		indexBufferDesc.pHeap = mHeapDevice;
+		subMesh.pIndexBuffer = mDevice->CreateBuffer(indexBufferDesc);
 
-		//Check device
-		if (mDevice.IsShutdown())
-			return;
-
-		//Create device buffer
-		GraphicsBufferDesc deviceBufferDesc = {};
-		deviceBufferDesc.SubItemCount = count;
-		deviceBufferDesc.SubItemSizeInBytes = elementSize;
-		deviceBufferDesc.Usage = GraphicsBufferUsage::IndexBuffer | GraphicsBufferUsage::TransferDestination;
-		deviceBufferDesc.pHeap = pDeviceHeap;
-		mIndexDeviceBuffer = mDevice->CreateBuffer(deviceBufferDesc);
-
-		//Create stage buffer if required
-		if (bAllocateStagebufferUpfront)
+		//Allocate index stage buffer
+		if (mAllocateStagebuffersUpfront)
 		{
 			GraphicsBufferDesc desc = {};
-			desc.SubItemCount = count;
-			desc.SubItemSizeInBytes = elementSize;
+			desc.SubItemCount = indexCount;
+			desc.SubItemSizeInBytes = perIndexSize;
 			desc.Usage = GraphicsBufferUsage::IndexBuffer | GraphicsBufferUsage::TransferSource;
-			desc.pHeap = pHostHeap;
-			mIndexStageBuffer = mDevice->CreateBuffer(desc);
+			desc.pHeap = mHeapHost;
+			subMesh.pIndexStageBuffer = mDevice->CreateBuffer(desc);
 		}
 
-		//Set properties
-		mIndexHostHeap = pHostHeap;
-		mIndexCount = count;
-	}
-	void MeshResource::UpdateVertexes(const MemoryView memory, const UInt32 offset)
-	{
-		//Check if shutdown
-		if (IsShutdown())
-			return;
+		//Register submesh
+		mSubMeshes.Add(subMesh);
 
-		//Check device
+		//Increment
+		mTotalVertexCount += vertexCount;
+		mTotalIndexCount += indexCount;
+	}
+	void MeshResource::UpdateSubMeshVertexes(const UInt32 subMeshIndex, const MemoryView memory, const UInt32 offset)
+	{
 		if (mDevice.IsShutdown())
 			return;
+		if (subMeshIndex >= mSubMeshes.GetSize())
+			return;
 
-		//Check if stage buffer creation is required
-		if (mVertexStageBuffer.IsShutdown())
+		//Get sub mesh
+		SubMeshResource& subMesh = mSubMeshes[subMeshIndex];
+
+		//Allocate stage buffer if needed
+		if (!mAllocateStagebuffersUpfront)
 		{
 			GraphicsBufferDesc desc = {};
-			desc.SubItemCount = mVertexDeviceBuffer->GetSubItemCount();
-			desc.SubItemSizeInBytes = mVertexDeviceBuffer->GetSubItemSize();
+			desc.SubItemCount = subMesh.pVertexBuffer->GetSubItemCount();
+			desc.SubItemSizeInBytes = subMesh.pVertexBuffer->GetSubItemSize();
 			desc.Usage = GraphicsBufferUsage::VertexBuffer | GraphicsBufferUsage::TransferSource;
-			desc.pHeap = mVertexHostHeap;
-			mVertexStageBuffer = mDevice->CreateBuffer(desc);
+			desc.pHeap = mHeapHost;
+			subMesh.pVertexStageBuffer = mDevice->CreateBuffer(desc);
 		}
 
 		//Update host buffer
 		GraphicsBufferHostUpdateDesc hostUpdateDesc = {};
-		hostUpdateDesc.OffsetInBytes = 0;
+		hostUpdateDesc.OffsetInBytes = offset;
 		hostUpdateDesc.View = memory;
-		mDevice->UpdateHostBuffer(mVertexStageBuffer.GetHeap(),hostUpdateDesc);
+		mDevice->UpdateHostBuffer(subMesh.pVertexStageBuffer.GetHeap(), hostUpdateDesc);
 
-		//Update vertex buffer
+		//Update device buffer
 		mCmdList->BeginRecording();
-
 		BufferBufferCopyDesc deviceCopyDesc = {};
 		deviceCopyDesc.DestinationOffsetInBytes = offset;
-		deviceCopyDesc.SourceOffsetInBytes = 0;
+		deviceCopyDesc.SourceOffsetInBytes = offset;
 		deviceCopyDesc.SizeInBytes = memory.GetSize();
-		mCmdList->CopyBufferToBuffer(mVertexStageBuffer.GetHeap(), mVertexDeviceBuffer.GetHeap(), deviceCopyDesc);
-
+		mCmdList->CopyBufferToBuffer(subMesh.pVertexStageBuffer.GetHeap(), subMesh.pVertexBuffer.GetHeap(), deviceCopyDesc);
 		mCmdList->EndRecording();
-
 		mDevice->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, mFence.GetHeap());
 		mDevice->WaitFences(mFence.GetHeapAddress(), 1);
 	}
-	void MeshResource::UpdateIndexes(const MemoryView memory, const UInt32 offset)
+	void MeshResource::UpdateSubMeshIndexes(const UInt32 subMeshIndex, const MemoryView memory, const UInt32 offset)
 	{
-		//Check if shutdown
-		if (IsShutdown())
-			return;
-
-		//Check device
 		if (mDevice.IsShutdown())
 			return;
+		if (subMeshIndex >= mSubMeshes.GetSize())
+			return;
 
-		//Check if stage buffer creation is required
-		if (mIndexStageBuffer.IsShutdown())
+		//Get sub mesh
+		SubMeshResource& subMesh = mSubMeshes[subMeshIndex];
+
+		//Allocate stage buffer if needed
+		if (!mAllocateStagebuffersUpfront)
 		{
 			GraphicsBufferDesc desc = {};
-			desc.SubItemCount = mIndexDeviceBuffer->GetSubItemCount();
-			desc.SubItemSizeInBytes = mIndexDeviceBuffer->GetSubItemSize();
+			desc.SubItemCount = subMesh.pVertexBuffer->GetSubItemCount();
+			desc.SubItemSizeInBytes = subMesh.pVertexBuffer->GetSubItemSize();
 			desc.Usage = GraphicsBufferUsage::IndexBuffer | GraphicsBufferUsage::TransferSource;
-			desc.pHeap = mIndexHostHeap;
-			mIndexStageBuffer = mDevice->CreateBuffer(desc);
+			desc.pHeap = mHeapHost;
+			subMesh.pIndexStageBuffer = mDevice->CreateBuffer(desc);
 		}
 
 		//Update host buffer
 		GraphicsBufferHostUpdateDesc hostUpdateDesc = {};
-		hostUpdateDesc.OffsetInBytes = 0;
+		hostUpdateDesc.OffsetInBytes = offset;
 		hostUpdateDesc.View = memory;
-		mDevice->UpdateHostBuffer(mIndexStageBuffer.GetHeap(), hostUpdateDesc);
+		mDevice->UpdateHostBuffer(subMesh.pIndexStageBuffer.GetHeap(), hostUpdateDesc);
 
-		//Update vertex buffer
+		//Update device buffer
 		mCmdList->BeginRecording();
-
 		BufferBufferCopyDesc deviceCopyDesc = {};
 		deviceCopyDesc.DestinationOffsetInBytes = offset;
-		deviceCopyDesc.SourceOffsetInBytes = 0;
+		deviceCopyDesc.SourceOffsetInBytes = offset;
 		deviceCopyDesc.SizeInBytes = memory.GetSize();
-		mCmdList->CopyBufferToBuffer(mIndexStageBuffer.GetHeap(), mIndexDeviceBuffer.GetHeap(), deviceCopyDesc);
-
+		mCmdList->CopyBufferToBuffer(subMesh.pIndexStageBuffer.GetHeap(), subMesh.pIndexBuffer.GetHeap(), deviceCopyDesc);
 		mCmdList->EndRecording();
-
 		mDevice->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, mFence.GetHeap());
 		mDevice->WaitFences(mFence.GetHeapAddress(), 1);
+	}
+	void MeshResource::DeleteSubMesh(const UInt32 index)
+	{
+		if (index >= mSubMeshes.GetSize())
+			return;
+
+		ClearSubMesh(mSubMeshes[index]);
+		mSubMeshes.RemoveAt(index);
+	}
+	void MeshResource::ClearSubMesh(SubMeshResource& mesh)
+	{
+		//Decrement
+		mTotalVertexCount -= mesh.pVertexBuffer->GetSubItemCount();
+		mTotalIndexCount -= mesh.pIndexBuffer->GetSubItemCount();
+		//Shutdown
+		mesh.pVertexStageBuffer.Shutdown();
+		mesh.pIndexStageBuffer.Shutdown();
+		mesh.pVertexBuffer.Shutdown();
+		mesh.pIndexBuffer.Shutdown();
 	}
 	void MeshResource::Clear()
 	{
-		mVertexStageBuffer.Shutdown();
-		mIndexStageBuffer.Shutdown();
-		mVertexDeviceBuffer.Shutdown();
-		mIndexDeviceBuffer.Shutdown();
+		for (SubMeshResource& mesh : mSubMeshes)
+			ClearSubMesh(mesh);
+		mSubMeshes.Clear();
 	}
 	void MeshResource::CreateInternalResources()
 	{

@@ -4,6 +4,7 @@
 #include <Runtime/Graphics/Device/GraphicsDevice.h>
 #include <Runtime/Graphics/Fence/Fence.h>
 #include <Runtime/Graphics/Buffer/GraphicsBuffer.h>
+#include <Runtime/Resource/Mesh/SubMeshResource.h>
 #include "MeshResource.reflected.h"
 
 namespace Portakal
@@ -17,28 +18,48 @@ namespace Portakal
 		MeshResource();
 		~MeshResource() = default;
 
-		FORCEINLINE UInt32 GetVertexCount() const noexcept
+		FORCEINLINE UInt32 GetSubMeshCount() const noexcept
 		{
-			return mVertexCount;
+			return mSubMeshes.GetSize();
 		}
-		FORCEINLINE UInt32 GetIndexCount() const noexcept
+		FORCEINLINE UInt32 GetVertexCount(const UInt32 subMeshIndex) const noexcept
 		{
-			return mIndexCount;
+			if (subMeshIndex >= mSubMeshes.GetSize())
+				return 0;
+
+			return mSubMeshes[subMeshIndex].pVertexBuffer->GetSubItemCount();
 		}
-		FORCEINLINE SharedHeap<GraphicsBuffer> GetVertexBuffer() const noexcept
+		FORCEINLINE UInt32 GetIndexCount(const UInt32 subMeshIndex) const noexcept
 		{
-			return mVertexDeviceBuffer;
+			if (subMeshIndex >= mSubMeshes.GetSize())
+				return 0;
+
+			return mSubMeshes[subMeshIndex].pIndexBuffer->GetSubItemCount();
 		}
-		FORCEINLINE SharedHeap<GraphicsBuffer> GetIndexBuffer() const noexcept
+		FORCEINLINE UInt64 GetTotalVertexCount() const noexcept
 		{
-			return mIndexDeviceBuffer;
+			return mTotalVertexCount;
+		}
+		FORCEINLINE UInt64 GetTotalIndexCount() const noexcept
+		{
+			return mTotalIndexCount;
+		}
+		FORCEINLINE SharedHeap<GraphicsBuffer> GetVertexBuffer(const UInt32 subMeshIndex) const noexcept
+		{
+			return mSubMeshes[subMeshIndex].pVertexBuffer;
+		}
+		FORCEINLINE SharedHeap<GraphicsBuffer> GetIndexBuffer(const UInt32 subMeshIndex) const noexcept
+		{
+			return mSubMeshes[subMeshIndex].pIndexBuffer;
 		}
 	public:
-		void AllocateVertexes(const UInt32 count,const UInt32 elementSize,const SharedHeap<GraphicsMemoryHeap>& pDeviceHeap,const SharedHeap<GraphicsMemoryHeap>& pHostHeap,const Bool8 bAllocateStagebufferUpfront);
-		void AllocateIndexes(const UInt32 count,const UInt32 elementSize,const SharedHeap<GraphicsMemoryHeap>& pDeviceHeap,const SharedHeap<GraphicsMemoryHeap>& pHostHeap,const Bool8 bAllocateStagebufferUpfront);
-		void UpdateVertexes(const MemoryView memory,const UInt32 offset);
-		void UpdateIndexes(const MemoryView memory,const UInt32 offset);
+		void SetMemoryProfile(const SharedHeap<GraphicsMemoryHeap>& pHeapDevice, const SharedHeap<GraphicsMemoryHeap>& pHeapHost,bool bAllocateStagebuffersUpfront = true);
+		void AllocateSubMesh(const UInt32 vertexCount,const UInt32 perVertexSize,const UInt32 indexCount,const UInt32 perIndexSize);
+		void UpdateSubMeshVertexes(const UInt32 subMeshIndex,const MemoryView memory,const UInt32 offset);
+		void UpdateSubMeshIndexes(const UInt32 subMeshIndex,const MemoryView memory,const UInt32 offset);
+		void DeleteSubMesh(const UInt32 index);
 	private:
+		void ClearSubMesh(SubMeshResource& mesh);
 		void Clear();
 		void CreateInternalResources();
 		virtual void OnShutdown() override;
@@ -47,14 +68,12 @@ namespace Portakal
 		SharedHeap<CommandPool> mCmdPool;
 		SharedHeap<CommandList> mCmdList;
 		SharedHeap<Fence> mFence;
-		SharedHeap<GraphicsBuffer> mVertexDeviceBuffer;
-		SharedHeap<GraphicsBuffer> mIndexDeviceBuffer;
-		SharedHeap<GraphicsBuffer> mVertexStageBuffer;
-		SharedHeap<GraphicsBuffer> mIndexStageBuffer;
-		SharedHeap<GraphicsMemoryHeap> mVertexHostHeap;
-		SharedHeap<GraphicsMemoryHeap> mIndexHostHeap;
-		UInt32 mVertexCount;
-		UInt32 mIndexCount;
+		Array<SubMeshResource> mSubMeshes;
+		SharedHeap<GraphicsMemoryHeap> mHeapDevice;
+		SharedHeap<GraphicsMemoryHeap> mHeapHost;
+		UInt64 mTotalVertexCount;
+		UInt64 mTotalIndexCount;
+		bool mAllocateStagebuffersUpfront;
 	};
 }
 

@@ -7,7 +7,6 @@
 namespace Portakal
 {
 	class ResourceSubObject;
-
 	PCLASS(Virtual);
 	class RUNTIME_API IResourceDeserializer : public Class
 	{

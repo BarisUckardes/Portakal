@@ -25,5 +25,5 @@
 		static inline Type* sType = nullptr;\
 	};
     #undef GENERATE_OBJECT;
-    #define GENERATE_OBJECT friend ReflectionManifest* ::GenerateModuleManifest(); virtual Type* GetType() const noexcept override {return typeof(IResourceDeserializer);}
+    #define GENERATE_OBJECT friend ReflectionManifest* ::GenerateModuleManifest(); virtual Type* GetType() const noexcept override {return typeof(Portakal::IResourceDeserializer);}
     #pragma warning( pop )

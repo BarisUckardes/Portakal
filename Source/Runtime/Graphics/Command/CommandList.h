@@ -53,7 +53,7 @@ namespace Portakal
 		void SetViewports(const ViewportDesc* pViewports, const Byte count);
 		void SetScissors(const ScissorDesc* pScissors, const Byte count);
 		void CopyBufferToTexture(const GraphicsBuffer* pSource, const Texture* pDestination, const BufferTextureCopyDesc& desc);
-		void CopyBufferToBuffer(const GraphicsBuffer* pBuffer, const GraphicsBuffer* pDestination, const BufferBufferCopyDesc& desc);
+		void CopyBufferToBuffer(const GraphicsBuffer* pSource, const GraphicsBuffer* pDestination, const BufferBufferCopyDesc& desc);
 		void CopyTextureToTexture(const Texture* pSource, const Texture* pDestination, const TextureCopyDesc& desc);
 		void SetTextureMemoryBarrier(const Texture* pTexture, const CommandListTextureMemoryBarrierDesc& desc);
 		void SetBufferMemoryBarrier(const GraphicsBuffer* pBuffer, const BufferBarrierDesc& desc);

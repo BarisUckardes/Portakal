@@ -133,12 +133,13 @@ namespace Portakal
         ImDrawData* pDrawData = ImGui::GetDrawData();
 
         //Allocate vertexes
-        if (pDrawData->TotalVtxCount > mMesh->GetVertexCount())
-            mMesh->AllocateVertexes(pDrawData->TotalVtxCount + 100, sizeof(ImDrawVert), mDeviceMemory, mHostMemory, true);
-
-        //Allocate indexes
-        if (pDrawData->TotalIdxCount > mMesh->GetIndexCount())
-            mMesh->AllocateIndexes(pDrawData->TotalIdxCount + 100, sizeof(UInt16), mDeviceMemory, mHostMemory, true);
+        if (pDrawData->TotalVtxCount > mMesh->GetVertexCount(0) || pDrawData->TotalIdxCount > mMesh->GetIndexCount(0))
+        {
+            const UInt64 vertexCount = pDrawData->TotalVtxCount > mMesh->GetVertexCount(0) ? pDrawData->TotalVtxCount + 100 : mMesh->GetVertexCount(0);
+            const UInt64 indexCount = pDrawData->TotalIdxCount > mMesh->GetIndexCount(0) ? pDrawData->TotalIdxCount + 100 : mMesh->GetIndexCount(0);
+            mMesh->DeleteSubMesh(0);
+            mMesh->AllocateSubMesh(vertexCount, sizeof(ImDrawVert), indexCount, sizeof(UInt16));
+        }
 
         UInt32 vertexOffset = 0;
         UInt32 indexOffset = 0;
@@ -150,8 +151,8 @@ namespace Portakal
             const UInt32 vertexBufferSize = pCmdList->VtxBuffer.Size * sizeof(ImDrawVert);
             const UInt32 indexBufferSize = pCmdList->IdxBuffer.Size * sizeof(UInt16);
 
-            mMesh->UpdateVertexes({ (Byte*)pCmdList->VtxBuffer.Data,vertexBufferSize }, vertexOffset);
-            mMesh->UpdateIndexes({ (Byte*)pCmdList->IdxBuffer.Data,indexBufferSize }, indexOffset);
+            mMesh->UpdateSubMeshVertexes(0,{ (Byte*)pCmdList->VtxBuffer.Data,vertexBufferSize }, vertexOffset);
+            mMesh->UpdateSubMeshIndexes(0,{ (Byte*)pCmdList->IdxBuffer.Data,indexBufferSize }, indexOffset);
 
             vertexOffset += vertexBufferSize;
             indexOffset += indexBufferSize;
@@ -200,8 +201,8 @@ namespace Portakal
             /*
             * Set vertex&index buffers
             */
-            mCmdList->SetVertexBuffer(mMesh->GetVertexBuffer());
-            mCmdList->SetIndexBuffer(mMesh->GetIndexBuffer(), CommandListIndexBufferType::Unsigned_Short);
+            mCmdList->SetVertexBuffer(mMesh->GetVertexBuffer(0));
+            mCmdList->SetIndexBuffer(mMesh->GetIndexBuffer(0), CommandListIndexBufferType::Unsigned_Short);
 
             /*
             * Set clip rects
@@ -542,8 +543,8 @@ namespace Portakal
         mMesh = new MeshResource(mDevice);
 
         //Allocate vertex and index buffer
-        mMesh->AllocateVertexes(6400, sizeof(ImDrawVert), mDeviceMemory, mHostMemory, true);
-        mMesh->AllocateIndexes(6400, sizeof(UInt16), mDeviceMemory, mHostMemory, true);
+        mMesh->SetMemoryProfile(mDeviceMemory, mHostMemory,true);
+        mMesh->AllocateSubMesh(6400, sizeof(ImDrawVert), 6400, sizeof(UInt16));
     }
     void ImGuiRenderer::SetupDefaultTheme()
     {
