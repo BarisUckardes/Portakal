@@ -11,7 +11,6 @@ namespace Portakal
 	}
 	SharedHeap<TextureResource> SamplerThumbnail::GetThumbnailTexture(DomainFile* pFile)
 	{
-		//Get sub object
-		return EditorResourceAPI::GetResource("DefaultIcon").QueryAs<EditorTextureResource>()->GetTexture();
+		return EditorResourceAPI::GetResource("SamplerIcon").QueryAs<EditorTextureResource>()->GetTexture();
 	}
 }
