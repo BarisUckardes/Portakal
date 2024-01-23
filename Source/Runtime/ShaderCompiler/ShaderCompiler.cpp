@@ -30,7 +30,11 @@ namespace Portakal
 			return false;
 		}
 
-		*ppViewOut = new MemoryOwnedView((Byte*)module.cbegin(), (Byte*)module.cend());
+		const UInt64 bufferSize = (Byte*)module.cend() - (Byte*)module.cbegin();
+		Byte* pBuffer = new Byte[bufferSize];
+		Memory::Copy(pBuffer, module.cbegin(), bufferSize);
+
+		*ppViewOut = new MemoryOwnedView(pBuffer,bufferSize);
 
 		if (*ppViewOut == nullptr)
 		{
@@ -79,7 +83,9 @@ namespace Portakal
 		{
 		case GraphicsBackend::Vulkan:
 		{
-			*ppBytes = new MemoryOwnedView((Byte*)pView.GetMemory(), pView.GetSize());
+			Byte* pBuffer = new Byte[pView.GetSize()];
+			Memory::Copy(pBuffer, pView.GetMemory(), pView.GetSize());
+			*ppBytes = new MemoryOwnedView(pBuffer, pView.GetSize());
 			return true;
 		}
 		case GraphicsBackend::DirectX12:
