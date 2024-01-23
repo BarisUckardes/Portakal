@@ -8,7 +8,6 @@ namespace Portakal
         Sampler,
         SampledTexture,
         StorageTexture,
-        CombinedTextureSampler,
         ConstantBuffer,
         StorageBuffer
     };

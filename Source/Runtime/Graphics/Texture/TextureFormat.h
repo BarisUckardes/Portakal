@@ -51,6 +51,21 @@ namespace Portakal
         R32_G32_B32_Float,
         R32_G32_B32_UInt,
         R32_G32_B32_SInt,
+        R16G16B16_UInt,
+        R16G16B16_SInt,
+        R16G16B16_Float,
+        R64_UInt,
+        R64_SInt,
+        R64_Float,
+        R64_G64_UInt,
+        R64_G64_SInt,
+        R64_G64_Float,
+        R64_G64_B64_UInt,
+        R64_G64_B64_SInt,
+        R64_G64_B64_Float,
+        R64_G64_B64_A64_UInt,
+        R64_G64_B64_A64_SInt,
+        R64_G64_B64_A64_Float,
         /**
          * @brief RG component order. Each component is an 8-bit normalized integer.
          */

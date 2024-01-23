@@ -8,6 +8,7 @@ include(${CMAKE_SOURCE_DIR}/Scripts/CMake/FetchLibraries.cmake)
 FetchContent_MakeAvailable(stbi)
 FetchContent_MakeAvailable(yaml-cpp)
 FetchContent_MakeAvailable(assimp)
+FetchContent_MakeAvailable(spirv-reflect)
 # ------------------------------------------------------------
 
 # ---------------------- FILE ADDITION -----------------------
@@ -19,9 +20,11 @@ add_library(Runtime main.cpp ${SUBDIRECTORIES})
 # ------------------- INCLUDE DIRECTORIES --------------------
 target_include_directories(Runtime PRIVATE "${CMAKE_SOURCE_DIR}/Source")
 target_include_directories(Runtime PUBLIC "${yaml-cpp_SOURCE_DIR}/include")
+target_include_directories(Runtime PUBLIC "${spirv-reflect_SOURCE_DIR}")
 
 target_link_libraries(Runtime PUBLIC yaml-cpp)
 target_link_libraries(Runtime PUBLIC assimp)
+target_link_libraries(Runtime PUBLIC spirv-reflect-static)
 # ------------------------------------------------------------
 
 # ------------------ FORCE SHADER DIRECTORY ------------------

@@ -1,13 +1,14 @@
 #include "ShaderCompiler.h"
 #include <Runtime/Containers/Array.h>
 #include <Shaderc/Include/shaderc.hpp>
+#include <Runtime/ShaderCompiler/ShaderIOSemantic.h>
+#include <Runtime/ShaderCompiler/ShaderVariableFormat.h>
+#include <Runtime/ShaderCompiler/ShaderTableBindingType.h>
 #include <Spirv-Cross/Include/spirv_hlsl.hpp>
 #include <Spirv-Cross/Include/spirv_glsl.hpp>
+#include <Runtime/ShaderCompiler/ShaderBlockMember.h>
 #include <Windows.h>
-#include <Dxc/Include/dxcapi.h>
-#include <wrl.h>
-
-using namespace Microsoft::WRL;
+#include <spirv_reflect.h>
 
 namespace Portakal
 {
@@ -144,5 +145,116 @@ namespace Portakal
 		}
 
 		return true;
+	}
+	ShaderBlockMember GetMemberData(const SpvReflectBlockVariable* pVariable)
+	{
+		ShaderBlockMember member = {};
+		member.Name = pVariable->name;
+		member.Size = pVariable->size;
+		member.PaddedSize = pVariable->padded_size;
+		member.Offset = pVariable->offset;
+		member.AbsoluteOffset = pVariable->absolute_offset;
+		
+		for (UInt32 i = 0; i < pVariable->member_count; i++)
+		{
+			ShaderBlockMember subMember = GetMemberData(&pVariable->members[i]);
+			member.Members.Add(subMember);
+		}
+
+		return member;
+	}
+	SharedHeap<ShaderReflection> ShaderCompiler::GenerateReflection(const MemoryView& memory)
+	{
+		//Generate reflection data
+		SpvReflectShaderModule module;
+		const SpvReflectResult generateResult = spvReflectCreateShaderModule(memory.GetSize(), memory.GetMemory(), &module);
+		if (generateResult != SPV_REFLECT_RESULT_SUCCESS)
+			return nullptr;
+
+		//Enumerate shader input variables
+		Array<ShaderIODescriptor> inputs;
+		UInt32 inputVariableCount = 0;
+		const SpvReflectResult inputEnumarateResult = spvReflectEnumerateInputVariables(&module,&inputVariableCount,NULL);
+		if (inputEnumarateResult != SPV_REFLECT_RESULT_SUCCESS)
+			return nullptr;
+
+		SpvReflectInterfaceVariable** ppInputVariables = new SpvReflectInterfaceVariable*[inputVariableCount];
+		const SpvReflectResult inputEnumarateResult2 = spvReflectEnumerateInputVariables(&module, &inputVariableCount, ppInputVariables);
+		if (inputEnumarateResult2 != SPV_REFLECT_RESULT_SUCCESS)
+			return nullptr;
+
+		for (UInt32 i = 0;i<inputVariableCount;i++)
+		{
+			const SpvReflectInterfaceVariable* pInput = ppInputVariables[i];
+			ShaderIODescriptor io = {};
+			io.Name = pInput->name;
+			io.Format = ShaderCompilerUtils::GetReflectFormat(pInput->format);
+			inputs.Add(io);
+		}
+
+		//Enumerate shader output variables
+		UInt32 outputVariableCount = 0;
+		const SpvReflectResult outputEnumerateResult = spvReflectEnumerateOutputVariables(&module, &outputVariableCount, nullptr);
+		if (outputEnumerateResult != SPV_REFLECT_RESULT_SUCCESS)
+			return nullptr;
+
+		SpvReflectInterfaceVariable** ppOutputVariables = new SpvReflectInterfaceVariable*[outputVariableCount];
+		const SpvReflectResult outputEnumerateResult2 = spvReflectEnumerateOutputVariables(&module, &outputVariableCount, ppOutputVariables);
+		if (outputEnumerateResult2 != SPV_REFLECT_RESULT_SUCCESS)
+			return nullptr;
+
+		Array<ShaderIODescriptor> outputs;
+		for (UInt32 i = 0; i < outputVariableCount; i++)
+		{
+			const SpvReflectInterfaceVariable* pOutput = ppOutputVariables[i];
+			ShaderIODescriptor io = {};
+			io.Name = pOutput->name;
+			io.Format = ShaderCompilerUtils::GetReflectFormat(pOutput->format);
+			outputs.Add(io);
+		}
+
+		//Enumerate descriptors
+		UInt32 descriptorSetCount = 0;
+		const SpvReflectResult descriptorSetResult = spvReflectEnumerateDescriptorSets(&module, &descriptorSetCount, nullptr);
+		if (descriptorSetResult != SPV_REFLECT_RESULT_SUCCESS)
+			return nullptr;
+
+		SpvReflectDescriptorSet** ppDescriptorSets = new SpvReflectDescriptorSet*[descriptorSetCount];
+		const SpvReflectResult descriptorSetResult2 = spvReflectEnumerateDescriptorSets(&module, &descriptorSetCount, ppDescriptorSets);
+		if (descriptorSetResult2 != SPV_REFLECT_RESULT_SUCCESS)
+			return nullptr;
+
+		Array<ShaderTableDescriptor> tableDescriptors;
+		for (UInt32 setIndex = 0; setIndex < descriptorSetCount; setIndex++)
+		{
+			const SpvReflectDescriptorSet* pDescriptorSet = ppDescriptorSets[setIndex];
+
+			ShaderTableDescriptor tableDescriptor = {};
+			tableDescriptor.TableIndex = pDescriptorSet->set;
+
+			for (UInt32 bindingIndex = 0; bindingIndex < pDescriptorSet->binding_count; bindingIndex++)
+			{
+				const SpvReflectDescriptorBinding* pBinding = pDescriptorSet->bindings[bindingIndex];
+				
+				ShaderTableBinding binding = {};
+				binding.BindingIndex = pBinding->binding;
+				binding.Name = pBinding->name;
+				binding.Type = ShaderCompilerUtils::GetBindingType(pBinding->descriptor_type);
+
+				//Collect members
+				binding.BlockMember = GetMemberData(&pBinding->block);
+				tableDescriptor.Bindings.Add(binding);
+			}
+
+			tableDescriptors.Add(tableDescriptor);
+		}
+
+		//Free reflect module
+		spvReflectDestroyShaderModule(&module);
+
+		//Create reflection object
+		ShaderReflection* pReflection = new ShaderReflection(inputs,outputs,tableDescriptors);
+
+		return pReflection;
 	}
 }

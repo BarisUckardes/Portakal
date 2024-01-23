@@ -21,6 +21,26 @@ namespace Portakal
         case TextureFormat::R32_G32_B32_UInt:
         case TextureFormat::R32_G32_B32_SInt:
             return 12;
+        case TextureFormat::R16G16B16_UInt:
+        case TextureFormat::R16G16B16_SInt:
+        case TextureFormat::R16G16B16_Float:
+            return 6;
+        case TextureFormat::R64_UInt:
+        case TextureFormat::R64_SInt:
+        case TextureFormat::R64_Float:
+             return 8;
+        case TextureFormat::R64_G64_UInt:
+        case TextureFormat::R64_G64_SInt:
+        case TextureFormat::R64_G64_Float:
+            return 16;
+        case TextureFormat::R64_G64_B64_UInt:
+        case TextureFormat::R64_G64_B64_SInt:
+        case TextureFormat::R64_G64_B64_Float:
+            return 24;
+        case TextureFormat::R64_G64_B64_A64_UInt:
+        case TextureFormat::R64_G64_B64_A64_SInt:
+        case TextureFormat::R64_G64_B64_A64_Float:
+            return 32;
         case TextureFormat::R32_G32_B32_A32_Float:
             return 16;
         case TextureFormat::R32_Float:

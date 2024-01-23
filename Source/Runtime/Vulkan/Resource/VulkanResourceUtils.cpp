@@ -9,8 +9,6 @@ namespace Portakal
         {
         case GraphicsResourceType::Sampler:
             return VK_DESCRIPTOR_TYPE_SAMPLER;
-        case GraphicsResourceType::CombinedTextureSampler:
-            return VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
         case GraphicsResourceType::SampledTexture:
             return VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
         case GraphicsResourceType::StorageTexture:

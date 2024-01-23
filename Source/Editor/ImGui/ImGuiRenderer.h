@@ -9,6 +9,7 @@
 #include <Editor/ImGui/ImGuiTextureBinding.h>
 #include <Runtime/Containers/HashMap.h>
 #include <imgui.h>
+#include <Runtime/Resource/Shader/ShaderResource.h>
 
 namespace Portakal
 {
@@ -65,8 +66,8 @@ namespace Portakal
 
 		SharedHeap<MeshResource> mMesh;
 
-		SharedHeap<Shader> mVertexShader;
-		SharedHeap<Shader> mFragmentShader;
+		SharedHeap<ShaderResource> mVertexShader;
+		SharedHeap<ShaderResource> mFragmentShader;
 
 		SharedHeap<Sampler> mSampler;
 

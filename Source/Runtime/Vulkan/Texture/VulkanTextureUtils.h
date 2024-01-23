@@ -44,6 +44,12 @@ namespace Portakal
                 return VK_FORMAT_D32_SFLOAT_S8_UINT;
             case TextureFormat::R32_G32_B32_A32_UInt:
                 return VK_FORMAT_R32G32B32A32_UINT;
+            case TextureFormat::R16G16B16_UInt:
+                return VK_FORMAT_R16G16B16_UINT;
+            case TextureFormat::R16G16B16_SInt:
+                return VK_FORMAT_R16G16B16_SINT;
+            case TextureFormat::R16G16B16_Float:
+                return VK_FORMAT_R16G16B16_SFLOAT;
             case TextureFormat::R8_G8_SNorm:
                 return VK_FORMAT_R8G8_SNORM;
             case TextureFormat::BC1_Rgb_UNorm:
@@ -116,6 +122,30 @@ namespace Portakal
                 return VK_FORMAT_R16G16B16A16_SFLOAT;
             case TextureFormat::R32_G32_B32_A32_SInt:
                 return VK_FORMAT_R32G32B32A32_SINT;
+            case TextureFormat::R64_UInt:
+                return VK_FORMAT_R64_UINT;
+            case TextureFormat::R64_SInt:
+                return VK_FORMAT_R64_SINT;
+            case TextureFormat::R64_Float:
+                return VK_FORMAT_R64_SFLOAT;
+            case TextureFormat::R64_G64_UInt:
+                return VK_FORMAT_R64_UINT;
+            case TextureFormat::R64_G64_SInt:
+                return VK_FORMAT_R64_UINT;
+            case TextureFormat::R64_G64_Float:
+                return VK_FORMAT_R64_SFLOAT;
+            case TextureFormat::R64_G64_B64_UInt:
+                return VK_FORMAT_R64G64B64_UINT;
+            case TextureFormat::R64_G64_B64_SInt:
+                return VK_FORMAT_R64G64B64_SINT;
+            case TextureFormat::R64_G64_B64_Float:
+                return VK_FORMAT_R64G64B64_SFLOAT;
+            case TextureFormat::R64_G64_B64_A64_UInt:
+                return VK_FORMAT_R64G64B64A64_UINT;
+            case TextureFormat::R64_G64_B64_A64_SInt:
+                return VK_FORMAT_R64G64B64A64_SINT;
+            case TextureFormat::R64_G64_B64_A64_Float:
+                return VK_FORMAT_R64G64B64A64_SFLOAT;
             case TextureFormat::ETC2_R8_G8_B8_UNorm:
                 return VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK;
             case TextureFormat::ETC2_R8_G8_B8_A1_UNorm:
@@ -149,6 +179,7 @@ namespace Portakal
             default:
                 return VK_FORMAT_UNDEFINED;
             }
+
         }
 
         FORCEINLINE static VkImageType GetImageType(const TextureType type) noexcept

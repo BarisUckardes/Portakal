@@ -19,6 +19,8 @@ namespace Portakal
         "layout(set=0,binding=0) cbuffer vertexBuffer\
             {\
               float4x4 ProjectionMatrix;\
+              float4 MyValue0;\
+              float3 MyValue1;\
             };\
             struct VS_INPUT\
             {\
@@ -363,34 +365,11 @@ namespace Portakal
         constantBufferDesc.SubItemSizeInBytes = 64;
         mConstantBuffer = mDevice->CreateBuffer(constantBufferDesc);
 
-        //Compile HLSL to SPIRV
-        MemoryOwnedView* pVertexShaderSpirv = nullptr;
-        MemoryOwnedView* pFragmentShaderSpirv = nullptr;
-
-        ShaderCompiler::CompileToSPIRV(vertexShaderSource, "main", ShaderStage::VertexStage, ShaderLanguage::HLSL, &pVertexShaderSpirv);
-        ShaderCompiler::CompileToSPIRV(pixelShaderSource, "main", ShaderStage::FragmentStage, ShaderLanguage::HLSL, &pFragmentShaderSpirv);
-
-        //Compile HLSL to platform bytes
-        MemoryOwnedView* pVertexShaderPlatformBytes = nullptr;
-        MemoryOwnedView* pFragmentShaderPlatformBytes = nullptr;
-        ShaderCompiler::CompileFromSPIRV(pVertexShaderSpirv, mDevice->GetBackend(), &pVertexShaderPlatformBytes);
-        ShaderCompiler::CompileFromSPIRV(pFragmentShaderSpirv, mDevice->GetBackend(), &pFragmentShaderPlatformBytes);
-
         //Create shaders
-        ShaderDesc vertexShaderDesc = {};
-        vertexShaderDesc.Stage = ShaderStage::VertexStage;
-        vertexShaderDesc.ByteCode = pVertexShaderSpirv;
-        vertexShaderDesc.Language = ShaderLanguage::HLSL;
-        vertexShaderDesc.EntryPoint = "main";
-
-        ShaderDesc fragmentShaderDesc = {};
-        fragmentShaderDesc.Stage = ShaderStage::FragmentStage;
-        fragmentShaderDesc.ByteCode = pFragmentShaderSpirv;
-        fragmentShaderDesc.Language = ShaderLanguage::HLSL;
-        fragmentShaderDesc.EntryPoint = "main";
-
-        mVertexShader = mDevice->CreateShader(vertexShaderDesc);
-        mFragmentShader = mDevice->CreateShader(fragmentShaderDesc);
+        mVertexShader = new ShaderResource();
+        mFragmentShader = new ShaderResource();
+        mVertexShader->CompileShader(vertexShaderSource, "main", ShaderLanguage::HLSL, ShaderStage::VertexStage);
+        mFragmentShader->CompileShader(pixelShaderSource, "main", ShaderLanguage::HLSL, ShaderStage::FragmentStage);
 
         //Create sampler
         SamplerDesc samplerDesc = {};
@@ -716,7 +695,7 @@ namespace Portakal
         pipelineDesc.Multisample = multisampleDesc;
         pipelineDesc.RasterizerState = rasterizerStateDesc;
         pipelineDesc.ResourceLayout = resourceLayoutDesc;
-        pipelineDesc.GraphicsShaders = { mVertexShader,mFragmentShader };
+        pipelineDesc.GraphicsShaders = { mVertexShader->GetShader(),mFragmentShader->GetShader()};
         pipelineDesc.Viewport = viewport;
         pipelineDesc.pRenderPass = pRenderTarget->GetRenderPass();
         pipelineDesc.SubpassIndex = subpassIndex;

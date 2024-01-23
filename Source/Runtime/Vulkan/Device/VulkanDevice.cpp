@@ -341,19 +341,6 @@ namespace Portakal
 				writeInfo.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER;
 				break;
 			}
-			case GraphicsResourceType::CombinedTextureSampler:
-			{
-				const VulkanTextureView* Texture = (const VulkanTextureView*)entry.pResource.GetHeap();
-
-				VkDescriptorImageInfo samplerImageInfo = {};
-				samplerImageInfo.imageView = Texture->GetVkImageView();
-				samplerImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-				samplerImageInfo.sampler = VK_NULL_HANDLE;
-				writeImageInformation[entryIndex] = samplerImageInfo;
-				writeInfo.pImageInfo = &samplerImageInfo;
-				writeInfo.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-				break;
-			}
 			case GraphicsResourceType::SampledTexture:
 			{
 				const VulkanTextureView* Texture = (const VulkanTextureView*)entry.pResource.GetHeap();

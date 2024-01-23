@@ -4,7 +4,7 @@
 
 namespace Portakal
 {
-	ShaderResource::ShaderResource()
+	ShaderResource::ShaderResource() : mLanguage(ShaderLanguage::Unknown),mStage(ShaderStage::VertexStage)
 	{
 		mDevice = GraphicsAPI::GetDefaultDevice();
 	}
@@ -31,7 +31,7 @@ namespace Portakal
 
 		//Compile from spirv
 		MemoryOwnedView* pPlatformBytes = nullptr;
-		if (!ShaderCompiler::CompileFromSPIRV(pSPIRVBytes, language, &pPlatformBytes))
+		if (!ShaderCompiler::CompileFromSPIRV(pSPIRVBytes, mDevice->GetBackend(), &pPlatformBytes))
 		{
 			DEV_LOG("ShaderResource", "Failed to compile from SPIRV to platform bytes!");
 			return;
@@ -45,12 +45,25 @@ namespace Portakal
 		desc.Stage = stage;
 		mShader = mDevice->CreateShader(desc);
 
+		//Generate reflection
+		mReflection = ShaderCompiler::GenerateReflection(pSPIRVBytes);
+
+		//Set properties
 		mSource = source;
+		mEntryPoint = entryMethod;
+		mLanguage = language;
+		mStage = mStage;
 	}
 
 	
 	void ShaderResource::Clear()
 	{
+		mSource = "";
+		mEntryPoint = "";
+		mLanguage = ShaderLanguage::Unknown;
+		mStage = ShaderStage::VertexStage;
+		mReflection.Deference();
+
 		mShader.Shutdown();
 	}
 	void ShaderResource::OnShutdown()

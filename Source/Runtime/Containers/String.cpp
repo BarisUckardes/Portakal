@@ -2,12 +2,16 @@
 #include <Runtime/Memory/Memory.h>
 #include <string>
 #include <iostream>
+
 namespace Portakal
 {
-	UInt64 GetCharPointerSize(const Char* target)
+	UInt64 GetCharPointerSize(const Char* pTarget)
 	{
+		if (pTarget == nullptr)
+			return 0;
+
 		unsigned int pSize = 0;
-		while (target[pSize] != '\0')
+		while (pTarget[pSize] != '\0')
 			pSize++;
 		return pSize;
 	}
