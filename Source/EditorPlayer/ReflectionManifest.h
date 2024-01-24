@@ -3,113 +3,115 @@
 #include <Runtime/Reflection/Reflection.h>
 #include <Runtime/Reflection/ReflectionManifest.h>
 #include <Runtime/Reflection/TypeDispatcher.h>
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\MyAttribute.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\TestClass.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Application\ApplicationModule.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Containers\Guid.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Math\Vector2F.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Math\Vector2I.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Math\Vector2UI.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Math\Vector2US.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Object\Object.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Platform\PlatformType.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Reflection\Attribute.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Reflection\FieldMode.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Reflection\ReflectionModule.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Rendering\RenderGraph.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Rendering\RenderOperation.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\CustomResourceDeserializer.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\IResourceDeserializer.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\ResourceDescriptor.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\ResourceModule.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\ResourceSubObject.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Window\WindowModule.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\World\Component.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\World\Entity.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\World\SceneAspect.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\World\SceneModule.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Graphics\Common\CompareOperation.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Graphics\Common\LogicOperation.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Graphics\Sampler\SamplerAddressMode.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Graphics\Sampler\SamplerBorderColor.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Graphics\Sampler\SamplerFiltering.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Graphics\Sampler\SamplerMapMode.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Graphics\Shader\ShaderLanguage.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Graphics\Shader\ShaderStage.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Rendering\Builtin\BasicCamera.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Rendering\Builtin\BasicRenderAspect.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Mesh\MeshDeserializer.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Mesh\MeshResource.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\RenderTarget\RenderTargetResource.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Sampler\SamplerDescriptor.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Sampler\SamplerResource.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Scene\SceneComponentDescriptor.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Scene\SceneComponentFieldDescriptor.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Scene\SceneComponentFieldType.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Scene\SceneDescriptor.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Scene\SceneDeserializer.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Scene\SceneEntityDescriptor.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Scene\SceneResource.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Shader\ShaderDescriptor.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Shader\ShaderDeserializer.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Shader\ShaderResource.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Texture\TextureDeserializer.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\Resource\Texture\TextureResource.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Runtime\World\Aspects\DisplayAspect.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Domain\DomainFileDescriptor.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Domain\DomainModule.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\GUIDirection.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\ImGui\ImGuiModule.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\ImGui\ImGuiRenderEndModule.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\ImGui\ImGuiRenderStartModule.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Project\ProjectDescriptor.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Project\ProjectModule.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Resource\CustomResourceSerializer.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Resource\EditorResourceModule.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Resource\IResourceSerializer.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Component\CustomComponentPainter.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Component\IComponentPainter.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\ContextMenu\CustomContextMenuItem.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\ContextMenu\IContextMenuItem.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Object\CustomObjectPainter.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Object\EditorObjectModule.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Object\IObjectPainter.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\OpenAction\CustomFileOpenAction.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\OpenAction\IFileOpenAction.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Thumbnail\CustomThumbnail.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Thumbnail\IThumbnail.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Window\GUIWindow.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Window\GUIWindowDescriptor.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Window\GUIWindowModule.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Window\GUIWindowSettings.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Resource\Mesh\MeshSerializer.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Resource\Sampler\SamplerSerializer.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Resource\Scene\SceneSerializer.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Resource\Shader\ShaderSerializer.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\Resource\Texture\TextureSerializer.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Component\Builtin\BasicCameraPainter.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\ContextMenu\Builtin\CreateFolderContextMenuItem.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\ContextMenu\Builtin\CreateSamplerContextMenuItem.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\ContextMenu\Builtin\CreateSceneContextMenuItem.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\ContextMenu\Builtin\CreateShaderContextMenuItem.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Object\Builtin\EntityObjectPainter.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Object\Builtin\SamplerObjectPainter.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Object\Builtin\ShaderObjectPainter.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Object\Builtin\TextureObjectPainter.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\OpenAction\Builtin\SceneFileOpenAction.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\OpenAction\Builtin\ShaderFileOpenAction.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\OpenAction\Builtin\TextureFileOpenAction.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Thumbnail\Builtin\DefaultThumbnail.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Thumbnail\Builtin\MeshThumbnail.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Thumbnail\Builtin\SamplerThumbnail.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Thumbnail\Builtin\SceneThumbnail.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Thumbnail\Builtin\ShaderThumbnail.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Thumbnail\Builtin\TextureThumbnail.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Window\Builtin\DomainWindow.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Window\Builtin\GameWindow.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Window\Builtin\ObjectWindow.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Window\Builtin\SceneWindow.h"
-#include "C:/Users/Roveldo/Documents/GitHub/Portakal/Source/Editor\GUI\Window\Builtin\WorldWindow.h"
+#include "D:/Projects/Portakal/Source/Runtime\MyAttribute.h"
+#include "D:/Projects/Portakal/Source/Runtime\TestClass.h"
+#include "D:/Projects/Portakal/Source/Runtime\Application\ApplicationModule.h"
+#include "D:/Projects/Portakal/Source/Runtime\Containers\Guid.h"
+#include "D:/Projects/Portakal/Source/Runtime\Math\Vector2F.h"
+#include "D:/Projects/Portakal/Source/Runtime\Math\Vector2I.h"
+#include "D:/Projects/Portakal/Source/Runtime\Math\Vector2UI.h"
+#include "D:/Projects/Portakal/Source/Runtime\Math\Vector2US.h"
+#include "D:/Projects/Portakal/Source/Runtime\Object\Object.h"
+#include "D:/Projects/Portakal/Source/Runtime\Platform\PlatformType.h"
+#include "D:/Projects/Portakal/Source/Runtime\Reflection\Attribute.h"
+#include "D:/Projects/Portakal/Source/Runtime\Reflection\FieldMode.h"
+#include "D:/Projects/Portakal/Source/Runtime\Reflection\ReflectionModule.h"
+#include "D:/Projects/Portakal/Source/Runtime\Rendering\RenderGraph.h"
+#include "D:/Projects/Portakal/Source/Runtime\Rendering\RenderOperation.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\CustomResourceDeserializer.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\IResourceDeserializer.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\ResourceDescriptor.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\ResourceModule.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\ResourceSubObject.h"
+#include "D:/Projects/Portakal/Source/Runtime\Window\WindowModule.h"
+#include "D:/Projects/Portakal/Source/Runtime\World\Component.h"
+#include "D:/Projects/Portakal/Source/Runtime\World\Entity.h"
+#include "D:/Projects/Portakal/Source/Runtime\World\SceneAspect.h"
+#include "D:/Projects/Portakal/Source/Runtime\World\SceneModule.h"
+#include "D:/Projects/Portakal/Source/Runtime\Graphics\Common\CompareOperation.h"
+#include "D:/Projects/Portakal/Source/Runtime\Graphics\Common\LogicOperation.h"
+#include "D:/Projects/Portakal/Source/Runtime\Graphics\Sampler\SamplerAddressMode.h"
+#include "D:/Projects/Portakal/Source/Runtime\Graphics\Sampler\SamplerBorderColor.h"
+#include "D:/Projects/Portakal/Source/Runtime\Graphics\Sampler\SamplerFiltering.h"
+#include "D:/Projects/Portakal/Source/Runtime\Graphics\Sampler\SamplerMapMode.h"
+#include "D:/Projects/Portakal/Source/Runtime\Graphics\Shader\ShaderLanguage.h"
+#include "D:/Projects/Portakal/Source/Runtime\Graphics\Shader\ShaderStage.h"
+#include "D:/Projects/Portakal/Source/Runtime\Rendering\Builtin\BasicCamera.h"
+#include "D:/Projects/Portakal/Source/Runtime\Rendering\Builtin\BasicRenderAspect.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\Mesh\MeshDeserializer.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\Mesh\MeshResource.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\RenderTarget\RenderTargetResource.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\Sampler\SamplerDescriptor.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\Sampler\SamplerDeserializer.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\Sampler\SamplerResource.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\Scene\SceneComponentDescriptor.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\Scene\SceneComponentFieldDescriptor.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\Scene\SceneComponentFieldType.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\Scene\SceneDescriptor.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\Scene\SceneDeserializer.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\Scene\SceneEntityDescriptor.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\Scene\SceneResource.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\Shader\ShaderDescriptor.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\Shader\ShaderDeserializer.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\Shader\ShaderResource.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\Texture\TextureDeserializer.h"
+#include "D:/Projects/Portakal/Source/Runtime\Resource\Texture\TextureResource.h"
+#include "D:/Projects/Portakal/Source/Runtime\World\Aspects\DisplayAspect.h"
+#include "D:/Projects/Portakal/Source/Editor\Domain\DomainFileDescriptor.h"
+#include "D:/Projects/Portakal/Source/Editor\Domain\DomainModule.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\GUIDirection.h"
+#include "D:/Projects/Portakal/Source/Editor\ImGui\ImGuiModule.h"
+#include "D:/Projects/Portakal/Source/Editor\ImGui\ImGuiRenderEndModule.h"
+#include "D:/Projects/Portakal/Source/Editor\ImGui\ImGuiRenderStartModule.h"
+#include "D:/Projects/Portakal/Source/Editor\Project\ProjectDescriptor.h"
+#include "D:/Projects/Portakal/Source/Editor\Project\ProjectModule.h"
+#include "D:/Projects/Portakal/Source/Editor\Resource\CustomResourceSerializer.h"
+#include "D:/Projects/Portakal/Source/Editor\Resource\EditorResourceModule.h"
+#include "D:/Projects/Portakal/Source/Editor\Resource\IResourceSerializer.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Component\CustomComponentPainter.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Component\IComponentPainter.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\ContextMenu\CustomContextMenuItem.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\ContextMenu\IContextMenuItem.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Object\CustomObjectPainter.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Object\EditorObjectModule.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Object\IObjectPainter.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\OpenAction\CustomFileOpenAction.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\OpenAction\IFileOpenAction.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Thumbnail\CustomThumbnail.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Thumbnail\IThumbnail.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Window\GUIWindow.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Window\GUIWindowDescriptor.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Window\GUIWindowModule.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Window\GUIWindowSettings.h"
+#include "D:/Projects/Portakal/Source/Editor\Resource\Mesh\MeshSerializer.h"
+#include "D:/Projects/Portakal/Source/Editor\Resource\Sampler\SamplerSerializer.h"
+#include "D:/Projects/Portakal/Source/Editor\Resource\Scene\SceneSerializer.h"
+#include "D:/Projects/Portakal/Source/Editor\Resource\Shader\ShaderSerializer.h"
+#include "D:/Projects/Portakal/Source/Editor\Resource\Texture\TextureSerializer.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Component\Builtin\BasicCameraPainter.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\ContextMenu\Builtin\CreateFolderContextMenuItem.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\ContextMenu\Builtin\CreateSamplerContextMenuItem.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\ContextMenu\Builtin\CreateSceneContextMenuItem.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\ContextMenu\Builtin\CreateShaderContextMenuItem.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Object\Builtin\EntityObjectPainter.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Object\Builtin\SamplerObjectPainter.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Object\Builtin\ShaderObjectPainter.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Object\Builtin\TextureObjectPainter.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\OpenAction\Builtin\SamplerFileOpenAction.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\OpenAction\Builtin\SceneFileOpenAction.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\OpenAction\Builtin\ShaderFileOpenAction.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\OpenAction\Builtin\TextureFileOpenAction.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Thumbnail\Builtin\DefaultThumbnail.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Thumbnail\Builtin\MeshThumbnail.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Thumbnail\Builtin\SamplerThumbnail.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Thumbnail\Builtin\SceneThumbnail.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Thumbnail\Builtin\ShaderThumbnail.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Thumbnail\Builtin\TextureThumbnail.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Window\Builtin\DomainWindow.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Window\Builtin\GameWindow.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Window\Builtin\ObjectWindow.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Window\Builtin\SceneWindow.h"
+#include "D:/Projects/Portakal/Source/Editor\GUI\Window\Builtin\WorldWindow.h"
 #include "EditorPlayerGDeviceModule.h"
 #include "EditorPlayerProjectModule.h"
 #include "EditorPlayerWindowModule.h"
@@ -166,6 +168,7 @@
 		void* CreateMeshResource() {return new Portakal::MeshResource();}
 		void* CreateRenderTargetResource() {return new Portakal::RenderTargetResource();}
 		void* CreateSamplerDescriptor() {return new Portakal::SamplerDescriptor();}
+		void* CreateSamplerDeserializer() {return new Portakal::SamplerDeserializer();}
 		void* CreateSamplerResource() {return new Portakal::SamplerResource();}
 		void* CreateSceneComponentDescriptor() {return new Portakal::SceneComponentDescriptor();}
 		void* CreateSceneComponentFieldDescriptor() {return new Portakal::SceneComponentFieldDescriptor();}
@@ -220,6 +223,7 @@
 		void* CreateSamplerObjectPainter() {return new Portakal::SamplerObjectPainter();}
 		void* CreateShaderObjectPainter() {return new Portakal::ShaderObjectPainter();}
 		void* CreateTextureObjectPainter() {return new Portakal::TextureObjectPainter();}
+		void* CreateSamplerFileOpenAction() {return new Portakal::SamplerFileOpenAction();}
 		void* CreateSceneFileOpenAction() {return new Portakal::SceneFileOpenAction();}
 		void* CreateShaderFileOpenAction() {return new Portakal::ShaderFileOpenAction();}
 		void* CreateTextureFileOpenAction() {return new Portakal::TextureFileOpenAction();}
@@ -347,6 +351,8 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::RenderTargetResource>(pRenderTargetResource);
 ;		Portakal::Type* pSamplerDescriptor = Portakal::TypeDispatcher::CreateType("SamplerDescriptor",sizeof(Portakal::SamplerDescriptor),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSamplerDescriptor,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SamplerDescriptor>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SamplerDescriptor>(pSamplerDescriptor);
+;		Portakal::Type* pSamplerDeserializer = Portakal::TypeDispatcher::CreateType("SamplerDeserializer",sizeof(Portakal::SamplerDeserializer),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSamplerDeserializer,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SamplerDeserializer>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SamplerDeserializer>(pSamplerDeserializer);
 ;		Portakal::Type* pSamplerResource = Portakal::TypeDispatcher::CreateType("SamplerResource",sizeof(Portakal::SamplerResource),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSamplerResource,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SamplerResource>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SamplerResource>(pSamplerResource);
 ;		Portakal::Type* pSceneComponentDescriptor = Portakal::TypeDispatcher::CreateType("SceneComponentDescriptor",sizeof(Portakal::SceneComponentDescriptor),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSceneComponentDescriptor,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneComponentDescriptor>());
@@ -455,6 +461,8 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ShaderObjectPainter>(pShaderObjectPainter);
 ;		Portakal::Type* pTextureObjectPainter = Portakal::TypeDispatcher::CreateType("TextureObjectPainter",sizeof(Portakal::TextureObjectPainter),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateTextureObjectPainter,Portakal::TypeDispatcher::GetTypeAddress<Portakal::TextureObjectPainter>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::TextureObjectPainter>(pTextureObjectPainter);
+;		Portakal::Type* pSamplerFileOpenAction = Portakal::TypeDispatcher::CreateType("SamplerFileOpenAction",sizeof(Portakal::SamplerFileOpenAction),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSamplerFileOpenAction,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SamplerFileOpenAction>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SamplerFileOpenAction>(pSamplerFileOpenAction);
 ;		Portakal::Type* pSceneFileOpenAction = Portakal::TypeDispatcher::CreateType("SceneFileOpenAction",sizeof(Portakal::SceneFileOpenAction),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSceneFileOpenAction,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneFileOpenAction>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneFileOpenAction>(pSceneFileOpenAction);
 ;		Portakal::Type* pShaderFileOpenAction = Portakal::TypeDispatcher::CreateType("ShaderFileOpenAction",sizeof(Portakal::ShaderFileOpenAction),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateShaderFileOpenAction,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ShaderFileOpenAction>());
@@ -627,6 +635,7 @@ extern "C"
         //Register attributes here
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::MyAttribute>(pTestClass);
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomResourceDeserializer>(pMeshDeserializer, "mesh");
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomResourceDeserializer>(pSamplerDeserializer, "sampler");
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::ResourceAttribute>(pSamplerResource, "sampler");
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomResourceDeserializer>(pSceneDeserializer,"scene");
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomResourceDeserializer>(pShaderDeserializer, "shader");
@@ -646,6 +655,7 @@ extern "C"
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomObjectPainter>(pSamplerObjectPainter, typeof(Portakal::SamplerResource));
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomObjectPainter>(pShaderObjectPainter, typeof(Portakal::ShaderResource));
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomObjectPainter>(pTextureObjectPainter, typeof(Portakal::TextureResource));
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomFileOpenAction>(pSamplerFileOpenAction, "sampler");
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomFileOpenAction>(pSceneFileOpenAction,"scene");
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomFileOpenAction>(pShaderFileOpenAction, "shader");
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomFileOpenAction>(pTextureFileOpenAction, "texture");
@@ -670,6 +680,7 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::MeshDeserializer),typeof(Portakal::IResourceDeserializer));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::MeshResource),typeof(Portakal::ResourceSubObject));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::RenderTargetResource),typeof(Portakal::ResourceSubObject));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::SamplerDeserializer),typeof(Portakal::IResourceDeserializer));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::SamplerResource),typeof(Portakal::ResourceSubObject));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::SceneDeserializer),typeof(Portakal::IResourceDeserializer));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::SceneResource),typeof(Portakal::ResourceSubObject));
@@ -707,6 +718,7 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::SamplerObjectPainter),typeof(Portakal::IObjectPainter));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ShaderObjectPainter),typeof(Portakal::IObjectPainter));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureObjectPainter),typeof(Portakal::IObjectPainter));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::SamplerFileOpenAction),typeof(Portakal::IFileOpenAction));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::SceneFileOpenAction),typeof(Portakal::IFileOpenAction));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ShaderFileOpenAction),typeof(Portakal::IFileOpenAction));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureFileOpenAction),typeof(Portakal::IFileOpenAction));
@@ -726,7 +738,7 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::EditorPlayerWindowModule),typeof(Portakal::ApplicationModule));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {pMyAttribute,pTestClass,pApplicationModule,pGuid,pVector2F,pVector2I,pVector2UI,pVector2US,pObject,pPlatformType,pAttribute,pFieldMode,pReflectionModule,pRenderGraph,pRenderOperation,pCustomResourceDeserializer,pIResourceDeserializer,pResourceDescriptor,pResourceModule,pResourceSubObject,pWindowModule,pComponent,pEntity,pSceneAspect,pSceneModule,pCompareOperation,pLogicOperation,pSamplerAddressMode,pSamplerBorderColor,pSamplerFiltering,pSamplerMapMode,pShaderLanguage,pShaderStage,pBasicCamera,pBasicRenderAspect,pMeshDeserializer,pMeshResource,pRenderTargetResource,pSamplerDescriptor,pSamplerResource,pSceneComponentDescriptor,pSceneComponentFieldDescriptor,pSceneComponentFieldType,pSceneDescriptor,pSceneDeserializer,pSceneEntityDescriptor,pSceneResource,pShaderDescriptor,pShaderDeserializer,pShaderResource,pTextureDeserializer,pTextureResource,pDisplayAspect,pDomainFileDescriptor,pDomainModule,pGUIDirection,pImGuiModule,pImGuiRenderEndModule,pImGuiRenderStartModule,pProjectDescriptor,pProjectModule,pCustomResourceSerializer,pEditorResourceModule,pIResourceSerializer,pCustomComponentPainter,pIComponentPainter,pCustomContextMenuItem,pIContextMenuItem,pCustomObjectPainter,pEditorObjectModule,pIObjectPainter,pCustomFileOpenAction,pIFileOpenAction,pCustomThumbnail,pIThumbnail,pGUIWindow,pGUIWindowDescriptor,pGUIWindowModule,pGUIWindowSettings,pMeshSerializer,pSamplerSerializer,pSceneSerializer,pShaderSerializer,pTextureSerializer,pBasicCameraPainter,pCreateFolderContextMenuItem,pCreateSamplerContextMenuItem,pCreateSceneContextMenuItem,pCreateShaderContextMenuItem,pEntityObjectPainter,pSamplerObjectPainter,pShaderObjectPainter,pTextureObjectPainter,pSceneFileOpenAction,pShaderFileOpenAction,pTextureFileOpenAction,pDefaultThumbnail,pMeshThumbnail,pSamplerThumbnail,pSceneThumbnail,pShaderThumbnail,pTextureThumbnail,pDomainWindow,pGameWindow,pObjectWindow,pSceneWindow,pWorldWindow,pEditorPlayerGDeviceModule,pEditorPlayerProjectModule,pEditorPlayerWindowModule,};
+		Portakal::Array<Portakal::Type*> types = {pMyAttribute,pTestClass,pApplicationModule,pGuid,pVector2F,pVector2I,pVector2UI,pVector2US,pObject,pPlatformType,pAttribute,pFieldMode,pReflectionModule,pRenderGraph,pRenderOperation,pCustomResourceDeserializer,pIResourceDeserializer,pResourceDescriptor,pResourceModule,pResourceSubObject,pWindowModule,pComponent,pEntity,pSceneAspect,pSceneModule,pCompareOperation,pLogicOperation,pSamplerAddressMode,pSamplerBorderColor,pSamplerFiltering,pSamplerMapMode,pShaderLanguage,pShaderStage,pBasicCamera,pBasicRenderAspect,pMeshDeserializer,pMeshResource,pRenderTargetResource,pSamplerDescriptor,pSamplerDeserializer,pSamplerResource,pSceneComponentDescriptor,pSceneComponentFieldDescriptor,pSceneComponentFieldType,pSceneDescriptor,pSceneDeserializer,pSceneEntityDescriptor,pSceneResource,pShaderDescriptor,pShaderDeserializer,pShaderResource,pTextureDeserializer,pTextureResource,pDisplayAspect,pDomainFileDescriptor,pDomainModule,pGUIDirection,pImGuiModule,pImGuiRenderEndModule,pImGuiRenderStartModule,pProjectDescriptor,pProjectModule,pCustomResourceSerializer,pEditorResourceModule,pIResourceSerializer,pCustomComponentPainter,pIComponentPainter,pCustomContextMenuItem,pIContextMenuItem,pCustomObjectPainter,pEditorObjectModule,pIObjectPainter,pCustomFileOpenAction,pIFileOpenAction,pCustomThumbnail,pIThumbnail,pGUIWindow,pGUIWindowDescriptor,pGUIWindowModule,pGUIWindowSettings,pMeshSerializer,pSamplerSerializer,pSceneSerializer,pShaderSerializer,pTextureSerializer,pBasicCameraPainter,pCreateFolderContextMenuItem,pCreateSamplerContextMenuItem,pCreateSceneContextMenuItem,pCreateShaderContextMenuItem,pEntityObjectPainter,pSamplerObjectPainter,pShaderObjectPainter,pTextureObjectPainter,pSamplerFileOpenAction,pSceneFileOpenAction,pShaderFileOpenAction,pTextureFileOpenAction,pDefaultThumbnail,pMeshThumbnail,pSamplerThumbnail,pSceneThumbnail,pShaderThumbnail,pTextureThumbnail,pDomainWindow,pGameWindow,pObjectWindow,pSceneWindow,pWorldWindow,pEditorPlayerGDeviceModule,pEditorPlayerProjectModule,pEditorPlayerWindowModule,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;

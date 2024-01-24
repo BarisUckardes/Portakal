@@ -43,6 +43,7 @@
 #include "GUI\Object\Builtin\SamplerObjectPainter.h"
 #include "GUI\Object\Builtin\ShaderObjectPainter.h"
 #include "GUI\Object\Builtin\TextureObjectPainter.h"
+#include "GUI\OpenAction\Builtin\SamplerFileOpenAction.h"
 #include "GUI\OpenAction\Builtin\SceneFileOpenAction.h"
 #include "GUI\OpenAction\Builtin\ShaderFileOpenAction.h"
 #include "GUI\OpenAction\Builtin\TextureFileOpenAction.h"
@@ -111,6 +112,7 @@
 		void* CreateSamplerObjectPainter() {return new Portakal::SamplerObjectPainter();}
 		void* CreateShaderObjectPainter() {return new Portakal::ShaderObjectPainter();}
 		void* CreateTextureObjectPainter() {return new Portakal::TextureObjectPainter();}
+		void* CreateSamplerFileOpenAction() {return new Portakal::SamplerFileOpenAction();}
 		void* CreateSceneFileOpenAction() {return new Portakal::SceneFileOpenAction();}
 		void* CreateShaderFileOpenAction() {return new Portakal::ShaderFileOpenAction();}
 		void* CreateTextureFileOpenAction() {return new Portakal::TextureFileOpenAction();}
@@ -237,6 +239,8 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ShaderObjectPainter>(pShaderObjectPainter);
 ;		Portakal::Type* pTextureObjectPainter = Portakal::TypeDispatcher::CreateType("TextureObjectPainter",sizeof(Portakal::TextureObjectPainter),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateTextureObjectPainter,Portakal::TypeDispatcher::GetTypeAddress<Portakal::TextureObjectPainter>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::TextureObjectPainter>(pTextureObjectPainter);
+;		Portakal::Type* pSamplerFileOpenAction = Portakal::TypeDispatcher::CreateType("SamplerFileOpenAction",sizeof(Portakal::SamplerFileOpenAction),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSamplerFileOpenAction,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SamplerFileOpenAction>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SamplerFileOpenAction>(pSamplerFileOpenAction);
 ;		Portakal::Type* pSceneFileOpenAction = Portakal::TypeDispatcher::CreateType("SceneFileOpenAction",sizeof(Portakal::SceneFileOpenAction),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSceneFileOpenAction,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneFileOpenAction>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneFileOpenAction>(pSceneFileOpenAction);
 ;		Portakal::Type* pShaderFileOpenAction = Portakal::TypeDispatcher::CreateType("ShaderFileOpenAction",sizeof(Portakal::ShaderFileOpenAction),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateShaderFileOpenAction,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ShaderFileOpenAction>());
@@ -304,6 +308,7 @@ extern "C"
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomObjectPainter>(pSamplerObjectPainter, typeof(Portakal::SamplerResource));
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomObjectPainter>(pShaderObjectPainter, typeof(Portakal::ShaderResource));
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomObjectPainter>(pTextureObjectPainter, typeof(Portakal::TextureResource));
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomFileOpenAction>(pSamplerFileOpenAction, "sampler");
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomFileOpenAction>(pSceneFileOpenAction,"scene");
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomFileOpenAction>(pShaderFileOpenAction, "shader");
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomFileOpenAction>(pTextureFileOpenAction, "texture");
@@ -343,6 +348,7 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::SamplerObjectPainter),typeof(Portakal::IObjectPainter));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ShaderObjectPainter),typeof(Portakal::IObjectPainter));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureObjectPainter),typeof(Portakal::IObjectPainter));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::SamplerFileOpenAction),typeof(Portakal::IFileOpenAction));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::SceneFileOpenAction),typeof(Portakal::IFileOpenAction));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ShaderFileOpenAction),typeof(Portakal::IFileOpenAction));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TextureFileOpenAction),typeof(Portakal::IFileOpenAction));
@@ -359,7 +365,7 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::WorldWindow),typeof(Portakal::GUIWindow));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {pDomainFileDescriptor,pDomainModule,pGUIDirection,pImGuiModule,pImGuiRenderEndModule,pImGuiRenderStartModule,pProjectDescriptor,pProjectModule,pCustomResourceSerializer,pEditorResourceModule,pIResourceSerializer,pCustomComponentPainter,pIComponentPainter,pCustomContextMenuItem,pIContextMenuItem,pCustomObjectPainter,pEditorObjectModule,pIObjectPainter,pCustomFileOpenAction,pIFileOpenAction,pCustomThumbnail,pIThumbnail,pGUIWindow,pGUIWindowDescriptor,pGUIWindowModule,pGUIWindowSettings,pMeshSerializer,pSamplerSerializer,pSceneSerializer,pShaderSerializer,pTextureSerializer,pBasicCameraPainter,pCreateFolderContextMenuItem,pCreateSamplerContextMenuItem,pCreateSceneContextMenuItem,pCreateShaderContextMenuItem,pEntityObjectPainter,pSamplerObjectPainter,pShaderObjectPainter,pTextureObjectPainter,pSceneFileOpenAction,pShaderFileOpenAction,pTextureFileOpenAction,pDefaultThumbnail,pMeshThumbnail,pSamplerThumbnail,pSceneThumbnail,pShaderThumbnail,pTextureThumbnail,pDomainWindow,pGameWindow,pObjectWindow,pSceneWindow,pWorldWindow,};
+		Portakal::Array<Portakal::Type*> types = {pDomainFileDescriptor,pDomainModule,pGUIDirection,pImGuiModule,pImGuiRenderEndModule,pImGuiRenderStartModule,pProjectDescriptor,pProjectModule,pCustomResourceSerializer,pEditorResourceModule,pIResourceSerializer,pCustomComponentPainter,pIComponentPainter,pCustomContextMenuItem,pIContextMenuItem,pCustomObjectPainter,pEditorObjectModule,pIObjectPainter,pCustomFileOpenAction,pIFileOpenAction,pCustomThumbnail,pIThumbnail,pGUIWindow,pGUIWindowDescriptor,pGUIWindowModule,pGUIWindowSettings,pMeshSerializer,pSamplerSerializer,pSceneSerializer,pShaderSerializer,pTextureSerializer,pBasicCameraPainter,pCreateFolderContextMenuItem,pCreateSamplerContextMenuItem,pCreateSceneContextMenuItem,pCreateShaderContextMenuItem,pEntityObjectPainter,pSamplerObjectPainter,pShaderObjectPainter,pTextureObjectPainter,pSamplerFileOpenAction,pSceneFileOpenAction,pShaderFileOpenAction,pTextureFileOpenAction,pDefaultThumbnail,pMeshThumbnail,pSamplerThumbnail,pSceneThumbnail,pShaderThumbnail,pTextureThumbnail,pDomainWindow,pGameWindow,pObjectWindow,pSceneWindow,pWorldWindow,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;
