@@ -7,6 +7,8 @@
 #include <Runtime/Resource/Shader/ShaderResource.h>
 #include <Runtime/Resource/Sampler/SamplerResource.h>
 #include <Runtime/Resource/Material/MaterialParameterType.h>
+#include <Runtime/Memory/MemoryOwnedView.h>
+#include <Runtime/Containers/Registry.h>
 
 namespace Portakal
 {
@@ -15,17 +17,17 @@ namespace Portakal
 	private:
 		struct MaterialParameter
 		{
-			MaterialParameterType Type;
+			MaterialParameterType Type = MaterialParameterType::None;
 			String Name;
-			MemoryOwnedView* pBufferMemory;
+			UInt32 BindingIndex;
+			MemoryOwnedView* pBufferMemory = nullptr;
 			SharedHeap<TextureResource> pTexture;
 			SharedHeap<SamplerResource> pSampler;
 			SharedHeap<GraphicsBuffer> pBufferDevice;
 			SharedHeap<GraphicsBuffer> pBufferHost;
 		};
-		struct MaterialStage
+		struct MaterialTableDescriptor
 		{
-			ShaderStage Stage;
 			Array<MaterialParameter> Parameters;
 		};
 	public:
@@ -53,10 +55,12 @@ namespace Portakal
 	private:
 		void InvalidateBufferMemory();
 		void InvalidateTablePool();
+		void ClearTableDescriptors();
+		void CreateTableDescriptors();
 	private:
-		Array<MaterialStage> mStages;
-		Array<SharedHeap<ResourceTable>> mResourceTables; // per stage
-		Array<SharedHeap<ResourceTableLayout>> mResourceTableLayouts; // per stage
+		Registry<UInt32, MaterialTableDescriptor> mTableDescriptors;
+		Array<SharedHeap<ResourceTable>> mResourceTables;
+		Array<SharedHeap<ResourceTableLayout>> mResourceTableLayouts;
 		Array<SharedHeap<ShaderResource>> mShaders;
 		SharedHeap<GraphicsDevice> mDevice;
 		SharedHeap<ResourceTablePool> mTablePool;

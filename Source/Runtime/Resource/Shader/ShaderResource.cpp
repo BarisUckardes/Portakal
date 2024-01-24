@@ -48,6 +48,10 @@ namespace Portakal
 		//Generate reflection
 		mReflection = ShaderCompiler::GenerateReflection(pSPIRVBytes);
 
+		//Delete owned memoris
+		delete pSPIRVBytes;
+		delete pPlatformBytes;
+
 		//Set properties
 		mSource = source;
 		mEntryPoint = entryMethod;

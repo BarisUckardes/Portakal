@@ -19,7 +19,6 @@ namespace Portakal
 		resultOut.Size = { (UInt16)width,(UInt16)height };
 		resultOut.pView = new MemoryOwnedView(pData, width * height * 4);
 
-		stbi_image_free(pData);
 		return true;
 	}
 	Bool8 TextureLoader::LoadFromMemory(const MemoryView& memory,TextureLoadResult& resultOut)
