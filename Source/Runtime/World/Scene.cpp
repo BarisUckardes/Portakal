@@ -5,6 +5,7 @@ namespace Portakal
 {
     Scene::Scene() : mPrimal(false)
     {
+
     }
     SharedHeap<Scene> Scene::Create()
     {

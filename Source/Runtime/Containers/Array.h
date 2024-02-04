@@ -236,22 +236,12 @@ namespace Portakal
 			if (index >= mSize)
 				return;
 
-			T* newData = new T[mSize - 1];
-			for (unsigned int i = 0; i < mSize; i++)
+			for (unsigned int i = index; i < mSize-1; i++)
 			{
-				if (i == index)
-					continue;
-
-				if (i < index)
-					newData[i] = mData[i];
-				else
-					newData[i - 1] = mData[i];
+				mData[i] = mData[i + 1];
 			}
 
-			delete[] mData;
-			mData = newData;
 			mSize--;
-
 		}
 
 		void RemoveAll()

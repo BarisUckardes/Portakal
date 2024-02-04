@@ -9,24 +9,30 @@ namespace Portakal
 		mDevice = GraphicsAPI::GetDefaultDevice();
 	}
 
-	void ShaderResource::CompileShader(const String& source, const String& entryMethod, const ShaderLanguage language, const ShaderStage stage)
+	bool ShaderResource::CompileShader(const String& source, const String& entryMethod, const ShaderLanguage language, const ShaderStage stage)
 	{
+		if (IsShutdown())
+			return false;
 		if (mDevice.IsShutdown())
-			return;
+			return false;
 		if (source.GetSize() == 0)
-			return;
+			return false;
 		if (entryMethod.GetSize() == 0)
-			return;
+			return false;
 
 		//Clear the former one
 		Clear();
 
 		//Compile to spirv
 		MemoryOwnedView* pSPIRVBytes = nullptr;
-		if (!ShaderCompiler::CompileToSPIRV(source, entryMethod, stage, language, &pSPIRVBytes))
+		String errorMessage;
+		if (!ShaderCompiler::CompileToSPIRV(source, entryMethod, stage, language, &pSPIRVBytes,mErrorMessage))
 		{
 			DEV_LOG("ShaderResource", "Failed to compile given shader text to SPIRV");
-			return;
+
+			//Invoke event
+			mOnNewShadersEvent.Invoke(this);
+			return false;
 		}
 
 		//Compile from spirv
@@ -34,7 +40,10 @@ namespace Portakal
 		if (!ShaderCompiler::CompileFromSPIRV(pSPIRVBytes, mDevice->GetBackend(), &pPlatformBytes))
 		{
 			DEV_LOG("ShaderResource", "Failed to compile from SPIRV to platform bytes!");
-			return;
+
+			//Invoke event
+			mOnNewShadersEvent.Invoke(this);
+			return false;
 		}
 
 		//Create shader
@@ -46,7 +55,7 @@ namespace Portakal
 		mShader = mDevice->CreateShader(desc);
 
 		//Generate reflection
-		mReflection = ShaderCompiler::GenerateReflection(pSPIRVBytes);
+		mReflection = ShaderCompiler::GenerateReflectionFromSPIRV(pSPIRVBytes);
 
 		//Delete owned memoris
 		delete pSPIRVBytes;
@@ -57,6 +66,11 @@ namespace Portakal
 		mEntryPoint = entryMethod;
 		mLanguage = language;
 		mStage = mStage;
+
+		//Invoke event
+		mOnNewShadersEvent.Invoke(this);
+
+		return true;
 	}
 
 	
@@ -64,12 +78,28 @@ namespace Portakal
 	{
 		mSource = "";
 		mEntryPoint = "";
+		mErrorMessage = "";
 		mLanguage = ShaderLanguage::Unknown;
 		mStage = ShaderStage::VertexStage;
 		mReflection.Deference();
 
 		mShader.Shutdown();
 	}
+	void ShaderResource::RegisterOnNewShadersEvent(const Delegate<void, ShaderResource*>& del)
+	{
+		if (IsShutdown())
+			return;
+
+		mOnNewShadersEvent += del;
+	}
+	void ShaderResource::RemoveOnNewShadersEvent(const Delegate<void, ShaderResource*>& del)
+	{
+		if (IsShutdown())
+			return;
+
+		mOnNewShadersEvent -= del;
+	}
+
 	void ShaderResource::OnShutdown()
 	{
 		Clear();

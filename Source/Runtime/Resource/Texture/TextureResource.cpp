@@ -12,6 +12,9 @@ namespace Portakal
     }
     void TextureResource::Wrap(const SharedHeap<Texture>& pTexture)
     {
+        if (IsShutdown())
+            return;
+
         mTexture = pTexture;
         mWrapped = true;
 
@@ -29,6 +32,9 @@ namespace Portakal
     }
     void TextureResource::SetMemoryProfile(const SharedHeap<GraphicsMemoryHeap>& pHeapDevice, const SharedHeap<GraphicsMemoryHeap>& pHeapHost)
     {
+        if (IsShutdown())
+            return;
+
         //First clear
         Clear();
 

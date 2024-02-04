@@ -12,27 +12,40 @@
 
 namespace Portakal
 {
-	Bool8 ShaderCompiler::CompileToSPIRV(const String& sourceAsString, const String& entryMethodName, const ShaderStage stage, const ShaderLanguage language, MemoryOwnedView** ppViewOut)
+	Bool8 ShaderCompiler::CompileToSPIRV(const String& sourceAsString, const String& entryMethodName, const ShaderStage stage, const ShaderLanguage language, MemoryOwnedView** ppViewOut, String& errorMessageOut)
 	{
 		DEV_ASSERT(language != ShaderLanguage::Unknown, "ShaderCompiler", "Invalid shader language");
 
 		shaderc::Compiler vkCompiler;
 		shaderc::CompileOptions compileOptions;
 
+		//Set options
 		compileOptions.SetSourceLanguage(ShaderCompilerUtils::GetLanguage(language));
+		compileOptions.SetSuppressWarnings();
 
-		shaderc::SpvCompilationResult module = vkCompiler.CompileGlslToSpv(sourceAsString.GetSource(), ShaderCompilerUtils::GetShaderKind(stage), "", compileOptions);
-
-		if (module.GetCompilationStatus() != shaderc_compilation_status_success)
+		//Pre process
+		const shaderc::PreprocessedSourceCompilationResult preprocessResult = vkCompiler.PreprocessGlsl(*sourceAsString, ShaderCompilerUtils::GetShaderKind(stage), *entryMethodName, compileOptions);
+		const String rm = preprocessResult.GetErrorMessage().c_str();
+		if (preprocessResult.GetCompilationStatus() != shaderc_compilation_status_success || preprocessResult.GetNumErrors() > 0)
 		{
+			errorMessageOut = preprocessResult.GetErrorMessage().c_str();
+			*ppViewOut = nullptr;
+			return false;
+		}
+
+		const shaderc::SpvCompilationResult result = vkCompiler.CompileGlslToSpv(sourceAsString.GetSource(), ShaderCompilerUtils::GetShaderKind(stage), "", compileOptions);
+
+		if (result.GetCompilationStatus() != shaderc_compilation_status_success)
+		{
+			errorMessageOut = result.GetErrorMessage().c_str();
 			DEV_LOG("SPIRVCompiler", "Compiling failed!");
 			*ppViewOut = nullptr;
 			return false;
 		}
 
-		const UInt64 bufferSize = (Byte*)module.cend() - (Byte*)module.cbegin();
+		const UInt64 bufferSize = (Byte*)result.cend() - (Byte*)result.cbegin();
 		Byte* pBuffer = new Byte[bufferSize];
-		Memory::Copy(pBuffer, module.cbegin(), bufferSize);
+		Memory::Copy(pBuffer, result.cbegin(), bufferSize);
 
 		*ppViewOut = new MemoryOwnedView(pBuffer,bufferSize);
 
@@ -45,25 +58,36 @@ namespace Portakal
 		return true;
 	}
 
-	Bool8 ShaderCompiler::CompileToSPIRV(const MemoryView& view, const String& entryMethodName, const ShaderStage stage, const ShaderLanguage language, MemoryOwnedView** ppViewOut)
+	Bool8 ShaderCompiler::CompileToSPIRV(const MemoryView& view, const String& entryMethodName, const ShaderStage stage, const ShaderLanguage language, MemoryOwnedView** ppViewOut, String& errorMessageOut)
 	{
 		DEV_ASSERT(language != ShaderLanguage::Unknown, "ShaderCompiler", "Invalid shader language");
 
 		shaderc::Compiler compiler;
 		shaderc::CompileOptions compileOptions;
 
+		//Set options
 		compileOptions.SetSourceLanguage(ShaderCompilerUtils::GetLanguage(language));
+		compileOptions.SetSuppressWarnings();
 
-		shaderc::SpvCompilationResult module = compiler.CompileGlslToSpv((const Char*)view.GetMemory(), ShaderCompilerUtils::GetShaderKind(stage), "", compileOptions);
+		//Pre process
+		const shaderc::PreprocessedSourceCompilationResult preprocessResult = compiler.PreprocessGlsl((const char*)view.GetMemory(), ShaderCompilerUtils::GetShaderKind(stage), *entryMethodName, compileOptions);
+		if (preprocessResult.GetCompilationStatus() != shaderc_compilation_status_success)
+		{
+			errorMessageOut = preprocessResult.GetErrorMessage().c_str();
+			*ppViewOut = nullptr;
+			return false;
+		}
+		shaderc::SpvCompilationResult result = compiler.CompileGlslToSpv((const Char*)view.GetMemory(), ShaderCompilerUtils::GetShaderKind(stage), "", compileOptions);
 
-		if (module.GetCompilationStatus() != shaderc_compilation_status_success)
+		if (result.GetCompilationStatus() != shaderc_compilation_status_success)
 		{
 			DEV_LOG("ShaderCompiler", "Compiling failed!");
+			errorMessageOut = result.GetErrorMessage().c_str();
 			*ppViewOut = nullptr;
 			return false;
 		}
 
-		*ppViewOut = new MemoryOwnedView((Byte*)module.cbegin(), (Byte*)module.cend());
+		*ppViewOut = new MemoryOwnedView((Byte*)result.cbegin(), (Byte*)result.cend());
 
 		if (*ppViewOut == nullptr)
 		{
@@ -107,7 +131,7 @@ namespace Portakal
 		return true;
 	}
 
-	Bool8 ShaderCompiler::CompileFromSPIRV(const MemoryView& pView, const ShaderLanguage language, MemoryOwnedView** ppViewOut)
+	/*Bool8 ShaderCompiler::CompileFromSPIRV(const MemoryView& pView, const ShaderLanguage language, MemoryOwnedView** ppViewOut)
 	{
 		*ppViewOut = nullptr;
 
@@ -151,7 +175,7 @@ namespace Portakal
 		}
 
 		return true;
-	}
+	}*/
 	ShaderBlockMember GetMemberData(const SpvReflectBlockVariable* pVariable)
 	{
 		ShaderBlockMember member = {};
@@ -169,7 +193,7 @@ namespace Portakal
 
 		return member;
 	}
-	SharedHeap<ShaderReflection> ShaderCompiler::GenerateReflection(const MemoryView& memory)
+	SharedHeap<ShaderReflection> ShaderCompiler::GenerateReflectionFromSPIRV(const MemoryView& memory)
 	{
 		//Generate reflection data
 		SpvReflectShaderModule module;

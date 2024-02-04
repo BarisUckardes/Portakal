@@ -52,11 +52,14 @@ namespace Portakal
 		void SetTextureParameter(const ShaderStage stage, const String& parameterName, const SharedHeap<TextureResource>& pTexture, const Byte arrayIndex, const Byte mipIndex);
 		void SetSamplerParameter(const ShaderStage stage, const String& parameterName, const SharedHeap<SamplerResource>& pSampler);
 		void UpdateTables();
+		void RegisterStateChangedEvent(const Delegate<void, MaterialResource*>& del);
+		void RemoveStateChangedEvent(const Delegate<void, MaterialResource*>& del);
 	private:
 		void InvalidateBufferMemory();
 		void InvalidateTablePool();
 		void ClearTableDescriptors();
 		void CreateTableDescriptors();
+		void OnShaderStateChanged(ShaderResource* pShader);
 	private:
 		Registry<UInt32, MaterialTableDescriptor> mTableDescriptors;
 		Array<SharedHeap<ResourceTable>> mResourceTables;
@@ -66,5 +69,6 @@ namespace Portakal
 		SharedHeap<ResourceTablePool> mTablePool;
 		SharedHeap<GraphicsMemoryHeap> mHeapDevice;
 		SharedHeap<GraphicsMemoryHeap> mHeapHost;
+		Event<void, MaterialResource*> mOnStateChangeEvent;
 	};
 }

@@ -77,8 +77,6 @@ namespace Portakal
 		if (pSelectedSerializerType == nullptr)
 			return nullptr;
 
-		
-
 		//Create file descriptor
 		DomainFileDescriptor descriptor = {};
 		descriptor.ID = Guid::Create();

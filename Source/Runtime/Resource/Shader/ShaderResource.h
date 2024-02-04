@@ -4,6 +4,7 @@
 #include <Runtime/Graphics/Device/GraphicsDevice.h>
 #include <Runtime/Graphics/Shader/ShaderLanguage.h>
 #include <Runtime/ShaderCompiler/ShaderReflection.h>
+#include <Runtime/Event/Event.h>
 #include "ShaderResource.reflected.h"
 
 namespace Portakal
@@ -40,9 +41,15 @@ namespace Portakal
 		{
 			return mStage;
 		}
+		FORCEINLINE String GetErrorMessage() const noexcept
+		{
+			return mErrorMessage;
+		}
 
-		void CompileShader(const String& source,const String& entryMethod, const ShaderLanguage language, const ShaderStage stage);
+		bool CompileShader(const String& source,const String& entryMethod, const ShaderLanguage language, const ShaderStage stage);
 		void Clear();
+		void RegisterOnNewShadersEvent(const Delegate<void, ShaderResource*>& del);
+		void RemoveOnNewShadersEvent(const Delegate<void, ShaderResource*>& del);
 	private:
 		virtual void OnShutdown() override;
 	private:
@@ -51,8 +58,10 @@ namespace Portakal
 		SharedHeap<ShaderReflection> mReflection;
 		String mSource;
 		String mEntryPoint;
+		String mErrorMessage;
 		ShaderLanguage mLanguage;
 		ShaderStage mStage;
+		Event<void, ShaderResource*> mOnNewShadersEvent;
 	};
 }
 

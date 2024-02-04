@@ -13,11 +13,11 @@ namespace Portakal
 	{
 	public:
 		// Compile functions may need GraphicsApi param to determine hlsl to spirv conversions properly.
-		static Bool8 CompileToSPIRV(const String& sourceAsString, const String& entryMethodName, const ShaderStage stage, const ShaderLanguage language, MemoryOwnedView** ppViewOut);
-		static Bool8 CompileToSPIRV(const MemoryView& view, const String& entryMethodName, const ShaderStage stage, const ShaderLanguage language, MemoryOwnedView** ppViewOut);
+		static Bool8 CompileToSPIRV(const String& sourceAsString, const String& entryMethodName, const ShaderStage stage, const ShaderLanguage language, MemoryOwnedView** ppViewOut,String& errorMessageOut);
+		static Bool8 CompileToSPIRV(const MemoryView& view, const String& entryMethodName, const ShaderStage stage, const ShaderLanguage language, MemoryOwnedView** ppViewOut, String& errorMessageOut);
 		static Bool8 CompileFromSPIRV(const MemoryView& pView, GraphicsBackend chosenApi, MemoryOwnedView** ppBytes);
-		static Bool8 CompileFromSPIRV(const MemoryView& pView, const ShaderLanguage language, MemoryOwnedView** ppViewOut);
-		static SharedHeap<ShaderReflection> GenerateReflection(const MemoryView& memory);
+		//static Bool8 CompileFromSPIRV(const MemoryView& pView, const ShaderLanguage language, MemoryOwnedView** ppViewOut);
+		static SharedHeap<ShaderReflection> GenerateReflectionFromSPIRV(const MemoryView& memory);
 	private:
 		ShaderCompiler() = delete;
 		~ShaderCompiler() = delete;

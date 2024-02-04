@@ -14,6 +14,11 @@ namespace Portakal
 			Bool8 bOwned;
 			UInt64 SizeInBytes;
 		};
+		struct CompactReport
+		{
+			UInt32 Min;
+			UInt32 Max;
+		};
 	public:
 		GraphicsMemoryHeap(const GraphicsMemoryHeapDesc& desc);
 		~GraphicsMemoryHeap() = default;
@@ -40,9 +45,12 @@ namespace Portakal
 	protected:
 		virtual MemoryHandle AllocateCore(const UInt64 offsetInBytes) = 0;
 	private:
+		CompactReport GetCompactReport(const UInt32 index);
+		void Compact(const CompactReport& report);
+	private:
 		const UInt64 mSize;
 		const GraphicsMemoryType mType;
 		UInt64 mOccupiedSize;
-		LinkedList<SubAllocationBlock> mBlocks;
+		Array<SubAllocationBlock> mBlocks;
 	};
 }

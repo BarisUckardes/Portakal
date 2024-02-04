@@ -10,12 +10,22 @@ namespace Portakal
 
 	void MaterialResource::SetMemoryProfile(const SharedHeap<GraphicsMemoryHeap>& pHeapDevice, const SharedHeap<GraphicsMemoryHeap>& pHeapHost, const SharedHeap<ResourceTablePool>& pPool)
 	{
+		if (IsShutdown())
+			return;
+
 		mHeapDevice = pHeapDevice;
 		mHeapHost = pHeapHost;
 		mTablePool = pPool;
 	}
 	void MaterialResource::SetShaderProfile(const Array<SharedHeap<ShaderResource>>& shaders)
 	{
+		if (IsShutdown())
+			return;
+
+		//Clear former event subs
+		for (const SharedHeap<ShaderResource>& pShader : mShaders)
+			pShader->RemoveOnNewShadersEvent(GENERATE_MEMBER_DELEGATE1(this,MaterialResource::OnShaderStateChanged,void,ShaderResource*));
+
 		//Clear current tables
 		ClearTableDescriptors();
 
@@ -24,6 +34,10 @@ namespace Portakal
 
 		//Create new table descriptors
 		CreateTableDescriptors();
+
+		//Generate event subs
+		for (const SharedHeap<ShaderResource>& pShader : mShaders)
+			pShader->RegisterOnNewShadersEvent(GENERATE_MEMBER_DELEGATE1(this, MaterialResource::OnShaderStateChanged, void, ShaderResource*));
 	}
 	void MaterialResource::ClearTableDescriptors()
 	{
@@ -104,5 +118,20 @@ namespace Portakal
 				}
 			}
 		}
+	}
+	void MaterialResource::OnShaderStateChanged(ShaderResource* pShader)
+	{
+		//Refresh state
+
+		//Invoke state change event
+		mOnStateChangeEvent.Invoke(this);
+	}
+	void MaterialResource::RegisterStateChangedEvent(const Delegate<void, MaterialResource*>& del)
+	{
+		mOnStateChangeEvent += del;
+	}
+	void MaterialResource::RemoveStateChangedEvent(const Delegate<void, MaterialResource*>& del)
+	{
+		mOnStateChangeEvent -= del;
 	}
 }

@@ -43,9 +43,14 @@ namespace Portakal
         mSource = ImGuiUtils::MultiTextField("Source", mSource);
 
         //compile&save
-        if (ImGui::Button("Compile&Save"))
+        if (ImGui::Button("Compile"))
         {
+            mShader->CompileShader(mSource, mEntryPoint, mLanguage, mStage);
+        }
 
+        if (mShader->GetErrorMessage() != "")
+        {
+            ImGui::Text("Error messages %s", *mShader->GetErrorMessage());
         }
     }
 }

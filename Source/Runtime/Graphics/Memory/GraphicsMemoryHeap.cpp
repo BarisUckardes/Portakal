@@ -4,172 +4,125 @@ namespace Portakal
 {
     GraphicsMemoryHeap::GraphicsMemoryHeap(const GraphicsMemoryHeapDesc& desc) : mType(desc.Type),mSize(desc.SizeInBytes),mOccupiedSize(0)
     {
-        //Add the first block
-        mBlocks.Add({ false,desc.SizeInBytes });
+        //Create block
+        SubAllocationBlock initialBlock = {};
+        initialBlock.bOwned = false;
+        initialBlock.SizeInBytes = desc.SizeInBytes;
+        mBlocks.Add(initialBlock);
     }
     MemoryHandle GraphicsMemoryHeap::Allocate(const UInt64 sizeInBytes)
     {
-        //Check if it's active
-        if (IsShutdown())
+        //Check enough space is left
+        const UInt64 sizeLeft = mSize - mOccupiedSize;
+        if (sizeLeft < sizeInBytes)
             return uint64_max;
 
-        //Get root
-        LinkedList<SubAllocationBlock>::Node* pNode = mBlocks.GetRoot();
-
-        //Validate root
-        if (pNode == nullptr)
-        {
-            DEV_LOG("GraphicsMemoryHeap", "Memory allocation chain root is empty!");
-            return uint64_max;
-        }
-
-        UInt32 nodeIndex = 0;
+        //Look for an available space
         UInt64 offset = 0;
-        Bool8 bFoundValidBlock = false;
-
-        while (pNode != nullptr)
+        for (UInt32 i = 0; i < mBlocks.GetSize(); i++)
         {
-            //Check if data is owned
-            if (pNode->Data.bOwned)
+            SubAllocationBlock& block = mBlocks[i];
+            if (block.bOwned)
             {
-                nodeIndex++;
-                offset += pNode->Data.SizeInBytes;
-                pNode = pNode->Next;
+                offset += block.SizeInBytes;
                 continue;
             }
 
-            //Check if the requested size can fit into this block
-            if (pNode->Data.SizeInBytes >= sizeInBytes)
+            if (block.SizeInBytes < sizeInBytes)
             {
-                bFoundValidBlock = true;
-                break;
+                offset += block.SizeInBytes;
+                continue;
             }
 
-            //Tick
-            nodeIndex++;
-            offset += pNode->Data.SizeInBytes;
-            pNode = pNode->Next;
+            const UInt32 sizeLeft = block.SizeInBytes - sizeInBytes;
+            block.SizeInBytes = sizeLeft;
+
+            SubAllocationBlock newBlock = {};
+            newBlock.bOwned = true;
+            newBlock.SizeInBytes = sizeInBytes;
+            mBlocks.AddAt(newBlock, i);
+            return offset;
         }
-
-        if (!bFoundValidBlock)
-        {
-            DEV_LOG("GraphicsMemoryHeap", "Failed to allocate the requested memory size");
-            return uint64_max;
-        }
-
-        //Allocate implementation
-        const MemoryHandle allocationHandle = AllocateCore(offset);
-        const UInt64 remainingSize = pNode->Data.SizeInBytes - sizeInBytes;
-
-        if (remainingSize == 0)
-        {
-            pNode->Data.bOwned = true;
-        }
-        else
-        {
-            pNode->Data.SizeInBytes = remainingSize;
-
-            SubAllocationBlock newBlock = { true,sizeInBytes };
-            mBlocks.Insert(newBlock, nodeIndex);
-        }
-
-        return allocationHandle;
     }
     void GraphicsMemoryHeap::Free(const MemoryHandle handle)
     {
-        //Check if it's active
-        if (IsShutdown())
-            return;
-
-        //Validate root
-        LinkedList<SubAllocationBlock>::Node* pNode = mBlocks.GetRoot();
-        if (pNode == nullptr)
+        //Find and free owned memory
+        UInt64 currentOffset = 0;
+        for (UInt32 i = 0; i < mBlocks.GetSize(); i++)
         {
-            DEV_LOG("GraphicsMemoryHeap", "Memory allocation chain root is empty!");
-            return;
+            SubAllocationBlock& block = mBlocks[i];
+            if (currentOffset != handle)
+            {
+                currentOffset += block.SizeInBytes;
+                continue;
+            }
+
+            block.bOwned = false;
+            break;
         }
 
+        //Compact
+        for (UInt32 i = 0; i < mBlocks.GetSize(); i++)
         {
-            //Find sub allocation block with the given offset
-            UInt64 offset = 0;
-            while (pNode != nullptr)
-            {
-                //Check
-                if (offset == handle)
-                    break;
+            SubAllocationBlock& block = mBlocks[i];
+            CompactReport report = GetCompactReport(i);
+            if (report.Min == report.Max)
+                continue;
 
-                //Iterate
-                offset += pNode->Data.SizeInBytes;
-                pNode = pNode->Next;
+            Compact(report);
+
+            if (report.Min < i)
+            {
+                const UInt32 diff = i - report.Min;
+                i -= diff;
             }
         }
-
-        //Validate found sub allocation block
-        if (pNode == nullptr)
+    }
+    GraphicsMemoryHeap::CompactReport GraphicsMemoryHeap::GetCompactReport(const UInt32 index)
+    {
+        //Check min
+        UInt32 min = index;
+        for (UInt32 i = index; i > 0; i--)
         {
-            DEV_LOG("GraphicsMemoryHeap", "Failed to find the block to free!");
-            return;
+            SubAllocationBlock& block = mBlocks[i];
+            if (block.bOwned)
+                break;
+
+            min--;
         }
 
-        //disown memory
-        pNode->Data.bOwned = false;
+        //Check max
+        UInt32 max = index;
+        for (UInt32 i = index; i < mBlocks.GetSize(); i++)
+        {
+            SubAllocationBlock& block = mBlocks[i];
+            if (block.bOwned)
+                break;
 
-        ////Do a compacting pass
-        //LinkedList<SubAllocationBlock>::Node* pStartNode = mBlocks.GetRoot();
-        //LinkedList<SubAllocationBlock>::Node* pEndNode = pStartNode->Next;
-        //UInt32 freeBlockCount = 0;
-        //UInt64 compactedBlockSize = 0;
-        //while (pStartNode != nullptr)
-        //{
-        //    //Check if start node has a not owned memory block
-        //    if (!pStartNode->Data.bOwned)
-        //    {
-        //        //Iterate and collect
-        //        while (pEndNode != nullptr && !pEndNode->Data.bOwned)
-        //        {
-        //            //Get block size
-        //            compactedBlockSize += pEndNode->Data.SizeInBytes;
+            max++;
+        }
 
-        //            //Tick
-        //            pEndNode = pEndNode->Next;
-        //            freeBlockCount++;
-        //        }
+        return { min,max };
+    }
+    void GraphicsMemoryHeap::Compact(const CompactReport& report)
+    {
+        //Calculate size
+        UInt64 size = 0;
+        for (UInt32 i = report.Min; i < report.Max; i++)
+        {
+            SubAllocationBlock& block = mBlocks[i];
+            size += block.SizeInBytes;
+        }
 
-        //        //Check if there's a consecutive free blocks
-        //        if (freeBlockCount > 1)
-        //        {
-        //            LinkedList<SubAllocationBlock>::Node* pTest = pStartNode->Next;
-        //            while (pTest != pEndNode)
-        //            {
-        //                //Cache the next one
-        //                LinkedList<SubAllocationBlock>::Node* pTemp = pTest->Next;
+        //Remove nodes
+        const UInt32 removeCount = report.Max - report.Min;
+        for (UInt32 i = 0; i < removeCount; i++)
+            mBlocks.RemoveAt(report.Min);
 
-        //                //Delete the current one
-        //                delete pTest;
-
-        //                //Make the connections
-        //                pTest = pTemp;
-        //            }
-
-        //            //Create new node
-        //            LinkedList<SubAllocationBlock>::Node* pNewNode = new LinkedList<SubAllocationBlock>::Node();
-        //            pNewNode->Data.bOwned = false;
-        //            pNewNode->Data.SizeInBytes = compactedBlockSize;
-        //            
-        //            //Connect
-        //            pNewNode->Next = pEndNode;
-        //            pStartNode->Next = pNewNode;
-        //        }
-        //    }
-        //  
-        //    //Tick
-        //    if (pStartNode == nullptr)
-        //        break;
-
-        //    pStartNode = pStartNode->Next;
-        //    pEndNode = pStartNode->Next;
-        //    freeBlockCount = 0;
-        //    compactedBlockSize = 0;
-        //}
+        //Add single node
+        SubAllocationBlock block = {};
+        block.SizeInBytes = size;
+        block.bOwned = false;
+        mBlocks.AddAt(block, report.Min);
     }
 }
