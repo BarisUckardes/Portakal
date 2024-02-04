@@ -1,10 +1,14 @@
 #include "SamplerResource.h"
+#include <Runtime/Graphics/GraphicsAPI.h>
 
 namespace Portakal
 {
 	SamplerResource::SamplerResource()
 	{
+		mDevice = GraphicsAPI::GetDefaultDevice();
 
+		if (mDevice.IsShutdown())
+			return;
 	}
 	void SamplerResource::Create(const SamplerDesc& desc)
 	{

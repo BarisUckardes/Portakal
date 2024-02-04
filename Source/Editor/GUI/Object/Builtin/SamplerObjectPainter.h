@@ -1,6 +1,7 @@
 #pragma once
 #include <Editor/GUI/Object/IObjectPainter.h>
 #include <Runtime/Resource/Sampler/SamplerResource.h>
+#include <Runtime/Graphics/Sampler/Sampler.h>
 #include "SamplerObjectPainter.reflected.h"
 
 namespace Portakal
@@ -21,6 +22,7 @@ namespace Portakal
 
 	private:
 		SharedHeap<SamplerResource> mSamplerResource;
+		SharedHeap<Sampler> mSampler;
 		SamplerFiltering mMinFilter;
 		SamplerFiltering mMagFilter;
 		SamplerMapMode mMipmapMode;
