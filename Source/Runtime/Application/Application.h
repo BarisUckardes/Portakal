@@ -3,12 +3,21 @@
 #include <Runtime/Containers/String.h>
 #include <Runtime/Application/ApplicationModuleState.h>
 #include <Runtime/Application/ApplicationModule.h>
-
+#include <Runtime/Object/Object.h>
 
 namespace Portakal
 {
 	class RUNTIME_API Application
 	{
+		template<typename T>
+		friend class API;
+	public:
+		static Application* GetCurrent()
+		{
+			return sApplication;
+		}
+	private:
+		static inline Application* sApplication = nullptr;
 	public:
 		Application();
 		~Application();
@@ -42,10 +51,15 @@ namespace Portakal
 		virtual void OnPreTick() {}
 		virtual void OnPostTick() {}
 	private:
+		void _RegisterAPI(Object* pAPI);
+		void _RemoveAPI(Object* pAPI);
+	private:
 		Array<ApplicationModule*> mModules;
+		Array<Object*> mAPIs;
 		String mQuitReason;
 		Bool8 mQuitRequest;
 		String mInvalidationReason;
 		Bool8 mInvalidationRequest;
+
 	};
 }

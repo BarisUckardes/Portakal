@@ -14,7 +14,7 @@ namespace Portakal
 	{
 	public:
 		Swapchain(const SwapchainDesc& desc);
-		virtual ~Swapchain() override = default;
+		~Swapchain() = default;
 
 		FORCEINLINE Byte GetBufferCount() const noexcept
 		{

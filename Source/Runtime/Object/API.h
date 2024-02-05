@@ -1,6 +1,7 @@
 #pragma once
 #include <Runtime/Core/Core.h>
 #include <Runtime/Object/Object.h>
+#include <Runtime/Application/Application.h>
 
 namespace Portakal
 {
@@ -20,11 +21,13 @@ namespace Portakal
 		API()
 		{
 			sUnderlyingAPI = (T*)this;
+			Application::GetCurrent()->_RegisterAPI(this);
 		}
 
 		virtual void OnShutdown() override
 		{
 			sUnderlyingAPI = nullptr;
+			Application::GetCurrent()->_RemoveAPI(this);
 		}
 	};
 }

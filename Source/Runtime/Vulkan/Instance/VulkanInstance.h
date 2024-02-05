@@ -12,7 +12,7 @@ namespace Portakal
 		static PFN_vkCmdEndRenderingKHR vkCmdEndRenderingKHR;
 	public:
 		VulkanInstance(const GraphicsInstanceDesc& desc);
-		~VulkanInstance() override = default;
+		~VulkanInstance() = default;
 
 		FORCEINLINE VkInstance GetVkInstance() const noexcept
 		{

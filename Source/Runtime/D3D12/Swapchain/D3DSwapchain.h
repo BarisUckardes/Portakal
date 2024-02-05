@@ -12,7 +12,7 @@ namespace Portakal
 	{
 	public:
 		D3DSwapchain(const SwapchainDesc& desc, D3DDevice* pDevice);
-		~D3DSwapchain() override = default;
+		~D3DSwapchain() = default;
 
 		void CreateRenderTargetViews();
 		void CreateDepthStencilView();

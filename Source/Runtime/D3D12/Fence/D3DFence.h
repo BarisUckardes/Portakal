@@ -11,7 +11,7 @@ namespace Portakal
 	{
 	public:
 		D3DFence(D3DDevice* pDevice);
-		~D3DFence() override = default;
+		~D3DFence() = default;
 
 		virtual void OnShutdown() override;
 

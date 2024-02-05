@@ -12,7 +12,7 @@ namespace Portakal
 	{
 	public:
 		D3DMemoryHeap(const GraphicsMemoryHeapDesc& desc, D3DDevice* pInstance);
-		~D3DMemoryHeap() override = default;
+		~D3DMemoryHeap() = default;
 
 	private:
 		ComPtr<ID3D12Heap> mMemoryHeap;

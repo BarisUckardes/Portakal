@@ -12,7 +12,7 @@ namespace Portakal
 	public:
 		D3DTextureView(const TextureViewDesc& desc, D3DDevice* pDevice);
 		D3DTextureView(const TextureViewDesc& desc, D3DDevice* pDevice, ComPtr<ID3D12DescriptorHeap> pDescriptorHeap);
-		~D3DTextureView() override = default;
+		~D3DTextureView() = default;
 
 		virtual void OnShutdown() override;
 	private:

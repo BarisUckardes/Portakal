@@ -3,11 +3,13 @@
 
 namespace Portakal
 {
-    Application::Application() : mQuitReason("Unknown"),mQuitRequest(false)
+    Application::Application() : mQuitReason("Unknown"),mQuitRequest(false),mInvalidationRequest(false)
     {
+        sApplication = this;
     }
     Application::~Application()
     {
+        sApplication = nullptr;
     }
     void Application::RemoveModule(const UInt32 index)
     {
@@ -24,24 +26,30 @@ namespace Portakal
         Array<ApplicationModule*> removedModules;
         while (!mQuitRequest)
         {
-            //Pre invalidate
-            for (ApplicationModule* pModule : mModules)
+            //Check if invalidation is required
+            if (mInvalidationRequest)
             {
-                if (pModule->GetState() != ApplicationModuleState::OK)
-                    continue;
+                //Pre invalidate
+                for (ApplicationModule* pModule : mModules)
+                {
+                    if (pModule->GetState() != ApplicationModuleState::OK)
+                        continue;
 
-                pModule->OnPreInvalidation();
-            }
+                    pModule->OnPreInvalidation();
+                }
 
-            //Invalidate
+                //Invalidate
 
-            //Post invalidate
-            for (ApplicationModule* pModule : mModules)
-            {
-                if (pModule->GetState() != ApplicationModuleState::OK)
-                    continue;
+                //Post invalidate
+                for (ApplicationModule* pModule : mModules)
+                {
+                    if (pModule->GetState() != ApplicationModuleState::OK)
+                        continue;
 
-                pModule->OnPostInvalidation();
+                    pModule->OnPostInvalidation();
+                }
+
+                mInvalidationRequest = false;
             }
 
             //Call pre tick impl
@@ -121,5 +129,13 @@ namespace Portakal
     {
         mInvalidationRequest = true;
         mInvalidationReason = reason;
+    }
+    void Application::_RegisterAPI(Object* pAPI)
+    {
+        mAPIs.Add(pAPI);
+    }
+    void Application::_RemoveAPI(Object* pAPI)
+    {
+        mAPIs.Remove(pAPI);
     }
 }

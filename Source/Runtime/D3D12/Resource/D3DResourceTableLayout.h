@@ -12,7 +12,7 @@ namespace Portakal
 	{
 	public:
 		D3DResourceTableLayout(const ResourceTableLayoutDesc& desc, D3DDevice* pDevice);
-		~D3DResourceTableLayout() override = default;
+		~D3DResourceTableLayout() = default;
 
 		ComPtr<ID3D12RootSignature> GetRootSignature() const { return mRootSignature; }
 	private:

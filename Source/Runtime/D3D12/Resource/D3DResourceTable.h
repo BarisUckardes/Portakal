@@ -11,7 +11,7 @@ namespace Portakal
 	{
 	public:
 		D3DResourceTable(const ResourceTableDesc& desc, D3DDevice* pDevice);
-		~D3DResourceTable() override = default;
+		~D3DResourceTable() = default;
 
 	private:
 		ComPtr<ID3D12DescriptorHeap> mDescriptorHeap;

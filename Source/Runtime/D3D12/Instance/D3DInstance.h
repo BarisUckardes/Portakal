@@ -13,7 +13,7 @@ namespace Portakal
 	{
 	public:
 		D3DInstance(const GraphicsInstanceDesc& desc);
-		~D3DInstance() override = default;
+		~D3DInstance() = default;
 
 		FORCEINLINE ComPtr<IDXGIFactory4> GetFactory() const noexcept
 		{

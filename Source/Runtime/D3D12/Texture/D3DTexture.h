@@ -11,7 +11,7 @@ namespace Portakal
 	public:
 		D3DTexture(const TextureDesc& desc, D3DDevice* pDevice);
 		D3DTexture(const TextureDesc& desc, D3DDevice* pDevice, ComPtr<ID3D12Resource> pBuffer);
-		~D3DTexture() override = default;
+		~D3DTexture() = default;
 
 		ComPtr<ID3D12Resource> GetTextureResource() const { return mTexture; }
 

@@ -11,7 +11,7 @@ namespace Portakal
 	{
 	public:
 		D3DCommandList(const CommandListDesc& desc, D3DDevice* pDevice);
-		~D3DCommandList() override = default;
+		~D3DCommandList() = default;
 
 		FORCEINLINE ID3D12GraphicsCommandList* GetD3DCommandList() const noexcept
 		{

@@ -2,6 +2,10 @@
 
 namespace Portakal
 {
+	Object::~Object()
+	{
+		Shutdown();
+	}
 	void Object::SetName(const String& name)
 	{
 		if (IsShutdown())

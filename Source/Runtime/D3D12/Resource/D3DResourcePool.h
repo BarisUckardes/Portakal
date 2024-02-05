@@ -10,7 +10,7 @@ namespace Portakal
 	class RUNTIME_API D3DResourcePool : public ResourceTablePool
 	{
 		D3DResourcePool(const ResourceTablePoolDesc& desc, D3DDevice* pDevice);
-		~D3DResourcePool() override = default;
+		~D3DResourcePool() = default;
 	private:
 		D3D12_DESCRIPTOR_RANGE mRange;
 	};
