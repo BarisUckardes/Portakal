@@ -32,4 +32,10 @@ namespace Portakal
 
         mWindow->PollMessages();
     }
+    void EditorPlayerWindowModule::OnPreInvalidation()
+    {
+    }
+    void EditorPlayerWindowModule::OnPostInvalidation()
+    {
+    }
 }

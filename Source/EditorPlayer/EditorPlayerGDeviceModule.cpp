@@ -59,4 +59,12 @@ namespace Portakal
 	{
 
 	}
+	void EditorPlayerGDeviceModule::OnPreInvalidation()
+	{
+
+	}
+	void EditorPlayerGDeviceModule::OnPostInvalidation()
+	{
+
+	}
 }

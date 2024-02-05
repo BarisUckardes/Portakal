@@ -14,4 +14,12 @@ namespace Portakal
 	{
 
 	}
+	void GraphicsModule::OnPreInvalidation()
+	{
+
+	}
+	void GraphicsModule::OnPostInvalidation()
+	{
+
+	}
 }

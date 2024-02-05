@@ -15,4 +15,12 @@ namespace Portakal
 		delete mAPI;
 		mAPI = nullptr;
 	}
+	void ReflectionModule::OnPreInvalidation()
+	{
+
+	}
+	void ReflectionModule::OnPostInvalidation()
+	{
+
+	}
 }

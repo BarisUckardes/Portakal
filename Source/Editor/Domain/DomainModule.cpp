@@ -41,4 +41,12 @@ namespace Portakal
 	void DomainModule::OnTick()
 	{
 	}
+	void DomainModule::OnPreInvalidation()
+	{
+
+	}
+	void DomainModule::OnPostInvalidation()
+	{
+
+	}
 }

@@ -19,4 +19,12 @@ namespace Portakal
 
 		mAPI->Render();
 	}
+	void GUIWindowModule::OnPreInvalidation()
+	{
+
+	}
+	void GUIWindowModule::OnPostInvalidation()
+	{
+
+	}
 }

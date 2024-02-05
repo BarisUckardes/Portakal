@@ -14,9 +14,11 @@ namespace Portakal
 		~EditorPlayerWindowModule() = default;
 	private:
 		// Inherited via ApplicationModule
-		void OnInitialize() override;
-		void OnFinalize() override;
-		void OnTick() override;
+		virtual void OnInitialize() override;
+		virtual void OnFinalize() override;
+		virtual void OnTick() override;
+		virtual void OnPreInvalidation() override;
+		virtual void OnPostInvalidation() override;
 	private:
 		SharedHeap<PlatformWindow> mWindow;
 	};

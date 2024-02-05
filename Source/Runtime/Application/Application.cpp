@@ -24,6 +24,26 @@ namespace Portakal
         Array<ApplicationModule*> removedModules;
         while (!mQuitRequest)
         {
+            //Pre invalidate
+            for (ApplicationModule* pModule : mModules)
+            {
+                if (pModule->GetState() != ApplicationModuleState::OK)
+                    continue;
+
+                pModule->OnPreInvalidation();
+            }
+
+            //Invalidate
+
+            //Post invalidate
+            for (ApplicationModule* pModule : mModules)
+            {
+                if (pModule->GetState() != ApplicationModuleState::OK)
+                    continue;
+
+                pModule->OnPostInvalidation();
+            }
+
             //Call pre tick impl
             OnPreTick();
 
@@ -92,9 +112,14 @@ namespace Portakal
         //Post quit reason
         DEV_LOG("Application", "Quit reason-> %s", *mQuitReason);
     }
-    void Application::PostQuitRequest(const String reason)
+    void Application::PostQuitRequest(const String& reason)
     {
         mQuitRequest = true;
         mQuitReason = reason;
+    }
+    void Application::PostInvalidationRequest(const String& reason)
+    {
+        mInvalidationRequest = true;
+        mInvalidationReason = reason;
     }
 }

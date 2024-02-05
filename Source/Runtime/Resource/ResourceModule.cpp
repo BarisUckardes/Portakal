@@ -15,4 +15,12 @@ namespace Portakal
     void ResourceModule::OnTick()
     {
     }
+    void ResourceModule::OnPreInvalidation()
+    {
+
+    }
+    void ResourceModule::OnPostInvalidation()
+    {
+
+    }
 }

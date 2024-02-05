@@ -14,4 +14,12 @@ namespace Portakal
     void EditorResourceModule::OnTick()
     {
     }
+    void EditorResourceModule::OnPreInvalidation()
+    {
+
+    }
+    void EditorResourceModule::OnPostInvalidation()
+    {
+
+    }
 }

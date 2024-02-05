@@ -55,4 +55,12 @@ namespace Portakal
 	{
 
 	}
+	void ProjectModule::OnPreInvalidation()
+	{
+
+	}
+	void ProjectModule::OnPostInvalidation()
+	{
+
+	}
 }

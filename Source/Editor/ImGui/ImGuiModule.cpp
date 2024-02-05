@@ -16,4 +16,12 @@ namespace Portakal
 	{
 
 	}
+	void ImGuiModule::OnPreInvalidation()
+	{
+
+	}
+	void ImGuiModule::OnPostInvalidation()
+	{
+
+	}
 }

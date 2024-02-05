@@ -17,4 +17,12 @@ namespace Portakal
 			for (const SharedHeap<SceneAspect>& pAspect : pScene->GetAspects())
 				pAspect->OnExecute();
 	}
+	void SceneModule::OnPreInvalidation()
+	{
+
+	}
+	void SceneModule::OnPostInvalidation()
+	{
+
+	}
 }

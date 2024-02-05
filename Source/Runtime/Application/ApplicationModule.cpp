@@ -7,6 +7,10 @@ namespace Portakal
     {
         GetOwnerApplication()->PostQuitRequest(reason);
     }
+    void ApplicationModule::PostInvalidationRequest(const String& reason)
+    {
+        GetOwnerApplication()->PostInvalidationRequest(reason);
+    }
     void ApplicationModule::_SetState(const ApplicationModuleState state)
     {
         mState = state;

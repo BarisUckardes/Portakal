@@ -24,6 +24,8 @@ namespace Portakal
 		virtual void OnInitialize() override;
 		virtual void OnFinalize() override;
 		virtual void OnTick() override;
+		virtual void OnPreInvalidation() override;
+		virtual void OnPostInvalidation() override;
 	private:
 		ResourceAPI* mAPI;
 

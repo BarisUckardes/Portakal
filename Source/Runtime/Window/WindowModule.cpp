@@ -18,4 +18,13 @@ namespace Portakal
 		mAPI = nullptr;
 		DEV_LOG("WindowMoudle", "Window API finalized!");
 	}
+
+	void WindowModule::OnPreInvalidation()
+	{
+
+	}
+	void WindowModule::OnPostInvalidation()
+	{
+
+	}
 }

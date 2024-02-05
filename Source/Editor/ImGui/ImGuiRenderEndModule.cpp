@@ -58,6 +58,14 @@ namespace Portakal
         pSwapchain->WaitForPresent(mSwapchainBufferIndex);
         mSwapchainBufferIndex = (mSwapchainBufferIndex + 1) % pSwapchain->GetBufferCount();
     }
+    void ImGuiRenderEndModule::OnPreInvalidation()
+    {
+
+    }
+    void ImGuiRenderEndModule::OnPostInvalidation()
+    {
+
+    }
     void ImGuiRenderEndModule::InvalidateRenderTarget(const SharedHeap<GraphicsDevice>& pDevice)
     {
         //Get swapchain

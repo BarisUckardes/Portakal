@@ -17,4 +17,10 @@ namespace Portakal
     {
 
     }
+    void EditorPlayerProjectModule::OnPreInvalidation()
+    {
+    }
+    void EditorPlayerProjectModule::OnPostInvalidation()
+    {
+    }
 }

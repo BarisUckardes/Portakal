@@ -34,7 +34,8 @@ namespace Portakal
 
 		void RemoveModule(const UInt32 index);
 		void Run();
-		void PostQuitRequest(const String reason);
+		void PostQuitRequest(const String& reason);
+		void PostInvalidationRequest(const String& reason);
 	protected:
 		virtual void OnInitialize() {}
 		virtual void OnFinalize() {}
@@ -44,5 +45,7 @@ namespace Portakal
 		Array<ApplicationModule*> mModules;
 		String mQuitReason;
 		Bool8 mQuitRequest;
+		String mInvalidationReason;
+		Bool8 mInvalidationRequest;
 	};
 }
