@@ -6,6 +6,10 @@
 
 namespace Portakal
 {
+
+	/// <summary>
+	/// Deserializer for sampler resource sub object
+	/// </summary>
 	PATTRIBUTE(CustomResourceDeserializer, "sampler");
 	PCLASS();
 	class RUNTIME_API SamplerDeserializer : public IResourceDeserializer

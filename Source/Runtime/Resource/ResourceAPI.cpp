@@ -7,97 +7,33 @@
 
 namespace Portakal
 {
-	SharedHeap<Resource> ResourceAPI::RegisterResource(const ResourceDescriptor& descriptor)
+	void ResourceAPI::_RegisterResource(const SharedHeap<Resource>& pTargetResource)
 	{
 		//Check API
 		ResourceAPI* pAPI = GetUnderlyingAPI();
 		if (pAPI == nullptr)
 		{
 			DEV_LOG("ResourceAPI", "No resource API found!");
-			return nullptr;
+			return;
 		}
-
-		//Check file if exists
-		if (!PlatformFile::Exists(descriptor.SourcePath))
-		{
-			DEV_LOG("ResourceAPI", "Given descriptor file path does not exist");
-			return nullptr;
-		}
-
-		//Check resource type
-		const Array<Type*> types = ReflectionAPI::GetSubTypes(typeof(IResourceDeserializer));
-		if (types.IsEmpty())
-		{
-			DEV_LOG("ResourceAPI", "No IResourceDeserializer in this application!");
-			return nullptr;
-		}
-		Type* pFoundDeserializer = nullptr;
-		for (Type* pType : types)
-		{
-			//Get attribute
-			const CustomResourceDeserializer* pAttribute = pType->GetAttribute<CustomResourceDeserializer>();
-			if (pAttribute == nullptr)
-				continue;
-
-			if (pAttribute->GetResourceType() == descriptor.ResourceType)
-			{
-				pFoundDeserializer = pType;
-				break;
-			}
-		}
-		if (pFoundDeserializer == nullptr)
-		{
-			DEV_LOG("ResourceAPI", "No IResourceDeserializer found for the resource %s", descriptor.ResourceType);
-			return nullptr;
-		}
-
-		//Create deserializer
-		IResourceDeserializer* pDeserializer = (IResourceDeserializer*)pFoundDeserializer->CreateDefaultHeapObject();
 
 		//Create resource
-		SharedHeap<Resource> pResource = new Resource(descriptor, pDeserializer);
-		pAPI->mResources.Add(pResource);
-
-		return pResource;
+		pAPI->mResources.Add(pTargetResource);
 	}
-	void ResourceAPI::RemoveResource(const String& name)
+	void ResourceAPI::_RemoveResource(Resource* pTargetResource)
 	{
 		//Get and validate API
 		ResourceAPI* pAPI = GetUnderlyingAPI();
 		if (pAPI == nullptr)
 			return;
 
-		//Search for the name
 		for (UInt32 i = 0; i < pAPI->mResources.GetSize(); i++)
 		{
-			SharedHeap<Resource>& resource = pAPI->mResources[i];
-			if (resource->GetName() == name)
-			{
-				resource.Shutdown();
-				pAPI->mResources.RemoveAt(i);
-				break;
-			}
+			const SharedHeap<Resource>& pResource = pAPI->mResources[i];
 		}
+		pAPI->mResources.Remove(pTargetResource);
 	}
-	void ResourceAPI::RemoveResource(const Guid& id)
-	{
-		//Get and validate API
-		ResourceAPI* pAPI = GetUnderlyingAPI();
-		if (pAPI == nullptr)
-			return;
-
-		//Search for the name
-		for (UInt32 i = 0; i < pAPI->mResources.GetSize(); i++)
-		{
-			SharedHeap<Resource>& resource = pAPI->mResources[i];
-			if (resource->GetID() == id)
-			{
-				resource.Shutdown();
-				pAPI->mResources.RemoveAt(i);
-				break;
-			}
-		}
-	}
+	
 	SharedHeap<Resource> ResourceAPI::GetResource(const String& name)
 	{
 		//Get and validate API

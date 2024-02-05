@@ -1,6 +1,6 @@
 #pragma once
 #include <Runtime/World/Component.h>
-#include <Runtime/Resource/RenderTarget/RenderTargetResource.h>
+#include <Runtime/Resource/RenderTarget/RenderTarget.h>
 #include <Runtime/Reflection/ReflectionManifest.h>
 #include "BasicCamera.reflected.h"
 
@@ -18,7 +18,7 @@ namespace Portakal
 		}
 		~BasicCamera() = default;
 
-		FORCEINLINE SharedHeap<RenderTargetResource> GetRenderTarget() const noexcept
+		FORCEINLINE SharedHeap<RenderTarget> GetRenderTarget() const noexcept
 		{
 			return mRenderTarget;
 		}
@@ -38,13 +38,13 @@ namespace Portakal
 		void SetFieldOfView(const Float32 value);
 		void SetNearPlane(const Float32 value);
 		void SetFarPlane(const Float32 value);
-		void SetRenderTarget(const SharedHeap<RenderTargetResource>& pResource);
+		void SetRenderTarget(const SharedHeap<RenderTarget>& pResource);
 	private:
 		// Inherited via Component
 		virtual void OnInitialize() override;
 		virtual void OnShutdown() override;
 	private:
-		SharedHeap<RenderTargetResource> mRenderTarget;
+		SharedHeap<RenderTarget> mRenderTarget;
 		PFIELD();
 		Float32 mFieldOfView;
 		PFIELD();

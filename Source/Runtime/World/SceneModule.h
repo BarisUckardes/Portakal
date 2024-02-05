@@ -6,6 +6,9 @@
 namespace Portakal
 {
 	PCLASS();
+	/// <summary>
+	/// A module responsible for the lifetime of the SceneAPI
+	/// </summary>
 	class RUNTIME_API SceneModule : public ApplicationModule
 	{
 		GENERATE_OBJECT;
@@ -19,7 +22,6 @@ namespace Portakal
 		void OnTick() override;
 	private:
 		SceneAPI* mAPI;
-
 	};
 }
 

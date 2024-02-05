@@ -3,6 +3,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Represents the available window modes to set
+	/// </summary>
 	enum class RUNTIME_API WindowMode : Byte
 	{
 		Windowed,

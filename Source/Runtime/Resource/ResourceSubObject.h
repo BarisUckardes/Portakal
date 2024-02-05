@@ -6,6 +6,10 @@ namespace Portakal
 {
 	class Resource;
 	PCLASS(Virtual);
+
+	/// <summary>
+	/// Represents the object loaded via a Resource
+	/// </summary>
 	class ResourceSubObject : public Object
 	{
 		GENERATE_OBJECT;

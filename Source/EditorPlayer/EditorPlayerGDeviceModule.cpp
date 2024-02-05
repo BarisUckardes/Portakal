@@ -48,8 +48,8 @@ namespace Portakal
 		mSwapchain = mDevice->CreateSwapchain(swapchainDesc);
 
 		//Set memory profile
-		GraphicsAPI::SetMemoryProfile(MB_TO_BYTE(2567), MB_TO_BYTE(2048));
-		GraphicsAPI::SetResourceProfile(4096, 4096);
+		GraphicsAPI::SetMemoryBudget(MB_TO_BYTE(4096), MB_TO_BYTE(4096));
+		GraphicsAPI::SetResourceBudget(4096, 4096);
 	}
 	void EditorPlayerGDeviceModule::OnFinalize()
 	{

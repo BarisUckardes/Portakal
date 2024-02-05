@@ -9,6 +9,10 @@
 
 namespace Portakal
 {
+
+	/// <summary>
+	/// Represents a resource sub object that is specialized for texture works
+	/// </summary>
 	PATTRIBUTE(ResourceAttribute, "texture");
 	PCLASS();
 	class RUNTIME_API TextureResource : public ResourceSubObject

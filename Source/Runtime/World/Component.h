@@ -7,6 +7,10 @@ namespace Portakal
 {
 	class Entity;
 	PCLASS(Virtual);
+
+	/// <summary>
+	/// Represents a single behaviour inside the entity.
+	/// </summary>
 	class RUNTIME_API Component : public Object
 	{
 		friend class Entity;

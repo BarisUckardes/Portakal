@@ -3,6 +3,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Available flags for mesh post processing for the mesh loader
+	/// </summary>
 	enum class RUNTIME_API MeshProcessFlags : UInt64
 	{
 

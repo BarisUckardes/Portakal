@@ -9,11 +9,18 @@
 #include <Runtime/Resource/Material/MaterialParameterType.h>
 #include <Runtime/Memory/MemoryOwnedView.h>
 #include <Runtime/Containers/Registry.h>
+#include "MaterialResource.reflected.h"
 
 namespace Portakal
 {
+	/// <summary>
+	/// A resource sub object that is specialized in general material works
+	/// </summary>
+	PATTRIBUTE(ResourceAttribute, "material");
+	PCLASS();
 	class RUNTIME_API MaterialResource : public ResourceSubObject
 	{
+		GENERATE_OBJECT;
 	private:
 		struct MaterialParameter
 		{
@@ -72,3 +79,4 @@ namespace Portakal
 		Event<void, MaterialResource*> mOnStateChangeEvent;
 	};
 }
+

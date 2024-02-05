@@ -18,30 +18,30 @@ namespace Portakal
 
 		return pAPI->mWindows;
 	}
-	void WindowAPI::_RegisterWindow(const SharedHeap<PlatformWindow>& pWindow)
+	void WindowAPI::_RegisterWindow(const SharedHeap<PlatformWindow>& pTargetWindow)
 	{
 		WindowAPI* pAPI = GetUnderlyingAPI();
 		if (pAPI == nullptr)
 			return;
 
 		//Add for both map and the array
-		pAPI->mWindows.Add(pWindow);
-		pAPI->mMap.Insert(pWindow.GetHeap(), pWindow);
+		pAPI->mWindows.Add(pTargetWindow);
 	}
-	void WindowAPI::_RemoveWindow(PlatformWindow* pWindow)
+	void WindowAPI::_RemoveWindow(PlatformWindow* pTargetWindow)
 	{
 		WindowAPI* pAPI = GetUnderlyingAPI();
 		if (pAPI == nullptr)
 			return;
 
-		//Get index
-		const Int32 index = pAPI->mMap.FindIndex(pWindow);
-		if (index == -1)
-			return;
-
-		//Remove from both map and the array
-		pAPI->mMap.Remove(pWindow);
-		pAPI->mWindows.RemoveAt(index);
+		for (UInt32 i = 0; i < pAPI->mWindows.GetSize(); i++)
+		{
+			const SharedHeap<PlatformWindow>& pWindow = pAPI->mWindows[i];
+			if (pWindow.GetHeap() == pTargetWindow)
+			{
+				pAPI->mWindows.RemoveAt(i);
+				return;
+			}
+		}
 	}
 	void WindowAPI::_PollEvents()
 	{

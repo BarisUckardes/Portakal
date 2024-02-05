@@ -73,6 +73,8 @@ namespace Portakal
 #define DEV_ASSERT(pCondition, pTitle, pMessage) (pCondition)
 #endif
 
+//#define ASSERT (pCondition, pTitle, pFailed, ...) Portakal::DevAssert(pCondition, pTitle, pFailed, __VA_ARGS__)
+
 #define PE_INFO Portakal::LogLevel::Info
 #define PE_VERBOSE Portakal::LogLevel::Verbose
 #define PE_WARNING Portakal::LogLevel::Warning

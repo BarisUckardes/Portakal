@@ -1,8 +1,55 @@
 #include "Resource.h"
 #include <Runtime/Platform/PlatformFile.h>
+#include <Runtime/Reflection/ReflectionAPI.h>
+#include <Runtime/Resource/ResourceAPI.h>
 
 namespace Portakal
 {
+	SharedHeap<Resource> Resource::Create(const ResourceDescriptor& descriptor)
+	{
+		//Check file if exists
+		if (!PlatformFile::Exists(descriptor.SourcePath))
+		{
+			DEV_LOG("ResourceAPI", "Given descriptor file path does not exist");
+			return nullptr;
+		}
+
+		//Check resource type
+		const Array<Type*> types = ReflectionAPI::GetSubTypes(typeof(IResourceDeserializer));
+		if (types.IsEmpty())
+		{
+			DEV_LOG("ResourceAPI", "No IResourceDeserializer in this application!");
+			return nullptr;
+		}
+		Type* pFoundDeserializer = nullptr;
+		for (Type* pType : types)
+		{
+			//Get attribute
+			const CustomResourceDeserializer* pAttribute = pType->GetAttribute<CustomResourceDeserializer>();
+			if (pAttribute == nullptr)
+				continue;
+
+			if (pAttribute->GetResourceType() == descriptor.ResourceType)
+			{
+				pFoundDeserializer = pType;
+				break;
+			}
+		}
+		if (pFoundDeserializer == nullptr)
+		{
+			DEV_LOG("ResourceAPI", "No IResourceDeserializer found for the resource %s", *descriptor.ResourceType);
+			return nullptr;
+		}
+
+		//Create deserializer
+		IResourceDeserializer* pDeserializer = (IResourceDeserializer*)pFoundDeserializer->CreateDefaultHeapObject();
+
+		SharedHeap<Resource> pResource = new Resource(descriptor, pDeserializer);
+
+		ResourceAPI::_RegisterResource(pResource);
+
+		return pResource;
+	}
 	void Resource::LoadSync()
 	{
 		//Abort if loaded
@@ -89,6 +136,9 @@ namespace Portakal
 		//Unload sync
 		FreeCacheSync();
 		UnloadSync();
+
+		//Remove resource from the api registry
+		ResourceAPI::_RemoveResource(this);
 
 		//Clear deserializer
 		delete mDeserializer;

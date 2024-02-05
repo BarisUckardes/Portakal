@@ -9,9 +9,14 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Represents a single resource within the Runtime. These resources can represent anything. Texture, Audio, Font, Mesh or some other custom data
+	/// </summary>
 	class RUNTIME_API Resource : public Object
 	{
 		friend class ResourceAPI;
+	public:
+		static SharedHeap<Resource> Create(const ResourceDescriptor& descriptor);
 	public:
 		FORCEINLINE SharedHeap<ResourceSubObject> GetSubObject() const noexcept
 		{

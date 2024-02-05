@@ -6,16 +6,20 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// API for resource works
+	/// </summary>
 	class RUNTIME_API ResourceAPI : API<ResourceAPI>
 	{
 		friend class ResourceModule;
-	public:
-		static SharedHeap<Resource> RegisterResource(const ResourceDescriptor& descriptor);
-		static void RemoveResource(const String& name);
-		static void RemoveResource(const Guid& id);
+		friend class Resource;
+	public:;
 		static SharedHeap<Resource> GetResource(const String& name);
 		static SharedHeap<Resource> GetResource(const Guid& id);
 		static void GetResources(const String& type,Array<SharedHeap<Resource>>& resourcesOut);
+	private:
+		static void _RegisterResource(const SharedHeap<Resource>& pTargetResource);
+		static void _RemoveResource(Resource* pTargetResource);
 	private:
 		ResourceAPI();
 		~ResourceAPI();

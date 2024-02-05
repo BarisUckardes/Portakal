@@ -5,7 +5,7 @@
 #include <Runtime/Graphics/RenderPass/RenderPass.h>
 #include <Runtime/Resource/Mesh/MeshResource.h>
 #include <Runtime/Resource/Texture/TextureResource.h>
-#include <Runtime/Resource/RenderTarget/RenderTargetResource.h>
+#include <Runtime/Resource/RenderTarget/RenderTarget.h>
 #include <Editor/ImGui/ImGuiTextureBinding.h>
 #include <Runtime/Containers/HashMap.h>
 #include <imgui.h>
@@ -32,7 +32,7 @@ namespace Portakal
 		}
 
 		void StartRendering(float deltaTimeInMilliSeconds);
-		void EndRendering(const SharedHeap<RenderTargetResource>& pRenderTarget, const Color4F clearColor);
+		void EndRendering(const SharedHeap<RenderTarget>& pRenderTarget, const Color4F clearColor);
 
 		SharedHeap<ImGuiTextureBinding> GetOrCreateTextureBinding(const SharedHeap<TextureResource>& pTexture);
 		void DeleteTextureBinding(const SharedHeap<TextureResource>& pTexture);
@@ -50,7 +50,7 @@ namespace Portakal
 		void CreateImGuiResources();
 		void SetupDefaultTheme();
 	private:
-		void InvalidateRenderTarget(const SharedHeap<RenderTargetResource>& pRenderTarget,const Byte subpassIndex);
+		void InvalidateRenderTarget(const SharedHeap<RenderTarget>& pRenderTarget,const Byte subpassIndex);
 		virtual void OnShutdown() override;
 
 	private:
@@ -80,7 +80,7 @@ namespace Portakal
 
 		SharedHeap<Pipeline> mPipeline;
 		SharedHeap<Fence> mFence;
-		Array<SharedHeap<RenderTargetResource>> mRenderTargets;
+		Array<SharedHeap<RenderTarget>> mRenderTargets;
 		HashMap<SharedHeap<TextureResource>, SharedHeap<ImGuiTextureBinding>> mTextureBindings;
 	};
 }

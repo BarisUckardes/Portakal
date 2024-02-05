@@ -22,6 +22,5 @@ namespace Portakal
 		const Bool8 mSwapchain;
 		VkImage mImage;
 		VkDevice mLogicalDevice;
-
 	};
 }

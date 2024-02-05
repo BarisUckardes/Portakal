@@ -7,6 +7,9 @@
 namespace Portakal
 {
 	PCLASS();
+	/// <summary>
+	/// Entity descriptor
+	/// </summary>
 	struct RUNTIME_API SceneEntityDescriptor
 	{
 		PFIELD();

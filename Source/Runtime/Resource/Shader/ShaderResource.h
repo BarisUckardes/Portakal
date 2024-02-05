@@ -9,6 +9,11 @@
 
 namespace Portakal
 {
+
+	/// <summary>
+	/// Represents a resource sub object that is specialized in shader works
+	/// </summary>
+	PATTRIBUTE(ResourceAttribute, "shader");
 	PCLASS();
 	class RUNTIME_API ShaderResource : public ResourceSubObject
 	{

@@ -19,7 +19,7 @@ namespace Portakal
 	{
 		mFarPlane = value;
 	}
-	void BasicCamera::SetRenderTarget(const SharedHeap<RenderTargetResource>& pResource)
+	void BasicCamera::SetRenderTarget(const SharedHeap<RenderTarget>& pResource)
 	{
 
 	}

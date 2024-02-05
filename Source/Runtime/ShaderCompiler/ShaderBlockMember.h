@@ -4,6 +4,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Represents a buffer block member of a shader reflection binding
+	/// </summary>
 	struct RUNTIME_API ShaderBlockMember
 	{
 		String Name;

@@ -11,6 +11,9 @@
 namespace Portakal
 {
     PCLASS();
+	/// <summary>
+	/// Sampler descriptor
+	/// </summary>
 	struct RUNTIME_API SamplerDescriptor
 	{
         PFIELD();

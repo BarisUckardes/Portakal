@@ -140,6 +140,8 @@ namespace Portakal
 
         //Create assembly
         Assembly* pAssembly = new Assembly(pLibrary->GetName(), pLibrary->GetPath(), pManifest->GetTypes());
+        for (Type* pType : pAssembly->GetTypes())
+            DEV_LOG("Reflection", "Type: %s", *pType->GetName());
 
         //Normalize the assembly
         Normalize(pAssembly);

@@ -2,14 +2,14 @@
 
 namespace Portakal
 {
-    void DisplayAspect::RegisterDisplay(const SharedHeap<RenderTargetResource>& pDisplay)
+    void DisplayAspect::RegisterDisplay(const SharedHeap<RenderTarget>& pDisplay)
     {
         if (mDisplays.Has(pDisplay))
             return;
 
         mDisplays.Add(pDisplay);
     }
-    void DisplayAspect::RemoveDisplay(const SharedHeap<RenderTargetResource>& pDisplay)
+    void DisplayAspect::RemoveDisplay(const SharedHeap<RenderTarget>& pDisplay)
     {
         if (!mDisplays.Has(pDisplay))
             return;

@@ -6,6 +6,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// API for window works
+	/// </summary>
 	class RUNTIME_API WindowAPI : API<WindowAPI>
 	{
 		friend class PlatformWindow;
@@ -14,8 +17,8 @@ namespace Portakal
 		static SharedHeap<PlatformWindow> GetDefaultWindow();
 		static Array<SharedHeap<PlatformWindow>> GetWindows();
 	private:
-		static void _RegisterWindow(const SharedHeap<PlatformWindow>& pWindow);
-		static void _RemoveWindow(PlatformWindow* pWindow);
+		static void _RegisterWindow(const SharedHeap<PlatformWindow>& pTargetWindow);
+		static void _RemoveWindow(PlatformWindow* pTargetWindow);
 	public:
 		WindowAPI();
 		~WindowAPI();
@@ -23,6 +26,5 @@ namespace Portakal
 		void _PollEvents();
 	private:
 		Array<SharedHeap<PlatformWindow>> mWindows;
-		HashMap<PlatformWindow*, SharedHeap<PlatformWindow>> mMap;
 	};
 }

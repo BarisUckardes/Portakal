@@ -24,9 +24,9 @@ namespace Portakal
 		mMemory = uint64_max;
 		mAlignedMemory = uint64_max;
 	}
-	void GraphicsMemoryObject::SetMemoryProperties(const MemoryHandle handle, const MemoryHandle alignedHandle)
+	void GraphicsMemoryObject::SetMemoryProperties(const UInt64 offset, const UInt64 alignedOffset)
 	{
-		mMemory = handle;
-		mAlignedMemory = alignedHandle;
+		mMemory = offset;
+		mAlignedMemory = alignedOffset;
 	}
 }

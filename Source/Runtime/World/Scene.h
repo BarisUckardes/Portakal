@@ -8,6 +8,10 @@ namespace Portakal
 {
 	class SceneAspect;
 	class Entity;
+
+	/// <summary>
+	/// Represents a collection of entities and the aspects that goven them.
+	/// </summary>
 	class RUNTIME_API Scene : public Object
 	{
 		friend class SceneAPI;

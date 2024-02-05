@@ -8,6 +8,11 @@
 
 namespace Portakal
 {
+
+	/// <summary>
+	/// A resource sub object that is specialized in mesh works
+	/// </summary>
+	PATTRIBUTE(ResourceAttribute, "mesh");
 	PCLASS();
 	class RUNTIME_API MeshResource : public ResourceSubObject
 	{

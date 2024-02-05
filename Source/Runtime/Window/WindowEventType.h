@@ -3,6 +3,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Represents the available types of PlatformWindow events
+	/// </summary>
 	enum class RUNTIME_API WindowEventType : Byte
 	{
 		None,

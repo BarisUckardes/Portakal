@@ -114,7 +114,7 @@ namespace Portakal
 
         ImGui::NewFrame();
     }
-    void ImGuiRenderer::EndRendering(const SharedHeap<RenderTargetResource>& pRenderTarget, const Color4F clearColor)
+    void ImGuiRenderer::EndRendering(const SharedHeap<RenderTarget>& pRenderTarget, const Color4F clearColor)
     {
         if (!mRenderTargets.Has(pRenderTarget))
             InvalidateRenderTarget(pRenderTarget, 0);
@@ -619,7 +619,7 @@ namespace Portakal
         ImGuiIO& io = ImGui::GetIO();
         io.AddInputCharacter(c);
     }
-    void ImGuiRenderer::InvalidateRenderTarget(const SharedHeap<RenderTargetResource>& pRenderTarget,const Byte subpassIndex)
+    void ImGuiRenderer::InvalidateRenderTarget(const SharedHeap<RenderTarget>& pRenderTarget,const Byte subpassIndex)
     {
         DEV_LOG("ImGuiRenderer", "Pipeline and RenderTarget invalidation");
 

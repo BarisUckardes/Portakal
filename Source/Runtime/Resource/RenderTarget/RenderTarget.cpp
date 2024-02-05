@@ -1,9 +1,9 @@
-#include "RenderTargetResource.h"
+#include "RenderTarget.h"
 #include <Runtime/Graphics/GraphicsAPI.h>
 
 namespace Portakal
 {
-	RenderTargetResource::RenderTargetResource()
+	RenderTarget::RenderTarget()
 	{
 		mDevice = GraphicsAPI::GetDefaultDevice();
 	}
@@ -61,7 +61,7 @@ namespace Portakal
 	//	mColorTargets = colorTargets;
 	//	mDepthStencilTarget = {};
 	//}
-	void RenderTargetResource::Create(const RenderPassDesc& desc)
+	void RenderTarget::Create(const RenderPassDesc& desc)
 	{
 		//First check if shutdown
 		if (IsShutdown())
@@ -83,13 +83,13 @@ namespace Portakal
 
 		mDepthStencilTarget = desc.DepthStencilAttachment.pTexture;
 	}
-	void RenderTargetResource::Delete()
+	void RenderTarget::Delete()
 	{
 		mRenderPass.Shutdown();
 		mColorTargets.Clear();
 		mDepthStencilTarget.Deference();
 	}
-	void RenderTargetResource::OnShutdown()
+	void RenderTarget::OnShutdown()
 	{
 		Delete();
 	}

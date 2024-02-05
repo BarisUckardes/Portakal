@@ -54,7 +54,6 @@ namespace Portakal
 	class Swapchain;
 	class GraphicsAdapter;
 
-	
 	class RUNTIME_API GraphicsDevice : public Object
 	{
 	public:
@@ -128,8 +127,8 @@ namespace Portakal
 		virtual void UpdateResourceTableCore(ResourceTable* pTable, const ResourceTableUpdateDesc& desc) = 0;
 		virtual void SubmitCommandListsCore(CommandList** ppCmdLists, const Byte cmdListCount, const GraphicsQueueType type, const Fence* pFence) = 0;
 	private:
-		GraphicsAdapter* mOwnerAdapter;
 		const GraphicsBackend mBackend;
+		GraphicsAdapter* mOwnerAdapter;
 		Array<SharedHeap<GraphicsDeviceObject>> mChilds;
 		SharedHeap<Swapchain> mMainSwapchain;
 	};

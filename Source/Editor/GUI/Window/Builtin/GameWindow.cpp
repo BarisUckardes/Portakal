@@ -32,7 +32,7 @@ namespace Portakal
 		if (pAspect == nullptr)
 			return;
 
-		SharedHeap<RenderTargetResource> pRenderTarget = pAspect->GetPrimaryDisplay();
+		SharedHeap<RenderTarget> pRenderTarget = pAspect->GetPrimaryDisplay();
 		if (pRenderTarget.IsShutdown())
 			return;
 

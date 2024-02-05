@@ -6,6 +6,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// API for the scene works
+	/// </summary>
 	class RUNTIME_API SceneAPI : public API<SceneAPI>
 	{
 		friend class SceneModule;
@@ -16,14 +19,13 @@ namespace Portakal
 		static void TransitionSync(const String& resourceName);
 	private:
 		static void _RegisterScene(const SharedHeap<Scene>& pScene);
-		static void _RemoveScene(Scene* pScene);
-		static void _SetScenePrimal(Scene* pScene);
+		static void _RemoveScene(Scene* pTargetScene);
+		static void _SetScenePrimal(Scene* pTargetScene);
 	private:
 		SceneAPI();
 		~SceneAPI();
 	private:
 		Array<SharedHeap<Scene>> mScenes;
-		HashMap<Scene*, SharedHeap<Scene>> mMap;
 		SharedHeap<Scene> mPrimalScene;
 	};
 }

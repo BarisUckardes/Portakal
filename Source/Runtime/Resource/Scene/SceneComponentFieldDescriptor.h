@@ -6,6 +6,10 @@
 namespace Portakal
 {
 	PCLASS();
+
+	/// <summary>
+	/// Descriptor for component fields
+	/// </summary>
 	struct RUNTIME_API SceneComponentFieldDescriptor
 	{
 		PFIELD();

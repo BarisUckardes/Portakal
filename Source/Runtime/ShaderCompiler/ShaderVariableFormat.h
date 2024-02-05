@@ -3,6 +3,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Variable data formats for a shader field
+	/// </summary>
 	enum class RUNTIME_API ShaderVariableFormat : Byte
 	{
 		Bool8,

@@ -9,6 +9,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Compiler for SPIRV->Any, Any->SPIRV languages
+	/// </summary>
 	class RUNTIME_API ShaderCompiler
 	{
 	public:

@@ -6,6 +6,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Single vertex input output semantic for shader reflection works
+	/// </summary>
 	struct RUNTIME_API ShaderIODescriptor
 	{
 		String Name;

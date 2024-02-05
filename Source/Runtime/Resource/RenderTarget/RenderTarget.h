@@ -3,17 +3,21 @@
 #include <Runtime/Graphics/Device/GraphicsDevice.h>
 #include <Runtime/Graphics/RenderPass/RenderPass.h>
 #include <Runtime/Resource/Texture/TextureResource.h>
-#include "RenderTargetResource.reflected.h"
+#include "RenderTarget.reflected.h"
 
 namespace Portakal
 {
+	/// <summary>
+	/// A resource sub object that is specialized in framebuffer works
+	/// </summary>
+	PATTRIBUTE(ResourceAttribute, "rendertarget");
 	PCLASS();
-	class RUNTIME_API RenderTargetResource : public ResourceSubObject
+	class RUNTIME_API RenderTarget : public ResourceSubObject
 	{
 		GENERATE_OBJECT;
 	public:
-		RenderTargetResource();
-		~RenderTargetResource() = default;
+		RenderTarget();
+		~RenderTarget() = default;
 
 		FORCEINLINE Array<SharedHeap<Texture>> GetColorTargets() const noexcept
 		{

@@ -7,12 +7,19 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Description to create a PlatformWindow
+	/// </summary>
 	struct RUNTIME_API WindowDesc
 	{
 		String Title;
 		Vector2US Size;
 		Vector2I Position;
 		WindowMode Mode;
+
+		/// <summary>
+		/// Optional. Use it if you want to enable fullscreen for a specific monitor
+		/// </summary>
 		SharedHeap<PlatformMonitor> pMonitor;
 	};
 }

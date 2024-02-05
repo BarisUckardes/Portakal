@@ -5,7 +5,6 @@
 
 namespace Portakal
 {
-	typedef UInt64 MemoryHandle;
 	class RUNTIME_API GraphicsMemoryHeap : public GraphicsDeviceObject
 	{
 	private:
@@ -40,10 +39,8 @@ namespace Portakal
 			return GraphicsDeviceObjectType::MemoryHeap;
 		}
 
-		MemoryHandle Allocate(const UInt64 sizeInBytes);
-		void Free(const MemoryHandle handle);
-	protected:
-		virtual MemoryHandle AllocateCore(const UInt64 offsetInBytes) = 0;
+		UInt64 Allocate(const UInt64 sizeInBytes);
+		void Free(const UInt64 offsetInBytes);
 	private:
 		CompactReport GetCompactReport(const UInt32 index);
 		void Compact(const CompactReport& report);

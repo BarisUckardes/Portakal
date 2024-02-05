@@ -3,6 +3,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// States that a thread job can have
+	/// </summary>
 	enum class RUNTIME_API ThreadJobState : Byte
 	{
 		Idle,

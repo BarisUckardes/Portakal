@@ -4,6 +4,10 @@
 
 namespace Portakal
 {
+
+	/// <summary>
+	/// Deserializer for shader resource sub object
+	/// </summary>
 	PATTRIBUTE(CustomResourceDeserializer, "shader");
 	PCLASS();
 	class RUNTIME_API ShaderDeserializer : public IResourceDeserializer

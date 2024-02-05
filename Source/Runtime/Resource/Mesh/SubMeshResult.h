@@ -6,6 +6,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// A loaded sub mesh result
+	/// </summary>
 	struct RUNTIME_API SubMeshResult
 	{
 		Array<Vector3F> Positions;

@@ -7,6 +7,10 @@
 namespace Portakal
 {
 	PCLASS();
+
+	/// <summary>
+	/// Descriptor for shader
+	/// </summary>
 	struct RUNTIME_API ShaderDescriptor
 	{
 		PFIELD();

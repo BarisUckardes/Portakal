@@ -19,7 +19,5 @@ namespace Portakal
 	private:
 		VkDevice mLogicalDevice;
 		VkBuffer mBuffer;
-		MemoryHandle mHandle;
-		MemoryHandle mAlignedHandle;
 	};
 }

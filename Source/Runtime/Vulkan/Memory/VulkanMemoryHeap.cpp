@@ -23,9 +23,6 @@ namespace Portakal
 	}
 	void VulkanMemoryHeap::OnShutdown()
 	{
-	}
-	MemoryHandle VulkanMemoryHeap::AllocateCore(const UInt64 offsetInBytes)
-	{
-		return offsetInBytes;
+		vkFreeMemory(mLogicalDevice, mMemory,nullptr);
 	}
 }

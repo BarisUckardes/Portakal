@@ -36,13 +36,13 @@ namespace Portakal
 		vkGetImageMemoryRequirements(mLogicalDevice, mImage, &requirements);
 
 		//Rent memory
-		const MemoryHandle memoryHandle = desc.pHeap->Allocate(requirements.size + requirements.alignment);
-		const MemoryHandle alignedHandle = memoryHandle + (memoryHandle == 0 ? 0 : (requirements.alignment - (memoryHandle % requirements.alignment)));
+		const UInt64 memoryOffset = desc.pHeap->Allocate(requirements.size + requirements.alignment);
+		const UInt64 memoryAlignedOffset = memoryOffset + (memoryOffset == 0 ? 0 : (requirements.alignment - (memoryOffset % requirements.alignment)));
 
-		DEV_ASSERT(vkBindImageMemory(mLogicalDevice, mImage, pHeap->GetVkMemory(), alignedHandle) == VK_SUCCESS, "VulkanTexture", "Failed to bind the texture memory!");
+		DEV_ASSERT(vkBindImageMemory(mLogicalDevice, mImage, pHeap->GetVkMemory(), memoryAlignedOffset) == VK_SUCCESS, "VulkanTexture", "Failed to bind the texture memory!");
 
 		//Set aligned handle
-		SetMemoryProperties(memoryHandle, alignedHandle);
+		SetMemoryProperties(memoryOffset, memoryAlignedOffset);
 	}
 	void VulkanTexture::OnShutdown()
 	{

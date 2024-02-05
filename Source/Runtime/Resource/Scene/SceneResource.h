@@ -6,6 +6,11 @@
 
 namespace Portakal
 {
+
+	/// <summary>
+	/// Represents a resource sub object that is specialized in scene works
+	/// </summary>
+	PATTRIBUTE(ResourceAttribute, "scene");
 	PCLASS();
 	class RUNTIME_API SceneResource : public ResourceSubObject
 	{

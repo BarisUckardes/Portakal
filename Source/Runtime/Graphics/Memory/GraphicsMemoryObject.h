@@ -13,11 +13,11 @@ namespace Portakal
 		{
 			return mSize;
 		}
-		FORCEINLINE MemoryHandle GetMemoryHandle() const noexcept
+		FORCEINLINE UInt64 GetMemoryHandle() const noexcept
 		{
 			return mMemory;
 		}
-		FORCEINLINE MemoryHandle GetAlignedMemoryHandle() const noexcept
+		FORCEINLINE UInt64 GetAlignedMemoryHandle() const noexcept
 		{
 			return mAlignedMemory;
 		}
@@ -28,12 +28,12 @@ namespace Portakal
 
 	protected:
 		void Free();
-		void SetMemoryProperties(const MemoryHandle handle,const MemoryHandle alignedHandle);
+		void SetMemoryProperties(const UInt64 offset,const UInt64 alignedOffset);
 		virtual void OnShutdown() override;
 	private:
 		SharedHeap<GraphicsMemoryHeap> mHeap;
-		MemoryHandle mMemory;
-		MemoryHandle mAlignedMemory;
+		UInt64 mMemory;
+		UInt64 mAlignedMemory;
 		UInt64 mSize;
 	};
 }

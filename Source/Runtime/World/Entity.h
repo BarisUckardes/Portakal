@@ -8,6 +8,10 @@ namespace Portakal
 {
 	class Scene;
 	PCLASS();
+
+	/// <summary>
+	/// Represents a collection of components which determines the final behaviour of the entity.
+	/// </summary>
 	class RUNTIME_API Entity final : public Object
 	{
 		GENERATE_OBJECT;

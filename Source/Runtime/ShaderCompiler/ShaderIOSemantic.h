@@ -3,6 +3,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Vertex input semantics for shader reflection works
+	/// </summary>
 	enum class RUNTIME_API ShaderIOSemantic
 	{
         Position,

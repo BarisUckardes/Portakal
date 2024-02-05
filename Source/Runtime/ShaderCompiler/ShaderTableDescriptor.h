@@ -5,6 +5,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// The descriptor of the shader bindings
+	/// </summary>
 	struct RUNTIME_API ShaderTableDescriptor
 	{
 		UInt32 TableIndex;

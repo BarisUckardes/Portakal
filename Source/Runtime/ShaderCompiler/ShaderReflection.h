@@ -8,6 +8,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Reflection data for a single shader
+	/// </summary>
 	class RUNTIME_API ShaderReflection : public Object
 	{
 		friend class ShaderCompiler;

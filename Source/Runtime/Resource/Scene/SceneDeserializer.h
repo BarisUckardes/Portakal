@@ -5,6 +5,10 @@
 
 namespace Portakal
 {
+
+	/// <summary>
+	/// Deserializer for scene resource sub object
+	/// </summary>
 	PATTRIBUTE(CustomResourceDeserializer,"scene");
 	PCLASS();
 	class RUNTIME_API SceneDeserializer : public IResourceDeserializer

@@ -1,6 +1,6 @@
 #pragma once
 #include <Runtime/World/SceneAspect.h>
-#include <Runtime/Resource/RenderTarget/RenderTargetResource.h>
+#include <Runtime/Resource/RenderTarget/RenderTarget.h>
 #include <Runtime/Containers/HashMap.h>
 #include "DisplayAspect.reflected.h"
 
@@ -14,23 +14,23 @@ namespace Portakal
 		DisplayAspect() = default;
 		~DisplayAspect() = default;
 
-		FORCEINLINE const Array<SharedHeap<RenderTargetResource>> GetDisplays() const noexcept
+		FORCEINLINE const Array<SharedHeap<RenderTarget>> GetDisplays() const noexcept
 		{
 			return mDisplays;
 		}
-		FORCEINLINE SharedHeap<RenderTargetResource> GetPrimaryDisplay() const noexcept
+		FORCEINLINE SharedHeap<RenderTarget> GetPrimaryDisplay() const noexcept
 		{
 			return mDisplays.IsEmpty() ? nullptr : mDisplays[0];
 		}
 
-		void RegisterDisplay(const SharedHeap<RenderTargetResource>& pDisplay);
-		void RemoveDisplay(const SharedHeap<RenderTargetResource>& pDisplay);
+		void RegisterDisplay(const SharedHeap<RenderTarget>& pDisplay);
+		void RemoveDisplay(const SharedHeap<RenderTarget>& pDisplay);
 	private:
 		// Inherited via SceneAspect
 		void OnInitialize() override;
 		void OnExecute() override;
 	private:
-		Array<SharedHeap<RenderTargetResource>> mDisplays;
+		Array<SharedHeap<RenderTarget>> mDisplays;
 	};
 }
 

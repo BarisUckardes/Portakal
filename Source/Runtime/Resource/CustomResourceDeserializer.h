@@ -5,6 +5,10 @@
 namespace Portakal
 {
 	PCLASS();
+
+	/// <summary>
+	/// Attribute for marking a class as resource deserializer
+	/// </summary>
 	class RUNTIME_API CustomResourceDeserializer : public Attribute
 	{
 		GENERATE_OBJECT;

@@ -8,6 +8,10 @@ namespace Portakal
 	class ResourceAPI;
 
 	PCLASS();
+
+	/// <summary>
+	/// A module that is responsible for the lifetime of the ResourceAPI
+	/// </summary>
 	class RUNTIME_API ResourceModule : public ApplicationModule
 	{
 		GENERATE_OBJECT;
@@ -16,12 +20,13 @@ namespace Portakal
 		~ResourceModule() = default;
 
 	private:
+		// Inherited via ApplicationModule
+		virtual void OnInitialize() override;
+		virtual void OnFinalize() override;
+		virtual void OnTick() override;
+	private:
 		ResourceAPI* mAPI;
 
-		// Inherited via ApplicationModule
-		void OnInitialize() override;
-		void OnFinalize() override;
-		void OnTick() override;
 	};
 }
 

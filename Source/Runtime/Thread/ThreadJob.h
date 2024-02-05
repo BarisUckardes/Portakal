@@ -8,6 +8,9 @@ namespace Portakal
 	class PlatformThread;
 	class PlatformCriticalSection;
 
+	/// <summary>
+	/// Represents a job that dispatched for a thread
+	/// </summary>
 	class RUNTIME_API ThreadJob : public Object
 	{
 		friend class PlatformThread;

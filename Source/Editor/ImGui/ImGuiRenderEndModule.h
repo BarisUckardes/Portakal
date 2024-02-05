@@ -1,6 +1,6 @@
 #pragma once
 #include <Runtime/Application/ApplicationModule.h>
-#include <Runtime/Resource/RenderTarget/RenderTargetResource.h>
+#include <Runtime/Resource/RenderTarget/RenderTarget.h>
 #include "ImGuiRenderEndModule.reflected.h"
 
 namespace Portakal
@@ -24,7 +24,7 @@ namespace Portakal
 	private:
 		void InvalidateRenderTarget(const SharedHeap<GraphicsDevice>& pDevice);
 	private:
-		Array<SharedHeap<RenderTargetResource>> mRenderTargets;
+		Array<SharedHeap<RenderTarget>> mRenderTargets;
 		Vector2US mLastSwapchainSize;
 		Byte mSwapchainBufferIndex;
 

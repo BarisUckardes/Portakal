@@ -21,6 +21,5 @@ namespace Portakal
 
 		// Inherited via GraphicsMemoryHeap
 		void OnShutdown() override;
-		MemoryHandle AllocateCore(const UInt64 offsetInBytes) override;
 	};
 }

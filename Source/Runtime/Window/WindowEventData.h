@@ -9,12 +9,11 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Event data that PlatformWindow broadcasts
+	/// </summary>
 	struct RUNTIME_API WindowEventData
 	{
-		WindowEventData() : Handled(false), Type(WindowEventType::None)
-		{
-
-		}
 		WindowEventType Type;
 
 		Vector2US WindowSize;
@@ -27,7 +26,6 @@ namespace Portakal
 		KeyboardKeys KeyboardKey;
 		Char KeyboardChar;
 
-		Bool8 Handled;
 		Byte WindowIndex;
 
 		Array<String> DropItems;

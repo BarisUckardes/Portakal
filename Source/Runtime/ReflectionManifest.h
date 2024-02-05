@@ -20,6 +20,7 @@
 #include "Rendering\RenderOperation.h"
 #include "Resource\CustomResourceDeserializer.h"
 #include "Resource\IResourceDeserializer.h"
+#include "Resource\ResourceAttribute.h"
 #include "Resource\ResourceDescriptor.h"
 #include "Resource\ResourceModule.h"
 #include "Resource\ResourceSubObject.h"
@@ -38,9 +39,10 @@
 #include "Graphics\Shader\ShaderStage.h"
 #include "Rendering\Builtin\BasicCamera.h"
 #include "Rendering\Builtin\BasicRenderAspect.h"
+#include "Resource\Material\MaterialResource.h"
 #include "Resource\Mesh\MeshDeserializer.h"
 #include "Resource\Mesh\MeshResource.h"
-#include "Resource\RenderTarget\RenderTargetResource.h"
+#include "Resource\RenderTarget\RenderTarget.h"
 #include "Resource\Sampler\SamplerDescriptor.h"
 #include "Resource\Sampler\SamplerDeserializer.h"
 #include "Resource\Sampler\SamplerResource.h"
@@ -88,6 +90,7 @@
 		void* CreateRenderOperation() {return nullptr;}
 		void* CreateCustomResourceDeserializer() {return new Portakal::CustomResourceDeserializer();}
 		void* CreateIResourceDeserializer() {return nullptr;}
+		void* CreateResourceAttribute() {return new Portakal::ResourceAttribute();}
 		void* CreateResourceDescriptor() {return new Portakal::ResourceDescriptor();}
 		void* CreateResourceModule() {return new Portakal::ResourceModule();}
 		void* CreateResourceSubObject() {return nullptr;}
@@ -106,9 +109,10 @@
 		void* CreateShaderStage() {return new Portakal::ShaderStage();}
 		void* CreateBasicCamera() {return new Portakal::BasicCamera();}
 		void* CreateBasicRenderAspect() {return new Portakal::BasicRenderAspect();}
+		void* CreateMaterialResource() {return new Portakal::MaterialResource();}
 		void* CreateMeshDeserializer() {return new Portakal::MeshDeserializer();}
 		void* CreateMeshResource() {return new Portakal::MeshResource();}
-		void* CreateRenderTargetResource() {return new Portakal::RenderTargetResource();}
+		void* CreateRenderTarget() {return new Portakal::RenderTarget();}
 		void* CreateSamplerDescriptor() {return new Portakal::SamplerDescriptor();}
 		void* CreateSamplerDeserializer() {return new Portakal::SamplerDeserializer();}
 		void* CreateSamplerResource() {return new Portakal::SamplerResource();}
@@ -191,6 +195,8 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::CustomResourceDeserializer>(pCustomResourceDeserializer);
 ;		Portakal::Type* pIResourceDeserializer = Portakal::TypeDispatcher::CreateType("IResourceDeserializer",sizeof(Portakal::IResourceDeserializer),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateIResourceDeserializer,Portakal::TypeDispatcher::GetTypeAddress<Portakal::IResourceDeserializer>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::IResourceDeserializer>(pIResourceDeserializer);
+;		Portakal::Type* pResourceAttribute = Portakal::TypeDispatcher::CreateType("ResourceAttribute",sizeof(Portakal::ResourceAttribute),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateResourceAttribute,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ResourceAttribute>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ResourceAttribute>(pResourceAttribute);
 ;		Portakal::Type* pResourceDescriptor = Portakal::TypeDispatcher::CreateType("ResourceDescriptor",sizeof(Portakal::ResourceDescriptor),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateResourceDescriptor,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ResourceDescriptor>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ResourceDescriptor>(pResourceDescriptor);
 ;		Portakal::Type* pResourceModule = Portakal::TypeDispatcher::CreateType("ResourceModule",sizeof(Portakal::ResourceModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateResourceModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ResourceModule>());
@@ -227,12 +233,14 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::BasicCamera>(pBasicCamera);
 ;		Portakal::Type* pBasicRenderAspect = Portakal::TypeDispatcher::CreateType("BasicRenderAspect",sizeof(Portakal::BasicRenderAspect),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateBasicRenderAspect,Portakal::TypeDispatcher::GetTypeAddress<Portakal::BasicRenderAspect>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::BasicRenderAspect>(pBasicRenderAspect);
+;		Portakal::Type* pMaterialResource = Portakal::TypeDispatcher::CreateType("MaterialResource",sizeof(Portakal::MaterialResource),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateMaterialResource,Portakal::TypeDispatcher::GetTypeAddress<Portakal::MaterialResource>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::MaterialResource>(pMaterialResource);
 ;		Portakal::Type* pMeshDeserializer = Portakal::TypeDispatcher::CreateType("MeshDeserializer",sizeof(Portakal::MeshDeserializer),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateMeshDeserializer,Portakal::TypeDispatcher::GetTypeAddress<Portakal::MeshDeserializer>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::MeshDeserializer>(pMeshDeserializer);
 ;		Portakal::Type* pMeshResource = Portakal::TypeDispatcher::CreateType("MeshResource",sizeof(Portakal::MeshResource),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateMeshResource,Portakal::TypeDispatcher::GetTypeAddress<Portakal::MeshResource>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::MeshResource>(pMeshResource);
-;		Portakal::Type* pRenderTargetResource = Portakal::TypeDispatcher::CreateType("RenderTargetResource",sizeof(Portakal::RenderTargetResource),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateRenderTargetResource,Portakal::TypeDispatcher::GetTypeAddress<Portakal::RenderTargetResource>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::RenderTargetResource>(pRenderTargetResource);
+;		Portakal::Type* pRenderTarget = Portakal::TypeDispatcher::CreateType("RenderTarget",sizeof(Portakal::RenderTarget),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateRenderTarget,Portakal::TypeDispatcher::GetTypeAddress<Portakal::RenderTarget>());
+		Portakal::TypeDispatcher::SetTypeAddress<Portakal::RenderTarget>(pRenderTarget);
 ;		Portakal::Type* pSamplerDescriptor = Portakal::TypeDispatcher::CreateType("SamplerDescriptor",sizeof(Portakal::SamplerDescriptor),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSamplerDescriptor,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SamplerDescriptor>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SamplerDescriptor>(pSamplerDescriptor);
 ;		Portakal::Type* pSamplerDeserializer = Portakal::TypeDispatcher::CreateType("SamplerDeserializer",sizeof(Portakal::SamplerDeserializer),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSamplerDeserializer,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SamplerDeserializer>());
@@ -383,11 +391,16 @@ extern "C"
 
         //Register attributes here
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::MyAttribute>(pTestClass);
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::ResourceAttribute>(pMaterialResource, "material");
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomResourceDeserializer>(pMeshDeserializer, "mesh");
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::ResourceAttribute>(pMeshResource, "mesh");
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::ResourceAttribute>(pRenderTarget, "rendertarget");
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomResourceDeserializer>(pSamplerDeserializer, "sampler");
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::ResourceAttribute>(pSamplerResource, "sampler");
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomResourceDeserializer>(pSceneDeserializer,"scene");
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::ResourceAttribute>(pSceneResource, "scene");
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomResourceDeserializer>(pShaderDeserializer, "shader");
+		Portakal::TypeDispatcher::RegisterAttribute<Portakal::ResourceAttribute>(pShaderResource, "shader");
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::CustomResourceDeserializer>(pTextureDeserializer,"texture");
 		Portakal::TypeDispatcher::RegisterAttribute<Portakal::ResourceAttribute>(pTextureResource, "texture");
 
@@ -396,16 +409,12 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::TestClass),typeof(Portakal::Object));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ReflectionModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::RenderGraph),typeof(Portakal::Object));
-		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::CustomResourceDeserializer),typeof(Portakal::Attribute));
-		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::ResourceModule),typeof(Portakal::ApplicationModule));
-		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::WindowModule),typeof(Portakal::ApplicationModule));
-		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::Entity),typeof(Portakal::Object));
-		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::SceneModule),typeof(Portakal::ApplicationModule));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::BasicCamera),typeof(Portakal::Component));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::BasicRenderAspect),typeof(Portakal::SceneAspect));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::MaterialResource),typeof(Portakal::ResourceSubObject));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::MeshDeserializer),typeof(Portakal::IResourceDeserializer));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::MeshResource),typeof(Portakal::ResourceSubObject));
-		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::RenderTargetResource),typeof(Portakal::ResourceSubObject));
+		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::RenderTarget),typeof(Portakal::ResourceSubObject));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::SamplerDeserializer),typeof(Portakal::IResourceDeserializer));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::SamplerResource),typeof(Portakal::ResourceSubObject));
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::SceneDeserializer),typeof(Portakal::IResourceDeserializer));
@@ -417,7 +426,7 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::DisplayAspect),typeof(Portakal::SceneAspect));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {pMyAttribute,pTestClass,pApplicationModule,pGuid,pVector2F,pVector2I,pVector2UI,pVector2US,pObject,pPlatformType,pAttribute,pFieldMode,pReflectionModule,pRenderGraph,pRenderOperation,pCustomResourceDeserializer,pIResourceDeserializer,pResourceDescriptor,pResourceModule,pResourceSubObject,pWindowModule,pComponent,pEntity,pSceneAspect,pSceneModule,pCompareOperation,pLogicOperation,pSamplerAddressMode,pSamplerBorderColor,pSamplerFiltering,pSamplerMapMode,pShaderLanguage,pShaderStage,pBasicCamera,pBasicRenderAspect,pMeshDeserializer,pMeshResource,pRenderTargetResource,pSamplerDescriptor,pSamplerDeserializer,pSamplerResource,pSceneComponentDescriptor,pSceneComponentFieldDescriptor,pSceneComponentFieldType,pSceneDescriptor,pSceneDeserializer,pSceneEntityDescriptor,pSceneResource,pShaderDescriptor,pShaderDeserializer,pShaderResource,pTextureDeserializer,pTextureResource,pDisplayAspect,};
+		Portakal::Array<Portakal::Type*> types = {pMyAttribute,pTestClass,pApplicationModule,pGuid,pVector2F,pVector2I,pVector2UI,pVector2US,pObject,pPlatformType,pAttribute,pFieldMode,pReflectionModule,pRenderGraph,pRenderOperation,pCustomResourceDeserializer,pIResourceDeserializer,pResourceAttribute,pResourceDescriptor,pResourceModule,pResourceSubObject,pWindowModule,pComponent,pEntity,pSceneAspect,pSceneModule,pCompareOperation,pLogicOperation,pSamplerAddressMode,pSamplerBorderColor,pSamplerFiltering,pSamplerMapMode,pShaderLanguage,pShaderStage,pBasicCamera,pBasicRenderAspect,pMaterialResource,pMeshDeserializer,pMeshResource,pRenderTarget,pSamplerDescriptor,pSamplerDeserializer,pSamplerResource,pSceneComponentDescriptor,pSceneComponentFieldDescriptor,pSceneComponentFieldType,pSceneDescriptor,pSceneDeserializer,pSceneEntityDescriptor,pSceneResource,pShaderDescriptor,pShaderDeserializer,pShaderResource,pTextureDeserializer,pTextureResource,pDisplayAspect,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;

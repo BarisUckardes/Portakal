@@ -109,7 +109,7 @@ namespace Portakal
 		descriptor.Name = name;
 		descriptor.SourcePath = sourcePath;
 		descriptor.ResourceType = resourceType;
-		mResource = ResourceAPI::RegisterResource(descriptor);
+		mResource = Resource::Create(descriptor);
 		if (mResource.IsShutdown())
 		{
 			DEV_LOG("DomainFile", "Failed to create Runtime::Resource");

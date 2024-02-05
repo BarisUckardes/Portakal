@@ -5,6 +5,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Loader for meshes
+	/// </summary>
 	class RUNTIME_API MeshLoader final
 	{
 	public:

@@ -5,6 +5,10 @@
 namespace Portakal
 {
 	PCLASS();
+
+	/// <summary>
+	/// Descriptor for a resource.
+	/// </summary>
 	struct RUNTIME_API ResourceDescriptor
 	{
 		PFIELD();

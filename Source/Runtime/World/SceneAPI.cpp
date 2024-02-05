@@ -44,34 +44,32 @@ namespace Portakal
 			return;
 
 		pAPI->mScenes.Add(pScene);
-		pAPI->mMap.Insert(pScene.GetHeap(), pScene);
 	}
-	void SceneAPI::_RemoveScene(Scene* pScene)
+	void SceneAPI::_RemoveScene(Scene* pTargetScene)
 	{
 		SceneAPI* pAPI = GetUnderlyingAPI();
 		if (pAPI == nullptr)
 			return;
 
-		const Int32 index = pAPI->mMap.FindIndex(pScene);
-		if (index == -1) // WTF
-			return;
-
-		pAPI->mMap.Remove(pScene);
-		pAPI->mScenes.RemoveAt(index);
-
-		if (pScene == pAPI->mPrimalScene.GetHeap())
+		//Look for the scene
+		for (UInt32 i = 0; i < pAPI->mScenes.GetSize(); i++)
+		{
+			const SharedHeap<Scene>& pScene = pAPI->mScenes[i];
+			if (pScene.GetHeap() == pTargetScene)
+			{
+				pAPI->mScenes.RemoveAt(i);
+			}
+		}
+		
+		if (pTargetScene == pAPI->mPrimalScene.GetHeap())
 			pAPI->mPrimalScene = nullptr;
 
-		pScene->_SetPrimalState(false);
+		pTargetScene->_SetPrimalState(false);
 	}
-	void SceneAPI::_SetScenePrimal(Scene* pScene)
+	void SceneAPI::_SetScenePrimal(Scene* pTargetScene)
 	{
 		SceneAPI* pAPI = GetUnderlyingAPI();
 		if (pAPI == nullptr)
-			return;
-
-		const Int32 index = pAPI->mMap.FindIndex(pScene);
-		if (index == -1) // WTF
 			return;
 
 		//Remove the primal mark of the previous primal scene
@@ -79,8 +77,16 @@ namespace Portakal
 			pAPI->mPrimalScene->_SetPrimalState(false);
 
 		//Set scene primal
-		pAPI->mPrimalScene = pAPI->mMap[index].GetValue();
-		pAPI->mPrimalScene->_SetPrimalState(true);
+		for (UInt32 i = 0; i < pAPI->mScenes.GetSize(); i++)
+		{
+			const SharedHeap<Scene>& pScene = pAPI->mScenes[i];
+			if (pScene.GetHeap() == pTargetScene)
+			{
+				pScene->_SetPrimalState(true);
+				pAPI->mPrimalScene = pScene;
+				break;
+			}
+		}
 	}
 	SceneAPI::SceneAPI()
 	{

@@ -5,7 +5,7 @@
 
 namespace Portakal
 {
-    VulkanBuffer::VulkanBuffer(const GraphicsBufferDesc& desc, VulkanDevice* pDevice) : GraphicsBuffer(desc),mLogicalDevice(pDevice->GetVkLogicalDevice()),mAlignedHandle(uint64_max),mHandle(uint64_max),mBuffer(VK_NULL_HANDLE)
+    VulkanBuffer::VulkanBuffer(const GraphicsBufferDesc& desc, VulkanDevice* pDevice) : GraphicsBuffer(desc),mLogicalDevice(pDevice->GetVkLogicalDevice()),mBuffer(VK_NULL_HANDLE)
     {
         //Get vk heap
         const VulkanMemoryHeap* pHeap = (const VulkanMemoryHeap*)desc.pHeap.GetHeap();
@@ -26,15 +26,14 @@ namespace Portakal
         vkGetBufferMemoryRequirements(mLogicalDevice, mBuffer, &requirements);
 
         //Get buffer memory
-        const MemoryHandle memoryHandle = desc.pHeap->Allocate(requirements.size + requirements.alignment);
-        const UInt64 alignmentOffset = (memoryHandle % requirements.alignment == 0 ? 0 : (requirements.alignment - (memoryHandle % requirements.alignment)));
-        const MemoryHandle alignedHandle = memoryHandle + alignmentOffset;
+        const UInt64 memoryOffset = desc.pHeap->Allocate(requirements.size + requirements.alignment);
+        const UInt64 alignedMemoryOffset = memoryOffset + (memoryOffset % requirements.alignment == 0 ? 0 : (requirements.alignment - (memoryOffset % requirements.alignment)));
 
         //Bind memory
-        DEV_ASSERT(vkBindBufferMemory(mLogicalDevice, mBuffer, pHeap->GetVkMemory(), alignedHandle) == VK_SUCCESS,"VulkanBuffer","Failed to bind memory");
+        DEV_ASSERT(vkBindBufferMemory(mLogicalDevice, mBuffer, pHeap->GetVkMemory(), alignedMemoryOffset) == VK_SUCCESS,"VulkanBuffer","Failed to bind memory");
 
         //Set aligned handle
-        SetMemoryProperties(memoryHandle, alignedHandle);
+        SetMemoryProperties(memoryOffset, alignedMemoryOffset);
     }
     void VulkanBuffer::OnShutdown()
     {

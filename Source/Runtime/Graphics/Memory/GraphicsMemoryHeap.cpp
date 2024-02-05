@@ -10,7 +10,7 @@ namespace Portakal
         initialBlock.SizeInBytes = desc.SizeInBytes;
         mBlocks.Add(initialBlock);
     }
-    MemoryHandle GraphicsMemoryHeap::Allocate(const UInt64 sizeInBytes)
+    UInt64 GraphicsMemoryHeap::Allocate(const UInt64 sizeInBytes)
     {
         //Check enough space is left
         const UInt64 sizeLeft = mSize - mOccupiedSize;
@@ -41,23 +41,27 @@ namespace Portakal
             newBlock.bOwned = true;
             newBlock.SizeInBytes = sizeInBytes;
             mBlocks.AddAt(newBlock, i);
+            mOccupiedSize += sizeInBytes;
             return offset;
         }
+
+        return uint64_max;
     }
-    void GraphicsMemoryHeap::Free(const MemoryHandle handle)
+    void GraphicsMemoryHeap::Free(const UInt64 offsetInBytes)
     {
         //Find and free owned memory
         UInt64 currentOffset = 0;
         for (UInt32 i = 0; i < mBlocks.GetSize(); i++)
         {
             SubAllocationBlock& block = mBlocks[i];
-            if (currentOffset != handle)
+            if (currentOffset != offsetInBytes)
             {
                 currentOffset += block.SizeInBytes;
                 continue;
             }
 
             block.bOwned = false;
+            mOccupiedSize -= block.SizeInBytes;
             break;
         }
 
@@ -77,6 +81,7 @@ namespace Portakal
                 i -= diff;
             }
         }
+
     }
     GraphicsMemoryHeap::CompactReport GraphicsMemoryHeap::GetCompactReport(const UInt32 index)
     {

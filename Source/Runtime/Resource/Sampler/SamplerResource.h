@@ -7,6 +7,10 @@
 
 namespace Portakal
 {
+
+	/// <summary>
+	/// A resource sub object that is specialized in sampler works
+	/// </summary>
 	PATTRIBUTE(ResourceAttribute, "sampler");
 	PCLASS();
 	class RUNTIME_API SamplerResource : public ResourceSubObject

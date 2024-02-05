@@ -5,6 +5,10 @@
 namespace Portakal
 {
 	PENUM();
+
+	/// <summary>
+	/// Available fields types a component can have
+	/// </summary>
 	enum class RUNTIME_API SceneComponentFieldType : Int64
 	{
 		EntityComponent,

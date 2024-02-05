@@ -5,6 +5,10 @@
 
 namespace Portakal
 {
+
+	/// <summary>
+	/// Deserializer for mesh resource sub object
+	/// </summary>
 	PATTRIBUTE(CustomResourceDeserializer, "mesh")
 	PCLASS();
 	class RUNTIME_API MeshDeserializer : public IResourceDeserializer

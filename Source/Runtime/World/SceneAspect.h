@@ -7,6 +7,10 @@ namespace Portakal
 {
 	class Scene;
 	PCLASS(Virtual);
+
+	/// <summary>
+	/// A controlling unit inside a scene. These units can control anything inside the scene. Physics2D, Physics3D, PBR, Lights etc.
+	/// </summary>
 	class RUNTIME_API SceneAspect : public Object
 	{
 		friend class Scene;

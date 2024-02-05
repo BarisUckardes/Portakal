@@ -2,7 +2,7 @@
 
 namespace Portakal
 {
-	void GraphicsAPI::SetMemoryProfile(const UInt64 deviceMemorySize, const UInt64 hostMemorySize)
+	void GraphicsAPI::SetMemoryBudget(const UInt64 deviceMemorySize, const UInt64 hostMemorySize)
 	{
 		GraphicsAPI* pAPI = GetUnderlyingAPI();
 		if (pAPI == nullptr)
@@ -20,7 +20,7 @@ namespace Portakal
 		hostHeapDesc.Type = GraphicsMemoryType::Host;
 		pAPI->mHeapHost = pAPI->mDevice->CreateMemoryHeap(hostHeapDesc);
 	}
-	void GraphicsAPI::SetResourceProfile(const UInt64 resourceCount, const UInt64 setCount)
+	void GraphicsAPI::SetResourceBudget(const UInt64 resourceCount, const UInt64 setCount)
 	{
 		GraphicsAPI* pAPI = GetUnderlyingAPI();
 		if (pAPI == nullptr)

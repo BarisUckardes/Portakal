@@ -8,6 +8,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Utilities for ShaderCompiler
+	/// </summary>
 	class RUNTIME_API ShaderCompilerUtils
 	{
 	public:
