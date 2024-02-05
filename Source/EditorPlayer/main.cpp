@@ -38,7 +38,6 @@
 #include <Runtime/Platform/PlatformRegistry.h>
 #include <Runtime/Reflection/ReflectionAPI.h>
 #include <Runtime/Window/WindowModule.h>
-#include <Runtime/Reflection/ReflectionModule.h>
 #include <Runtime/Reflection/ReflectionAPI.h>
 #include <RUntime/World/Component.h>
 #include <Runtime/World/Entity.h>
@@ -72,26 +71,25 @@ namespace Portakal
 		EditorPlayerApplication* pApplication = new EditorPlayerApplication();
 
 		//Add core modules
-		pApplication->RegisterModule<ReflectionModule>(0);
-		pApplication->RegisterModule<SceneModule>(1); // tick 0
-		pApplication->RegisterModule<WindowModule>(2);
-		pApplication->RegisterModule<GraphicsModule>(3);
-		pApplication->RegisterModule<ResourceModule>(4);
-		pApplication->RegisterModule<ProjectModule>(5, cmdArguments[1]);
-		pApplication->RegisterModule<DomainModule>(6);
+		pApplication->RegisterModule<SceneModule>(0); // tick 0
+		pApplication->RegisterModule<WindowModule>(1);
+		pApplication->RegisterModule<GraphicsModule>(2);
+		pApplication->RegisterModule<ResourceModule>(3);
+		pApplication->RegisterModule<ProjectModule>(4, cmdArguments[1]);
+		pApplication->RegisterModule<DomainModule>(5);
 
 		//Add create-only modules
-		pApplication->RegisterModule<EditorPlayerProjectModule>(7);
-		pApplication->RegisterModule<EditorPlayerWindowModule>(8);
-		pApplication->RegisterModule<EditorPlayerGDeviceModule>(9);
-		pApplication->RegisterModule<EditorResourceModule>(10);
-		pApplication->RegisterModule<EditorObjectModule>(11);
-		pApplication->RegisterModule<ImGuiModule>(12);
+		pApplication->RegisterModule<EditorPlayerProjectModule>(6);
+		pApplication->RegisterModule<EditorPlayerWindowModule>(7);
+		pApplication->RegisterModule<EditorPlayerGDeviceModule>(8);
+		pApplication->RegisterModule<EditorResourceModule>(9);
+		pApplication->RegisterModule<EditorObjectModule>(10);
+		pApplication->RegisterModule<ImGuiModule>(11);
 		
 		//GUI modules
-		pApplication->RegisterModule<ImGuiRenderStartModule>(13);
-		pApplication->RegisterModule<GUIWindowModule>(14);
-		pApplication->RegisterModule<ImGuiRenderEndModule>(15);
+		pApplication->RegisterModule<ImGuiRenderStartModule>(12);
+		pApplication->RegisterModule<GUIWindowModule>(13);
+		pApplication->RegisterModule<ImGuiRenderEndModule>(14);
 
 		//Run
 		pApplication->Run();

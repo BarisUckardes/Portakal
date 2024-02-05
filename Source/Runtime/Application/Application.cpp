@@ -1,15 +1,49 @@
 #include "Application.h"
-#include <Runtime/Reflection/ReflectionModule.h>
+#include <Runtime/Reflection/ReflectionManifest.h>
+#include <Runtime/Reflection/TypeDispatcher.h>
 
 namespace Portakal
 {
+    typedef ReflectionManifest* (*GetManifestProc)();
     Application::Application() : mQuitReason("Unknown"),mQuitRequest(false),mInvalidationRequest(false)
     {
         sApplication = this;
+
+        //Load this dll boundry library
+        LoadLibrary(PlatformLibrary::GetCurrent());
     }
     Application::~Application()
     {
         sApplication = nullptr;
+    }
+    Array<Assembly*> Application::GetAssemblies() const noexcept
+    {
+        Array<Assembly*> assemblies;
+        for (const LibraryEntry& entry : mLibraries)
+            assemblies.Add(entry.pAssembly);
+
+        return assemblies;
+    }
+    void Application::LoadLibrary(const SharedHeap<PlatformLibrary>& pLibrary)
+    {
+        if (pLibrary.IsShutdown())
+            return;
+
+        LibraryEntry entry = CreateLibraryEntry(pLibrary);
+    }
+    void Application::UnloadLibrary(const SharedHeap<PlatformLibrary>& pLibrary)
+    {
+        if (pLibrary.IsShutdown())
+            return;
+
+        for (LibraryEntry& entry : mLibraries)
+        {
+            if (entry.pLibrary != pLibrary)
+                continue;
+
+            DeleteLibraryEntry(entry);
+            return;
+        }
     }
     void Application::RemoveModule(const UInt32 index)
     {
@@ -129,6 +163,64 @@ namespace Portakal
     {
         mInvalidationRequest = true;
         mInvalidationReason = reason;
+    }
+    Portakal::Application::LibraryEntry Application::CreateLibraryEntry(const SharedHeap<PlatformLibrary>& pLibrary)
+    {
+        //Try get proc 
+        GetManifestProc getProc = (GetManifestProc)pLibrary->GetSymbol("GenerateModuleManifest");
+        if (getProc == nullptr)
+            return {};
+
+        //Call manifest
+        ReflectionManifest* pManifest = getProc();
+        if (pManifest == nullptr)
+            return {};
+
+        //Create assembly
+        Assembly* pAssembly = new Assembly(pLibrary->GetName(), pLibrary->GetPath(), pManifest->GetTypes());
+
+        //Normalize the assembly
+        NormalizeLibrary(pAssembly);
+
+        //Create entry
+        LibraryEntry entry = {};
+        entry.pLibrary = pLibrary;
+        entry.pAssembly = pAssembly;
+        entry.pManifest = pManifest;
+
+        //Register entry
+        mLibraries.Add(entry);
+
+        return entry;
+    }
+    void Application::DeleteLibraryEntry(LibraryEntry& entry)
+    {
+        delete entry.pAssembly;
+        delete entry.pManifest;
+    }
+    void Application::NormalizeLibrary(Assembly* pAssembly)
+    {
+        //Get assembly types
+        Array<Type*> assemblyTypes = pAssembly->GetTypes();
+
+        //Iterate and look for the matches
+        for (Type* pAssemblyType : assemblyTypes)
+        {
+            for (const LibraryEntry& entry : mLibraries)
+            {
+                const Array<Type*> types = entry.pAssembly->GetTypes();
+
+                for (Type* pType : types)
+                {
+                    if (pType->GetName() == pAssemblyType->GetName())
+                    {
+                        Type** pAddress = TypeDispatcher::GetTypeAddress(pAssemblyType);
+                        *pAddress = pType;
+                        break;
+                    }
+                }
+            }
+        }
     }
     void Application::_RegisterAPI(Object* pAPI)
     {
