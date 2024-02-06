@@ -13,8 +13,8 @@ set(CMAKE_CXX_STANDARD 20)
 # --------------------------------------------------
 
 # --------------- COMPILER VERSIONS ----------------
-if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     message(STATUS "Platform is Windows, Using MSVC Compiler Version ${MSVC_VERSION}")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     message(STATUS "Platform is Unix, Using Clang Compiler Version ${CMAKE_CXX_COMPILER_VERSION}")
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")

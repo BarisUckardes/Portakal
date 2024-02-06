@@ -15,15 +15,30 @@ namespace Portakal
 	{
 		GENERATE_OBJECT;
 	public:
-		DomainWindow() : mTargetFolder(nullptr), mContextMenuFolder(nullptr), mFolderChanged(false),mFileSize(64),mFolderSize(64),mItemGap(16)
+		DomainWindow() : mTargetFolder(nullptr), mContextMenuFolder(nullptr), mFolderChanged(false),mItemSize(64),mItemGap(16)
 		{
 
 		}
 		~DomainWindow() = default;
 
+		FORCEINLINE float GetItemSize() const noexcept
+		{
+			return mItemSize;
+		}
+		FORCEINLINE float GetItemGap() const noexcept
+		{
+			return mItemGap;
+		}
+		FORCEINLINE float GetFontSize() const noexcept
+		{
+			return mFontSize;
+		}
+
+		void SetItemSize(const float size);
+		void SetItemGap(const float gap);
 	private:
 		void SelectFolder(const SharedHeap<DomainFolder>& pFolder);
-		void SelectFile(const SharedHeap<DomainFile>& pFile);
+		void SelectFile(const SharedHeap<DomainFile>& pFile); 
 		void DeleteFolder(const SharedHeap<DomainFolder>& pFolder);
 		void DeleteSelections();
 		void ClearSelections();
@@ -52,9 +67,9 @@ namespace Portakal
 		SharedHeap<DomainFolder> mContextMenuFolder;
 		SharedHeap<DomainFile> mContextMenuFile;
 		bool mFolderChanged;
-		float mFolderSize;
-		float mFileSize;
+		float mItemSize;
 		float mItemGap;
+		float mFontSize;
 
 		//Context menu item variables
 		Array<SharedHeap<IContextMenuItem>> mContextCreateActions;

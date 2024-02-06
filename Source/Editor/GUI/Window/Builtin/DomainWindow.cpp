@@ -40,6 +40,15 @@ namespace Portakal
 		mSelectedFiles.Clear();
 		mSelectedFolders.Clear();
 	}
+	void DomainWindow::SetItemSize(const float size)
+	{
+		mItemSize = size;
+		mFontSize = size / 4;
+	}
+	void DomainWindow::SetItemGap(const float gap)
+	{
+		mItemGap = gap;
+	}
 	void DomainWindow::SelectFolder(const SharedHeap<DomainFolder>& pFolder)
 	{
 		if (mSelectedFolders.Remove(pFolder))
@@ -168,7 +177,7 @@ namespace Portakal
 				//Create selectable
 				ImGui::SetCursorPos(itemPos);
 				ImGui::PushID(*pFolder->GetName());
-				const bool bClicked = ImGui::Selectable("", bSelected, ImGuiSelectableFlags_DontClosePopups, { mFolderSize,mFolderSize });
+				const bool bClicked = ImGui::Selectable("", bSelected, ImGuiSelectableFlags_DontClosePopups, { mItemSize,mItemSize });
 				ImGui::PopID();
 
 				//Check if requested selection
@@ -188,14 +197,25 @@ namespace Portakal
 
 				//Create image
 				ImGui::SetCursorPos(itemPos);
-				ImGui::Image(mFolderIconBinding->GetTable(), { mFolderSize,mFolderSize });
+				ImGui::Image(mFolderIconBinding->GetTable(), { mItemSize,mItemSize });
 
 				//Draw text
-				ImGui::SetCursorPos({ itemPos.x,itemPos.y + mFolderSize });
+				ImGui::SetCursorPos({ itemPos.x,itemPos.y + mItemSize });
+				ImGui::PushTextWrapPos(itemPos.x + mItemSize);
 				ImGui::Text(*pFolder->GetName());
+				ImGui::PopTextWrapPos();
 
 				//Move next
-				itemPos.x += (mFolderSize + mItemGap);
+				const ImVec2 availableRegion = ImGui::GetContentRegionAvail();
+				if (itemPos.x + mItemSize*2 + mItemGap > availableRegion.x)
+				{
+					itemPos.x = 0;
+					itemPos.y += mItemSize + mItemGap + mFontSize;
+				}
+				else
+				{
+					itemPos.x += (mItemSize + mItemGap);
+				}
 
 				//Reset same line
 				ImGui::SameLine();
@@ -216,20 +236,18 @@ namespace Portakal
 				//Create selectable
 				ImGui::SetCursorPos(itemPos);
 				ImGui::PushID(*pFile->GetName());
-				const bool bClicked = ImGui::Selectable("", bSelected, ImGuiSelectableFlags_DontClosePopups, { mFileSize,mFileSize });
+				const bool bClicked = ImGui::Selectable("", bSelected, ImGuiSelectableFlags_DontClosePopups, { mItemSize,mItemSize });
 				ImGui::PopID();
 
 				//Check if requested selection
 				if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl) && bClicked)
 				{
 					SelectFile(pFile);
-					DEV_LOG("a", "Selected0 %d",mSelectedFiles.GetSize());
 				}
 				else if (bClicked)
 				{
 					ClearSelections();
 					SelectFile(pFile);
-					DEV_LOG("a","Selected1 %d",mSelectedFiles.GetSize());
 				}
 
 				//Check if requested to open file
@@ -251,14 +269,25 @@ namespace Portakal
 
 				//Create image
 				ImGui::SetCursorPos(itemPos);
-				ImGui::Image(pBinding->GetTable(), { mFileSize,mFileSize });
+				ImGui::Image(pBinding->GetTable(), { mItemSize,mItemSize });
 
 				//Draw text
-				ImGui::SetCursorPos({ itemPos.x,itemPos.y + mFileSize });
+				ImGui::SetCursorPos({ itemPos.x,itemPos.y + mItemSize });
+				ImGui::PushTextWrapPos(itemPos.x + mItemSize);
 				ImGui::Text(*pFile->GetName());
+				ImGui::PopTextWrapPos();
 
 				//Move next
-				itemPos.x += (mFileSize + mItemGap);
+				const ImVec2 availableRegion = ImGui::GetContentRegionAvail();
+				if (itemPos.x + mItemSize*2 + mItemGap > availableRegion.x)
+				{
+					itemPos.x = 0;
+					itemPos.y += mItemSize + mItemGap + mFontSize;
+				}
+				else
+				{
+					itemPos.x += (mItemSize + mItemGap);
+				}
 
 				//Reset same line
 				ImGui::SameLine();
@@ -432,8 +461,7 @@ namespace Portakal
 		mDefaultItemIconBinding = ImGuiAPI::GetRenderer()->GetOrCreateTextureBinding(pDefaultIcon->GetTexture());
 
 		//Setup defaults
-		mFolderSize = 64;
-		mFileSize = 64;
-		mItemGap = 16;
+		SetItemSize(64);
+		SetItemGap(16);
 	}
 }

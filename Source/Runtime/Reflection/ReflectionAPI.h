@@ -13,6 +13,5 @@ namespace Portakal
 	private:
 		ReflectionAPI() = delete;
 		~ReflectionAPI() = delete;
-
 	};
 }
