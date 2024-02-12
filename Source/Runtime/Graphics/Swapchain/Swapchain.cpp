@@ -21,8 +21,16 @@ namespace Portakal
     }
     Bool8 Swapchain::Present()
     {
+        //First wait for the target fence
+        GetOwnerDevice()->WaitFences(mPresentFences[mIndex].GetHeapAddress(), 1);
+        GetOwnerDevice()->ResetFences(mPresentFences[mIndex].GetHeapAddress(), 1);
+
+        //Present
         const Bool8 bState = PresentCore();
+
+        //Increment the internal index
         IncrementIndex();
+
         return bState;
     }
     void Swapchain::WaitForPresent(const Byte index)
@@ -54,27 +62,26 @@ namespace Portakal
         mCmdList->EndRecording();
         GetOwnerDevice()->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, mLayoutFence.GetHeap());
         GetOwnerDevice()->WaitFences(mLayoutFence.GetHeapAddress(), 1);
+        GetOwnerDevice()->ResetFences(mLayoutFence.GetHeapAddress(), 1);
     }
-    Bool8 Swapchain::SetMode(const WindowMode mode)
+    Bool8 Swapchain::SetMode(const SwapchainMode mode)
     {
         //Wait for idle
         GetOwnerDevice()->WaitDeviceIdle();
 
         //Set fullscreen
-        const Bool8 bSuccess = mode == WindowMode::Fullscreen ? SetFullScreen() : SetWindowed();
+        const Bool8 bSuccess = mode == SwapchainMode::Fullscreen ? SetFullScreen() : SetWindowed();
 
         return bSuccess;
     }
    
     void Swapchain::SetTextures(const Array<SharedHeap<Texture>>& textures, const Array<SharedHeap<TextureView>>& views)
     {
-        DEV_LOG("Swapchain", "New set of textures&views arrived!");
         mTextures = textures;
         mViews = views;
     }
     void Swapchain::SetSize(const UInt16 width, const UInt16 height)
     {
-        DEV_LOG("Swapchain", "Size: %d,%d", width, height);
         mSize = { width,height };
     }
     void Swapchain::OnShutdown()
@@ -104,11 +111,11 @@ namespace Portakal
         mCmdList = pDevice->CreateCommandList(cmdListDesc);
 
         //Create layout fence
-        mLayoutFence = pDevice->CreateFence();
+        mLayoutFence = pDevice->CreateFence(false);
 
         //Create present fences
         for (Byte i = 0; i < mBufferCount; i++)
-            mPresentFences.Add(pDevice->CreateFence());
+            mPresentFences.Add(pDevice->CreateFence(true));
     }
     void Swapchain::IncrementIndex()
     {

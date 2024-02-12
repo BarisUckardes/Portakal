@@ -8,7 +8,7 @@ namespace Portakal
 	class RUNTIME_API VulkanFence : public Fence
 	{
 	public:
-		VulkanFence(VulkanDevice* pDevice);
+		VulkanFence(VulkanDevice* pDevice,const bool bSignalled);
 		~VulkanFence() = default;
 
 		FORCEINLINE VkFence GetVkFence() const noexcept

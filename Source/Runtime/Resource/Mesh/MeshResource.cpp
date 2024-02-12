@@ -113,6 +113,7 @@ namespace Portakal
 		mCmdList->EndRecording();
 		mDevice->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, mFence.GetHeap());
 		mDevice->WaitFences(mFence.GetHeapAddress(), 1);
+		mDevice->ResetFences(mFence.GetHeapAddress(), 1);
 	}
 	void MeshResource::UpdateSubMeshIndexes(const UInt32 subMeshIndex, const MemoryView memory, const UInt32 offset)
 	{
@@ -151,6 +152,7 @@ namespace Portakal
 		mCmdList->EndRecording();
 		mDevice->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, mFence.GetHeap());
 		mDevice->WaitFences(mFence.GetHeapAddress(), 1);
+		mDevice->ResetFences(mFence.GetHeapAddress(),1);
 	}
 	void MeshResource::DeleteSubMesh(const UInt32 index)
 	{
@@ -187,7 +189,7 @@ namespace Portakal
 		cmdListDesc.pPool = mCmdPool;
 		mCmdList = mDevice->CreateCommandList(cmdListDesc);
 
-		mFence = mDevice->CreateFence();
+		mFence = mDevice->CreateFence(false);
 	}
 	void MeshResource::OnShutdown()
 	{

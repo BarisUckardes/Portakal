@@ -61,24 +61,11 @@ namespace Portakal
 		mSelectedFiles.Clear();
 		mSelectedFolders.Clear();
 	}
-	void DomainWindow::OpenFile(DomainFile* pFile)
-	{
-		Type* pActionType = pFile->GetOpenActionType();
-		if (pActionType == nullptr)
-		{
-			DEV_LOG("DomainWindow", "Cannot open file %s, no open action defined", *pFile->GetName());
-			return;
-		}
 
-		IFileOpenAction* pAction = (IFileOpenAction*)pActionType->CreateDefaultHeapObject();
-		pAction->OnOpen(pFile);
-		delete pAction;
-	}
 	void DomainWindow::OpenFolder(DomainFolder* pFolder)
 	{
 		mTargetFolder = pFolder;
 		ClearSelections();
-		ClearThumbnails();
 	}
 	void DomainWindow::ProcessDragDrops(const Array<String>& items)
 	{
@@ -86,36 +73,8 @@ namespace Portakal
 		for (const String& itemPath : items)
 			mTargetFolder->ImportExternalFile(itemPath);
 	}
-	void DomainWindow::InitializeThumbnail(const SharedHeap<DomainFile>& pFile)
-	{
-		//Check if this domain file already exists
-		if (mThumnails.FindIndex(pFile) == -1)
-		{
-			Type* pType = pFile->GetThumbnailType();
-			IThumbnail* pThumbnail = nullptr;
-			if (pType == nullptr)
-			{
-				pThumbnail = new DefaultThumbnail();
-			}
-			else
-			{
-				pThumbnail = (IThumbnail*)pFile->GetThumbnailType()->CreateDefaultHeapObject();
-				
-			}
-			
-			pThumbnail->OnInitialize();
-			mThumnails.Insert(pFile, pThumbnail);
-		}
-	}
-	SharedHeap<TextureResource> DomainWindow::GetThumbnailImage(const SharedHeap<DomainFile>& pFile)
-	{
-		SharedHeap<IThumbnail>* pThumbnail = mThumnails.Find(pFile);
-		return (*pThumbnail)->GetThumbnailTexture(pFile.GetHeap());
-	}
-	void DomainWindow::ClearThumbnails()
-	{
-		mThumnails.Clear();
-	}
+	
+
 
 	void DomainWindow::RenameFile(const SharedHeap<DomainFile>& pFile)
 	{
@@ -252,7 +211,7 @@ namespace Portakal
 
 				//Check if requested to open file
 				if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
-					OpenFile(pFile.GetHeap());
+					pFile->OpenFile();
 
 				//Check if requested to open file context menu
 				if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsItemHovered())
@@ -262,9 +221,7 @@ namespace Portakal
 				}
 
 				//Thumbnail work
-				InitializeThumbnail(pFile);
-
-				SharedHeap<TextureResource> pTexture = GetThumbnailImage(pFile);
+				SharedHeap<TextureResource> pTexture = pFile->GetThumbnail();
 				SharedHeap<ImGuiTextureBinding> pBinding = ImGuiAPI::GetRenderer()->GetOrCreateTextureBinding(pTexture);
 
 				//Create image
@@ -351,7 +308,7 @@ namespace Portakal
 
 			if (ImGui::Selectable("Open"))
 			{
-				OpenFile(mContextMenuFile.GetHeap());
+				mContextMenuFile->OpenFile();
 			}
 			if (ImGui::Selectable("Rename"))
 			{

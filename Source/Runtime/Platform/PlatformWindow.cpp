@@ -42,18 +42,6 @@ namespace Portakal
 		//Call implementation
 		SetModeCore(mode);
 
-		//Set new mode
-		mMode = mode;
-
-		const Vector2US monitorSize = mMonitor.IsShutdown() ? Vector2US(1024, 1024) : mMonitor->GetSize();
-		if (!mMonitor.IsShutdown())
-		{
-			const Vector2I position = mMonitor->GetPosition();
-
-			//Set position
-			SetPosition(position);
-		}
-
 		//Set sizes
 		switch (mode)
 		{
@@ -70,6 +58,14 @@ namespace Portakal
 			}
 			case Portakal::WindowMode::Fullscreen:
 			{
+				const Vector2US monitorSize = mMonitor.IsShutdown() ? Vector2US(1024, 1024) : mMonitor->GetSize();
+				if (!mMonitor.IsShutdown())
+				{
+					const Vector2I position = mMonitor->GetPosition();
+
+					//Set position
+					SetPosition(position);
+				}
 				SetSize(monitorSize);
 				break;
 			}
@@ -77,7 +73,10 @@ namespace Portakal
 		
 		//Set swapchain mode
 		if (!mSwapchain.IsShutdown())
-			mSwapchain->SetMode(mode);
+			mSwapchain->SetMode(mode == WindowMode::Fullscreen ? SwapchainMode::Fullscreen : SwapchainMode::Normal);
+
+		//Set new mode
+		mMode = mode;
 	}
 	void PlatformWindow::SwitchMonitor(const SharedHeap<PlatformMonitor>& pMonitor)
 	{

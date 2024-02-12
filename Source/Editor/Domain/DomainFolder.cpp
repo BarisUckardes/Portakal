@@ -280,7 +280,22 @@ namespace Portakal
 	{
 		mFiles.Remove(pFile);
 	}
+	void DomainFolder::_OnPreInvalidate()
+	{
+		//Pre invalidate files
 
+		//Pre invalidate folders
+		for (const SharedHeap<DomainFolder>& pFolder : mFolders)
+			pFolder->_OnPreInvalidate();
+	}
+	void DomainFolder::_OnPostInvalidate()
+	{
+		//Post invalidate files
+
+		//Post invalidate folders
+		for (const SharedHeap<DomainFolder>& pFolder : mFolders)
+			pFolder->_OnPostInvalidate();
+	}
 	void DomainFolder::OnShutdown()
 	{
 		//First notify the owner folder that this folder is removed

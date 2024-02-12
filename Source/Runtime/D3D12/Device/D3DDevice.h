@@ -34,10 +34,11 @@ namespace Portakal
 		virtual ResourceTableLayout* CreateResourceTableLayoutCore(const ResourceTableLayoutDesc& desc) override { return nullptr; }
 		virtual ResourceTablePool* CreateResourceTablePoolCore(const ResourceTablePoolDesc& desc) override { return nullptr; }
 		virtual ResourceTable* CreateResourceTableCore(const ResourceTableDesc& desc) override { return nullptr; }
-		virtual Fence* CreateFenceCore() override;
+		virtual Fence* CreateFenceCore(const bool bSignalled) override;
 		virtual Swapchain* CreateSwapchainCore(const SwapchainDesc& desc) override;
 		virtual RenderPass* CreateRenderPassCore(const RenderPassDesc& desc) override { return nullptr; }
 
+		virtual void ResetFencesCore(Fence** ppFences, const Byte count) override;
 		virtual void WaitFencesCore(Fence** ppFences, const Byte count) override {}
 		virtual void WaitDeviceIdleCore() override {}
 		virtual void WaitQueueDefaultCore(const GraphicsQueueType type) override {}

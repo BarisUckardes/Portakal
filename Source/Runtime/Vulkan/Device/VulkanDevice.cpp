@@ -225,9 +225,9 @@ namespace Portakal
 	{
 		return new VulkanResourceTable(desc, this);
 	}
-	Fence* VulkanDevice::CreateFenceCore()
+	Fence* VulkanDevice::CreateFenceCore(const bool bSignalled)
 	{
-		return new VulkanFence(this);
+		return new VulkanFence(this, bSignalled);
 	}
 	Swapchain* VulkanDevice::CreateSwapchainCore(const SwapchainDesc& desc)
 	{
@@ -249,10 +249,21 @@ namespace Portakal
 	{
 		return new VulkanPipeline(desc, this);
 	}
+	void VulkanDevice::ResetFencesCore(Fence** ppFences, const Byte count)
+	{
+		VkFence vkFences[128];
+		for (UInt32 fenceIndex = 0; fenceIndex < count; fenceIndex++)
+		{
+			const VulkanFence* pVkFence = (const VulkanFence*)ppFences[fenceIndex];
+
+			vkFences[fenceIndex] = pVkFence->GetVkFence();
+		}
+
+		DEV_ASSERT(vkResetFences(mLogicalDevice, count, vkFences) == VK_SUCCESS, "VulkanGraphicsDevice", "Failed to reset the given fences");
+	}
 	void VulkanDevice::WaitFencesCore(Fence** ppFences, const Byte count)
 	{
 		VkFence vkFences[128];
-
 		for (UInt32 fenceIndex = 0; fenceIndex < count; fenceIndex++)
 		{
 			const VulkanFence* pVkFence = (const VulkanFence*)ppFences[fenceIndex];
@@ -261,7 +272,7 @@ namespace Portakal
 		}
 
 		DEV_ASSERT(vkWaitForFences(mLogicalDevice, count, vkFences, VK_TRUE, UINT64_MAX) == VK_SUCCESS, "VulkanGraphicsDevice", "Failed to wait fences[%d]", count);
-		DEV_ASSERT(vkResetFences(mLogicalDevice, count, vkFences) == VK_SUCCESS, "VulkanGraphicsDevice", "Failed to reset fences[%hhu]", count);
+		//DEV_ASSERT(vkResetFences(mLogicalDevice, count, vkFences) == VK_SUCCESS, "VulkanGraphicsDevice", "Failed to reset fences[%hhu]", count);
 	}
 	void VulkanDevice::WaitDeviceIdleCore()
 	{

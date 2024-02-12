@@ -265,6 +265,7 @@ namespace Portakal
 
         //Wait for commands to finish
         mDevice->WaitFences(mFence.GetHeapAddress(), 1);
+        mDevice->ResetFences(mFence.GetHeapAddress(), 1);
     }
     void TextureResource::CreateInternalResources()
     {
@@ -276,7 +277,7 @@ namespace Portakal
         cmdListDesc.pPool = mCmdPool;
         mCmdList = mDevice->CreateCommandList(cmdListDesc);
 
-        mFence = mDevice->CreateFence();
+        mFence = mDevice->CreateFence(false);
     }
     void TextureResource::Clear()
     {

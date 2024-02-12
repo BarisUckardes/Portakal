@@ -204,7 +204,7 @@ namespace Portakal
 
 		//Get process handle
 		const HINSTANCE processHandle = GetModuleHandle(NULL);
-
+		
 		//Register window class
 		WNDCLASSEX windowClass = {};
 		windowClass.cbSize = sizeof(windowClass);
@@ -230,7 +230,7 @@ namespace Portakal
 			NULL,NULL,processHandle,
 			this
 		);
-
+	
 		//Add message filters
 		ChangeWindowMessageFilter(WM_DROPFILES, MSGFLT_ADD);
 		ChangeWindowMessageFilter(WM_COPYDATA, MSGFLT_ADD);
@@ -286,7 +286,6 @@ namespace Portakal
 				break;
 			}
 		}
-	
 	}
 	void Win32Window::SwitchMonitorCore(const SharedHeap<PlatformMonitor>& pMonitor)
 	{

@@ -45,6 +45,8 @@ namespace Portakal
 		Type* GetOpenActionType(const String& resourceType);
 		void _OnSubFolderDeleted(const DomainFolder* pFolder);
 		void _OnSubFileDeleted(const DomainFile* pFile);
+		void _OnPreInvalidate();
+		void _OnPostInvalidate();
 		virtual void OnShutdown() override;
 	private:
 		Array<SharedHeap<DomainFolder>> mFolders;

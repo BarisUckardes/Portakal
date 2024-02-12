@@ -15,7 +15,7 @@ namespace Portakal
 	{
 		GENERATE_OBJECT;
 	public:
-		DomainWindow() : mTargetFolder(nullptr), mContextMenuFolder(nullptr), mFolderChanged(false),mItemSize(64),mItemGap(16)
+		DomainWindow() : mTargetFolder(nullptr), mContextMenuFolder(nullptr), mFolderChanged(false),mItemSize(64),mItemGap(16),mFontSize(16)
 		{
 
 		}
@@ -42,12 +42,8 @@ namespace Portakal
 		void DeleteFolder(const SharedHeap<DomainFolder>& pFolder);
 		void DeleteSelections();
 		void ClearSelections();
-		void OpenFile(DomainFile* pFile);
 		void OpenFolder(DomainFolder* pFolder);
 		void ProcessDragDrops(const Array<String>& items);
-		void InitializeThumbnail(const SharedHeap<DomainFile>& pFile);
-		SharedHeap<TextureResource> GetThumbnailImage(const SharedHeap<DomainFile>& pFile);
-		void ClearThumbnails();
 
 		void RenameFile(const SharedHeap<DomainFile>& pFile);
 		void RenameFolder(const SharedHeap<DomainFolder>& pFolder);
@@ -74,9 +70,6 @@ namespace Portakal
 		//Context menu item variables
 		Array<SharedHeap<IContextMenuItem>> mContextCreateActions;
 		Array<SharedHeap<IContextMenuItem>> mTickingContextCreateActions;
-
-		//Thumbnail variables
-		HashMap<SharedHeap<DomainFile>, SharedHeap<IThumbnail>> mThumnails;
 
 		//File rename
 		String mFileRenameName;

@@ -92,9 +92,18 @@ namespace Portakal
 			mResource->SetName(name);
 	}
 
+	SharedHeap<TextureResource> DomainFile::GetThumbnail()
+	{
+		return mThumbnail->GetThumbnailTexture(this);
+	}
+	void DomainFile::OpenFile()
+	{
+		mOpenAction->OnOpen(this);
+	}
+
 
 	DomainFile::DomainFile(DomainFolder* pOwnerFolder, const String& resourceType,const String& name, const Guid& id,const String& descriptorPath,const String& sourcePath,IResourceSerializer* pSerializer, Type* pThumnailType,Type* pOpenActionType) :
-		mDescriptorPath(descriptorPath),mSourcePath(sourcePath), mOwnerFolder(pOwnerFolder), mSerializer(pSerializer),mThumbnailType(pThumnailType),mOpenActionType(pOpenActionType)
+		mDescriptorPath(descriptorPath),mSourcePath(sourcePath), mOwnerFolder(pOwnerFolder), mSerializer(pSerializer),mThumbnail(nullptr),mOpenAction(nullptr)
 	{
 		//Override name and id
 		SetName(name);
@@ -129,8 +138,65 @@ namespace Portakal
 
 			mResource->SetMetaData(metaContent);
 		}
+
+		//Create thumbnail
+		if(pThumnailType != nullptr)
+			mThumbnail = (IThumbnail*)pThumnailType->CreateDefaultHeapObject();
+
+		//Create open action
+		if(pOpenActionType != nullptr)
+			mOpenAction = (IFileOpenAction*)pOpenActionType->CreateDefaultHeapObject();
 	}
 
+	void DomainFile::_OnPreInvalidate()
+	{
+		if (mThumbnail != nullptr)
+			delete mThumbnail;
+		mThumbnail = nullptr;
+
+		if (mOpenAction != nullptr)
+			delete mOpenAction;
+		mOpenAction = nullptr;
+	}
+	void DomainFile::_OnPostInvalidate()
+	{
+		//Look for the thumbnail
+		Type* pFoundThumbnailType = nullptr;
+		for (Type* pType : ReflectionAPI::GetSubTypes(typeof(IThumbnail)))
+		{
+			CustomThumbnail* pAttr = pType->GetAttribute<CustomThumbnail>();
+			if (pAttr == nullptr)
+				continue;
+
+			if (pAttr->GetResourceType() == mResource->GetResourceType())
+				continue;
+
+			pFoundThumbnailType = pType;
+		}
+
+		//Look for the open action
+		Type* pFoundOpenActionType = nullptr;
+		for (Type* pType : ReflectionAPI::GetSubTypes(typeof(IThumbnail)))
+		{
+			CustomFileOpenAction* pAttr = pType->GetAttribute<CustomFileOpenAction>();
+			if (pAttr == nullptr)
+				continue;
+
+			if (pAttr->GetResourceType() == mResource->GetResourceType())
+				continue;
+
+			pFoundOpenActionType = pType;
+		}
+
+		//Create thumbnail
+		if (pFoundThumbnailType != nullptr)
+			mThumbnail = (IThumbnail*)pFoundThumbnailType->CreateDefaultHeapObject();
+
+		//Create open file action
+		if (pFoundOpenActionType != nullptr)
+			mOpenAction = (IFileOpenAction*)pFoundOpenActionType->CreateDefaultHeapObject();
+
+	}
 	void DomainFile::OnShutdown()
 	{
 		mResource.Shutdown();

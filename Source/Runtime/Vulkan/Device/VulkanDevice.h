@@ -85,7 +85,7 @@ namespace Portakal
 		ResourceTableLayout* CreateResourceTableLayoutCore(const ResourceTableLayoutDesc& desc) override;
 		ResourceTablePool* CreateResourceTablePoolCore(const ResourceTablePoolDesc& desc) override;
 		ResourceTable* CreateResourceTableCore(const ResourceTableDesc& desc) override;
-        Fence* CreateFenceCore() override;
+        Fence* CreateFenceCore(const bool bSignalled) override;
         Swapchain* CreateSwapchainCore(const SwapchainDesc& desc) override;
         RenderPass* CreateRenderPassCore(const RenderPassDesc& desc) override;
 
@@ -93,6 +93,8 @@ namespace Portakal
         CommandPool* CreateCommandPoolCore(const CommandPoolDesc& desc) override;
         Pipeline* CreateGraphicsPipelineCore(const GraphicsPipelineDesc& desc) override;
         SharedHeap<Pipeline> CreateComputePipelineCore(const ComputePipelineDesc& desc) override;
+
+        virtual void ResetFencesCore(Fence** ppFences, const Byte count) override;
         void WaitFencesCore(Fence** ppFences, const Byte count) override;
         void WaitDeviceIdleCore() override;
         void WaitQueueDefaultCore(const GraphicsQueueType type) override;

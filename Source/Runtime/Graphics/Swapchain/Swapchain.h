@@ -7,6 +7,7 @@
 #include <Runtime/Graphics/Command/CommandPool.h>
 #include <Runtime/Graphics/Command/CommandList.h>
 #include <Runtime/Graphics/Swapchain/PresentMode.h>
+#include <Runtime/Graphics/Swapchain/SwapchainMode.h>
 
 namespace Portakal
 {
@@ -75,7 +76,7 @@ namespace Portakal
 		Bool8 Present();
 		void WaitForPresent(const Byte index);
 		void TransitionToPresent();
-		Bool8 SetMode(const WindowMode mode);
+		Bool8 SetMode(const SwapchainMode mode);
 	protected:
 		void SetTextures(const Array<SharedHeap<Texture>>& textures, const Array<SharedHeap<TextureView>>& views);
 		void SetSize(const UInt16 width, const UInt16 height);

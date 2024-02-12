@@ -88,10 +88,11 @@ namespace Portakal
 		SharedHeap<ResourceTableLayout> CreateResourceTableLayout(const ResourceTableLayoutDesc& desc);
 		SharedHeap<ResourceTablePool> CreateResourceTablePool(const ResourceTablePoolDesc& desc);
 		SharedHeap<ResourceTable> CreateResourceTable(const ResourceTableDesc& desc);
-		SharedHeap<Fence> CreateFence();
+		SharedHeap<Fence> CreateFence(const bool bSignalled);
 		SharedHeap<Swapchain> CreateSwapchain(const SwapchainDesc& desc);
 		SharedHeap<RenderPass> CreateRenderPass(const RenderPassDesc& desc);
 
+		void ResetFences(Fence** ppFences,const Byte count);
 		void WaitFences(Fence** ppFences, const Byte count);
 		void WaitDeviceIdle();
 		void WaitQueueDefault(const GraphicsQueueType type);
@@ -116,10 +117,11 @@ namespace Portakal
 		virtual ResourceTableLayout* CreateResourceTableLayoutCore(const ResourceTableLayoutDesc& desc) = 0;
 		virtual ResourceTablePool* CreateResourceTablePoolCore(const ResourceTablePoolDesc& desc) = 0;
 		virtual ResourceTable* CreateResourceTableCore(const ResourceTableDesc& desc) = 0;
-		virtual Fence* CreateFenceCore() = 0;
+		virtual Fence* CreateFenceCore(const bool bSignalled) = 0;
 		virtual Swapchain* CreateSwapchainCore(const SwapchainDesc& desc) = 0;
 		virtual RenderPass* CreateRenderPassCore(const RenderPassDesc& desc) = 0;
 
+		virtual void ResetFencesCore(Fence** ppFences, const Byte count) = 0;
 		virtual void WaitFencesCore(Fence** ppFences, const Byte count) = 0;
 		virtual void WaitDeviceIdleCore() = 0;
 		virtual void WaitQueueDefaultCore(const GraphicsQueueType type) = 0;

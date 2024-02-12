@@ -70,12 +70,15 @@ namespace Portakal
 	{
 		return new D3DCommandPool(desc, this);
 	}
-	Fence* D3DDevice::CreateFenceCore()
+	Fence* D3DDevice::CreateFenceCore(const bool bSignalled)
 	{
 		return new D3DFence(this);
 	}
 	Swapchain* D3DDevice::CreateSwapchainCore(const SwapchainDesc& desc)
 	{
 		return new D3DSwapchain(desc, this);
+	}
+	void D3DDevice::ResetFencesCore(Fence** ppFences, const Byte count)
+	{
 	}
 }

@@ -119,10 +119,10 @@ namespace Portakal
         RegisterChild(pResourceSet.QueryAs<GraphicsDeviceObject>());
         return pResourceSet;
     }
-    SharedHeap<Fence> GraphicsDevice::CreateFence()
+    SharedHeap<Fence> GraphicsDevice::CreateFence(const bool bSignalled)
     {
         //Create fence
-        SharedHeap<Fence> pFence = CreateFenceCore();
+        SharedHeap<Fence> pFence = CreateFenceCore(bSignalled);
 
         //Register
         RegisterChild(pFence.QueryAs<GraphicsDeviceObject>());
@@ -157,6 +157,10 @@ namespace Portakal
         SharedHeap<RenderPass> pResourceSet = CreateRenderPassCore(desc);
         RegisterChild(pResourceSet.QueryAs<GraphicsDeviceObject>());
         return pResourceSet;
+    }
+    void GraphicsDevice::ResetFences(Fence** ppFences, const Byte count)
+    {
+        ResetFencesCore(ppFences, count);
     }
     void GraphicsDevice::WaitFences(Fence** ppFences, const Byte count)
     {

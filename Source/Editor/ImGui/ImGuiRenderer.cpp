@@ -282,6 +282,7 @@ namespace Portakal
         //Submit commands and wait
         mDevice->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, mFence.GetHeap());
         mDevice->WaitFences(mFence.GetHeapAddress(), 1);
+        mDevice->ResetFences(mFence.GetHeapAddress(), 1);
     }
     SharedHeap<ImGuiTextureBinding> ImGuiRenderer::GetOrCreateTextureBinding(const SharedHeap<TextureResource>& pTexture)
     {
@@ -405,7 +406,7 @@ namespace Portakal
         mFontResourceLayout = mDevice->CreateResourceTableLayout(dynamicResourceLayoutDesc);
 
         //Create fence
-        mFence = mDevice->CreateFence();
+        mFence = mDevice->CreateFence(false);
 
         //Create command pool
         CommandPoolDesc cmdPoolDesc = {};
@@ -462,6 +463,7 @@ namespace Portakal
         mCmdList->EndRecording();
         mDevice->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, mFence.GetHeap());
         mDevice->WaitFences(mFence.GetHeapAddress(), 1);
+        mDevice->ResetFences(mFence.GetHeapAddress(), 1);
 
         // Create static resource set
         ResourceTableDesc staticResourceTableDesc = {};
