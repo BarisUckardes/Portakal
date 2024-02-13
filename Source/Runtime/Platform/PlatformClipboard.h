@@ -3,6 +3,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Clipboard platform utilities
+	/// </summary>
 	class RUNTIME_API PlatformClipboard final
 	{
 	public:
@@ -11,6 +14,5 @@ namespace Portakal
 	public:
 		PlatformClipboard() = delete;
 		~PlatformClipboard() = delete;
-
 	};
 }

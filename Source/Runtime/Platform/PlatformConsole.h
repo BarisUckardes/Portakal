@@ -4,6 +4,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Console works platform implementation
+	/// </summary>
 	class RUNTIME_API PlatformConsole final
 	{
 		constexpr static inline ConsoleColor DefaultBackgroundColor = ConsoleColor::Black;

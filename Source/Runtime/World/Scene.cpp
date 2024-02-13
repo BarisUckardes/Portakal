@@ -28,8 +28,19 @@ namespace Portakal
 
         return pEntity;
     }
+    bool Scene::HasAspect(const Type* pType)
+    {
+        for (const SharedHeap<SceneAspect>& pAspect : mAspects)
+            if (pAspect->GetType() == pType)
+                return true;
+        return false;
+    }
     void Scene::CreateAspect(const Type* pType)
     {
+        //Check if this scene aspect already exists
+        if (HasAspect(pType))
+            return;
+
         //Create aspect
         SharedHeap<SceneAspect> pAspect = (SceneAspect*)pType->CreateDefaultHeapObject();
 

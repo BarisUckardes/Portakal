@@ -34,9 +34,14 @@ namespace Portakal
 		}
 
 		SharedHeap<Entity> CreateEntity();
+
 		template<typename T,typename... TArgs>
 		void CreateAspect(TArgs... args)
 		{
+			//Check if this aspect type already exists
+			if (HasAspect<T>())
+				return;
+
 			//Create aspect
 			SharedHeap<SceneAspect> pAspect = new T(args...);
 
@@ -63,7 +68,20 @@ namespace Portakal
 			return nullptr;
 		}
 
+		template<typename T>
+		bool HasAspect() const noexcept
+		{
+			const Type* pTargetType = typeof(T);
+
+			for (const SharedHeap<SceneAspect>& pAspect : mAspects)
+				if (pAspect->GetType() == pTargetType)
+					return true;
+			return false;
+		}
+
+		bool HasAspect(const Type* pType);
 		void CreateAspect(const Type* pType);
+
 		void MarkPrimal();
 		virtual void OnShutdown() override;
 	private:
