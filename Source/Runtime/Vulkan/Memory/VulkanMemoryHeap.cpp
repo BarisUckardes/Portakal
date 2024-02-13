@@ -19,7 +19,6 @@ namespace Portakal
 		info.pNext = nullptr;
 
 		DEV_ASSERT(vkAllocateMemory(mLogicalDevice, &info, nullptr, &mMemory) == VK_SUCCESS, "VulkanMemoryHeap", "Failed to allocate memory!");
-
 	}
 	void VulkanMemoryHeap::OnShutdown()
 	{

@@ -5,6 +5,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Process platform implementation
+	/// </summary>
 	class RUNTIME_API PlatformProcess : public Object
 	{
 	public:

@@ -6,6 +6,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Monitor platform implementation
+	/// </summary>
 	class RUNTIME_API PlatformMonitor : public Object
 	{
 	public:

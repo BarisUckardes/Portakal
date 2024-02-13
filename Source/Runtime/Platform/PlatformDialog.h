@@ -3,6 +3,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Dialog platform implementation
+	/// </summary>
 	class RUNTIME_API PlatformDialog final
 	{
 	public:

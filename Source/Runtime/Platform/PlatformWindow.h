@@ -7,6 +7,10 @@
 namespace Portakal
 {
 	class Swapchain;
+
+	/// <summary>
+	/// Window platform implementation
+	/// </summary>
 	class RUNTIME_API PlatformWindow : public Object
 	{
 		friend class GraphicsDevice;

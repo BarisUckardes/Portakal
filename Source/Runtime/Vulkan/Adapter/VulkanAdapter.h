@@ -23,6 +23,5 @@ namespace Portakal
 		GraphicsDevice* CreateDeviceCore() override;
 	private:
 		VkPhysicalDevice mDevice;
-
 	};
 }

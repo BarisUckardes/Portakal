@@ -5,6 +5,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Icon platform implementation
+	/// </summary>
 	class RUNTIME_API PlatformIcon
 	{
 	public:

@@ -27,9 +27,7 @@ namespace Portakal
 
         createInfo.pNext = nullptr;
 
-
         DEV_ASSERT(vkCreateSampler(pDevice->GetVkLogicalDevice(), &createInfo, nullptr, &mSampler) == VK_SUCCESS, "VulkanSampler", "Failed to create sampler");
-
     }
 
     void VulkanSampler::OnShutdown()

@@ -3,6 +3,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Representing invalid component. Probably a type missing
+	/// </summary>
 	class RUNTIME_API InvalidComponent : public Component
 	{
 	public:

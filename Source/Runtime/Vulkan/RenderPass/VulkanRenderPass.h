@@ -19,19 +19,12 @@ namespace Portakal
 		{
 			return mFramebuffer;
 		}
-		FORCEINLINE Array<VkFramebuffer> GetvkSwapchainFramebuffers() const noexcept
-		{
-			return mSwapchainFramebuffers;
-		}
 		FORCEINLINE Vector2US GetAvailableSize() const noexcept
 		{
 			return mSize;
 		}
 		virtual void OnShutdown() override;
 	private:
-		void CreateAsSwapchain(const RenderPassDesc& desc,VulkanDevice* pDevice);
-	private:
-		Array<VkFramebuffer> mSwapchainFramebuffers;
 		VkFramebuffer mFramebuffer;
 		VkDevice mLogicalDevice;
 		VkRenderPass mRenderPass;

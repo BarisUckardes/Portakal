@@ -3,6 +3,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Time platform implementation
+	/// </summary>
 	class RUNTIME_API PlatformTime final
 	{
 		friend class Platform;

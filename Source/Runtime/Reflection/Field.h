@@ -4,6 +4,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Representing data fields within the Type information
+	/// </summary>
 	class RUNTIME_API Field final
 	{
 		friend class TypeDispatcher;

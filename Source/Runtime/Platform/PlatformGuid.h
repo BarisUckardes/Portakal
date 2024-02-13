@@ -3,6 +3,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Guid platform implementation
+	/// </summary>
 	class RUNTIME_API PlatformGuid final
 	{
 	public:

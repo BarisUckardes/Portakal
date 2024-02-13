@@ -3,6 +3,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Container of the reflection information per DLL
+	/// </summary>
 	class RUNTIME_API Assembly final
 	{
 		friend class Application;

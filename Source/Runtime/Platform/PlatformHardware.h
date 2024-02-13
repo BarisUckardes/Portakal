@@ -3,6 +3,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Hardware platform implementation
+	/// </summary>
 	class RUNTIME_API PlatformHardware final
 	{
 	public:

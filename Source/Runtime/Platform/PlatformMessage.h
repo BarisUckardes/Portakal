@@ -4,6 +4,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Message box platform implementation
+	/// </summary>
 	class RUNTIME_API PlatformMessage final
 	{
 	public:

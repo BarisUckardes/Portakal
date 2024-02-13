@@ -12,7 +12,7 @@
 namespace Portakal
 {
 
-	VulkanPipeline::VulkanPipeline(const GraphicsPipelineDesc& desc, VulkanDevice* pDevice) : Pipeline(desc), mLayout(VK_NULL_HANDLE), mPipeline(VK_NULL_HANDLE), mLogicalDevice(VK_NULL_HANDLE)
+	VulkanPipeline::VulkanPipeline(const GraphicsPipelineDesc& desc, VulkanDevice* pDevice) : Pipeline(desc), mLayout(VK_NULL_HANDLE), mPipeline(VK_NULL_HANDLE), mLogicalDevice(pDevice->GetVkLogicalDevice())
 	{
 		/**
 		* Create input layout
@@ -243,7 +243,6 @@ namespace Portakal
 
 		//Clean up the trash
 		mBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-		mLogicalDevice = pDevice->GetVkLogicalDevice();
 	}
 	VulkanPipeline::VulkanPipeline(const ComputePipelineDesc& desc, VulkanDevice* pDevice) : Pipeline(desc), mBindPoint(VK_PIPELINE_BIND_POINT_GRAPHICS)
 	{

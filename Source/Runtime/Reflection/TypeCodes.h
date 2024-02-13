@@ -3,6 +3,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// General type codes
+	/// </summary>
 	enum class RUNTIME_API TypeCodes : Byte
 	{
 		Void,

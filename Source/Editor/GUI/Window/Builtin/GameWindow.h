@@ -19,7 +19,6 @@ namespace Portakal
 		void OnPaint() override;
 		void OnInitialize() override;
 	private:
-
 	};
 }
 

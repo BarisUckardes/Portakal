@@ -29,7 +29,6 @@ namespace Portakal
         // Inherited via CommandList
         virtual void SetPipelineCore(const Pipeline* pPipeline) override;
 
-
         void SetViewportsCore(const ViewportDesc* pViewports, const Byte count) override;
         void SetScissorsCore(const ScissorDesc* pScissors, const Byte count) override;
 
@@ -46,7 +45,7 @@ namespace Portakal
         void CommitResourcesCore(ResourceTable** ppTables, const UInt32 count) override;
 
         // Inherited via CommandList
-        void BeginRenderPassCore(const RenderPass* pRenderPass, const Color4F& clearColor, const Byte subFramebufferIndex) override;
+        void BeginRenderPassCore(const RenderPass* pRenderPass, const Color4F& clearColor) override;
         void EndRenderPassCore() override;
 
         // Inherited via CommandList

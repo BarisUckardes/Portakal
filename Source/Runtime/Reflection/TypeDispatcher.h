@@ -4,6 +4,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Type dispatcher utilities
+	/// </summary>
 	class RUNTIME_API TypeDispatcher final
 	{
 	public:

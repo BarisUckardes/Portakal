@@ -3,6 +3,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Main type modes for the runtime reflection
+	/// </summary>
 	enum class RUNTIME_API TypeModes : Byte
 	{
 		Class,

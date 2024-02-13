@@ -3,6 +3,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Enum name and its value
+	/// </summary>
 	struct RUNTIME_API EnumValue
 	{
 		String Name;

@@ -86,7 +86,6 @@ namespace Portakal
 
             //Create render pass
             RenderPassDesc desc = {};
-            desc.bSwapchain = true;
             desc.Size = { pTexture->GetSize().X,pTexture->GetSize().Y };
             desc.AttachmentViews.Add(pView);
             RenderPassAttachmentDesc colorAttachmentDesc = {};

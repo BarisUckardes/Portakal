@@ -5,6 +5,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Input platform implementation
+	/// </summary>
 	class RUNTIME_API PlatformInput final
 	{
 	public:

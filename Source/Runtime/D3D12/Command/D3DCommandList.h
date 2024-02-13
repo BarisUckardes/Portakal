@@ -56,7 +56,7 @@ namespace Portakal
 		void CommitResourcesCore(ResourceTable** ppTables,const UInt32 count) override;
 
 		// Inherited via CommandList
-		void BeginRenderPassCore(const RenderPass* pRenderPass, const Color4F& clearColor, const Byte subFramebufferIndex) override;
+		void BeginRenderPassCore(const RenderPass* pRenderPass, const Color4F& clearColor) override;
 		void EndRenderPassCore() override;
 
 		virtual void OnShutdown() override;

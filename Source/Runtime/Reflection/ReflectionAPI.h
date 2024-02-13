@@ -4,6 +4,10 @@
 namespace Portakal
 {
 	class ReflectionManifest;
+
+	/// <summary>
+	/// API for reflection works
+	/// </summary>
 	class RUNTIME_API ReflectionAPI
 	{
 	public:

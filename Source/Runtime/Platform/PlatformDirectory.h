@@ -5,6 +5,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Directory work 
+	/// </summary>
 	class RUNTIME_API PlatformDirectory final
 	{
 	public:
@@ -17,6 +20,7 @@ namespace Portakal
 		static Bool8 Exists(const String& path);
 	public:
 		PlatformDirectory() = delete;
+	public:
 		~PlatformDirectory() = delete;
 	};
 }

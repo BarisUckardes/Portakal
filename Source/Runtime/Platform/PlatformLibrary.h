@@ -4,6 +4,10 @@
 namespace Portakal
 {
 	typedef void* PlatformLibraryHandle;
+
+	/// <summary>
+	/// Library platform implementation
+	/// </summary>
 	class RUNTIME_API PlatformLibrary : public Object
 	{
 	public:

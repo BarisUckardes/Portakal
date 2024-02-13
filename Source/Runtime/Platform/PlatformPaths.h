@@ -3,6 +3,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Paths platform implementation
+	/// </summary>
 	class RUNTIME_API PlatformPaths final
 	{
 		friend class Platform;

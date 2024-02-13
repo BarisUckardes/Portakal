@@ -3,6 +3,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Registry platform implementation
+	/// </summary>
 	class RUNTIME_API PlatformRegistry final
 	{
 	public:

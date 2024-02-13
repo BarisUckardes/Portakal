@@ -5,6 +5,9 @@ namespace Portakal
 {
 	class ThreadJob;
 
+	/// <summary>
+	/// Thread platform implementation
+	/// </summary>
 	class RUNTIME_API PlatformThread : public Object
 	{
 	public:

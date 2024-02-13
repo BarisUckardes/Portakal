@@ -20,7 +20,6 @@ namespace Portakal
             else if (usages & GraphicsBufferUsage::Storage)
                 flags |= VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
 
-
             if (usages & GraphicsBufferUsage::TransferDestination)
                 flags |= VK_BUFFER_USAGE_TRANSFER_DST_BIT;
             else if (usages & GraphicsBufferUsage::TransferSource)

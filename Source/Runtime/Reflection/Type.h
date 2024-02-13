@@ -3,7 +3,7 @@
 #include <Runtime/Containers/Array.h>
 #include <Runtime/Reflection/TypeCodes.h>
 #include <Runtime/Reflection/TypeModes.h>
-#include <Runtime/Reflection/EnumType.h>
+#include <Runtime/Reflection/EnumDataType.h>
 #include <Runtime/Reflection/EnumValue.h>
 #include <Runtime/Reflection/TypeCodes.h>
 #include <Runtime/Reflection/Attribute.h>
@@ -13,6 +13,10 @@ namespace Portakal
 {
 	class Field;
 	typedef void* (*DefaultHeapObjectGenerator)(void);
+
+	/// <summary>
+	/// Base runtime reflection type information
+	/// </summary>
 	class RUNTIME_API Type final
 	{
 		friend class ReflectionManifest;

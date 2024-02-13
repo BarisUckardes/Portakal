@@ -1,9 +1,12 @@
 #pragma once
-#include <Runtime/Thread/MutexState.h>
+#include <Runtime/Thread/MutexWaitResult.h>
 #include <Runtime/Memory/SharedHeap.h>
 
 namespace Portakal
 {
+	/// <summary>
+	/// Mutex platform implementation
+	/// </summary>
 	class RUNTIME_API PlatformMutex : public Object
 	{
 	public:
@@ -12,7 +15,7 @@ namespace Portakal
 		PlatformMutex() = default;
 		~PlatformMutex() = default;
 
-		virtual MutexState Lock(const UInt64 timeInMs = uint64_max) = 0;
+		virtual MutexWaitResult Lock(const UInt64 timeInMs = uint64_max) = 0;
 		virtual Bool8 Release() = 0;
 	};
 }

@@ -5,6 +5,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// File works platform implementation
+	/// </summary>
 	class RUNTIME_API PlatformFile final
 	{
 	public:

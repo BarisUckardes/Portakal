@@ -3,6 +3,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Error platform implementation
+	/// </summary>
 	class RUNTIME_API PlatformError final
 	{
 	public:

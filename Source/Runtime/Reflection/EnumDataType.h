@@ -3,7 +3,10 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API EnumType : Byte
+	/// <summary>
+	/// Enum data type
+	/// </summary>
+	enum class RUNTIME_API EnumDataType : Byte
 	{
 		Byte,
 		Char,

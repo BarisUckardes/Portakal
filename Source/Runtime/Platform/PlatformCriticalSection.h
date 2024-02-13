@@ -4,6 +4,9 @@
 
 namespace Portakal
 {
+	/// <summary>
+	/// Critical section platform implementation
+	/// </summary>
 	class RUNTIME_API PlatformCriticalSection : public Object
 	{
 	public:

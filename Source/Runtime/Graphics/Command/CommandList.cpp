@@ -69,12 +69,12 @@ namespace Portakal
 
 		mBoundPipeline = pPipeline;
 	}
-	void CommandList::BeginRenderPass(const SharedHeap<RenderPass>& pRenderPass, const Color4F& clearColor,const Byte subFramebufferIndex)
+	void CommandList::BeginRenderPass(const SharedHeap<RenderPass>& pRenderPass, const Color4F& clearColor)
 	{
 		if (IsShutdown())
 			return;
 
-		BeginRenderPassCore(pRenderPass.GetHeap(),clearColor,subFramebufferIndex);
+		BeginRenderPassCore(pRenderPass.GetHeap(),clearColor);
 
 		mBoundRenderPass = pRenderPass;
 	}
