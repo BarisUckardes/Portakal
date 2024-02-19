@@ -48,7 +48,7 @@ namespace Portakal
 		//Cache last state
 		Memory::Copy(mLastState, pButtons, 256);
 	}
-	void MouseInputDevice::UpdateWheel(const float wheel)
+	void MouseInputDevice::UpdateWheel(const Float32 wheel)
 	{
 		mWheelDelta = wheel;
 	}

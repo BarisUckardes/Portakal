@@ -3,22 +3,22 @@
 #include <Runtime/Vulkan/Device/VulkanDevice.h>
 #include <Runtime/Vulkan/Shader/VulkanShader.h>
 #include <Runtime/Vulkan/VulkanUtils.h>
-#include <Runtime/Vulkan/Resource/VulkanResourceTableLayout.h>
 #include <Runtime/Vulkan/Texture/VulkanTextureUtils.h>
 #include <Runtime/Vulkan/Shader/VulkanShaderUtils.h>
 #include <Runtime/Graphics/Texture/TextureUtils.h>
 #include <Runtime/Vulkan/RenderPass/VulkanRenderPass.h>
+#include <Runtime/Vulkan/Descriptor/VulkanDescriptorSetLayout.h>
 
 namespace Portakal
 {
 
-	VulkanPipeline::VulkanPipeline(const GraphicsPipelineDesc& desc, VulkanDevice* pDevice) : Pipeline(desc), mLayout(VK_NULL_HANDLE), mPipeline(VK_NULL_HANDLE), mLogicalDevice(pDevice->GetVkLogicalDevice())
+	VulkanPipeline::VulkanPipeline(const GraphicsPipelineDesc& desc, VulkanDevice* pDevice) : Pipeline(desc,pDevice), mLayout(VK_NULL_HANDLE), mPipeline(VK_NULL_HANDLE), mLogicalDevice(pDevice->GetVkLogicalDevice())
 	{
 		/**
 		* Create input layout
 		*/
-		Array<VkVertexInputBindingDescription> inputBindingDescriptions;
-		Array<VkVertexInputAttributeDescription> inputAttributeDescriptions;
+		std::vector<VkVertexInputBindingDescription> inputBindingDescriptions;
+		std::vector<VkVertexInputAttributeDescription> inputAttributeDescriptions;
 		for (UInt32 bindingIndex = 0; bindingIndex < desc.InputLayout.Bindings.GetSize(); bindingIndex++)
 		{
 			const InputBinding& binding = desc.InputLayout.Bindings[bindingIndex];
@@ -38,7 +38,7 @@ namespace Portakal
 				vkAttributeDescription.location = attributeIndex;
 				vkAttributeDescription.offset = inputOffset;
 
-				inputAttributeDescriptions.Add(vkAttributeDescription);
+				inputAttributeDescriptions.push_back(vkAttributeDescription);
 
 				inputOffset += TextureUtils::GetFormatSize(inputElement.Format);
 			}
@@ -51,15 +51,15 @@ namespace Portakal
 			/**
 			* Add binding desc
 			*/
-			inputBindingDescriptions.Add(vkBindingDescription);
+			inputBindingDescriptions.push_back(vkBindingDescription);
 		}
 		VkPipelineVertexInputStateCreateInfo inputStateCreateInfo = {};
 		inputStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 		inputStateCreateInfo.pNext = nullptr;
-		inputStateCreateInfo.pVertexBindingDescriptions = inputBindingDescriptions.GetData();
-		inputStateCreateInfo.vertexBindingDescriptionCount = inputBindingDescriptions.GetSize();
-		inputStateCreateInfo.pVertexAttributeDescriptions = inputAttributeDescriptions.GetData();
-		inputStateCreateInfo.vertexAttributeDescriptionCount = inputAttributeDescriptions.GetSize();
+		inputStateCreateInfo.pVertexBindingDescriptions = inputBindingDescriptions.data();
+		inputStateCreateInfo.vertexBindingDescriptionCount = inputBindingDescriptions.size();
+		inputStateCreateInfo.pVertexAttributeDescriptions = inputAttributeDescriptions.data();
+		inputStateCreateInfo.vertexAttributeDescriptionCount = inputAttributeDescriptions.size();
 
 		/**
 		* Create input assembly
@@ -74,12 +74,12 @@ namespace Portakal
 		* Create viewport and scissors
 		*/
 		VkViewport viewport = {};
-		viewport.x = desc.Viewport.OffsetInPixels.X;
-		viewport.y = desc.Viewport.OffsetInPixels.Y;
-		viewport.width = desc.Viewport.SizeInPixels.X;
-		viewport.height = desc.Viewport.SizeInPixels.Y;
-		viewport.minDepth = desc.Viewport.DepthRange.X;
-		viewport.maxDepth = desc.Viewport.DepthRange.Y;
+		viewport.x = desc.Viewport.X;
+		viewport.y = desc.Viewport.Y;
+		viewport.width = desc.Viewport.Width;
+		viewport.height = desc.Viewport.Height;
+		viewport.minDepth = desc.Viewport.DepthMin;
+		viewport.maxDepth = desc.Viewport.DepthMax;
 
 		VkRect2D scissor = {};
 		scissor.offset = { 0,0 };
@@ -103,8 +103,8 @@ namespace Portakal
 		rasterizerStateCreateInfo.polygonMode = VulkanPipelineUtils::GetPolygonMode(desc.RasterizerState.FillMode);
 		rasterizerStateCreateInfo.lineWidth = 1.0f;
 		rasterizerStateCreateInfo.cullMode = VulkanPipelineUtils::GetCullModes(desc.RasterizerState.CullFlags);
-		rasterizerStateCreateInfo.frontFace = desc.RasterizerState.IsFrontCounterClockwise ? VK_FRONT_FACE_COUNTER_CLOCKWISE : VK_FRONT_FACE_CLOCKWISE;
-		rasterizerStateCreateInfo.depthBiasEnable = desc.RasterizerState.DepthBiasEnabled;
+		rasterizerStateCreateInfo.frontFace = desc.RasterizerState.bFrontCounterClockwise ? VK_FRONT_FACE_COUNTER_CLOCKWISE : VK_FRONT_FACE_CLOCKWISE;
+		rasterizerStateCreateInfo.depthBiasEnable = desc.RasterizerState.bDepthBiasEnabled;
 		rasterizerStateCreateInfo.depthBiasConstantFactor = desc.RasterizerState.DepthBiasFactor;
 		rasterizerStateCreateInfo.depthBiasClamp = desc.RasterizerState.DepthBiasClamp;
 		rasterizerStateCreateInfo.depthBiasSlopeFactor = desc.RasterizerState.DepthBiasSlope;
@@ -128,9 +128,12 @@ namespace Portakal
 		VkPipelineDepthStencilStateCreateInfo depthStencilStateCreateInfo = {};
 		depthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
 		depthStencilStateCreateInfo.pNext = nullptr;
-		depthStencilStateCreateInfo.depthBoundsTestEnable = false;
 		depthStencilStateCreateInfo.depthTestEnable = desc.DepthStencilState.bDepthTestEnabled;
 		depthStencilStateCreateInfo.depthWriteEnable = desc.DepthStencilState.bDepthWriteEnabled;
+		depthStencilStateCreateInfo.depthCompareOp = VulkanUtils::GetCompareOperation(desc.DepthStencilState.DepthTestOperation);
+		depthStencilStateCreateInfo.depthBoundsTestEnable = false;
+		depthStencilStateCreateInfo.minDepthBounds = 0;
+		depthStencilStateCreateInfo.maxDepthBounds = 1.0f;
 		depthStencilStateCreateInfo.stencilTestEnable = desc.DepthStencilState.bStencilTestEnabled;
 		depthStencilStateCreateInfo.front = VulkanPipelineUtils::GetStencilFaceState(desc.DepthStencilState.StencilFrontFace);
 		depthStencilStateCreateInfo.back = VulkanPipelineUtils::GetStencilFaceState(desc.DepthStencilState.StencilBackFace);
@@ -148,15 +151,15 @@ namespace Portakal
 		blendingStateCreateInfo.blendConstants[2] = 1;
 		blendingStateCreateInfo.blendConstants[3] = 1;
 
-		Array<VkPipelineColorBlendAttachmentState> blendingAttachments;
+		std::vector<VkPipelineColorBlendAttachmentState> blendingAttachments;
 		for (Byte attachmentIndex = 0; attachmentIndex < desc.BlendState.Attachments.GetSize(); attachmentIndex++)
 		{
 			const BlendStateAttachment& attachment = desc.BlendState.Attachments[attachmentIndex];
 
-			blendingAttachments.Add(VulkanPipelineUtils::GetBlendAttachmentState(attachment));
+			blendingAttachments.push_back(VulkanPipelineUtils::GetBlendAttachmentState(attachment));
 		}
-		blendingStateCreateInfo.pAttachments = blendingAttachments.GetData();
-		blendingStateCreateInfo.attachmentCount = blendingAttachments.GetSize();
+		blendingStateCreateInfo.pAttachments = blendingAttachments.data();
+		blendingStateCreateInfo.attachmentCount = blendingAttachments.size();
 
 
 		blendingStateCreateInfo.pNext = nullptr;
@@ -164,17 +167,17 @@ namespace Portakal
 		/**
 		* Create pipeline resource layout
 		*/
-		Array<VkDescriptorSetLayout> descriptorSetLayouts;
+		std::vector<VkDescriptorSetLayout> descriptorSetLayouts;
 		for (UInt32 layoutIndex = 0; layoutIndex < desc.ResourceLayout.ResourceLayouts.GetSize(); layoutIndex++)
 		{
-			const VulkanResourceTableLayout* pLayout = (const VulkanResourceTableLayout*)desc.ResourceLayout.ResourceLayouts[layoutIndex];
-			descriptorSetLayouts.Add(pLayout->GetVkSetLayout());
+			const VulkanDescriptorSetLayout* pLayout = (const VulkanDescriptorSetLayout*)desc.ResourceLayout.ResourceLayouts[layoutIndex].GetHeap();
+			descriptorSetLayouts.push_back(pLayout->GetVkLayout());
 		}
 
 		VkPipelineLayoutCreateInfo layoutCreateInfo = {};
 		layoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-		layoutCreateInfo.setLayoutCount = descriptorSetLayouts.GetSize();
-		layoutCreateInfo.pSetLayouts = descriptorSetLayouts.GetData();
+		layoutCreateInfo.setLayoutCount = descriptorSetLayouts.size();
+		layoutCreateInfo.pSetLayouts = descriptorSetLayouts.data();
 		layoutCreateInfo.pPushConstantRanges = nullptr;
 		layoutCreateInfo.pushConstantRangeCount = 0;
 		layoutCreateInfo.pNext = nullptr;
@@ -192,11 +195,11 @@ namespace Portakal
 			const VulkanShader* pShader = (const VulkanShader*)desc.GraphicsShaders[shaderIndex].GetHeap();
 
 			//Cache entry point
-			vkShaderStageNameCache[shaderIndex] = pShader->GetEntryPoint();
+			vkShaderStageNameCache[shaderIndex] = pShader->GetEntryMethod();
 
 			VkPipelineShaderStageCreateInfo info = {};
 			info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-			info.module = pShader->GetVkShader();
+			info.module = pShader->GetVkModule();
 			info.pName = *vkShaderStageNameCache[shaderIndex];
 			info.stage = (VkShaderStageFlagBits)VulkanShaderUtils::GetShaderFlags(pShader->GetStage());
 			info.pSpecializationInfo = nullptr;
@@ -217,7 +220,7 @@ namespace Portakal
 		dynamicStateCreateInfo.pDynamicStates = dynamicStates;
 
 		//Get render pass
-		const VulkanRenderPass* pPass = (const VulkanRenderPass*)desc.pRenderPass.GetHeap();
+		const VulkanRenderPass* pPass = (const VulkanRenderPass*)desc.pRenderPass;
 
 		VkGraphicsPipelineCreateInfo pipelineCreateInfo = {};
 		pipelineCreateInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -244,59 +247,59 @@ namespace Portakal
 		//Clean up the trash
 		mBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
 	}
-	VulkanPipeline::VulkanPipeline(const ComputePipelineDesc& desc, VulkanDevice* pDevice) : Pipeline(desc), mBindPoint(VK_PIPELINE_BIND_POINT_GRAPHICS)
+	VulkanPipeline::VulkanPipeline(const ComputePipelineDesc& desc, VulkanDevice* pDevice) : Pipeline(desc,pDevice), mBindPoint(VK_PIPELINE_BIND_POINT_COMPUTE),mLayout(VK_NULL_HANDLE),mPipeline(VK_NULL_HANDLE), mLogicalDevice(pDevice->GetVkLogicalDevice())
 	{
-		/**
-		* Create shader info
-		*/
-		VkPipelineShaderStageCreateInfo shaderStageInfo = {};
-		shaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-		shaderStageInfo.pNext = nullptr;
-		shaderStageInfo.module = ((const VulkanShader*)desc.ComputeShader.GetHeap())->GetVkShader();
-		shaderStageInfo.pName = "";
-		shaderStageInfo.pSpecializationInfo = nullptr;
-		shaderStageInfo.stage = VK_SHADER_STAGE_COMPUTE_BIT;
+		//Create pipeline shader stage informations
+		VkPipelineShaderStageCreateInfo vkShaderStageInfo;
+		String vkShaderStageNameCache;
+		const VulkanShader* pShader = (const VulkanShader*)desc.pComputeShader.GetHeap();
 
-		/**
-		* Create pipeline layout
-		*/
-		VkDescriptorSetLayout vkSetLayouts[32];
-		for (Byte layoutIndex = 0; layoutIndex < desc.ResourceLayouts.GetSize(); layoutIndex++)
+		//Cache entry point
+		vkShaderStageNameCache = pShader->GetEntryMethod();
+
+		VkPipelineShaderStageCreateInfo info = {};
+		info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+		info.module = pShader->GetVkModule();
+		info.pName = *vkShaderStageNameCache;
+		info.stage = (VkShaderStageFlagBits)VulkanShaderUtils::GetShaderFlags(pShader->GetStage());
+		info.pSpecializationInfo = nullptr;
+		info.pNext = nullptr;
+		vkShaderStageInfo = info;
+
+		//Create resource layout
+		std::vector<VkDescriptorSetLayout> descriptorSetLayouts;
+		for (UInt32 layoutIndex = 0; layoutIndex < desc.DescriptorSetLayouts.GetSize(); layoutIndex++)
 		{
-			vkSetLayouts[layoutIndex] = ((const VulkanResourceTableLayout*)desc.ResourceLayouts[layoutIndex])->GetVkSetLayout();
+			const VulkanDescriptorSetLayout* pLayout = (const VulkanDescriptorSetLayout*)desc.DescriptorSetLayouts[layoutIndex].GetHeap();
+			descriptorSetLayouts.push_back(pLayout->GetVkLayout());
 		}
+
 		VkPipelineLayoutCreateInfo layoutCreateInfo = {};
 		layoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-		layoutCreateInfo.setLayoutCount = desc.ResourceLayouts.GetSize();
-		layoutCreateInfo.pSetLayouts = vkSetLayouts;
+		layoutCreateInfo.setLayoutCount = descriptorSetLayouts.size();
+		layoutCreateInfo.pSetLayouts = descriptorSetLayouts.data();
 		layoutCreateInfo.pPushConstantRanges = nullptr;
 		layoutCreateInfo.pushConstantRangeCount = 0;
 		layoutCreateInfo.pNext = nullptr;
 
 		DEV_ASSERT(vkCreatePipelineLayout(pDevice->GetVkLogicalDevice(), &layoutCreateInfo, nullptr, &mLayout) == VK_SUCCESS, "VulkanPipeline", "Failed to create pipeline layout!");
 
-		/**
-		* Create compute pipeline
-		*/
-		VkComputePipelineCreateInfo createInfo = {};
-		createInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
-		createInfo.basePipelineHandle = VK_NULL_HANDLE;
-		createInfo.basePipelineIndex = -1;
-		createInfo.flags = VkPipelineCreateFlags();
-		createInfo.layout = mLayout;
-		createInfo.stage = shaderStageInfo;
+		//Create pipeine
+		VkComputePipelineCreateInfo pipelineInfo = {};
+		pipelineInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
+		pipelineInfo.flags = VkPipelineCreateFlags();
+		pipelineInfo.layout = mLayout;
+		pipelineInfo.stage = vkShaderStageInfo;
+		pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+		pipelineInfo.basePipelineIndex = -1;
+		pipelineInfo.pNext = nullptr;
 
-		DEV_ASSERT(vkCreateComputePipelines(mLogicalDevice, VK_NULL_HANDLE, 1, &createInfo, nullptr, &mPipeline) == VK_SUCCESS, "VulkanPipeline", "Failed to create compute pipeline");
+		DEV_ASSERT(vkCreateComputePipelines(mLogicalDevice, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &mPipeline) == VK_SUCCESS, "VulkanPipeline", "Failed to create compute pipeline!");
 	}
 
-	void VulkanPipeline::OnShutdown()
+	Portakal::VulkanPipeline::~VulkanPipeline()
 	{
 		vkDestroyPipelineLayout(mLogicalDevice, mLayout, nullptr);
 		vkDestroyPipeline(mLogicalDevice, mPipeline, nullptr);
-
-		mLayout = VK_NULL_HANDLE;
-		mPipeline = VK_NULL_HANDLE;
-		mLogicalDevice = VK_NULL_HANDLE;
 	}
-
 }

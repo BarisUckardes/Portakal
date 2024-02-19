@@ -8,25 +8,35 @@ namespace Portakal
 	class RUNTIME_API RenderPass : public GraphicsDeviceObject
 	{
 	public:
-		RenderPass(const RenderPassDesc& desc) : mColorAttachments(desc.ColorAttachments), mDepthStencilAttachment(desc.DepthStencilAttachment), mSubpasses(desc.Subpasses), mDependencies(desc.Dependencies), mSize({ desc.ColorAttachments[0].pTexture->GetSize().X,desc.ColorAttachments[0].pTexture->GetSize().Y })
-		{
-
-		}
 		~RenderPass() = default;
 
+		FORCEINLINE const Array<RenderPassAttachmentDesc>& GetColorAttachments() const noexcept
+		{
+			return mAttachments;
+		}
+
+		
+		FORCEINLINE UInt32 GetRenderWidth() const noexcept
+		{
+			return mTargetRenderWidth;
+		}
+		FORCEINLINE UInt32 GetRenderHeight() const noexcept
+		{
+			return mTargetRenderHeight;
+		}
 		FORCEINLINE virtual GraphicsDeviceObjectType GetObjectType() const noexcept override final
 		{
 			return GraphicsDeviceObjectType::RenderPass;
 		}
-		FORCEINLINE Vector2US GetRenderRegion() const noexcept
+	protected:
+		RenderPass(const RenderPassDesc& desc,GraphicsDevice* pDevice) : GraphicsDeviceObject(pDevice),
+			mAttachments(desc.ColorAttachments),mTargetRenderWidth(desc.TargetRenderWidth),mTargetRenderHeight(desc.TargetRenderHeight)
 		{
-			return mSize;
+
 		}
 	private:
-		const Array<RenderPassAttachmentDesc> mColorAttachments;
-		const RenderPassAttachmentDesc mDepthStencilAttachment;
-		const Array<RenderPassSubpassDesc> mSubpasses;
-		const Array<RenderPassSubpassDependencyDesc> mDependencies;
-		const Vector2US mSize;
+		const Array<RenderPassAttachmentDesc> mAttachments;
+		const UInt32 mTargetRenderWidth;
+		const UInt32 mTargetRenderHeight;;
 	};
 }

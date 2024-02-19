@@ -211,6 +211,6 @@ namespace Portakal
 	typedef Vector3<UInt32> Vector3UI;
 	typedef Vector3<UInt16> Vector3US;
 	typedef Vector3<Byte> Vector3B;
-	typedef Vector3<float> Vector3F;
+	typedef Vector3<Float32> Vector3F;
 	typedef Vector3<double> Vector3D;
 }

@@ -4,32 +4,10 @@
 
 namespace Portakal
 {
-    /**
-     * @class Sampler
-     * 
-     * @brief It is an object that is used to sample textures in shaders.
-     */
-    class RUNTIME_API Sampler : public GraphicsDeviceObject
-    {
-    public:
-        Sampler(const SamplerDesc& desc) :
-            mMinFilter(desc.MinFilter),
-            mMagFilter(desc.MagFilter),
-            mMipmapMode(desc.MipmapMode),
-            mAddressModeU(desc.AddressModeU),
-            mAddressModeV(desc.AddressModeV),
-            mAddressModeW(desc.AddressModeW),
-            mMipLodBias(desc.MipLodBias),
-            mMaxAnisotropy(desc.MaxAnisotropy),
-            mComparisonEnabled(desc.ComparisonEnabled),
-            mCompareOperation(desc.CompareOperation),
-            mMinLod(desc.MinLod),
-            mMaxLod(desc.MaxLod),
-            mBorderColor(desc.BorderColor)
-        {
-        }
-
-        ~Sampler() = default;
+	class RUNTIME_API Sampler : public GraphicsDeviceObject
+	{
+	public:
+		~Sampler();
 
         FORCEINLINE const SamplerFiltering GetMinFilter() const
         {
@@ -55,15 +33,15 @@ namespace Portakal
         {
             return mAddressModeW;
         }
-        FORCEINLINE const float GetMipLodBias() const
+        FORCEINLINE const Float32 GetMipLodBias() const
         {
             return mMipLodBias;
         }
-        FORCEINLINE const float GetMaxAnisotropy() const
+        FORCEINLINE const Float32 GetMaxAnisotropy() const
         {
             return mMaxAnisotropy;
         }
-        FORCEINLINE const Bool8 IsComparisonEnabled() const
+        FORCEINLINE const bool IsComparisonEnabled() const
         {
             return mComparisonEnabled;
         }
@@ -71,11 +49,11 @@ namespace Portakal
         {
             return mCompareOperation;
         }
-        FORCEINLINE const float GetMinLod() const
+        FORCEINLINE const Float32 GetMinLod() const
         {
             return mMinLod;
         }
-        FORCEINLINE const float GetMaxLod() const
+        FORCEINLINE const Float32 GetMaxLod() const
         {
             return mMaxLod;
         }
@@ -88,21 +66,21 @@ namespace Portakal
         {
             return GraphicsDeviceObjectType::Sampler;
         }
-
-    private:
+	protected:
+		Sampler(const SamplerDesc& desc, GraphicsDevice* pDevice);
+	private:
         const SamplerFiltering mMinFilter;
         const SamplerFiltering mMagFilter;
         const SamplerMapMode mMipmapMode;
         const SamplerAddressMode mAddressModeU;
         const SamplerAddressMode mAddressModeV;
         const SamplerAddressMode mAddressModeW;
-        const float mMipLodBias;
-        const float mMaxAnisotropy;
+        const Float32 mMipLodBias;
+        const Float32 mMaxAnisotropy;
         const Bool8 mComparisonEnabled;
         const CompareOperation mCompareOperation;
-        const float mMinLod;
-        const float mMaxLod;
+        const Float32 mMinLod;
+        const Float32 mMaxLod;
         const SamplerBorderColor mBorderColor;
-    };
-
+	};
 }

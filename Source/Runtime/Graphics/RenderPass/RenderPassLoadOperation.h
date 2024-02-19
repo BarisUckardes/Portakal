@@ -5,6 +5,7 @@ namespace Portakal
 {
 	enum class RUNTIME_API RenderPassLoadOperation : Byte
 	{
+		Ignore,
 		Load,
 		Clear
 	};

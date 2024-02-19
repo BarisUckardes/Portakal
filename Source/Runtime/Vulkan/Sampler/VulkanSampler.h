@@ -4,23 +4,19 @@
 
 namespace Portakal
 {
-    class VulkanDevice;
-    class RUNTIME_API VulkanSampler : public Sampler
-    {
-    public:
-        VulkanSampler(const SamplerDesc& desc, VulkanDevice* pDevice);
-        ~VulkanSampler() = default;
+	class VulkanDevice;
+	class RUNTIME_API VulkanSampler : public Sampler
+	{
+	public:
+		VulkanSampler(const SamplerDesc& desc, VulkanDevice* pDevice);
+		~VulkanSampler();
 
-        FORCEINLINE VkSampler GetVkSampler() const noexcept
-        {
-            return mSampler;
-        }
-
-    private:
-        void OnShutdown() override;
-
-    private:
-        VkSampler mSampler;
-        VkDevice mLogicalDevice;
-    };
+		FORCEINLINE VkSampler GetVkSampler() const noexcept
+		{
+			return mSampler;
+		}
+	private:
+		VkSampler mSampler;
+		VkDevice mLogicalDevice;
+	};
 }

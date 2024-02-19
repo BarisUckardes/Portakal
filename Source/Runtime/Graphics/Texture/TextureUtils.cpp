@@ -17,39 +17,39 @@ namespace Portakal
             return 1;
         case TextureFormat::R16_UNorm:
             return 2;
-        case TextureFormat::R32_G32_B32_Float:
+        case TextureFormat::R32_G32_B32_Float32:
         case TextureFormat::R32_G32_B32_UInt:
         case TextureFormat::R32_G32_B32_SInt:
             return 12;
         case TextureFormat::R16G16B16_UInt:
         case TextureFormat::R16G16B16_SInt:
-        case TextureFormat::R16G16B16_Float:
+        case TextureFormat::R16G16B16_Float32:
             return 6;
         case TextureFormat::R64_UInt:
         case TextureFormat::R64_SInt:
-        case TextureFormat::R64_Float:
+        case TextureFormat::R64_Float32:
              return 8;
         case TextureFormat::R64_G64_UInt:
         case TextureFormat::R64_G64_SInt:
-        case TextureFormat::R64_G64_Float:
+        case TextureFormat::R64_G64_Float32:
             return 16;
         case TextureFormat::R64_G64_B64_UInt:
         case TextureFormat::R64_G64_B64_SInt:
-        case TextureFormat::R64_G64_B64_Float:
+        case TextureFormat::R64_G64_B64_Float32:
             return 24;
         case TextureFormat::R64_G64_B64_A64_UInt:
         case TextureFormat::R64_G64_B64_A64_SInt:
-        case TextureFormat::R64_G64_B64_A64_Float:
+        case TextureFormat::R64_G64_B64_A64_Float32:
             return 32;
-        case TextureFormat::R32_G32_B32_A32_Float:
+        case TextureFormat::R32_G32_B32_A32_Float32:
             return 16;
-        case TextureFormat::R32_Float:
+        case TextureFormat::R32_Float32:
             return 4;
         case TextureFormat::BC3_UNorm:
             return 1;
         case TextureFormat::D24_UNorm_S8_UInt:
             return 4;
-        case TextureFormat::D32_Float_S8_UInt:
+        case TextureFormat::D32_Float32_S8_UInt:
             return 5;
         case TextureFormat::R32_G32_B32_A32_UInt:
             return 16;
@@ -65,7 +65,7 @@ namespace Portakal
             return 4;
         case TextureFormat::R10_G10_B10_A2_UInt:
             return 4;
-        case TextureFormat::R11_G11_B10_Float:
+        case TextureFormat::R11_G11_B10_Float32:
             return 4;
         case TextureFormat::R8_SNorm:
             return 1;
@@ -79,7 +79,7 @@ namespace Portakal
             return 2;
         case TextureFormat::R16_SInt:
             return 2;
-        case TextureFormat::R16_Float:
+        case TextureFormat::R16_Float32:
             return 2;
         case TextureFormat::R32_UInt:
             return 4;
@@ -99,13 +99,13 @@ namespace Portakal
             return 4;
         case TextureFormat::R16_G16_SInt:
             return 4;
-        case TextureFormat::R16_G16_Float:
+        case TextureFormat::R16_G16_Float32:
             return 4;
         case TextureFormat::R32_G32_UInt:
             return 8;
         case TextureFormat::R32_G32_SInt:
             return 8;
-        case TextureFormat::R32_G32_Float:
+        case TextureFormat::R32_G32_Float32:
             return 8;
         case TextureFormat::R8_G8_B8_A8_SNorm:
             return 4;
@@ -121,7 +121,7 @@ namespace Portakal
             return 8;
         case TextureFormat::R16_G16_B16_A16_SInt:
             return 8;
-        case TextureFormat::R16_G16_B16_A16_Float:
+        case TextureFormat::R16_G16_B16_A16_Float32:
             return 8;
         case TextureFormat::R32_G32_B32_A32_SInt:
             return 16;

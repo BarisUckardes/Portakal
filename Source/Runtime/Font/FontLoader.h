@@ -1,8 +1,6 @@
 #pragma once
 #include <Runtime/Core/Core.h>
-
 #include <Runtime/Memory/SharedHeap.h>
-
 #include <Runtime/Containers/String.h>
 #include <Runtime/Graphics/Texture/TextureLoadResult.h>
 

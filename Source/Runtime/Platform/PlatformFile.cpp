@@ -23,25 +23,25 @@ namespace Portakal
     }
 
     Bool8 PlatformFile::Write(const String& path, const String& content,
-        const unsigned long long int offsetInBytes)
+        const UInt64 offsetInBytes)
     {
         return PlatformAbstraction::Write(path, content, offsetInBytes);
     }
 
     Bool8 PlatformFile::Write(const String& path, const MemoryView& view,
-        const unsigned long long int offsetInBytes)
+        const UInt64 offsetInBytes)
     {
         return PlatformAbstraction::Write(path, view, offsetInBytes);
     }
 
     Bool8 PlatformFile::Read(const String& path, String& contentOut,
-        const unsigned long long int startByte, const unsigned long long int endByte)
+        const UInt64 startByte, const UInt64 endByte)
     {
         return PlatformAbstraction::Read(path, contentOut, startByte, endByte);
     }
 
-    Bool8 PlatformFile::Read(const String& path, MemoryView& view, const unsigned long long int startByte,
-        const unsigned long long int endByte)
+    Bool8 PlatformFile::Read(const String& path, MemoryView& view, const UInt64 startByte,
+        const UInt64 endByte)
     {
         return PlatformAbstraction::Read(path, view, startByte, endByte);
     }
@@ -65,7 +65,7 @@ namespace Portakal
         return PlatformAbstraction::RemoveExtension(path);
     }
 
-    Bool8 PlatformFile::GetSize(const String& path, unsigned long long int& sizeInBytesOut)
+    Bool8 PlatformFile::GetSize(const String& path, UInt64& sizeInBytesOut)
     {
         return PlatformAbstraction::GetSize(path, sizeInBytesOut);
     }

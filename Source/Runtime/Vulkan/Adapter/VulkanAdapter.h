@@ -7,21 +7,16 @@ namespace Portakal
 	class RUNTIME_API VulkanAdapter : public GraphicsAdapter
 	{
 	public:
-		VulkanAdapter(const GraphicsAdapterDesc& desc, const VkPhysicalDevice device) : GraphicsAdapter(desc), mDevice(device)
-		{
-
-		}
-		~VulkanAdapter() = default;
+		VulkanAdapter(const VkPhysicalDevice physicalDevice,const GraphicsAdapterDesc& desc);
+		~VulkanAdapter();
 
 		FORCEINLINE VkPhysicalDevice GetVkPhysicalDevice() const noexcept
 		{
 			return mDevice;
 		}
-		virtual void OnShutdown() override;
 	private:
-		// Inherited via GraphicsAdapter
-		GraphicsDevice* CreateDeviceCore() override;
+		virtual GraphicsDevice* CreateDeviceCore(const GraphicsDeviceDesc* pDesc) override;
 	private:
-		VkPhysicalDevice mDevice;
+		const VkPhysicalDevice mDevice;
 	};
 }

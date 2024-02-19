@@ -30,12 +30,14 @@ namespace Portakal
 		TextureDesc textureDesc = {};
 		textureDesc.Type = TextureType::Texture2D;
 		textureDesc.Format = TextureFormat::R8_G8_B8_A8_UNorm;
-		textureDesc.Usage = TextureUsage::Sampled | TextureUsage::TransferDestination;
-		textureDesc.Size = { loadResult.Size.X,loadResult.Size.Y,1 };
+		textureDesc.Usages = TextureUsage::Sampled | TextureUsage::TransferDestination;
+		textureDesc.Width = loadResult.Size.X;
+		textureDesc.Height = loadResult.Size.Y;
+		textureDesc.Depth = 1;
 		textureDesc.ArrayLevels = 1;
 		textureDesc.MipLevels = 1;
 		textureDesc.SampleCount = TextureSampleCount::SAMPLE_COUNT_1;
-		textureDesc.pHeap = nullptr;
+		textureDesc.pMemory = nullptr;
 		pTexture->AllocateTexture(textureDesc, true, true);
 
 		//Update texture data

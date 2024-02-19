@@ -11,10 +11,10 @@ namespace Portakal
 	class RUNTIME_API Math final
 	{
 	public:
-		constexpr static float Epsilon = 2.7182818284590452353602874713526624977572470936999595749669676277240766303535f;
-		constexpr static float Pi = 3.1415926535897932384626433832795028841971693993751058209749445923078164062f;
-		constexpr static float RadToDeg = 180.0 / Pi;
-		constexpr static float DegToRad = Pi / 180.0;
+		constexpr static Float32 Epsilon = 2.7182818284590452353602874713526624977572470936999595749669676277240766303535f;
+		constexpr static Float32 Pi = 3.1415926535897932384626433832795028841971693993751058209749445923078164062f;
+		constexpr static Float32 RadToDeg = 180.0 / Pi;
+		constexpr static Float32 DegToRad = Pi / 180.0;
 
 		template<typename T>
 		FORCEINLINE static T Sqrt(const T value)

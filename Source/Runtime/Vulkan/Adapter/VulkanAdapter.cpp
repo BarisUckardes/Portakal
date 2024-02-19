@@ -3,13 +3,16 @@
 
 namespace Portakal
 {
-    void VulkanAdapter::OnShutdown()
-    {
-        DEV_LOG("VulkanAdapter", "Shutdown");
-    }
+	VulkanAdapter::VulkanAdapter(const VkPhysicalDevice physicalDevice,const GraphicsAdapterDesc& desc) : GraphicsAdapter(desc),mDevice(physicalDevice)
+	{
 
-    GraphicsDevice* VulkanAdapter::CreateDeviceCore()
-    {
-        return new VulkanDevice({ GraphicsBackend::Vulkan,this });
-    }
+	}
+	VulkanAdapter::~VulkanAdapter()
+	{
+
+	}
+	GraphicsDevice* VulkanAdapter::CreateDeviceCore(const GraphicsDeviceDesc* pDesc)
+	{
+		return new VulkanDevice((VulkanDeviceDesc*)pDesc);
+	}
 }

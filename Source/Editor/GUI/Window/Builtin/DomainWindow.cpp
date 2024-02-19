@@ -40,12 +40,12 @@ namespace Portakal
 		mSelectedFiles.Clear();
 		mSelectedFolders.Clear();
 	}
-	void DomainWindow::SetItemSize(const float size)
+	void DomainWindow::SetItemSize(const Float32 size)
 	{
 		mItemSize = size;
 		mFontSize = size / 4;
 	}
-	void DomainWindow::SetItemGap(const float gap)
+	void DomainWindow::SetItemGap(const Float32 gap)
 	{
 		mItemGap = gap;
 	}

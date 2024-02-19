@@ -3,15 +3,6 @@
 
 namespace Portakal
 {
-
-	/**
-	 * @enum GraphicsBufferUsage
-	 * 
-	 * @brief It is used to specify the usage of a buffer.
-	 * 
-	 * @throw Have no clue about the storage, transfer source and transfer destination. Transfers 
-	 * are giving a basic idea by the name but don't know what storage is.
-	 */
 	enum class GraphicsBufferUsage : Byte
 	{
 		Unknown = 0,

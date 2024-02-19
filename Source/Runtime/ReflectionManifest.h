@@ -28,14 +28,6 @@
 #include "World\Entity.h"
 #include "World\SceneAspect.h"
 #include "World\SceneModule.h"
-#include "Graphics\Common\CompareOperation.h"
-#include "Graphics\Common\LogicOperation.h"
-#include "Graphics\Sampler\SamplerAddressMode.h"
-#include "Graphics\Sampler\SamplerBorderColor.h"
-#include "Graphics\Sampler\SamplerFiltering.h"
-#include "Graphics\Sampler\SamplerMapMode.h"
-#include "Graphics\Shader\ShaderLanguage.h"
-#include "Graphics\Shader\ShaderStage.h"
 #include "Rendering\Builtin\BasicCamera.h"
 #include "Rendering\Builtin\BasicRenderAspect.h"
 #include "Resource\Material\MaterialResource.h"
@@ -97,14 +89,6 @@
 		void* CreateEntity() {return new Portakal::Entity();}
 		void* CreateSceneAspect() {return nullptr;}
 		void* CreateSceneModule() {return new Portakal::SceneModule();}
-		void* CreateCompareOperation() {return new Portakal::CompareOperation();}
-		void* CreateLogicOperation() {return new Portakal::LogicOperation();}
-		void* CreateSamplerAddressMode() {return new Portakal::SamplerAddressMode();}
-		void* CreateSamplerBorderColor() {return new Portakal::SamplerBorderColor();}
-		void* CreateSamplerFiltering() {return new Portakal::SamplerFiltering();}
-		void* CreateSamplerMapMode() {return new Portakal::SamplerMapMode();}
-		void* CreateShaderLanguage() {return new Portakal::ShaderLanguage();}
-		void* CreateShaderStage() {return new Portakal::ShaderStage();}
 		void* CreateBasicCamera() {return new Portakal::BasicCamera();}
 		void* CreateBasicRenderAspect() {return new Portakal::BasicRenderAspect();}
 		void* CreateMaterialResource() {return new Portakal::MaterialResource();}
@@ -209,22 +193,6 @@ extern "C"
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneAspect>(pSceneAspect);
 ;		Portakal::Type* pSceneModule = Portakal::TypeDispatcher::CreateType("SceneModule",sizeof(Portakal::SceneModule),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateSceneModule,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SceneModule>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SceneModule>(pSceneModule);
-;		Portakal::Type* pCompareOperation = Portakal::TypeDispatcher::CreateType("CompareOperation",sizeof(Portakal::CompareOperation),Portakal::TypeModes::Enum,Portakal::TypeCodes::Composed,CreateCompareOperation,Portakal::TypeDispatcher::GetTypeAddress<Portakal::CompareOperation>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::CompareOperation>(pCompareOperation);
-;		Portakal::Type* pLogicOperation = Portakal::TypeDispatcher::CreateType("LogicOperation",sizeof(Portakal::LogicOperation),Portakal::TypeModes::Enum,Portakal::TypeCodes::Composed,CreateLogicOperation,Portakal::TypeDispatcher::GetTypeAddress<Portakal::LogicOperation>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::LogicOperation>(pLogicOperation);
-;		Portakal::Type* pSamplerAddressMode = Portakal::TypeDispatcher::CreateType("SamplerAddressMode",sizeof(Portakal::SamplerAddressMode),Portakal::TypeModes::Enum,Portakal::TypeCodes::Composed,CreateSamplerAddressMode,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SamplerAddressMode>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SamplerAddressMode>(pSamplerAddressMode);
-;		Portakal::Type* pSamplerBorderColor = Portakal::TypeDispatcher::CreateType("SamplerBorderColor",sizeof(Portakal::SamplerBorderColor),Portakal::TypeModes::Enum,Portakal::TypeCodes::Composed,CreateSamplerBorderColor,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SamplerBorderColor>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SamplerBorderColor>(pSamplerBorderColor);
-;		Portakal::Type* pSamplerFiltering = Portakal::TypeDispatcher::CreateType("SamplerFiltering",sizeof(Portakal::SamplerFiltering),Portakal::TypeModes::Enum,Portakal::TypeCodes::Composed,CreateSamplerFiltering,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SamplerFiltering>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SamplerFiltering>(pSamplerFiltering);
-;		Portakal::Type* pSamplerMapMode = Portakal::TypeDispatcher::CreateType("SamplerMapMode",sizeof(Portakal::SamplerMapMode),Portakal::TypeModes::Enum,Portakal::TypeCodes::Composed,CreateSamplerMapMode,Portakal::TypeDispatcher::GetTypeAddress<Portakal::SamplerMapMode>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::SamplerMapMode>(pSamplerMapMode);
-;		Portakal::Type* pShaderLanguage = Portakal::TypeDispatcher::CreateType("ShaderLanguage",sizeof(Portakal::ShaderLanguage),Portakal::TypeModes::Enum,Portakal::TypeCodes::Composed,CreateShaderLanguage,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ShaderLanguage>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ShaderLanguage>(pShaderLanguage);
-;		Portakal::Type* pShaderStage = Portakal::TypeDispatcher::CreateType("ShaderStage",sizeof(Portakal::ShaderStage),Portakal::TypeModes::Enum,Portakal::TypeCodes::Composed,CreateShaderStage,Portakal::TypeDispatcher::GetTypeAddress<Portakal::ShaderStage>());
-		Portakal::TypeDispatcher::SetTypeAddress<Portakal::ShaderStage>(pShaderStage);
 ;		Portakal::Type* pBasicCamera = Portakal::TypeDispatcher::CreateType("BasicCamera",sizeof(Portakal::BasicCamera),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateBasicCamera,Portakal::TypeDispatcher::GetTypeAddress<Portakal::BasicCamera>());
 		Portakal::TypeDispatcher::SetTypeAddress<Portakal::BasicCamera>(pBasicCamera);
 ;		Portakal::Type* pBasicRenderAspect = Portakal::TypeDispatcher::CreateType("BasicRenderAspect",sizeof(Portakal::BasicRenderAspect),Portakal::TypeModes::Class,Portakal::TypeCodes::Composed,CreateBasicRenderAspect,Portakal::TypeDispatcher::GetTypeAddress<Portakal::BasicRenderAspect>());
@@ -279,51 +247,6 @@ extern "C"
 		Portakal::TypeDispatcher::RegisterEnum("Normal",0,pFieldMode);
 		Portakal::TypeDispatcher::RegisterEnum("Object",1,pFieldMode);
 		Portakal::TypeDispatcher::RegisterEnum("Array",2,pFieldMode);
-		Portakal::TypeDispatcher::RegisterEnum("Never",0,pCompareOperation);
-		Portakal::TypeDispatcher::RegisterEnum("Less",1,pCompareOperation);
-		Portakal::TypeDispatcher::RegisterEnum("Equal",2,pCompareOperation);
-		Portakal::TypeDispatcher::RegisterEnum("LessEqual",3,pCompareOperation);
-		Portakal::TypeDispatcher::RegisterEnum("Greater",4,pCompareOperation);
-		Portakal::TypeDispatcher::RegisterEnum("NotEqual",5,pCompareOperation);
-		Portakal::TypeDispatcher::RegisterEnum("GreaterEqual",6,pCompareOperation);
-		Portakal::TypeDispatcher::RegisterEnum("Always",7,pCompareOperation);
-		Portakal::TypeDispatcher::RegisterEnum("Clear",0,pLogicOperation);
-		Portakal::TypeDispatcher::RegisterEnum("Set",1,pLogicOperation);
-		Portakal::TypeDispatcher::RegisterEnum("Copy",2,pLogicOperation);
-		Portakal::TypeDispatcher::RegisterEnum("CopyInverted",3,pLogicOperation);
-		Portakal::TypeDispatcher::RegisterEnum("NoOp",4,pLogicOperation);
-		Portakal::TypeDispatcher::RegisterEnum("Invert",5,pLogicOperation);
-		Portakal::TypeDispatcher::RegisterEnum("And",6,pLogicOperation);
-		Portakal::TypeDispatcher::RegisterEnum("NotAnd",7,pLogicOperation);
-		Portakal::TypeDispatcher::RegisterEnum("Or",8,pLogicOperation);
-		Portakal::TypeDispatcher::RegisterEnum("Nor",9,pLogicOperation);
-		Portakal::TypeDispatcher::RegisterEnum("Xor",10,pLogicOperation);
-		Portakal::TypeDispatcher::RegisterEnum("Equal",11,pLogicOperation);
-		Portakal::TypeDispatcher::RegisterEnum("AndReverse",12,pLogicOperation);
-		Portakal::TypeDispatcher::RegisterEnum("AndInverted",13,pLogicOperation);
-		Portakal::TypeDispatcher::RegisterEnum("OrReverse",14,pLogicOperation);
-		Portakal::TypeDispatcher::RegisterEnum("OrInverted",15,pLogicOperation);
-		Portakal::TypeDispatcher::RegisterEnum("Repeat",0,pSamplerAddressMode);
-		Portakal::TypeDispatcher::RegisterEnum("MirroredRepeat",1,pSamplerAddressMode);
-		Portakal::TypeDispatcher::RegisterEnum("ClampToEdge",2,pSamplerAddressMode);
-		Portakal::TypeDispatcher::RegisterEnum("ClampToBorder",3,pSamplerAddressMode);
-		Portakal::TypeDispatcher::RegisterEnum("MirrorClampToEdge",4,pSamplerAddressMode);
-		Portakal::TypeDispatcher::RegisterEnum("TransparentBlack",0,pSamplerBorderColor);
-		Portakal::TypeDispatcher::RegisterEnum("OpaqueBlack",1,pSamplerBorderColor);
-		Portakal::TypeDispatcher::RegisterEnum("OpaqueWhite",2,pSamplerBorderColor);
-		Portakal::TypeDispatcher::RegisterEnum("None",0,pSamplerFiltering);
-		Portakal::TypeDispatcher::RegisterEnum("Linear",1,pSamplerFiltering);
-		Portakal::TypeDispatcher::RegisterEnum("Nearest",2,pSamplerFiltering);
-		Portakal::TypeDispatcher::RegisterEnum("None",0,pSamplerMapMode);
-		Portakal::TypeDispatcher::RegisterEnum("Linear",1,pSamplerMapMode);
-		Portakal::TypeDispatcher::RegisterEnum("Nearest",2,pSamplerMapMode);
-		Portakal::TypeDispatcher::RegisterEnum("Unknown",0,pShaderLanguage);
-		Portakal::TypeDispatcher::RegisterEnum("GLSL",1,pShaderLanguage);
-		Portakal::TypeDispatcher::RegisterEnum("HLSL",2,pShaderLanguage);
-		Portakal::TypeDispatcher::RegisterEnum("MSL",3,pShaderLanguage);
-		Portakal::TypeDispatcher::RegisterEnum("VertexStage",1,pShaderStage);
-		Portakal::TypeDispatcher::RegisterEnum("FragmentStage",2,pShaderStage);
-		Portakal::TypeDispatcher::RegisterEnum("ComputeStage",4,pShaderStage);
 		Portakal::TypeDispatcher::RegisterEnum("EntityComponent",0,pSceneComponentFieldType);
 		Portakal::TypeDispatcher::RegisterEnum("Resource",1,pSceneComponentFieldType);
 
@@ -421,7 +344,7 @@ extern "C"
 		Portakal::TypeDispatcher::SetBaseType(typeof(Portakal::DisplayAspect),typeof(Portakal::SceneAspect));
 
 		//Create manifest here
-		Portakal::Array<Portakal::Type*> types = {pMyAttribute,pTestClass,pApplicationModule,pGuid,pVector2F,pVector2I,pVector2UI,pVector2US,pObject,pPlatformType,pAttribute,pFieldMode,pRenderGraph,pRenderOperation,pCustomResourceDeserializer,pIResourceDeserializer,pResourceAttribute,pResourceDescriptor,pResourceModule,pResourceSubObject,pWindowModule,pComponent,pEntity,pSceneAspect,pSceneModule,pCompareOperation,pLogicOperation,pSamplerAddressMode,pSamplerBorderColor,pSamplerFiltering,pSamplerMapMode,pShaderLanguage,pShaderStage,pBasicCamera,pBasicRenderAspect,pMaterialResource,pMeshDeserializer,pMeshResource,pRenderTarget,pSamplerDescriptor,pSamplerDeserializer,pSamplerResource,pSceneComponentDescriptor,pSceneComponentFieldDescriptor,pSceneComponentFieldType,pSceneDescriptor,pSceneDeserializer,pSceneEntityDescriptor,pSceneResource,pShaderDescriptor,pShaderDeserializer,pShaderResource,pTextureDeserializer,pTextureResource,pDisplayAspect,};
+		Portakal::Array<Portakal::Type*> types = {pMyAttribute,pTestClass,pApplicationModule,pGuid,pVector2F,pVector2I,pVector2UI,pVector2US,pObject,pPlatformType,pAttribute,pFieldMode,pRenderGraph,pRenderOperation,pCustomResourceDeserializer,pIResourceDeserializer,pResourceAttribute,pResourceDescriptor,pResourceModule,pResourceSubObject,pWindowModule,pComponent,pEntity,pSceneAspect,pSceneModule,pBasicCamera,pBasicRenderAspect,pMaterialResource,pMeshDeserializer,pMeshResource,pRenderTarget,pSamplerDescriptor,pSamplerDeserializer,pSamplerResource,pSceneComponentDescriptor,pSceneComponentFieldDescriptor,pSceneComponentFieldType,pSceneDescriptor,pSceneDeserializer,pSceneEntityDescriptor,pSceneResource,pShaderDescriptor,pShaderDeserializer,pShaderResource,pTextureDeserializer,pTextureResource,pDisplayAspect,};
 		pManifest = new Portakal::ReflectionManifest("Runtime", types);
 
 		return pManifest;

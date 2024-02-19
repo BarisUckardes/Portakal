@@ -27,12 +27,12 @@ namespace Portakal
 		}
 
 		void RegisterTexture(const String& name);
-		void RegisterFloat(const String& name);
+		void RegisterFloat32(const String& name);
 		void RegisterColor(const String& name);
 		void RegisterMaterial(const String& name); //TODO!
 
 		void SetTexture(const String& name, const SharedHeap<TextureResource>& pTexture);
-		void SetFloat(const String& name, const float value);
+		void SetFloat32(const String& name, const Float32 value);
 		void SetColor(const String& name, const Color4F& value);
 		void SetMaterial(const String& name); //TODO!
 
@@ -43,7 +43,7 @@ namespace Portakal
 		virtual void Execute() = 0;
 	private:
 		HashMap<String, SharedHeap<TextureResource>> mTextures;
-		HashMap<String, float> mFloats;
+		HashMap<String, Float32> mFloat32s;
 		HashMap<String, Color4F> mColors;
 		SharedHeap<TextureResource> mTargetTexture;
 		Array<RenderOperation*> mOutputs;

@@ -1,12 +1,12 @@
 #include "VulkanSampler.h"
 #include <Runtime/Vulkan/Device/VulkanDevice.h>
-#include <Runtime/Vulkan/VulkanUtils.h>
 #include <Runtime/Vulkan/Sampler/VulkanSamplerUtils.h>
+#include <Runtime/Vulkan/VulkanUtils.h>
 
 namespace Portakal
 {
-    VulkanSampler::VulkanSampler(const SamplerDesc& desc, VulkanDevice* pDevice) : Sampler(desc), mSampler(VK_NULL_HANDLE), mLogicalDevice(pDevice->GetVkLogicalDevice())
-    {
+	VulkanSampler::VulkanSampler(const SamplerDesc& desc, VulkanDevice* pDevice) : Sampler(desc,pDevice),mSampler(VK_NULL_HANDLE),mLogicalDevice(pDevice->GetVkLogicalDevice())
+	{
         VkSamplerCreateInfo createInfo = {};
         createInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
         createInfo.flags = VkSamplerCreateFlags();
@@ -18,7 +18,7 @@ namespace Portakal
         createInfo.mipLodBias = desc.MipLodBias;
         createInfo.anisotropyEnable = desc.MaxAnisotropy != 0;
         createInfo.maxAnisotropy = desc.MaxAnisotropy;
-        createInfo.compareEnable = desc.ComparisonEnabled;
+        createInfo.compareEnable = desc.bComparisonEnabled;
         createInfo.compareOp = VulkanUtils::GetCompareOperation(desc.CompareOperation);
         createInfo.minLod = desc.MinLod;
         createInfo.maxLod = desc.MaxLod;
@@ -28,12 +28,9 @@ namespace Portakal
         createInfo.pNext = nullptr;
 
         DEV_ASSERT(vkCreateSampler(pDevice->GetVkLogicalDevice(), &createInfo, nullptr, &mSampler) == VK_SUCCESS, "VulkanSampler", "Failed to create sampler");
-    }
-
-    void VulkanSampler::OnShutdown()
-    {
+	}
+	VulkanSampler::~VulkanSampler()
+	{
         vkDestroySampler(mLogicalDevice, mSampler, nullptr);
-        mSampler = VK_NULL_HANDLE;
-        mLogicalDevice = VK_NULL_HANDLE;
-    }
+	}
 }

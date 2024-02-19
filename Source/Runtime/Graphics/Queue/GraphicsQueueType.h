@@ -8,6 +8,5 @@ namespace Portakal
 		Graphics,
 		Compute,
 		Transfer,
-		Present
 	};
 }

@@ -1,30 +1,29 @@
 #include "VulkanTexture.h"
 #include <Runtime/Vulkan/Device/VulkanDevice.h>
-#include <Runtime/Vulkan/Memory/VulkanMemoryHeap.h>
 #include <Runtime/Vulkan/Texture/VulkanTextureUtils.h>
+#include <Runtime/Vulkan/Memory/VulkanMemory.h>
 
 namespace Portakal
 {
-	VulkanTexture::VulkanTexture(const TextureDesc& desc, const VkImage image, VulkanDevice* pDevice) : Texture(desc, true), mSwapchain(true), mLogicalDevice(pDevice->GetVkLogicalDevice()), mImage(image)
+	VulkanTexture::VulkanTexture(const TextureDesc& desc, const VkImage image, VulkanDevice* pDevice) : Texture(desc, pDevice), mImage(image), mLogicalDevice(pDevice->GetVkLogicalDevice()), mMemoryOffset(0), mMemoryAlignedOffset(0),mSwapchain(true)
 	{
 
 	}
-	VulkanTexture::VulkanTexture(const TextureDesc& desc, VulkanDevice* pDevice) : Texture(desc, false), mSwapchain(false), mLogicalDevice(pDevice->GetVkLogicalDevice()), mImage(VK_NULL_HANDLE)
+	VulkanTexture::VulkanTexture(const TextureDesc& desc, VulkanDevice* pDevice) : Texture(desc,pDevice),mImage(VK_NULL_HANDLE),mLogicalDevice(pDevice->GetVkLogicalDevice()),mSwapchain(false)
 	{
-		//Get vulkan memory heap
-		const VulkanMemoryHeap* pHeap = (const VulkanMemoryHeap*)desc.pHeap.GetHeap();
+		const VulkanMemory* pVkMemory = (const VulkanMemory*)desc.pMemory;
 
 		//Create image
 		VkImageCreateInfo imageInfo = {};
 		imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-		imageInfo.extent = { desc.Size.X,desc.Size.Y,desc.Size.Z };
+		imageInfo.extent = { desc.Width,desc.Height,desc.Depth };
 		imageInfo.format = VulkanTextureUtils::GetTextureFormat(desc.Format);
 		imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 		imageInfo.arrayLayers = desc.ArrayLevels;
 		imageInfo.mipLevels = desc.MipLevels;
 		imageInfo.imageType = VulkanTextureUtils::GetImageType(desc.Type);
 		imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
-		imageInfo.usage = VulkanTextureUtils::GetImageUsages(desc.Usage);
+		imageInfo.usage = VulkanTextureUtils::GetImageUsages(desc.Usages);
 		imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 		imageInfo.samples = (VkSampleCountFlagBits)VulkanTextureUtils::GetSampleCount(desc.SampleCount);
 		imageInfo.flags = VkImageCreateFlags();
@@ -36,23 +35,17 @@ namespace Portakal
 		vkGetImageMemoryRequirements(mLogicalDevice, mImage, &requirements);
 
 		//Rent memory
-		const UInt64 memoryOffset = desc.pHeap->Allocate(requirements.size + requirements.alignment);
+		const UInt64 memoryOffset = desc.pMemory->Allocate(requirements.size + requirements.alignment);
 		const UInt64 memoryAlignedOffset = memoryOffset + (memoryOffset == 0 ? 0 : (requirements.alignment - (memoryOffset % requirements.alignment)));
 
-		DEV_ASSERT(vkBindImageMemory(mLogicalDevice, mImage, pHeap->GetVkMemory(), memoryAlignedOffset) == VK_SUCCESS, "VulkanTexture", "Failed to bind the texture memory!");
+		DEV_ASSERT(vkBindImageMemory(mLogicalDevice, mImage, pVkMemory->GetVkMemory(), memoryAlignedOffset) == VK_SUCCESS, "VulkanTexture", "Failed to bind the texture memory!");
 
-		//Set aligned handle
-		SetMemoryProperties(memoryOffset, memoryAlignedOffset);
+		mMemoryOffset = memoryOffset;
+		mMemoryAlignedOffset = memoryAlignedOffset;
 	}
-	void VulkanTexture::OnShutdown()
+	VulkanTexture::~VulkanTexture()
 	{
-		if (mSwapchain)
-			return;
-
-		//Cal texture impl
-		Texture::OnShutdown();
-
-		//Destroy vk image
-		vkDestroyImage(mLogicalDevice, mImage, nullptr);
+		if(!mSwapchain)
+			vkDestroyImage(mLogicalDevice, mImage, nullptr);
 	}
 }

@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API RenderPassStoreOperation
+	enum class RUNTIME_API RenderPassStoreOperation : Byte
 	{
 		Store,
 		Ignore

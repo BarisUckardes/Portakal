@@ -85,7 +85,7 @@ namespace Portakal
 		String operator=(const Char* other);
 		String operator=(const wchar_t* other);
 
-		Char operator[](unsigned int index) const { return mSource[index]; }
+		Char operator[](UInt32 index) const { return mSource[index]; }
 
 	private:
 		Char* mSource;

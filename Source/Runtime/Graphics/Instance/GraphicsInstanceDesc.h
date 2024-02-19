@@ -1,13 +1,10 @@
 #pragma once
-#include <Runtime/Containers/Array.h>
-#include <Runtime/Containers/String.h>
-#include <Runtime/Graphics/Device/GraphicsBackend.h>
+#include <Runtime/Graphics/GraphicsBackend.h>
 
 namespace Portakal
 {
 	struct RUNTIME_API GraphicsInstanceDesc
 	{
 		GraphicsBackend Backend;
-		Array<String> VulkanExtensions;
 	};
 }

@@ -20,7 +20,7 @@ namespace Portakal
 		UInt32,
 		Int64,
 		UInt64,
-		Float,
+		Float32,
 		Double
 	};
 }

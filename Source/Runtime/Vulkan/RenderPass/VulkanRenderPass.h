@@ -9,7 +9,7 @@ namespace Portakal
 	{
 	public:
 		VulkanRenderPass(const RenderPassDesc& desc, VulkanDevice* pDevice);
-		~VulkanRenderPass() = default;
+		~VulkanRenderPass();
 
 		FORCEINLINE VkRenderPass GetVkRenderPass() const noexcept
 		{
@@ -19,15 +19,9 @@ namespace Portakal
 		{
 			return mFramebuffer;
 		}
-		FORCEINLINE Vector2US GetAvailableSize() const noexcept
-		{
-			return mSize;
-		}
-		virtual void OnShutdown() override;
 	private:
 		VkFramebuffer mFramebuffer;
 		VkDevice mLogicalDevice;
 		VkRenderPass mRenderPass;
-		Vector2US mSize;
 	};
 }

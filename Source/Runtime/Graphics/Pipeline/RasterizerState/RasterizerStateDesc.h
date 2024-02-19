@@ -6,12 +6,12 @@ namespace Portakal
 {
     struct RUNTIME_API RasterizerStateDesc
     {
-        Bool8 DepthBiasEnabled;
-        float DepthBiasClamp;
-        float DepthBiasFactor;
-        float DepthBiasSlope;
+        Bool8 bDepthBiasEnabled;
+        Float32 DepthBiasClamp;
+        Float32 DepthBiasFactor;
+        Float32 DepthBiasSlope;
         PolygonMode FillMode;
         FaceCullMode CullFlags;
-        Bool8 IsFrontCounterClockwise;
+        Bool8 bFrontCounterClockwise;
     };
 }

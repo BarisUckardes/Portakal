@@ -11,6 +11,5 @@ namespace Portakal
         Binormal,
         Color,
         TexCoord
-        // TODO : Bone enums may be needed
     };
 }

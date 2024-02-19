@@ -293,10 +293,10 @@ namespace Portakal
 		ImGui::InputInt(temp.c_str(), &value);
 		return value;
 	}
-	Float32 ImGuiUtils::FloatField(const String& name, Float32 value)
+	Float32 ImGuiUtils::Float32Field(const String& name, Float32 value)
 	{
 		std::string temp(name.GetSource(), name.GetSize());
-		ImGui::InputFloat(temp.c_str(), &value);
+		ImGui::InputFloat32(temp.c_str(), &value);
 		return value;
 	}
 	Float64 ImGuiUtils::DoubleField(const String& name, Float64 value)

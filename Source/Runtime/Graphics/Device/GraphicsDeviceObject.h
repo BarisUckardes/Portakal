@@ -1,31 +1,22 @@
 #pragma once
-#include <Runtime/Object/Object.h>
-#include <Runtime/Memory/SharedHeap.h>
+#include <Runtime/Core/Core.h>
 #include <Runtime/Graphics/Device/GraphicsDeviceObjectType.h>
 
 namespace Portakal
 {
 	class GraphicsDevice;
-	class RUNTIME_API GraphicsDeviceObject : public Object
+	class RUNTIME_API GraphicsDeviceObject
 	{
-		friend class GraphicsDevice;
 	public:
-		GraphicsDeviceObject() = default;
-		~GraphicsDeviceObject() = default;
+		GraphicsDeviceObject(GraphicsDevice* pDevice);
+		~GraphicsDeviceObject();
 
-
-		FORCEINLINE GraphicsDevice* GetOwnerDevice() const noexcept
+		FORCEINLINE GraphicsDevice* GetDevice() const noexcept
 		{
-			return mOwnerDevice;
+			return mDevice;
 		}
-		FORCEINLINE virtual GraphicsDeviceObjectType GetObjectType() const noexcept = 0;
-		virtual void OnShutdown() = 0;
+		virtual GraphicsDeviceObjectType GetObjectType() const noexcept = 0;
 	private:
-		void _SetOwnerDevice(GraphicsDevice* pOwnerDevice)
-		{
-			mOwnerDevice = pOwnerDevice;
-		}
-	private:
-		GraphicsDevice* mOwnerDevice;
+		GraphicsDevice* mDevice;
 	};
 }

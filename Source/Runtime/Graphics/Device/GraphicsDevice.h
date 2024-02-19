@@ -1,137 +1,106 @@
 #pragma once
-#include <Runtime/Object/Object.h>
+#include <Runtime/Core/Core.h>
 #include <Runtime/Graphics/Device/GraphicsDeviceObject.h>
-#include <Runtime/Graphics/Device/GraphicsBackend.h>
-#include <Runtime/Graphics/Queue/GraphicsQueueType.h>
+#include <Runtime/Graphics/GraphicsBackend.h>
 #include <Runtime/Graphics/Device/GraphicsDeviceDesc.h>
-#include <Runtime/Containers/Array.h>
-
-#include <Runtime/Graphics/Texture/TextureDesc.h>
-#include <Runtime/Graphics/Texture/TextureViewDesc.h>
-
-#include <Runtime/Graphics/Command/CommandListDesc.h>
-#include <Runtime/Graphics/Command/CommandPoolDesc.h>
-
-#include <Runtime/Graphics/Pipeline/GraphicsPipelineDesc.h>
-#include <Runtime/Graphics/Pipeline/ComputePipelineDesc.h>
-
-#include <Runtime/Graphics/Memory/GraphicsMemoryHeapDesc.h>
-#include <Runtime/Graphics/Buffer/GraphicsBufferDesc.h>
-
-#include <Runtime/Graphics/Shader/ShaderDesc.h>
-#include <Runtime/Graphics/Sampler/SamplerDesc.h>
-
-#include <Runtime/Graphics/Resource/ResourceTableLayoutDesc.h>
-#include <Runtime/Graphics/Resource/ResourceTableDesc.h>
-#include <Runtime/Graphics/Resource/ResourceTablePoolDesc.h>
-
-
-#include <Runtime/Graphics/Buffer/GraphicsBufferHostUpdateDesc.h>
-#include <Runtime/Graphics/Resource/ResourceTableUpdateDesc.h>
-#include <Runtime/Graphics/Pipeline/GraphicsPipelineDesc.h>
-#include <Runtime/Graphics/Pipeline/ComputePipelineDesc.h>
-#include <Runtime/Graphics/Swapchain/SwapchainDesc.h>
-
+#include <Runtime/Graphics/Queue/GraphicsQueue.h>
+#include <Runtime/Graphics/Buffer/GraphicsBuffer.h>
+#include <Runtime/Graphics/Descriptor/DescriptorSet.h>
+#include <Runtime/Graphics/Descriptor/DescriptorPool.h>
+#include <Runtime/Graphics/Descriptor/DescriptorSetLayout.h>
+#include <Runtime/Graphics/Fence/Fence.h>
+#include <Runtime/Graphics/Semaphore/Semaphore.h>
+#include <Runtime/Graphics/Memory/GraphicsMemory.h>
+#include <Runtime/Graphics/Sampler/Sampler.h>
+#include <Runtime/Graphics/Shader/Shader.h>
+#include <Runtime/Graphics/Texture/Texture.h>
+#include <Runtime/Graphics/Texture/TextureView.h>
+#include <Runtime/Graphics/Swapchain/Swapchain.h>
+#include <Runtime/Graphics/Pipeline/Pipeline.h>
+#include <Runtime/Graphics/RenderPass/RenderPass.h>
+#include <Runtime/Graphics/Command/CommandPool.h>
+#include <Runtime/Graphics/Command/CommandList.h>
+#include <Runtime/Graphics/Common/HostBufferUpdateDesc.h>
+#include <Runtime/Graphics/Common/DescriptorSetUpdateDesc.h>
+#include <Runtime/Graphics/Common/DescriptorSetCopyDesc.h>
 
 namespace Portakal
 {
-	class CommandList;
-	class Fence;
-	class Texture;
-	class TextureView;
-	class Framebuffer;
-	class CommandList;
-	class CommandPool;
-	class Pipeline;
-	class GraphicsMemoryHeap;
-	class GraphicsBuffer;
-	class Shader;
-	class Sampler;
-	class ResourceTableLayout;
-	class ResourceTablePool;
-	class ResourceTable;
-	class GraphicsQueue;
-	class Swapchain;
-	class GraphicsAdapter;
-
-	class RUNTIME_API GraphicsDevice : public Object
+	class RUNTIME_API GraphicsDevice
 	{
 	public:
-		static SharedHeap<GraphicsDevice> Create(const GraphicsDeviceDesc& desc);
-	public:
-		GraphicsDevice(const GraphicsDeviceDesc& desc);
-		~GraphicsDevice() = default;
+		~GraphicsDevice();
 
-		FORCEINLINE SharedHeap<Swapchain> GetMainSwapchain() const noexcept
-		{
-			return mMainSwapchain;
-		}
-		FORCEINLINE GraphicsAdapter* GetOwnerAdapter() const noexcept
+		FORCEINLINE GraphicsAdapter* GetAdapter() const noexcept
 		{
 			return mOwnerAdapter;
 		}
-		FORCEINLINE GraphicsBackend GetBackend() const noexcept
-		{
-			return mBackend;
-		}
 
-		SharedHeap<Texture> CreateTexture(const TextureDesc& desc);
-		SharedHeap<TextureView> CreateTextureView(const TextureViewDesc& desc);
-		SharedHeap<CommandList> CreateCommandList(const CommandListDesc& desc);
-		SharedHeap<CommandPool> CreateCommandPool(const CommandPoolDesc& desc);
-		SharedHeap<Pipeline> CreateGraphicsPipeline(const GraphicsPipelineDesc& desc);
-		SharedHeap<Pipeline> CreateComputePipeline(const ComputePipelineDesc& desc);
-		SharedHeap<GraphicsMemoryHeap> CreateMemoryHeap(const GraphicsMemoryHeapDesc& desc);
-		SharedHeap<GraphicsBuffer> CreateBuffer(const GraphicsBufferDesc& desc);
-		SharedHeap<Shader> CreateShader(const ShaderDesc& desc);
-		SharedHeap<Sampler> CreateSampler(const SamplerDesc& desc);
-		SharedHeap<ResourceTableLayout> CreateResourceTableLayout(const ResourceTableLayoutDesc& desc);
-		SharedHeap<ResourceTablePool> CreateResourceTablePool(const ResourceTablePoolDesc& desc);
-		SharedHeap<ResourceTable> CreateResourceTable(const ResourceTableDesc& desc);
-		SharedHeap<Fence> CreateFence(const bool bSignalled);
-		SharedHeap<Swapchain> CreateSwapchain(const SwapchainDesc& desc);
-		SharedHeap<RenderPass> CreateRenderPass(const RenderPassDesc& desc);
+		virtual GraphicsBackend GetBackend() const noexcept = 0;
+		virtual bool HasQueue(const GraphicsQueueType type) const noexcept = 0;
 
-		void ResetFences(Fence** ppFences,const Byte count);
-		void WaitFences(Fence** ppFences, const Byte count);
+		GraphicsQueue* CreateQueue(const GraphicsQueueDesc& desc);
+		GraphicsBuffer* CreateBuffer(const GraphicsBufferDesc& desc);
+		DescriptorSet* CreateDescriptorSet(const DescriptorSetDesc& desc);
+		DescriptorPool* CreateDescriptorPool(const DescriptorPoolDesc& desc);
+		DescriptorSetLayout* CreateDescriptorSetLayout(const DescriptorSetLayoutDesc& desc);
+		Fence* CreateFence(const FenceDesc& desc);
+		Semaphore* CreateSyncObject(const SemaphoreDesc& desc);
+		GraphicsMemory* AllocateMemory(const GraphicsMemoryDesc& desc);
+		Sampler* CreateSampler(const SamplerDesc& desc);
+		Shader* CreateShader(const ShaderDesc& desc);
+		Texture* CreateTexture(const TextureDesc& desc);
+		TextureView* CreateTextureView(const TextureViewDesc& desc);
+		Swapchain* CreateSwapchain(const SwapchainDesc& desc);
+		Pipeline* CreateGraphicsPipeline(const GraphicsPipelineDesc& desc);
+		Pipeline* CreateComputePipeline(const ComputePipelineDesc& desc);
+		RenderPass* CreateRenderPass(const RenderPassDesc& desc);
+		CommandPool* CreateCommandPool(const CommandPoolDesc& desc);
+		CommandList* CreateCommandList(const CommandListDesc& desc);
+
+		void UpdateDescriptorSet(DescriptorSet* pSet,const DescriptorSetUpdateDesc& desc);
+		void CopyDescriptorSet(DescriptorSet* pSourceSet, DescriptorSet* pDestinationSet,const DescriptorSetCopyDesc& desc);
+		void UpdateHostBuffer(GraphicsBuffer* pTargetBuffer,const HostBufferUpdateDesc& desc);
+		void SubmitCommands(CommandList** ppCmdLists, const Byte cmdListCount,const GraphicsQueue* pTargetQueue, Semaphore** ppSignalSemaphores,const UInt32 signalSemaphoreCount,Semaphore** ppWaitSemaphores, const PipelineStageFlags* pWaitStageFlags,const UInt32 waitSemaphoreCount,const Fence* pSignalFence);
+		void ResetFences(Fence** ppFences, const UInt32 count);
+		void WaitFences(Fence** ppFences, const UInt32 count);
 		void WaitDeviceIdle();
-		void WaitQueueDefault(const GraphicsQueueType type);
-		void UpdateHostBuffer(GraphicsBuffer* pBuffer, const GraphicsBufferHostUpdateDesc& desc);
-		void UpdateResourceTable(ResourceTable* pTable, const ResourceTableUpdateDesc& desc);
-		void SubmitCommandLists(CommandList** ppCmdLists, const Byte cmdListCount, const GraphicsQueueType type, const Fence* pFence);
+		void WaitQueueIdle(GraphicsQueue* pQueue);
 	protected:
-		void RegisterChild(const SharedHeap<GraphicsDeviceObject>& pObject);
-		void RemoveChild(const SharedHeap<GraphicsDeviceObject>& pObject);
+		GraphicsDevice(const GraphicsDeviceDesc* pDesc);
 
-		virtual void OnShutdown() override;
+		void RegisterObject(const SharedHeap<GraphicsDeviceObject>& pObject);
+		void RemoveObject(const SharedHeap<GraphicsDeviceObject>& pObject);
+
+		virtual GraphicsQueue* CreateQueueCore(const GraphicsQueueDesc& desc) = 0;
+		virtual GraphicsBuffer* CreateBufferCore(const GraphicsBufferDesc& desc) = 0;
+		virtual DescriptorSet* CreateDescriptorSetCore(const DescriptorSetDesc& desc) = 0;
+		virtual DescriptorPool* CreateDescriptorPoolCore(const DescriptorPoolDesc& desc) = 0;
+		virtual DescriptorSetLayout* CreateDescriptorSetLayoutCore(const DescriptorSetLayoutDesc& desc) = 0;
+		virtual Fence* CreateFenceCore(const FenceDesc& desc) = 0;
+		virtual Semaphore* CreateSyncObjectCore(const SemaphoreDesc& desc) = 0;
+		virtual GraphicsMemory* AllocateMemoryCore(const GraphicsMemoryDesc& desc) = 0;
+		virtual Sampler* CreateSamplerCore(const SamplerDesc& desc) = 0;
+		virtual Shader* CreateShaderCore(const ShaderDesc& desc) = 0;
 		virtual Texture* CreateTextureCore(const TextureDesc& desc) = 0;
 		virtual TextureView* CreateTextureViewCore(const TextureViewDesc& desc) = 0;
-		virtual CommandList* CreateCommandListCore(const CommandListDesc& desc) = 0;
-		virtual CommandPool* CreateCommandPoolCore(const CommandPoolDesc& desc) = 0;
-		virtual Pipeline* CreateGraphicsPipelineCore(const GraphicsPipelineDesc& desc) = 0;
-		virtual SharedHeap<Pipeline> CreateComputePipelineCore(const ComputePipelineDesc& desc) = 0;
-		virtual GraphicsMemoryHeap* CreateMemoryHeapCore(const GraphicsMemoryHeapDesc& desc) = 0;
-		virtual GraphicsBuffer* CreateBufferCore(const GraphicsBufferDesc& desc) = 0;
-		virtual Shader* CreateShaderCore(const ShaderDesc& desc) = 0;
-		virtual Sampler* CreateSamplerCore(const SamplerDesc& desc) = 0;
-		virtual ResourceTableLayout* CreateResourceTableLayoutCore(const ResourceTableLayoutDesc& desc) = 0;
-		virtual ResourceTablePool* CreateResourceTablePoolCore(const ResourceTablePoolDesc& desc) = 0;
-		virtual ResourceTable* CreateResourceTableCore(const ResourceTableDesc& desc) = 0;
-		virtual Fence* CreateFenceCore(const bool bSignalled) = 0;
 		virtual Swapchain* CreateSwapchainCore(const SwapchainDesc& desc) = 0;
+		virtual Pipeline* CreateGraphicsPipelineCore(const GraphicsPipelineDesc& desc) = 0;
+		virtual Pipeline* CreateComputePipelineCore(const ComputePipelineDesc& desc) = 0;
 		virtual RenderPass* CreateRenderPassCore(const RenderPassDesc& desc) = 0;
+		virtual CommandPool* CreateCommandPoolCore(const CommandPoolDesc& desc) = 0;
+		virtual CommandList* CreateCommandListCore(const CommandListDesc& desc) = 0;
 
-		virtual void ResetFencesCore(Fence** ppFences, const Byte count) = 0;
-		virtual void WaitFencesCore(Fence** ppFences, const Byte count) = 0;
-		virtual void WaitDeviceIdleCore() = 0;
-		virtual void WaitQueueDefaultCore(const GraphicsQueueType type) = 0;
-		virtual void UpdateHostBufferCore(GraphicsBuffer* pBuffer, const GraphicsBufferHostUpdateDesc& desc) = 0;
-		virtual void UpdateResourceTableCore(ResourceTable* pTable, const ResourceTableUpdateDesc& desc) = 0;
-		virtual void SubmitCommandListsCore(CommandList** ppCmdLists, const Byte cmdListCount, const GraphicsQueueType type, const Fence* pFence) = 0;
+		virtual void UpdateDescriptorSetCore(DescriptorSet* pSet, const DescriptorSetUpdateDesc& desc) = 0;
+		virtual void CopyDescriptorSetCore(DescriptorSet* pSourceSet, DescriptorSet* pDestinationSet, const DescriptorSetCopyDesc& desc) = 0;
+		virtual void UpdateHostBufferCore(GraphicsBuffer* pTargetBuffer, const HostBufferUpdateDesc& desc) = 0;
+		virtual void SubmitCommandsCore(CommandList** ppCmdLists, const Byte cmdListCount, const GraphicsQueue* pTargetQueue, Semaphore** ppSignalSemaphores, const UInt32 signalSemaphoreCount, Semaphore** ppWaitSemaphores,const PipelineStageFlags* pWaitStageFlags, const UInt32 waitSemaphoreCount, const Fence* pSignalFence) = 0;
+		virtual void ResetFencesCore(Fence** ppFences, const UInt32 count) =  0;
+		virtual void WaitFencesCore(Fence** ppFences, const UInt32 count) =  0;
+		virtual void WaitDeviceIdleCore() =  0;
+		virtual void WaitQueueIdleCore(GraphicsQueue* pQueue) =  0;
 	private:
-		const GraphicsBackend mBackend;
+		Array<SharedHeap<GraphicsDeviceObject>> mObjects;
 		GraphicsAdapter* mOwnerAdapter;
-		Array<SharedHeap<GraphicsDeviceObject>> mChilds;
-		SharedHeap<Swapchain> mMainSwapchain;
 	};
 }

@@ -228,7 +228,7 @@ namespace Portakal
 //#ifdef UNICODE //Test to see if we're using wchar_ts or not.
 //    typedef std::wstring StringType;
 //#else
-//    typedef std::string StringType;
+//    typedef String StringType;
 //#endif
 //
 //    StringType GetBaseFilename(const TCHAR* filename)

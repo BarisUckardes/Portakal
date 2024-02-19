@@ -47,7 +47,7 @@ namespace Portakal
 		{
 			mArray = target.mArray;
 		}
-		Registry(const unsigned int preallocatedCount)
+		Registry(const UInt32 preallocatedCount)
 		{
 			mArray = Array<RegistryEntry<TKey, TValue>>(preallocatedCount);
 		}
@@ -61,7 +61,7 @@ namespace Portakal
 		/// Returns the entry count of the registry
 		/// </summary>
 		/// <returns></returns>
-		FORCEINLINE unsigned int GetSize() const noexcept
+		FORCEINLINE UInt32 GetSize() const noexcept
 		{
 			return mArray.GetSize();
 		}
@@ -73,7 +73,7 @@ namespace Portakal
 		/// <returns></returns>
 		FORCEINLINE TValue* GetEntryValue(const TKey& key) const noexcept
 		{
-			for (unsigned int i = 0; i < mArray.GetSize(); i++)
+			for (UInt32 i = 0; i < mArray.GetSize(); i++)
 			{
 				RegistryEntry<TKey, TValue>& entry = mArray[i];
 				if (entry.Key == key)
@@ -90,7 +90,7 @@ namespace Portakal
 		/// <returns></returns>
 		FORCEINLINE bool HasEntry(const TKey& key) const noexcept
 		{
-			for (unsigned int i = 0; i < mArray.GetSize(); i++)
+			for (UInt32 i = 0; i < mArray.GetSize(); i++)
 			{
 				RegistryEntry<TKey, TValue>& entry = mArray[i];
 				if (entry.Key == key)
@@ -107,7 +107,7 @@ namespace Portakal
 		/// <returns></returns>
 		FORCEINLINE int FindIndex(const TKey& key) const noexcept
 		{
-			for (unsigned int i = 0; i < mArray.GetSize(); i++)
+			for (UInt32 i = 0; i < mArray.GetSize(); i++)
 			{
 				RegistryEntry<TKey, TValue>& entry = mArray[i];
 				if (entry.Key == key)
@@ -168,7 +168,7 @@ namespace Portakal
 		/// </summary>
 		/// <param name="index"></param>
 		/// <returns></returns>
-		FORCEINLINE RegistryEntry<TKey, TValue>& operator[](const unsigned int index) const noexcept
+		FORCEINLINE RegistryEntry<TKey, TValue>& operator[](const UInt32 index) const noexcept
 		{
 			return mArray[index];
 		}

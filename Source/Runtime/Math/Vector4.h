@@ -357,6 +357,6 @@ namespace Portakal
 	typedef Vector4<UInt32> Vector4UI;
 	typedef Vector4<UInt16> Vector4US;
 	typedef Vector4<Byte> Vector4B;
-	typedef Vector4<float> Vector4F;
+	typedef Vector4<Float32> Vector4F;
 	typedef Vector4<double> Vector4D;
 }

@@ -31,7 +31,7 @@ namespace Portakal
 			return mDevice;
 		}
 
-		void StartRendering(float deltaTimeInMilliSeconds);
+		void StartRendering(Float32 deltaTimeInMilliSeconds);
 		void EndRendering(const SharedHeap<RenderTarget>& pRenderTarget, const Color4F clearColor);
 
 		SharedHeap<ImGuiTextureBinding> GetOrCreateTextureBinding(const SharedHeap<TextureResource>& pTexture);
@@ -42,7 +42,7 @@ namespace Portakal
 		void OnMouseMoved(const Vector2I mousePosition);
 		void OnMouseButtonDown(const MouseButtons button);
 		void OnMouseButtonUp(const MouseButtons button);
-		void OnMouseWheel(float delta);
+		void OnMouseWheel(Float32 delta);
 		void OnKeyboardKeyDown(const KeyboardKeys key);
 		void OnKeyboardKeyUp(const KeyboardKeys key);
 		void OnKeyboardChar(const Char value);

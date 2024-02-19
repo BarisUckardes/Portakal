@@ -1,14 +1,14 @@
 #pragma once
-#include <Runtime/Containers/Array.h>
 #include <Runtime/Graphics/Shader/Shader.h>
+#include <Runtime/Graphics/Descriptor/DescriptorSetLayout.h>
+#include <Runtime/Containers/Array.h>
+#include <Runtime/Memory/SharedHeap.h>
 
 namespace Portakal
 {
-    class ResourceLayout;
-
     struct RUNTIME_API ComputePipelineDesc
     {
-        Array<ResourceLayout*> ResourceLayouts;
-        SharedHeap<Shader> ComputeShader;
+        Array<SharedHeap<DescriptorSetLayout>> DescriptorSetLayouts;
+        SharedHeap<Shader> pComputeShader;
     };
 }

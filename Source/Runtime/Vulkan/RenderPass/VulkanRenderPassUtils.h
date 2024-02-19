@@ -11,8 +11,10 @@ namespace Portakal
 		{
 			switch (op)
 			{
-			case Portakal::RenderPassLoadOperation::Load:
 			default:
+			case Portakal::RenderPassLoadOperation::Ignore:
+				return VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+			case Portakal::RenderPassLoadOperation::Load:
 				return VK_ATTACHMENT_LOAD_OP_LOAD;
 			case Portakal::RenderPassLoadOperation::Clear:
 				return VK_ATTACHMENT_LOAD_OP_CLEAR;

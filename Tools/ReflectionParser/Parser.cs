@@ -188,7 +188,7 @@ namespace Portakal
             typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::Int32>(pInt32);{Environment.NewLine}";
             typeLines += $"\t\tPortakal::Type* pInt64 = Portakal::TypeDispatcher::CreateType(\"Int64\",sizeof(Portakal::Int64),Portakal::TypeModes::Class,Portakal::TypeCodes::Int64,CreateInt64,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Int64>());{Environment.NewLine}";
             typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::Int64>(pInt64);{Environment.NewLine}";
-            typeLines += $"\t\tPortakal::Type* pFloat32 = Portakal::TypeDispatcher::CreateType(\"Float32\",sizeof(Portakal::Float32),Portakal::TypeModes::Class,Portakal::TypeCodes::Float,CreateFloat32,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Float32>());{Environment.NewLine}";
+            typeLines += $"\t\tPortakal::Type* pFloat32 = Portakal::TypeDispatcher::CreateType(\"Float32\",sizeof(Portakal::Float32),Portakal::TypeModes::Class,Portakal::TypeCodes::Float32,CreateFloat32,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Float32>());{Environment.NewLine}";
             typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::Float32>(pFloat32);{Environment.NewLine}";
             typeLines += $"\t\tPortakal::Type* pFloat64 = Portakal::TypeDispatcher::CreateType(\"Float64\",sizeof(Portakal::Float64),Portakal::TypeModes::Class,Portakal::TypeCodes::Double,CreateFloat64,Portakal::TypeDispatcher::GetTypeAddress<Portakal::Float64>());{Environment.NewLine}";
             typeLines += $"\t\tPortakal::TypeDispatcher::SetTypeAddress<Portakal::Float64>(pFloat64);{Environment.NewLine}";

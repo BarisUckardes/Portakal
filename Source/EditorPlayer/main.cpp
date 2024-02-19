@@ -20,7 +20,7 @@
 #include <Runtime/Graphics/Adapter/GraphicsAdapter.h>
 #include <Runtime/Graphics/Device/GraphicsDevice.h>
 #include <Runtime/Graphics/Swapchain/Swapchain.h>
-#include <Runtime/Graphics/Memory/GraphicsMemoryHeap.h>
+#include <Runtime/Graphics/Memory/GraphicsMemory.h>
 #include <Runtime/Graphics/RenderPass/RenderPass.h>
 #include <Runtime/Graphics/Buffer/GraphicsBuffer.h>
 #include <Runtime/Graphics/Sampler/Sampler.h>
@@ -96,7 +96,7 @@ namespace Portakal
 	}
 }
 	
-int main(const unsigned int argumentCount, const char** ppArguments)
+int main(const UInt32 argumentCount, const char** ppArguments)
 {
 	Portakal::Array<Portakal::String> cmdArguments;
 	for (Portakal::UInt32 i = 0; i < argumentCount; i++)

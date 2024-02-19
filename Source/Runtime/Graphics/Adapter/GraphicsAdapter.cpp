@@ -1,17 +1,21 @@
 #include "GraphicsAdapter.h"
-#include <Runtime/Graphics/GraphicsAPI.h>
 
 namespace Portakal
 {
-    SharedHeap<GraphicsDevice> GraphicsAdapter::CreateDevice()
+    GraphicsAdapter::~GraphicsAdapter()
     {
-        //Create device
-        SharedHeap<GraphicsDevice> pDevice = CreateDeviceCore();
+    }
+    GraphicsAdapter::GraphicsAdapter(const GraphicsAdapterDesc& desc) :
+        mProductName(desc.ProductName), mVendorName(desc.VendorName), mSupportGeometryShader(desc.bSupportGeometryShader), mSupportComputeShader(desc.bSupportComputeShader),
+        mColorAttachmentCount(desc.ColorAttachmentCount), mShaderTextureCount(desc.ShaderTextureCount), mShaderSamplerCount(desc.ShaderSamplerCount), mShaderBufferCount(desc.ShaderBufferCount),
+        mMemory(desc.Memory),mImageWidth(desc.ImageWidth),mImageHeight(desc.ImageHeight),mImageDepth(desc.ImageDepth), mOwnerInstance(desc.pInstance)
+    {
 
-        //Try register to api
-        GraphicsAPI::_SetDevice(pDevice);
+    }
+    GraphicsDevice* GraphicsAdapter::CreateDevice(const GraphicsDeviceDesc* pDesc)
+    {
+        GraphicsDevice* pDevice = CreateDeviceCore(pDesc);
 
-        //Register
         mDevices.Add(pDevice);
 
         return pDevice;

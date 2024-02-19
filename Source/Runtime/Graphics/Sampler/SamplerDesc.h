@@ -15,12 +15,12 @@ namespace Portakal
         SamplerAddressMode AddressModeU;
         SamplerAddressMode AddressModeV;
         SamplerAddressMode AddressModeW;
-        float MipLodBias;
-        float MaxAnisotropy;
-        Bool8 ComparisonEnabled;
+        Float32 MipLodBias;
+        Float32 MaxAnisotropy;
+        Bool8 bComparisonEnabled;
         CompareOperation CompareOperation;
-        float MinLod;
-        float MaxLod;
+        Float32 MinLod;
+        Float32 MaxLod;
         SamplerBorderColor BorderColor;
     };
 }

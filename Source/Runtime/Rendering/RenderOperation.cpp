@@ -9,12 +9,12 @@ namespace Portakal
 
 		mTextures.Insert(name, {});
 	}
-	void RenderOperation::RegisterFloat(const String& name)
+	void RenderOperation::RegisterFloat32(const String& name)
 	{
-		if (mFloats.Find(name) != nullptr)
+		if (mFloat32s.Find(name) != nullptr)
 			return;
 
-		mFloats.Insert(name, 1.0f);
+		mFloat32s.Insert(name, 1.0f);
 	}
 	void RenderOperation::RegisterColor(const String& name)
 	{
@@ -34,9 +34,9 @@ namespace Portakal
 
 		*ppTexture = pTexture;
 	}
-	void RenderOperation::SetFloat(const String& name, const float value)
+	void RenderOperation::SetFloat32(const String& name, const Float32 value)
 	{
-		float* pValue = mFloats.Find(name);
+		Float32* pValue = mFloat32s.Find(name);
 		if (pValue == nullptr)
 			return;
 

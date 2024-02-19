@@ -10,7 +10,7 @@ namespace Portakal
 		if (pTarget == nullptr)
 			return 0;
 
-		unsigned int pSize = 0;
+		UInt32 pSize = 0;
 		while (pTarget[pSize] != '\0')
 			pSize++;
 		return pSize;
@@ -180,12 +180,12 @@ namespace Portakal
 		if (count > 0 && count < searchLength)
 			searchLength = count;
 
-		for (unsigned int i = startIndex; i < searchLength; i++)
+		for (UInt32 i = startIndex; i < searchLength; i++)
 		{
 			if (mSource[i] == target[0])
 			{
 				Bool8 found = true;
-				for (unsigned int j = 1; j < searchLength; j++)
+				for (UInt32 j = 1; j < searchLength; j++)
 				{
 					if (mSource[i + j] != target[j])
 					{
@@ -226,7 +226,7 @@ namespace Portakal
 			if (mSource[i] == target[0])
 			{
 				Bool8 bFound = true;
-				for (unsigned int j = 1; j < targetSize; j++)
+				for (UInt32 j = 1; j < targetSize; j++)
 				{
 					if (mSource[i + j] != target[j])
 					{
@@ -257,12 +257,12 @@ namespace Portakal
 
 		const UInt64 searchSize = mSize - targetSize;
 
-		for (unsigned int i = searchSize; i > startIndex; i--)
+		for (UInt32 i = searchSize; i > startIndex; i--)
 		{
 			if (mSource[i] == target[0])
 			{
 				Bool8 found = true;
-				for (unsigned int j = 1; j < searchSize; j++)
+				for (UInt32 j = 1; j < searchSize; j++)
 				{
 					if (mSource[i + j] != target[j])
 					{
@@ -353,8 +353,8 @@ namespace Portakal
 
 	String String::operator+=(const String& other)
 	{
-		unsigned int pOtherLength = other.GetSize();
-		unsigned int newLength = mSize + pOtherLength;
+		UInt32 pOtherLength = other.GetSize();
+		UInt32 newLength = mSize + pOtherLength;
 
 		Char* newSource = new Char[newLength + 1];
 
@@ -373,8 +373,8 @@ namespace Portakal
 
 	String String::operator+=(const Char* other)
 	{
-		unsigned int pOtherLength = GetCharPointerSize(other);
-		unsigned int newLength = mSize + pOtherLength;
+		UInt32 pOtherLength = GetCharPointerSize(other);
+		UInt32 newLength = mSize + pOtherLength;
 
 		Char* newSource = new Char[newLength + 1];
 
@@ -393,7 +393,7 @@ namespace Portakal
 
 	String String::operator+=(Char other)
 	{
-		unsigned int newLength = mSize + 1;
+		UInt32 newLength = mSize + 1;
 
 		Char* newSource = new Char[newLength + 1];
 
@@ -410,16 +410,16 @@ namespace Portakal
 
 	String String::operator-=(const Char* other)
 	{
-		unsigned int pOtherLength = GetCharPointerSize(other);
-		unsigned int newLength = mSize - pOtherLength;
+		UInt32 pOtherLength = GetCharPointerSize(other);
+		UInt32 newLength = mSize - pOtherLength;
 
 		Char* newSource = new Char[newLength + 1];
 
-		unsigned int newSourceIndex = 0;
-		for (unsigned int i = 0; i < mSize; i++)
+		UInt32 newSourceIndex = 0;
+		for (UInt32 i = 0; i < mSize; i++)
 		{
 			Bool8 found = false;
-			for (unsigned int j = 0; j < pOtherLength; j++)
+			for (UInt32 j = 0; j < pOtherLength; j++)
 			{
 				if (mSource[i] == other[j])
 				{
@@ -447,16 +447,16 @@ namespace Portakal
 
 	String String::operator-=(const String& other)
 	{
-		unsigned int pOtherLength = other.GetSize();
-		unsigned int newLength = mSize - pOtherLength;
+		UInt32 pOtherLength = other.GetSize();
+		UInt32 newLength = mSize - pOtherLength;
 
 		Char* newSource = new Char[newLength + 1];
 
-		unsigned int newSourceIndex = 0;
-		for (unsigned int i = 0; i < mSize; i++)
+		UInt32 newSourceIndex = 0;
+		for (UInt32 i = 0; i < mSize; i++)
 		{
 			Bool8 found = false;
-			for (unsigned int j = 0; j < pOtherLength; j++)
+			for (UInt32 j = 0; j < pOtherLength; j++)
 			{
 				if (mSource[i] == other[j])
 				{
@@ -484,15 +484,15 @@ namespace Portakal
 
 	Bool8 operator==(const String& target0, const String& target1)
 	{
-		unsigned int target0Length = target0.GetSize();
-		unsigned int target1Length = target1.GetSize();
+		UInt32 target0Length = target0.GetSize();
+		UInt32 target1Length = target1.GetSize();
 		const Char* target0Source = target0.GetSource();
 		const Char* target1Source = target1.GetSource();
 
 		if (target0Length != target1Length)
 			return false;
 
-		for (unsigned int i = 0; i < target0Length; i++)
+		for (UInt32 i = 0; i < target0Length; i++)
 		{
 			if (target0Source[i] != target1Source[i])
 			{
@@ -505,9 +505,9 @@ namespace Portakal
 
 	String operator+(const String& target0, const String& target1)
 	{
-		unsigned int target0Length = target0.GetSize();
-		unsigned int target1Length = target1.GetSize();
-		unsigned int newLength = target0Length + target1Length;
+		UInt32 target0Length = target0.GetSize();
+		UInt32 target1Length = target1.GetSize();
+		UInt32 newLength = target0Length + target1Length;
 
 		Char* newSource = new Char[newLength + 1];
 
@@ -521,15 +521,15 @@ namespace Portakal
 
 	Bool8 operator!=(const String& target0, const String& target1)
 	{
-		unsigned int target0Length = target0.GetSize();
-		unsigned int target1Length = target1.GetSize();
+		UInt32 target0Length = target0.GetSize();
+		UInt32 target1Length = target1.GetSize();
 		const Char* target0Source = target0.GetSource();
 		const Char* target1Source = target1.GetSource();
 
 		if (target0Length != target1Length)
 			return true;
 
-		for (unsigned int i = 0; i < target0Length; i++)
+		for (UInt32 i = 0; i < target0Length; i++)
 		{
 			if (target0Source[i] != target1Source[i])
 			{

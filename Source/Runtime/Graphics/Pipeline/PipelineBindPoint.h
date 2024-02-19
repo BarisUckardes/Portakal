@@ -6,6 +6,6 @@ namespace Portakal
 	enum class RUNTIME_API PipelineBindPoint : Byte
 	{
 		Graphics,
-		Compute
+		Compute,
 	};
 }

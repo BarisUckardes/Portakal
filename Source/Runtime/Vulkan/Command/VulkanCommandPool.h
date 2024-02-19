@@ -9,14 +9,12 @@ namespace Portakal
 	{
 	public:
 		VulkanCommandPool(const CommandPoolDesc& desc, VulkanDevice* pDevice);
-		~VulkanCommandPool() = default;
+		~VulkanCommandPool();
 
-		FORCEINLINE VkCommandPool GetVkCmdPool() const noexcept
+		FORCEINLINE VkCommandPool GetVkPool() const noexcept
 		{
 			return mPool;
 		}
-
-		virtual void OnShutdown() override;
 	private:
 		VkCommandPool mPool;
 		VkDevice mLogicalDevice;

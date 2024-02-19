@@ -1,10 +1,14 @@
 #include "CommandList.h"
-#include <Runtime/Graphics/Pipeline/Pipeline.h>
+
 namespace Portakal
 {
-	CommandList::CommandList(const CommandListDesc& desc) : mCmdPool(desc.pPool)
+	CommandList::~CommandList()
 	{
-		
+	}
+	CommandList::CommandList(const CommandListDesc& desc, GraphicsDevice* pDevice) :
+		GraphicsDeviceObject(pDevice),mCmdPool(desc.pCmdPool),mRecording(false),
+		mBoundPipeline(nullptr),mBoundRenderPass(nullptr)
+	{
 	}
 	void CommandList::BeginRecording()
 	{
@@ -14,149 +18,74 @@ namespace Portakal
 	void CommandList::EndRecording()
 	{
 		EndRecordingCore();
-		mRecording = false;
-		mBoundRenderPass = nullptr;
-		mBoundIndexBuffer = nullptr;
-		mBoundVertexBuffer = nullptr;
-		mBoundPipeline = nullptr;
+		ClearCachedState();
 	}
-	void CommandList::SetVertexBuffer(const SharedHeap<GraphicsBuffer>& pBuffer)
+	void CommandList::SetVertexBuffers(GraphicsBuffer** ppBuffers, const Byte count)
 	{
-		if (IsShutdown())
-			return;
-		if (pBuffer.IsShutdown())
-			return;
-
-		SetVertexBufferCore(pBuffer.GetHeap());
-
-		mBoundVertexBuffer = pBuffer;
+		SetVertexBuffersCore(ppBuffers,count);
 	}
-	void CommandList::SetIndexBuffer(const SharedHeap<GraphicsBuffer>& pBuffer, const CommandListIndexBufferType type)
+	void CommandList::SetIndexBuffer(GraphicsBuffer* pBuffer, const IndexBufferType type)
 	{
-		if (IsShutdown())
-			return;
-		if (pBuffer.IsShutdown())
-			return;
-
-		SetIndexBufferCore(pBuffer.GetHeap(), type);
-
-		mBoundIndexBuffer = pBuffer;
+		SetIndexBufferCore(pBuffer, type);
 	}
-	void CommandList::DrawIndexed(const UInt32 indexCount, const UInt32 indexOffset, const UInt32 vertexOffset, const UInt32 instanceCount, const UInt32 instanceOffset)
+	void CommandList::DrawIndexed(const UInt32 indexCount, const UInt32 indexOffset, const UInt32 vertexOffset, const UInt32 instanceOffset, const UInt32 instanceCount)
 	{
-		if (IsShutdown())
-			return;
-
-		DrawIndexedCore(indexCount, indexOffset, vertexOffset, instanceCount, instanceOffset);
+		DrawIndexedCore(indexCount, indexOffset, vertexOffset, instanceOffset, instanceCount);
 	}
-	void CommandList::DispatchCompute(const UInt32 groupX, const UInt32 groupY, const UInt32 groupZ)
+	void CommandList::DispatchCompute(const UInt32 x, const UInt32 y, const UInt32 z)
 	{
-		if (IsShutdown())
-			return;
-
-		DEV_ASSERT(mBoundPipeline != nullptr, "CommandList", "No pipeline is bound for dispatching the compute shader");
-
-		DEV_ASSERT(mBoundPipeline->GetBindPoint() == PipelineBindPoint::Compute, "CommandList", "Bound pipeline is not a compute pipeline, cannot dispatch the compute shader");
-
-		DispatchComputeCore(groupX, groupY, groupZ);
+		DispatchComputeCore(x, y, z);
 	}
-	void CommandList::SetPipeline(const SharedHeap<Pipeline>& pPipeline)
+	void CommandList::SetPipeline(Pipeline* pPipeline)
 	{
-		if (IsShutdown())
-			return;
-
-		SetPipelineCore(pPipeline.GetHeap());
-
+		SetPipelineCore(pPipeline);
 		mBoundPipeline = pPipeline;
 	}
-	void CommandList::BeginRenderPass(const SharedHeap<RenderPass>& pRenderPass, const Color4F& clearColor)
+	void CommandList::BeginRenderPass(RenderPass* pPass, const ClearValue* pClearColorValues, const Byte clearColorValueCount, const double clearDepth, const double clearStencil)
 	{
-		if (IsShutdown())
-			return;
-
-		BeginRenderPassCore(pRenderPass.GetHeap(),clearColor);
-
-		mBoundRenderPass = pRenderPass;
+		BeginRenderPassCore(pPass, pClearColorValues,clearColorValueCount,clearDepth,clearStencil);
+		mBoundRenderPass = pPass;
 	}
 	void CommandList::EndRenderPass()
 	{
-		if (IsShutdown())
-			return;
-
 		EndRenderPassCore();
 		mBoundRenderPass = nullptr;
 	}
-	void CommandList::SetViewports(const ViewportDesc* pViewports, const Byte count)
+	void CommandList::SetViewports(ViewportDesc* pViewports, const Byte count)
 	{
-		if (IsShutdown())
-			return;
-
 		SetViewportsCore(pViewports, count);
 	}
-	void CommandList::SetScissors(const ScissorDesc* pScissors, const Byte count)
+	void CommandList::SetScissors(ScissorDesc* pScissors, const Byte count)
 	{
-		if (IsShutdown())
-			return;
-
 		SetScissorsCore(pScissors, count);
 	}
-	void CommandList::CopyBufferToTexture(const GraphicsBuffer* pSource, const Texture* pDestination, const BufferTextureCopyDesc& desc)
+	void CommandList::CopyBufferToBuffer(const GraphicsBuffer* pSourceBuffer, const GraphicsBuffer* pDestinationBuffer, const BufferBufferCopyDesc& desc)
 	{
-		if (IsShutdown())
-			return;
-
-		CopyBufferToTextureCore(pSource, pDestination, desc);
+		CopyBufferToBufferCore(pSourceBuffer, pDestinationBuffer, desc);
 	}
-	void CommandList::CopyBufferToBuffer(const GraphicsBuffer* pSource, const GraphicsBuffer* pDestination, const BufferBufferCopyDesc& desc)
+	void CommandList::CopyBufferToTexture(const GraphicsBuffer* pSourceBuffer, const Texture* pDestinationTexture, const BufferTextureCopyDesc& desc)
 	{
-		if (IsShutdown())
-			return;
-
-		CopyBufferToBufferCore(pSource, pDestination, desc);
+		CopyBufferToTextureCore(pSourceBuffer, pDestinationTexture, desc);
 	}
-	void CommandList::CopyTextureToTexture(const Texture* pSource, const Texture* pDestination, const TextureCopyDesc& desc)
+	void CommandList::CopyTextureToTexture(const Texture* pSourceTexture, const Texture* pDestinationTexture, const TextureCopyDesc& desc)
 	{
-		if (IsShutdown())
-			return;
-
-		CopyTextureToTextureCore(pSource, pDestination, desc);
+		CopyTextureToTextureCore(pSourceTexture, pDestinationTexture, desc);
 	}
-	void CommandList::SetTextureMemoryBarrier(const Texture* pTexture, const CommandListTextureMemoryBarrierDesc& desc)
+	void CommandList::SetTextureMemoryBarrier(const Texture* pTexture, const TextureMemoryBarrierDesc& desc)
 	{
-		if (IsShutdown())
-			return;
-
 		SetTextureMemoryBarrierCore(pTexture, desc);
 	}
-	void CommandList::SetBufferMemoryBarrier(const GraphicsBuffer* pBuffer, const BufferBarrierDesc& desc)
+	void CommandList::SetBufferMemoryBarrier(const GraphicsBuffer* pBuffer, const BufferMemoryBarrierDesc& desc)
 	{
-		if (IsShutdown())
-			return;
-
 		SetBufferMemoryBarrierCore(pBuffer, desc);
 	}
-	void CommandList::CommitResources(ResourceTable** ppTables, const UInt32 count)
+	void CommandList::CommitResourceSets(DescriptorSet** ppSets, const Byte count)
 	{
-		if (IsShutdown())
-			return;
-
-		/**
-		* Validate bound pipeline
-		*/
-		DEV_ASSERT(mBoundPipeline != nullptr, "CommandList", "Cannot commit resources before binding a pipeline!");
-
-		/**
-		* Validate resource set count
-		*/
-		DEV_ASSERT(mBoundPipeline->GetResourceLayout().ResourceLayouts.GetSize() == count, "CommandList", "Committed resource count does not match the given pipeline layout!");
-
-		/**
-		* Commit
-		*/
-		CommitResourcesCore(ppTables,count);
+		CommitResourceSetsCore(ppSets, count);
 	}
-	void CommandList::ClearTexture(const Texture* pTexture,const Byte arrayIndex,const Byte mipIndex, const Color4F clearColor)
+	void CommandList::ClearCachedState()
 	{
-		ClearTextureCore(pTexture,arrayIndex,mipIndex, clearColor);
+		mBoundPipeline = nullptr;
+		mBoundRenderPass = nullptr;
 	}
 }

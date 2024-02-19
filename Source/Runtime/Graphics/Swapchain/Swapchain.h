@@ -4,105 +4,95 @@
 #include <Runtime/Graphics/Fence/Fence.h>
 #include <Runtime/Graphics/Texture/Texture.h>
 #include <Runtime/Graphics/Texture/TextureView.h>
-#include <Runtime/Graphics/Command/CommandPool.h>
-#include <Runtime/Graphics/Command/CommandList.h>
-#include <Runtime/Graphics/Swapchain/PresentMode.h>
-#include <Runtime/Graphics/Swapchain/SwapchainMode.h>
+#include <Runtime/Graphics/Semaphore/Semaphore.h>
+
 
 namespace Portakal
 {
 	class RUNTIME_API Swapchain : public GraphicsDeviceObject
 	{
 	public:
-		Swapchain(const SwapchainDesc& desc);
-		~Swapchain() = default;
+		~Swapchain();
 
+		FORCEINLINE PresentMode GetMode() const noexcept
+		{
+			return mMode;
+		}
 		FORCEINLINE Byte GetBufferCount() const noexcept
 		{
 			return mBufferCount;
 		}
-		FORCEINLINE TextureFormat GetColorFormat() const noexcept
+		FORCEINLINE TextureFormat GetColorBufferFormat() const noexcept
 		{
-			return mColorFormat;
+			return mColorBufferFormat;
 		}
-		FORCEINLINE TextureFormat GetDepthStencilFormat() const noexcept
+		FORCEINLINE TextureFormat GetDepthStencilBufferFormat() const noexcept
 		{
-			return mDepthStencilFormat;
+			return mDepthStencilBufferFormat;
 		}
-		FORCEINLINE SharedHeap<PlatformWindow> GetWindow() const noexcept
+		FORCEINLINE const Array<SharedHeap<Texture>>& GetColorTextures() const noexcept
+		{
+			return mColorTextures;
+		}
+		FORCEINLINE const Array<SharedHeap<TextureView>>& GetColorTextureViews() const noexcept
+		{
+			return mColorTextureViews;
+		}
+		FORCEINLINE const SharedHeap<PlatformWindow> GetWindow() const noexcept
 		{
 			return mWindow;
 		}
-		FORCEINLINE PresentMode GetPresentMode() const noexcept
+		FORCEINLINE UInt32 GetWidth() const noexcept
 		{
-			return mPresentMode;
+			return mWidth;
 		}
-		FORCEINLINE Vector2US GetSize() const noexcept
+		FORCEINLINE UInt32 GetHeight() const noexcept
 		{
-			return mSize;
+			return mHeight;
 		}
-		FORCEINLINE SharedHeap<Fence> GetPresentFence(const Byte index = 0) const noexcept
+		FORCEINLINE Byte GetCurrentImageIndex() const noexcept
+		{
+			return mImageIndex;
+		}
+		FORCEINLINE const GraphicsQueue* GetQueue() const noexcept
+		{
+			return mQueue;
+		}
+		virtual GraphicsDeviceObjectType GetObjectType() const noexcept override final
+		{
+			return GraphicsDeviceObjectType::Swapchain;
+		}
+
+		void Resize(const UInt32 width, const UInt32 height);
+		void Present(Semaphore** ppWaitSemahpores,const UInt32 waitSemaphoreCount);
+		void WaitForPresent(const Byte index);
+	protected:
+		Swapchain(const SwapchainDesc& desc, GraphicsDevice* pDevice);
+
+		void SetCustomSize(const UInt32 width, const UInt32 height);
+		void SetCustomSwapchainTextures(const Array<SharedHeap<Texture>>& textures);
+
+		FORCEINLINE SharedHeap<Fence> GetPresentFence(const Byte index)
 		{
 			return mPresentFences[index];
 		}
-		FORCEINLINE SharedHeap<Fence> GetLayoutFence() const noexcept
-		{
-			return mLayoutFence;
-		}
-		FORCEINLINE Array<SharedHeap<Texture>> GetTextures() const noexcept
-		{
-			return mTextures;
-		}
-		FORCEINLINE Array<SharedHeap<TextureView>> GetTextureViews() const noexcept
-		{
-			return mViews;
-		}
-		FORCEINLINE Byte GetImageIndex() const noexcept
-		{
-			return mIndex;
-		}
-		FORCEINLINE SharedHeap<Texture> GetCurrentTexture() const noexcept
-		{
-			return mTextures[mIndex];
-		}
-		FORCEINLINE SharedHeap<TextureView> GetCurrentView() const noexcept
-		{
-			return mViews[mIndex];
-		}
-	
-		virtual GraphicsDeviceObjectType GetObjectType() const noexcept override final { return GraphicsDeviceObjectType::Swapchain; }
-	
-		void Resize(const UInt16 width, const UInt16 height);
-		Bool8 Present();
-		void WaitForPresent(const Byte index);
-		void TransitionToPresent();
-		Bool8 SetMode(const SwapchainMode mode);
-	protected:
-		void SetTextures(const Array<SharedHeap<Texture>>& textures, const Array<SharedHeap<TextureView>>& views);
-		void SetSize(const UInt16 width, const UInt16 height);
 
-		virtual void ResizeCore(const UInt16 width, const UInt16 height) = 0;
-		virtual void OnShutdown() override;
-		virtual Bool8 PresentCore() = 0;
-		virtual Bool8 SetFullScreen() = 0;
-		virtual Bool8 SetWindowed() = 0;
+		virtual void ResizeCore(const UInt32 width, const UInt32 height) = 0;
+		virtual void PresentCore(Semaphore** ppWaitSemahpores, const UInt32 waitSemaphoreCount) = 0;
 	private:
-		void CreateInternalResources(GraphicsDevice* pDevice);
-		void IncrementIndex();
-		void FreeTextures();
+		void ClearTextures();
 	private:
+		const PresentMode mMode;
 		const Byte mBufferCount;
-		const TextureFormat mColorFormat;
-		const TextureFormat mDepthStencilFormat;
+		const TextureFormat mColorBufferFormat;
+		const TextureFormat mDepthStencilBufferFormat;
 		const SharedHeap<PlatformWindow> mWindow;
-		const PresentMode mPresentMode;
-		Array<SharedHeap<Texture>> mTextures;
-		Array<SharedHeap<TextureView>> mViews;
+		const GraphicsQueue* mQueue;
 		Array<SharedHeap<Fence>> mPresentFences;
-		SharedHeap<Fence> mLayoutFence;
-		SharedHeap<CommandPool> mCmdPool;
-		SharedHeap<CommandList> mCmdList;
-		Vector2US mSize;
-		Byte mIndex;
+		Array<SharedHeap<Texture>> mColorTextures;
+		Array<SharedHeap<TextureView>> mColorTextureViews;
+		UInt32 mWidth;
+		UInt32 mHeight;
+		Byte mImageIndex;
 	};
 }

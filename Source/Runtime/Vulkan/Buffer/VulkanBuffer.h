@@ -9,15 +9,24 @@ namespace Portakal
 	{
 	public:
 		VulkanBuffer(const GraphicsBufferDesc& desc, VulkanDevice* pDevice);
-		~VulkanBuffer() = default;
+		~VulkanBuffer();
 
 		FORCEINLINE VkBuffer GetVkBuffer() const noexcept
 		{
 			return mBuffer;
 		}
-		virtual void OnShutdown() override;
+		FORCEINLINE UInt64 GetVkMemoryOffset() const noexcept
+		{
+			return mMemoryOffset;
+		}
+		FORCEINLINE UInt64 GetVkMemoryAlignedOffset() const noexcept
+		{
+			return mMemoryAlignedOffset;
+		}
 	private:
-		VkDevice mLogicalDevice;
 		VkBuffer mBuffer;
+		VkDevice mLogicalDevice;
+		UInt64 mMemoryOffset;
+		UInt64 mMemoryAlignedOffset;
 	};
 }

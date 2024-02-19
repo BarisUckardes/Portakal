@@ -9,7 +9,7 @@ namespace Portakal
 		CreateInternalResources();
 	}
 
-	void MeshResource::SetMemoryProfile(const SharedHeap<GraphicsMemoryHeap>& pHeapDevice, const SharedHeap<GraphicsMemoryHeap>& pHeapHost, bool bAllocateStagebuffersUpfront)
+	void MeshResource::SetMemoryProfile(const SharedHeap<GraphicsMemory>& pHeapDevice, const SharedHeap<GraphicsMemory>& pHeapHost, bool bAllocateStagebuffersUpfront)
 	{
 		//Clear current setup
 		Clear();
@@ -36,7 +36,7 @@ namespace Portakal
 		vertexBufferDesc.SubItemCount = vertexCount;
 		vertexBufferDesc.SubItemSizeInBytes = perVertexSize;
 		vertexBufferDesc.Usage = GraphicsBufferUsage::VertexBuffer | GraphicsBufferUsage::TransferDestination;
-		vertexBufferDesc.pHeap = mHeapDevice;
+		vertexBufferDesc.pMemory = mHeapDevice;
 		subMesh.pVertexBuffer = mDevice->CreateBuffer(vertexBufferDesc);
 
 		//Allocate vertex stage buffer
@@ -46,7 +46,7 @@ namespace Portakal
 			desc.SubItemCount = vertexCount;
 			desc.SubItemSizeInBytes = perVertexSize;
 			desc.Usage = GraphicsBufferUsage::VertexBuffer | GraphicsBufferUsage::TransferSource;
-			desc.pHeap = mHeapHost;
+			desc.pMemory = mHeapHost;
 			subMesh.pVertexStageBuffer = mDevice->CreateBuffer(desc);
 		}
 
@@ -55,7 +55,7 @@ namespace Portakal
 		indexBufferDesc.SubItemCount = indexCount;
 		indexBufferDesc.SubItemSizeInBytes = perIndexSize;
 		indexBufferDesc.Usage = GraphicsBufferUsage::IndexBuffer | GraphicsBufferUsage::TransferDestination;
-		indexBufferDesc.pHeap = mHeapDevice;
+		indexBufferDesc.pMemory = mHeapDevice;
 		subMesh.pIndexBuffer = mDevice->CreateBuffer(indexBufferDesc);
 
 		//Allocate index stage buffer
@@ -65,7 +65,7 @@ namespace Portakal
 			desc.SubItemCount = indexCount;
 			desc.SubItemSizeInBytes = perIndexSize;
 			desc.Usage = GraphicsBufferUsage::IndexBuffer | GraphicsBufferUsage::TransferSource;
-			desc.pHeap = mHeapHost;
+			desc.pMemory = mHeapHost;
 			subMesh.pIndexStageBuffer = mDevice->CreateBuffer(desc);
 		}
 
@@ -93,12 +93,12 @@ namespace Portakal
 			desc.SubItemCount = subMesh.pVertexBuffer->GetSubItemCount();
 			desc.SubItemSizeInBytes = subMesh.pVertexBuffer->GetSubItemSize();
 			desc.Usage = GraphicsBufferUsage::VertexBuffer | GraphicsBufferUsage::TransferSource;
-			desc.pHeap = mHeapHost;
+			desc.pMemory = mHeapHost;
 			subMesh.pVertexStageBuffer = mDevice->CreateBuffer(desc);
 		}
 
 		//Update host buffer
-		GraphicsBufferHostUpdateDesc hostUpdateDesc = {};
+		HostBufferUpdateDesc hostUpdateDesc = {};
 		hostUpdateDesc.OffsetInBytes = offset;
 		hostUpdateDesc.View = memory;
 		mDevice->UpdateHostBuffer(subMesh.pVertexStageBuffer.GetHeap(), hostUpdateDesc);

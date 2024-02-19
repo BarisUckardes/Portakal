@@ -18,28 +18,28 @@ namespace Portakal
     static const Char vertexShaderSource[] =
         "layout(set=0,binding=0) cbuffer vertexBuffer\
             {\
-              float4x4 ProjectionMatrix;\
-              float4 MyValue0;\
-              float3 MyValue1;\
+              Float324x4 ProjectionMatrix;\
+              Float324 MyValue0;\
+              Float323 MyValue1;\
             };\
             struct VS_INPUT\
             {\
-              float2 pos : POSITION;\
-              float2 uv  : TEXCOORD0;\
-              float4 col : COLOR0;\
+              Float322 pos : POSITION;\
+              Float322 uv  : TEXCOORD0;\
+              Float324 col : COLOR0;\
             };\
             \
             struct PS_INPUT\
             {\
-              float4 pos : SV_POSITION;\
-              float2 uv  : TEXCOORD0;\
-              float4 col : COLOR0;\
+              Float324 pos : SV_POSITION;\
+              Float322 uv  : TEXCOORD0;\
+              Float324 col : COLOR0;\
             };\
             \
             PS_INPUT main(VS_INPUT input)\
             {\
               PS_INPUT output;\
-              output.pos = mul( ProjectionMatrix, float4(input.pos.xy, 0.f, 1.f));\
+              output.pos = mul( ProjectionMatrix, Float324(input.pos.xy, 0.f, 1.f));\
               output.col = input.col;\
               output.uv  = input.uv;\
               return output;\
@@ -48,16 +48,16 @@ namespace Portakal
     static const Char pixelShaderSource[] =
         "struct PS_INPUT\
             {\
-            float4 pos : SV_POSITION;\
-            float2 uv  : TEXCOORD0;\
-            float4 col : COLOR0;\
+            Float324 pos : SV_POSITION;\
+            Float322 uv  : TEXCOORD0;\
+            Float324 col : COLOR0;\
             };\
             layout(set=0,binding=1) sampler sampler0;\
             layout(set=1,binding=0) Texture2D texture0;\
             \
-            float4 main(PS_INPUT input) : SV_Target\
+            Float324 main(PS_INPUT input) : SV_Target\
             {\
-            float4 out_col =  input.col*texture0.Sample(sampler0,input.uv); \
+            Float324 out_col =  input.col*texture0.Sample(sampler0,input.uv); \
             return out_col; \
             }";
 
@@ -107,7 +107,7 @@ namespace Portakal
         mCmdPool.Shutdown();
     }
 
-    void ImGuiRenderer::StartRendering(const float deltaTimeInMilliseconds)
+    void ImGuiRenderer::StartRendering(const Float32 deltaTimeInMilliseconds)
     {
         ImGuiIO& io = ImGui::GetIO();
         io.DeltaTime = deltaTimeInMilliseconds;
@@ -122,7 +122,7 @@ namespace Portakal
         //Get display size
         const Vector2US renderSize = pRenderTarget->GetRenderPass()->GetRenderRegion();
         ImGuiIO& io = ImGui::GetIO();
-        io.DisplaySize = { (float)renderSize.X,(float)renderSize.Y };
+        io.DisplaySize = { (Float32)renderSize.X,(Float32)renderSize.Y };
         io.DisplayFramebufferScale = { 1.0f,1.0f };
 
         //Render queued calls
@@ -158,11 +158,11 @@ namespace Portakal
         }
 
         //Create projection matrix
-        const float L = pDrawData->DisplayPos.x;
-        const float R = L + pDrawData->DisplaySize.x;
-        const float B = pDrawData->DisplayPos.y;
-        const float T = B + pDrawData->DisplaySize.y;
-        const float projectionData[] =
+        const Float32 L = pDrawData->DisplayPos.x;
+        const Float32 R = L + pDrawData->DisplaySize.x;
+        const Float32 B = pDrawData->DisplayPos.y;
+        const Float32 T = B + pDrawData->DisplaySize.y;
+        const Float32 projectionData[] =
         {
             2.0f / (R - L),0,0,0,
             0,2.0f / (T - B),0,0,
@@ -558,7 +558,7 @@ namespace Portakal
     void ImGuiRenderer::OnResized(const Vector2US size)
     {
         ImGuiIO& io = ImGui::GetIO();
-        io.DisplaySize = { (float)size.X,(float)size.Y };
+        io.DisplaySize = { (Float32)size.X,(Float32)size.Y };
         mRenderTargets.Clear();
     }
 
@@ -580,7 +580,7 @@ namespace Portakal
         io.AddMouseButtonEvent(ImGuiUtils::GetMouseButton(button), false);
     }
 
-    void ImGuiRenderer::OnMouseWheel(const float delta)
+    void ImGuiRenderer::OnMouseWheel(const Float32 delta)
     {
         ImGuiIO& io = ImGui::GetIO();
         io.AddMouseWheelEvent(delta, delta);
@@ -634,8 +634,8 @@ namespace Portakal
         vertexInputBinding.StepRate = InputBindingStepRate::Vertex;
         vertexInputBinding.Elements =
         {
-            {TextureFormat::R32_G32_Float, InputElementSemantic::Position},
-            {TextureFormat::R32_G32_Float, InputElementSemantic::TexCoord},
+            {TextureFormat::R32_G32_Float32, InputElementSemantic::Position},
+            {TextureFormat::R32_G32_Float32, InputElementSemantic::TexCoord},
             {TextureFormat::R8_G8_B8_A8_UNorm, InputElementSemantic::Color}
         };
         inputStateDesc.Bindings.Add(vertexInputBinding);

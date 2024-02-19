@@ -6,7 +6,7 @@ namespace Portakal
     struct MonitorProcData
     {
         HMONITOR Monitors[WIN32_MAX_MONITORS];
-        unsigned int ProcIndex;
+        UInt32 ProcIndex;
     };
     BOOL CALLBACK MonitorEnumProc(HMONITOR monitor, HDC monitorContext, LPRECT rect, LPARAM userData)
     {
@@ -28,7 +28,7 @@ namespace Portakal
         }
 
         Array<SharedHeap<PlatformMonitor>> monitors;
-        for (unsigned int monitorIndex = 0; monitorIndex < procData.ProcIndex; monitorIndex++)
+        for (UInt32 monitorIndex = 0; monitorIndex < procData.ProcIndex; monitorIndex++)
         {
             const HMONITOR monitorHandle = procData.Monitors[monitorIndex];
 
@@ -53,7 +53,7 @@ namespace Portakal
 
 
             Array<MonitorDisplayMode> displayModes;
-            unsigned int modeIndex = 0;
+            UInt32 modeIndex = 0;
             if (EnumDisplaySettings(monitorInformation.szDevice, 0, &currentDisplayModeWin32) == 0)
             {
                 continue;
@@ -113,7 +113,7 @@ namespace Portakal
         currentDisplayMode.Height = currentDisplayModeWin32.dmPelsHeight;
 
         Array<MonitorDisplayMode> displayModes;
-        unsigned int modeIndex = 0;
+        UInt32 modeIndex = 0;
         if (EnumDisplaySettings(monitorInformation.szDevice, 0, &currentDisplayModeWin32) == 0)
         {
             return nullptr;

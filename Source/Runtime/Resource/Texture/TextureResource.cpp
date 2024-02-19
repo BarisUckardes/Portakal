@@ -30,7 +30,7 @@ namespace Portakal
             mData.Add(mips);
         }
     }
-    void TextureResource::SetMemoryProfile(const SharedHeap<GraphicsMemoryHeap>& pHeapDevice, const SharedHeap<GraphicsMemoryHeap>& pHeapHost)
+    void TextureResource::SetMemoryProfile(const SharedHeap<GraphicsMemory>& pHeapDevice, const SharedHeap<GraphicsMemory>& pHeapHost)
     {
         if (IsShutdown())
             return;

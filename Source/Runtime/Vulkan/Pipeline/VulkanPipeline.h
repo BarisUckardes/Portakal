@@ -10,14 +10,11 @@ namespace Portakal
     public:
         VulkanPipeline(const GraphicsPipelineDesc& desc, VulkanDevice* pDevice);
         VulkanPipeline(const ComputePipelineDesc& desc, VulkanDevice* pDevice);
-        ~VulkanPipeline() {};
+        ~VulkanPipeline();
 
         FORCEINLINE VkPipelineLayout GetVkPipelineLayout() const noexcept { return mLayout; }
         FORCEINLINE VkPipeline GetVkPipeline() const noexcept { return mPipeline; }
         FORCEINLINE VkPipelineBindPoint GetVkPipelinBindPoint() const noexcept { return mBindPoint; }
-
-    private:
-        virtual void OnShutdown() override;
     private:
         VkPipelineLayout mLayout;
         VkPipeline mPipeline;

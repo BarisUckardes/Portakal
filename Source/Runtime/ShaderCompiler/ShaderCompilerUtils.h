@@ -54,74 +54,74 @@ namespace Portakal
 				return TextureFormat::R16_UInt;
 			case SPV_REFLECT_FORMAT_R16_SINT:
 				return TextureFormat::R16_SInt;
-			case SPV_REFLECT_FORMAT_R16_SFLOAT:
-				return TextureFormat::R16_Float;
+			case SPV_REFLECT_FORMAT_R16_SFloat32:
+				return TextureFormat::R16_Float32;
 			case SPV_REFLECT_FORMAT_R16G16_UINT:
 				return TextureFormat::R16_G16_UInt;
 			case SPV_REFLECT_FORMAT_R16G16_SINT:
 				return TextureFormat::R16_G16_SInt;
-			case SPV_REFLECT_FORMAT_R16G16_SFLOAT:
-				return TextureFormat::R16_G16_Float;
+			case SPV_REFLECT_FORMAT_R16G16_SFloat32:
+				return TextureFormat::R16_G16_Float32;
 			case SPV_REFLECT_FORMAT_R16G16B16_UINT:
 				return TextureFormat::R16_G16_B16_A16_UInt;
 			case SPV_REFLECT_FORMAT_R16G16B16_SINT:
 				return TextureFormat::R16_G16_B16_A16_SInt;
-			case SPV_REFLECT_FORMAT_R16G16B16_SFLOAT:
-				return TextureFormat::R16_G16_B16_A16_Float;
+			case SPV_REFLECT_FORMAT_R16G16B16_SFloat32:
+				return TextureFormat::R16_G16_B16_A16_Float32;
 			case SPV_REFLECT_FORMAT_R16G16B16A16_UINT:
 				return TextureFormat::R16_G16_B16_A16_UInt;
 			case SPV_REFLECT_FORMAT_R16G16B16A16_SINT:
 				return TextureFormat::R16_G16_B16_A16_SInt;
-			case SPV_REFLECT_FORMAT_R16G16B16A16_SFLOAT:
-				return TextureFormat::R16_G16_B16_A16_Float;
+			case SPV_REFLECT_FORMAT_R16G16B16A16_SFloat32:
+				return TextureFormat::R16_G16_B16_A16_Float32;
 			case SPV_REFLECT_FORMAT_R32_UINT:
 				return TextureFormat::R32_UInt;
 			case SPV_REFLECT_FORMAT_R32_SINT:
 				return TextureFormat::R32_SInt;
-			case SPV_REFLECT_FORMAT_R32_SFLOAT:
-				return TextureFormat::R32_Float;
+			case SPV_REFLECT_FORMAT_R32_SFloat32:
+				return TextureFormat::R32_Float32;
 			case SPV_REFLECT_FORMAT_R32G32_UINT:
 				return TextureFormat::R32_G32_UInt;
 			case SPV_REFLECT_FORMAT_R32G32_SINT:
 				return TextureFormat::R32_G32_SInt;
-			case SPV_REFLECT_FORMAT_R32G32_SFLOAT:
-				return TextureFormat::R32_G32_Float;
+			case SPV_REFLECT_FORMAT_R32G32_SFloat32:
+				return TextureFormat::R32_G32_Float32;
 			case SPV_REFLECT_FORMAT_R32G32B32_UINT:
 				return TextureFormat::R32_G32_B32_UInt;
 			case SPV_REFLECT_FORMAT_R32G32B32_SINT:
 				return TextureFormat::R32_G32_B32_SInt;
-			case SPV_REFLECT_FORMAT_R32G32B32_SFLOAT:
-				return TextureFormat::R32_G32_B32_Float;
+			case SPV_REFLECT_FORMAT_R32G32B32_SFloat32:
+				return TextureFormat::R32_G32_B32_Float32;
 			case SPV_REFLECT_FORMAT_R32G32B32A32_UINT:
 				return TextureFormat::R32_G32_B32_A32_UInt;
 			case SPV_REFLECT_FORMAT_R32G32B32A32_SINT:
 				return TextureFormat::R32_G32_B32_A32_SInt;
-			case SPV_REFLECT_FORMAT_R32G32B32A32_SFLOAT:
-				return TextureFormat::R32_G32_B32_A32_Float;
+			case SPV_REFLECT_FORMAT_R32G32B32A32_SFloat32:
+				return TextureFormat::R32_G32_B32_A32_Float32;
 			case SPV_REFLECT_FORMAT_R64_UINT:
 				return TextureFormat::R64_UInt ;
 			case SPV_REFLECT_FORMAT_R64_SINT:
 				return TextureFormat::R64_SInt;
-			case SPV_REFLECT_FORMAT_R64_SFLOAT:
-				return TextureFormat::R64_Float;
+			case SPV_REFLECT_FORMAT_R64_SFloat32:
+				return TextureFormat::R64_Float32;
 			case SPV_REFLECT_FORMAT_R64G64_UINT:
 				return TextureFormat::R64_G64_UInt;
 			case SPV_REFLECT_FORMAT_R64G64_SINT:
 				return TextureFormat::R64_G64_SInt;
-			case SPV_REFLECT_FORMAT_R64G64_SFLOAT:
-				return TextureFormat::R64_G64_Float;
+			case SPV_REFLECT_FORMAT_R64G64_SFloat32:
+				return TextureFormat::R64_G64_Float32;
 			case SPV_REFLECT_FORMAT_R64G64B64_UINT:
 				return TextureFormat::R64_G64_B64_UInt;
 			case SPV_REFLECT_FORMAT_R64G64B64_SINT:
 				return TextureFormat::R64_G64_B64_SInt;
-			case SPV_REFLECT_FORMAT_R64G64B64_SFLOAT:
-				return TextureFormat::R64_G64_B64_Float;
+			case SPV_REFLECT_FORMAT_R64G64B64_SFloat32:
+				return TextureFormat::R64_G64_B64_Float32;
 			case SPV_REFLECT_FORMAT_R64G64B64A64_UINT:
 				return TextureFormat::R64_G64_B64_A64_UInt;
 			case SPV_REFLECT_FORMAT_R64G64B64A64_SINT:
 				return TextureFormat::R64_G64_B64_A64_SInt;
-			case SPV_REFLECT_FORMAT_R64G64B64A64_SFLOAT:
-				return TextureFormat::R64_G64_B64_A64_Float;
+			case SPV_REFLECT_FORMAT_R64G64B64A64_SFloat32:
+				return TextureFormat::R64_G64_B64_A64_Float32;
 			default:
 				break;
 			}

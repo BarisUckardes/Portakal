@@ -1,111 +1,90 @@
 #pragma once
 #include <Runtime/Graphics/Device/GraphicsDevice.h>
+#include <Runtime/Vulkan/Device/VulkanDeviceDesc.h>
 #include <vulkan.h>
 
 namespace Portakal
 {
-    class VulkanAdapter;
-	class RUNTIME_API VulkanDevice final : public GraphicsDevice
+	class RUNTIME_API VulkanDevice : public GraphicsDevice
 	{
-	private:
         struct DeviceQueueFamily
         {
-            DeviceQueueFamily() : FamilyIndex(255), QueueCapacity(0), DefaultQueue(VK_NULL_HANDLE), CanPresent(false)
+            DeviceQueueFamily() : FamilyIndex(255), Capacity(0),RequestedCount(0)
             {
 
             }
 
-            Bool8 OwnQueue(VkQueue& queueOut)
-            {
-                if (FreeQueues.GetSize() == 0)
-                {
-                    queueOut = VK_NULL_HANDLE;
-                    return false;
-                }
+			VkQueue OwnQueue()
+			{
+				if (FreeQueues.size() == 0)
+					return VK_NULL_HANDLE;
 
-                queueOut = FreeQueues[0];
-                FreeQueues.RemoveAt(0);
-                return true;
-            }
+				VkQueue queue = FreeQueues[0];
+				FreeQueues.erase(FreeQueues.begin());
+				return queue;
+			}
 
-            Bool8 HasFreeQueue() const noexcept
-            {
-                return FreeQueues.GetSize() > 0;
-            }
-
-            void ReturnQueue(VkQueue queue)
-            {
-                FreeQueues.Add(queue);
-            }
+			void ReturnQueue(VkQueue queue)
+			{
+				FreeQueues.push_back(queue);
+			}
 
             Byte FamilyIndex;
-            Byte QueueCapacity;
-            VkQueue DefaultQueue;
-            Array<VkQueue> Queues;
-            Array<VkQueue> FreeQueues;
-            VkBool32 CanPresent;
+            Byte Capacity;
+			Byte RequestedCount;
+            std::vector<VkQueue> FreeQueues;
         };
-    public:
-        static PFN_vkCmdBeginRenderingKHR vkCmdBeginRenderingKHR;
-        static PFN_vkCmdEndRenderingKHR vkCmdEndRenderingKHR;
 	public:
-		VulkanDevice(const GraphicsDeviceDesc& desc);
-        ~VulkanDevice()
-        {
+		VulkanDevice(const VulkanDeviceDesc* pDesc);
+		~VulkanDevice();
 
-        }
-
-        FORCEINLINE Int32 GetPresentQueueFamilyIndex(const VkSurfaceKHR surface) const noexcept;
-        FORCEINLINE VkQueue GetPresentQueue(const VkSurfaceKHR surface) const noexcept;
-        FORCEINLINE Int32 GetGraphicsQueueFamilyIndex()
-        {
-            return mGraphicsQueueFamily.FamilyIndex;
-        }
-        FORCEINLINE Int32 GetComputeQueueFamilyIndex()
-        {
-            return mComputeQueueFamily.FamilyIndex;
-        }
-        FORCEINLINE Int32 GetTransfersQueueFamilyIndex()
-        {
-            return mTransferQueueFamily.FamilyIndex;
-        }
-        FORCEINLINE VkDevice GetVkLogicalDevice() const noexcept { return mLogicalDevice; }
-
-        SharedHeap<Texture> CreateVkSwapchainTexture(const TextureDesc& desc, const VkImage image);
+		FORCEINLINE VkDevice GetVkLogicalDevice() const noexcept
+		{
+			return mLogicalDevice;
+		}
+		VkQueue vkOwnQueue(const GraphicsQueueType type);
+		void vkReturnQueue(const GraphicsQueueType type,const VkQueue queue);
+		Byte vkGetQueueFamilyIndex(const GraphicsQueueType type) const noexcept;
+		Texture* vkCreateSwapchainTexture(const TextureDesc& desc,const VkImage image);
+		TextureView* vkCreateSwapchainTextureView(const TextureViewDesc& desc, const VkImageView view);
 	private:
-		// Inherited via GraphicsDevice
-		void OnShutdown() override;
-		Texture* CreateTextureCore(const TextureDesc& desc) override;
-		TextureView* CreateTextureViewCore(const TextureViewDesc& desc) override;
-		CommandList* CreateCommandListCore(const CommandListDesc& desc) override;
-		GraphicsMemoryHeap* CreateMemoryHeapCore(const GraphicsMemoryHeapDesc& desc) override;
-		GraphicsBuffer* CreateBufferCore(const GraphicsBufferDesc& desc) override;
-		Shader* CreateShaderCore(const ShaderDesc& desc) override;
-		Sampler* CreateSamplerCore(const SamplerDesc& desc) override;
-		ResourceTableLayout* CreateResourceTableLayoutCore(const ResourceTableLayoutDesc& desc) override;
-		ResourceTablePool* CreateResourceTablePoolCore(const ResourceTablePoolDesc& desc) override;
-		ResourceTable* CreateResourceTableCore(const ResourceTableDesc& desc) override;
-        Fence* CreateFenceCore(const bool bSignalled) override;
-        Swapchain* CreateSwapchainCore(const SwapchainDesc& desc) override;
-        RenderPass* CreateRenderPassCore(const RenderPassDesc& desc) override;
+		virtual GraphicsBackend GetBackend() const noexcept
+		{
+			return GraphicsBackend::Vulkan;
+		}
 
-        // Inherited via GraphicsDevice
-        CommandPool* CreateCommandPoolCore(const CommandPoolDesc& desc) override;
-        Pipeline* CreateGraphicsPipelineCore(const GraphicsPipelineDesc& desc) override;
-        SharedHeap<Pipeline> CreateComputePipelineCore(const ComputePipelineDesc& desc) override;
+		virtual bool HasQueue(const GraphicsQueueType type) const noexcept override;
+		virtual GraphicsQueue* CreateQueueCore(const GraphicsQueueDesc& desc) override;
+		virtual GraphicsBuffer* CreateBufferCore(const GraphicsBufferDesc& desc) override;
+		virtual DescriptorSet* CreateDescriptorSetCore(const DescriptorSetDesc& desc) override;
+		virtual DescriptorPool* CreateDescriptorPoolCore(const DescriptorPoolDesc& desc) override;
+		virtual DescriptorSetLayout* CreateDescriptorSetLayoutCore(const DescriptorSetLayoutDesc& desc) override;
+		virtual Fence* CreateFenceCore(const FenceDesc& desc) override;
+		virtual Semaphore* CreateSyncObjectCore(const SemaphoreDesc& desc) override;
+		virtual GraphicsMemory* AllocateMemoryCore(const GraphicsMemoryDesc& desc) override;
+		virtual Sampler* CreateSamplerCore(const SamplerDesc& desc) override;
+		virtual Shader* CreateShaderCore(const ShaderDesc& desc) override;
+		virtual Texture* CreateTextureCore(const TextureDesc& desc) override;
+		virtual TextureView* CreateTextureViewCore(const TextureViewDesc& desc) override;
+		virtual Swapchain* CreateSwapchainCore(const SwapchainDesc& desc) override;
+		virtual Pipeline* CreateGraphicsPipelineCore(const GraphicsPipelineDesc& desc) override;
+		virtual Pipeline* CreateComputePipelineCore(const ComputePipelineDesc& desc) override;
+		virtual RenderPass* CreateRenderPassCore(const RenderPassDesc& desc) override;
+		virtual CommandPool* CreateCommandPoolCore(const CommandPoolDesc& desc) override;
+		virtual CommandList* CreateCommandListCore(const CommandListDesc& desc) override;
 
-        virtual void ResetFencesCore(Fence** ppFences, const Byte count) override;
-        void WaitFencesCore(Fence** ppFences, const Byte count) override;
-        void WaitDeviceIdleCore() override;
-        void WaitQueueDefaultCore(const GraphicsQueueType type) override;
-        void UpdateHostBufferCore(GraphicsBuffer* pBuffer, const GraphicsBufferHostUpdateDesc& desc) override;
-        void UpdateResourceTableCore(ResourceTable* pTable, const ResourceTableUpdateDesc& desc) override;
-        void SubmitCommandListsCore(CommandList** ppCmdLists, const Byte cmdListCount, const GraphicsQueueType type, const Fence* pFence) override;
+		virtual void UpdateDescriptorSetCore(DescriptorSet* pSet, const DescriptorSetUpdateDesc& desc) override;
+		virtual void CopyDescriptorSetCore(DescriptorSet* pSourceSet, DescriptorSet* pDestinationSet, const DescriptorSetCopyDesc& desc) override;
+		virtual void UpdateHostBufferCore(GraphicsBuffer* pTargetBuffer, const HostBufferUpdateDesc& desc) override;
+		virtual void SubmitCommandsCore(CommandList** ppCmdLists, const Byte cmdListCount, const GraphicsQueue* pTargetQueue, Semaphore** ppSignalSemaphores, const UInt32 signalSemaphoreCount, Semaphore** ppWaitSemaphores,const  PipelineStageFlags* pWaitStageFlags, const UInt32 waitSemaphoreCount, const Fence* pSignalFence) override;
+		virtual void ResetFencesCore(Fence** ppFences, const UInt32 count) override;
+		virtual void WaitFencesCore(Fence** ppFences, const UInt32 count) override;
+		virtual void WaitDeviceIdleCore() override;
+		virtual void WaitQueueIdleCore(GraphicsQueue* pQueue) override;
 	private:
-        DeviceQueueFamily mGraphicsQueueFamily;
-        DeviceQueueFamily mComputeQueueFamily;
-        DeviceQueueFamily mTransferQueueFamily;
-        VkDevice mLogicalDevice;
-        VkPhysicalDevice mPhysicalDevice;
-    };
+		VkDevice mLogicalDevice;
+        DeviceQueueFamily mGraphicsFamily;
+        DeviceQueueFamily mComputeFamily;
+        DeviceQueueFamily mTransferFamily;
+	};
 }

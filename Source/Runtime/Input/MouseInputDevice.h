@@ -28,11 +28,11 @@ namespace Portakal
 		}
 	protected:
 		void UpdateButtons(const Bool8* pButtons);
-		void UpdateWheel(const float wheel);
+		void UpdateWheel(const Float32 wheel);
 	private:
 		MouseEntry mButtons[256];
 		Bool8 mLastState[256];
-		float mWheelDelta;
+		Float32 mWheelDelta;
 
 	};
 }

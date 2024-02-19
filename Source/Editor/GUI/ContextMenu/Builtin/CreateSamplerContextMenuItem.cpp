@@ -41,12 +41,12 @@ namespace Portakal
 			mAddressModeU = ImGuiUtils::EnumBox<SamplerAddressMode>("AddressModeU", mAddressModeU);
 			mAddressModeV = ImGuiUtils::EnumBox<SamplerAddressMode>("AddressModeV", mAddressModeV);
 			mAddressModeW = ImGuiUtils::EnumBox<SamplerAddressMode>("AddressModeW", mAddressModeW);
-			mMipLodBias = ImGuiUtils::FloatField("MipLodBias", mMipLodBias);
-			mMaxAnisotropy = ImGuiUtils::FloatField("MaxAnisotropy", mMaxAnisotropy);
+			mMipLodBias = ImGuiUtils::Float32Field("MipLodBias", mMipLodBias);
+			mMaxAnisotropy = ImGuiUtils::Float32Field("MaxAnisotropy", mMaxAnisotropy);
 			mComparisonEnabled = ImGuiUtils::Checkbox("ComparisonEnabled", mComparisonEnabled);
 			mCompareOperation = ImGuiUtils::EnumBox<CompareOperation>("CompareOperation", mCompareOperation);
-			mMinLod = ImGuiUtils::FloatField("MinLod", mMinLod);
-			mMaxLod = ImGuiUtils::FloatField("MaxLod", mMaxLod);
+			mMinLod = ImGuiUtils::Float32Field("MinLod", mMinLod);
+			mMaxLod = ImGuiUtils::Float32Field("MaxLod", mMaxLod);
 			mBorderColor = ImGuiUtils::EnumBox<SamplerBorderColor>("BorderColor", mBorderColor);
 
 			if (ImGui::Button("Create"))

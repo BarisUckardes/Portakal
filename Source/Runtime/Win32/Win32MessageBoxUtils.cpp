@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    unsigned int Win32MessageBoxUtils::GetFlags(const MessageFlags flags)
+    UInt32 Win32MessageBoxUtils::GetFlags(const MessageFlags flags)
     {
         UInt32 result = (const UInt32)MessageFlags::None;
 

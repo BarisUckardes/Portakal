@@ -1,18 +1,15 @@
 #pragma once
 #include <Runtime/Graphics/Instance/GraphicsInstance.h>
-#include <Vulkan.h>
+#include <Runtime/Vulkan/Instance/VulkanInstanceDesc.h>
+#include <vulkan.h>
 
 namespace Portakal
 {
 	class RUNTIME_API VulkanInstance : public GraphicsInstance
 	{
 	public:
-	private:
-		static PFN_vkCmdBeginRenderingKHR vkCmdBeginRenderingKHR;
-		static PFN_vkCmdEndRenderingKHR vkCmdEndRenderingKHR;
-	public:
-		VulkanInstance(const GraphicsInstanceDesc& desc);
-		~VulkanInstance() = default;
+		VulkanInstance(const VulkanInstanceDesc* pDesc);
+		~VulkanInstance();
 
 		FORCEINLINE VkInstance GetVkInstance() const noexcept
 		{
@@ -20,12 +17,8 @@ namespace Portakal
 		}
 	private:
 		VkInstance mInstance;
-		Array<const Char*> mEnabledValidationLayers;
-#ifdef PORTAKAL_DEBUG
+#ifdef Portakal_DEBUG
 		VkDebugUtilsMessengerEXT mDebugMessenger;
 #endif
-
-		// Inherited via GraphicsInstance
-		virtual void OnShutdown() override;
 	};
 }

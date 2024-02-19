@@ -1,15 +1,13 @@
 #pragma once
 #include <Runtime/Graphics/Device/GraphicsDeviceObject.h>
 #include <Runtime/Graphics/Texture/TextureDesc.h>
-#include <Runtime/Graphics/Memory/GraphicsMemoryObject.h>
 
 namespace Portakal
 {
-	class RUNTIME_API Texture : public GraphicsMemoryObject
+	class RUNTIME_API Texture : public GraphicsDeviceObject
 	{
 	public:
-		Texture(const TextureDesc& desc,const Bool8 bSwapchain);
-		~Texture() = default;
+		~Texture();
 
 		FORCEINLINE TextureType GetTextureType() const noexcept
 		{
@@ -23,9 +21,17 @@ namespace Portakal
 		{
 			return mFormat;
 		}
-		FORCEINLINE Vector3US GetSize() const noexcept
+		FORCEINLINE UInt32 GetWidth() const noexcept
 		{
-			return mSize;
+			return mWidth;
+		}
+		FORCEINLINE UInt32 GetHeight() const noexcept
+		{
+			return mHeight;
+		}
+		FORCEINLINE UInt32 GetDepth() const noexcept
+		{
+			return mDepth;
 		}
 		FORCEINLINE Byte GetMipLevels() const noexcept
 		{
@@ -39,25 +45,27 @@ namespace Portakal
 		{
 			return mSampleCount;
 		}
-		FORCEINLINE Bool8 IsSwapchain() const noexcept
+		FORCEINLINE SharedHeap<GraphicsMemory> GetMemory() const noexcept
 		{
-			return mSwapchain;
+			return mMemory;
 		}
-
-		virtual GraphicsDeviceObjectType GetObjectType() const noexcept override final
+		virtual GraphicsDeviceObjectType GetObjectType() const noexcept
 		{
 			return GraphicsDeviceObjectType::Texture;
 		}
+	protected:
+		Texture(const TextureDesc& desc, GraphicsDevice* pDevice);
 
-		virtual void OnShutdown() override;
 	private:
 		const TextureType mType;
 		const TextureUsage mUsages;
 		const TextureFormat mFormat;
-		const Vector3US mSize;
+		const UInt32 mWidth;
+		const UInt32 mHeight;
+		const UInt32 mDepth;
 		const Byte mMipLevels;
 		const Byte mArrayLevels;
 		const TextureSampleCount mSampleCount;
-		const Bool8 mSwapchain;
+		SharedHeap<GraphicsMemory> mMemory;
 	};
 }

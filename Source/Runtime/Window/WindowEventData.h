@@ -21,7 +21,7 @@ namespace Portakal
 
 		MouseButtons MouseButton;
 		Vector2I MousePosition;
-		float MouseWheelDelta;
+		Float32 MouseWheelDelta;
 
 		KeyboardKeys KeyboardKey;
 		Char KeyboardChar;

@@ -1,18 +1,15 @@
 #include "Texture.h"
-#include <Runtime/Graphics/Texture/TextureUtils.h>
 
 namespace Portakal
 {
-	Texture::Texture(const TextureDesc& desc,const Bool8 bSwapchain) :
-		GraphicsMemoryObject(desc.pHeap),
-		mType(desc.Type),mUsages(desc.Usage),mFormat(desc.Format),
-		mSize(desc.Size),mMipLevels(desc.MipLevels),mArrayLevels(desc.ArrayLevels),
-		mSampleCount(desc.SampleCount),mSwapchain(bSwapchain)
+	Texture::~Texture()
 	{
-		//Allocate(desc.Size.X * desc.Size.Y * desc.Size.Z * TextureUtils::GetFormatSize(desc.Format));
 	}
-	void Texture::OnShutdown()
+	Texture::Texture(const TextureDesc& desc, GraphicsDevice* pDevice) : GraphicsDeviceObject(pDevice),
+		mType(desc.Type), mUsages(desc.Usages), mFormat(desc.Format),
+		mWidth(desc.Width),mHeight(desc.Height),mDepth(desc.Depth), mMipLevels(desc.MipLevels), mArrayLevels(desc.ArrayLevels),
+		mSampleCount(desc.SampleCount),mMemory(desc.pMemory)
 	{
-		GraphicsMemoryObject::OnShutdown();
+
 	}
 }

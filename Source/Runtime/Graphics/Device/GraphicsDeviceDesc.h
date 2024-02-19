@@ -1,13 +1,22 @@
 #pragma once
+#include <Runtime/Graphics/Device/GraphicsDeviceFeatures.h>
+#include <Runtime/Core/Core.h>
 #include <Runtime/Memory/SharedHeap.h>
-#include <Runtime/Graphics/Device/GraphicsBackend.h>
 
 namespace Portakal
 {
 	class GraphicsAdapter;
 	struct RUNTIME_API GraphicsDeviceDesc
 	{
-		GraphicsBackend Backend;
-		GraphicsAdapter* pAdapter;
+		GraphicsDeviceDesc() : GraphicsQueueCount(0),ComputeQueueCount(0),TransferQueueCount(0)
+		{
+
+		}
+
+		GraphicsAdapter* pOwnerAdapter;
+		GraphicsDeviceFeatures* pRequestedFeatures;
+		Byte GraphicsQueueCount;
+		Byte ComputeQueueCount;
+		Byte TransferQueueCount;
 	};
 }

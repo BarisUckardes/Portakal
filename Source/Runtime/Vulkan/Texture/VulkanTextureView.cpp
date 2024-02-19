@@ -1,13 +1,18 @@
 #include "VulkanTextureView.h"
-#include <RUntime/Vulkan/Device/VulkanDevice.h>
 #include <Runtime/Vulkan/Texture/VulkanTexture.h>
 #include <Runtime/Vulkan/Texture/VulkanTextureUtils.h>
+#include <Runtime/Vulkan/Device/VulkanDevice.h>
+
 namespace Portakal
 {
-    VulkanTextureView::VulkanTextureView(const TextureViewDesc& desc, VulkanDevice* pDevice) : TextureView(desc),mLogicalDevice(pDevice->GetVkLogicalDevice()),mSwapchain(false)
+    VulkanTextureView::VulkanTextureView(const TextureViewDesc& desc, const VkImageView view, VulkanDevice* pDevice) : TextureView(desc,pDevice),mView(view),mLogicalDevice(pDevice->GetVkLogicalDevice()),mSwapchain(true)
     {
+
+    }
+    VulkanTextureView::VulkanTextureView(const TextureViewDesc& desc, VulkanDevice* pDevice) : TextureView(desc,pDevice),mView(VK_NULL_HANDLE),mLogicalDevice(pDevice->GetVkLogicalDevice()),mSwapchain(false)
+	{
         //Get vulkan texture
-        const VulkanTexture* pTexture = (VulkanTexture*)desc.pTexture.GetHeap();
+        const VulkanTexture* pTexture = (VulkanTexture*)desc.pTexture;
         constexpr VkComponentMapping swizzleMap = {
             VK_COMPONENT_SWIZZLE_R,
             VK_COMPONENT_SWIZZLE_G,
@@ -21,7 +26,7 @@ namespace Portakal
         info.image = pTexture->GetVkImage();
         info.format = VulkanTextureUtils::GetTextureFormat(pTexture->GetFormat());
         info.viewType = VulkanTextureUtils::GetImageViewType(pTexture->GetTextureType());
-        info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        info.subresourceRange.aspectMask = VulkanTextureUtils::GetImageAspects(desc.AspectFlags);
         info.subresourceRange.baseArrayLayer = desc.ArrayLevel;
         info.subresourceRange.baseMipLevel = desc.MipLevel;
         info.subresourceRange.layerCount = desc.pTexture->GetArrayLevels();
@@ -31,12 +36,10 @@ namespace Portakal
         info.pNext = nullptr;
 
         DEV_ASSERT(vkCreateImageView(mLogicalDevice, &info, nullptr, &mView) == VK_SUCCESS, "VulkanTextureView", "Failed to create view");
-    }
-    VulkanTextureView::VulkanTextureView(const TextureViewDesc& desc, const VkImageView view, VulkanDevice* pDevice) : TextureView(desc),mLogicalDevice(VK_NULL_HANDLE),mSwapchain(true),mView(view)
-    {
-    }
-    void VulkanTextureView::OnShutdown()
-    {
-        vkDestroyImageView(mLogicalDevice, mView, nullptr);
-    }
+	}
+	VulkanTextureView::~VulkanTextureView()
+	{
+        if(!mSwapchain)
+            vkDestroyImageView(mLogicalDevice, mView, nullptr);
+	}
 }

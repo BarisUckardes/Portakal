@@ -154,7 +154,7 @@ namespace Portakal
 		}
 
 		Matrix4x4(T a11, T a21, T a31, T a41,
-				   T a12, float a22, T a32, T a42,
+				   T a12, Float32 a22, T a32, T a42,
 				   T a13, T a23, T a33, T a43,
 				   T a14, T a24, T a34, T a44)
 		{
@@ -224,7 +224,7 @@ namespace Portakal
 
 			Matrix4x4<T> output = {};
 #pragma unroll
-			for (unsigned int i = 0; i < 16; i++)
+			for (UInt32 i = 0; i < 16; i++)
 				output.mData[i] = snapShot[i];
 
 			return output;
@@ -359,5 +359,5 @@ namespace Portakal
 		return result;
 	}
 
-	typedef Matrix4x4<float> Matrix4x4F;
+	typedef Matrix4x4<Float32> Matrix4x4F;
 }

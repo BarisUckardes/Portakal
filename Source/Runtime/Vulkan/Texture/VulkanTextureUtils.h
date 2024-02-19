@@ -26,30 +26,32 @@ namespace Portakal
                 return VK_FORMAT_R8_UNORM;
             case TextureFormat::R16_UNorm:
                 return VK_FORMAT_R16_UNORM;
-            case TextureFormat::R32_G32_B32_Float:
-                return VK_FORMAT_R32G32B32_SFLOAT;
+            case TextureFormat::R32_G32_B32_Float32:
+                return VK_FORMAT_R32G32B32_SFloat32;
             case TextureFormat::R32_G32_B32_UInt:
                 return VK_FORMAT_R32G32B32_UINT;
             case TextureFormat::R32_G32_B32_SInt:
                 return VK_FORMAT_R32G32B32_SINT;
-            case TextureFormat::R32_G32_B32_A32_Float:
-                return VK_FORMAT_R32G32B32A32_SFLOAT;
-            case TextureFormat::R32_Float:
-                return VK_FORMAT_R32_SFLOAT;
+            case TextureFormat::R32_G32_B32_A32_Float32:
+                return VK_FORMAT_R32G32B32A32_SFloat32;
+            case TextureFormat::R32_Float32:
+                return VK_FORMAT_R32_SFloat32;
             case TextureFormat::BC3_UNorm:
                 return VK_FORMAT_BC3_UNORM_BLOCK;
+            case TextureFormat::D32_SFloat32:
+                return VK_FORMAT_D32_SFloat32;
             case TextureFormat::D24_UNorm_S8_UInt:
                 return VK_FORMAT_D24_UNORM_S8_UINT;
-            case TextureFormat::D32_Float_S8_UInt:
-                return VK_FORMAT_D32_SFLOAT_S8_UINT;
+            case TextureFormat::D32_Float32_S8_UInt:
+                return VK_FORMAT_D32_SFloat32_S8_UINT;
             case TextureFormat::R32_G32_B32_A32_UInt:
                 return VK_FORMAT_R32G32B32A32_UINT;
             case TextureFormat::R16G16B16_UInt:
                 return VK_FORMAT_R16G16B16_UINT;
             case TextureFormat::R16G16B16_SInt:
                 return VK_FORMAT_R16G16B16_SINT;
-            case TextureFormat::R16G16B16_Float:
-                return VK_FORMAT_R16G16B16_SFLOAT;
+            case TextureFormat::R16G16B16_Float32:
+                return VK_FORMAT_R16G16B16_SFloat32;
             case TextureFormat::R8_G8_SNorm:
                 return VK_FORMAT_R8G8_SNORM;
             case TextureFormat::BC1_Rgb_UNorm:
@@ -62,8 +64,8 @@ namespace Portakal
                 return VK_FORMAT_A2B10G10R10_UNORM_PACK32;
             case TextureFormat::R10_G10_B10_A2_UInt:
                 return VK_FORMAT_A2B10G10R10_UINT_PACK32;
-            case TextureFormat::R11_G11_B10_Float:
-                return VK_FORMAT_B10G11R11_UFLOAT_PACK32;
+            case TextureFormat::R11_G11_B10_Float32:
+                return VK_FORMAT_B10G11R11_UFloat32_PACK32;
             case TextureFormat::R8_SNorm:
                 return VK_FORMAT_R8_SNORM;
             case TextureFormat::R8_UInt:
@@ -76,8 +78,8 @@ namespace Portakal
                 return VK_FORMAT_R16_UINT;
             case TextureFormat::R16_SInt:
                 return VK_FORMAT_R16_SINT;
-            case TextureFormat::R16_Float:
-                return VK_FORMAT_R16_SFLOAT;
+            case TextureFormat::R16_Float32:
+                return VK_FORMAT_R16_SFloat32;
             case TextureFormat::R32_UInt:
                 return VK_FORMAT_R32_UINT;
             case TextureFormat::R32_SInt:
@@ -96,14 +98,14 @@ namespace Portakal
                 return VK_FORMAT_R16G16_UINT;
             case TextureFormat::R16_G16_SInt:
                 return VK_FORMAT_R16G16_SINT;
-            case TextureFormat::R16_G16_Float:
-                return VK_FORMAT_R16G16_SFLOAT;
+            case TextureFormat::R16_G16_Float32:
+                return VK_FORMAT_R16G16_SFloat32;
             case TextureFormat::R32_G32_UInt:
                 return VK_FORMAT_R32G32_UINT;
             case TextureFormat::R32_G32_SInt:
                 return VK_FORMAT_R32G32_SINT;
-            case TextureFormat::R32_G32_Float:
-                return VK_FORMAT_R32G32_SFLOAT;
+            case TextureFormat::R32_G32_Float32:
+                return VK_FORMAT_R32G32_SFloat32;
             case TextureFormat::R8_G8_B8_A8_SNorm:
                 return VK_FORMAT_R8G8B8A8_SNORM;
             case TextureFormat::R8_G8_B8_A8_UInt:
@@ -118,34 +120,34 @@ namespace Portakal
                 return VK_FORMAT_R16G16B16A16_UINT;
             case TextureFormat::R16_G16_B16_A16_SInt:
                 return VK_FORMAT_R16G16B16A16_SINT;
-            case TextureFormat::R16_G16_B16_A16_Float:
-                return VK_FORMAT_R16G16B16A16_SFLOAT;
+            case TextureFormat::R16_G16_B16_A16_Float32:
+                return VK_FORMAT_R16G16B16A16_SFloat32;
             case TextureFormat::R32_G32_B32_A32_SInt:
                 return VK_FORMAT_R32G32B32A32_SINT;
             case TextureFormat::R64_UInt:
                 return VK_FORMAT_R64_UINT;
             case TextureFormat::R64_SInt:
                 return VK_FORMAT_R64_SINT;
-            case TextureFormat::R64_Float:
-                return VK_FORMAT_R64_SFLOAT;
+            case TextureFormat::R64_Float32:
+                return VK_FORMAT_R64_SFloat32;
             case TextureFormat::R64_G64_UInt:
                 return VK_FORMAT_R64_UINT;
             case TextureFormat::R64_G64_SInt:
                 return VK_FORMAT_R64_UINT;
-            case TextureFormat::R64_G64_Float:
-                return VK_FORMAT_R64_SFLOAT;
+            case TextureFormat::R64_G64_Float32:
+                return VK_FORMAT_R64_SFloat32;
             case TextureFormat::R64_G64_B64_UInt:
                 return VK_FORMAT_R64G64B64_UINT;
             case TextureFormat::R64_G64_B64_SInt:
                 return VK_FORMAT_R64G64B64_SINT;
-            case TextureFormat::R64_G64_B64_Float:
-                return VK_FORMAT_R64G64B64_SFLOAT;
+            case TextureFormat::R64_G64_B64_Float32:
+                return VK_FORMAT_R64G64B64_SFloat32;
             case TextureFormat::R64_G64_B64_A64_UInt:
                 return VK_FORMAT_R64G64B64A64_UINT;
             case TextureFormat::R64_G64_B64_A64_SInt:
                 return VK_FORMAT_R64G64B64A64_SINT;
-            case TextureFormat::R64_G64_B64_A64_Float:
-                return VK_FORMAT_R64G64B64A64_SFLOAT;
+            case TextureFormat::R64_G64_B64_A64_Float32:
+                return VK_FORMAT_R64G64B64A64_SFloat32;
             case TextureFormat::ETC2_R8_G8_B8_UNorm:
                 return VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK;
             case TextureFormat::ETC2_R8_G8_B8_A1_UNorm:
@@ -260,6 +262,8 @@ namespace Portakal
             {
             case TextureMemoryLayout::Unknown:
                 return VK_IMAGE_LAYOUT_UNDEFINED;
+            case TextureMemoryLayout::General:
+                return VK_IMAGE_LAYOUT_GENERAL;
             case TextureMemoryLayout::ColorAttachment:
                 return VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
             case TextureMemoryLayout::DepthStencilAttachment:
@@ -270,10 +274,8 @@ namespace Portakal
                 return VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
             case TextureMemoryLayout::TransferDestination:
                 return VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
-            case TextureMemoryLayout::DepthReadOnly:
-                return VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL;
-            case TextureMemoryLayout::StencilReadOnly:
-                return VK_IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL;
+            case TextureMemoryLayout::DepthAttachment:
+                return VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
             case TextureMemoryLayout::Present:
                 return VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
             default:
@@ -283,7 +285,7 @@ namespace Portakal
         FORCEINLINE static VkImageAspectFlags GetImageAspects(const TextureAspectFlags aspects) noexcept
         {
             VkImageAspectFlags flags = VkImageAspectFlags();
-
+            
             if (aspects & TextureAspectFlags::Color)
                 flags |= VK_IMAGE_ASPECT_COLOR_BIT;
             if (aspects & TextureAspectFlags::Depth)

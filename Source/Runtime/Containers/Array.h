@@ -52,7 +52,7 @@ namespace Portakal
 			mCapacity = 0;
 		}
 
-		Array(unsigned int size)
+		Array(UInt32 size)
 		{
 			mData = new T[size];
 			mSize = size;
@@ -65,7 +65,7 @@ namespace Portakal
 			mSize = initList.size();
 			mCapacity = initList.size();
 
-			unsigned int index = 0;
+			UInt32 index = 0;
 			for (const T& value : initList)
 			{
 				mData[index] = value;
@@ -79,7 +79,7 @@ namespace Portakal
 			mSize = other.GetSize();
 			mCapacity = other.GetCapacity();
 
-			for (unsigned int i = 0; i < mSize; i++)
+			for (UInt32 i = 0; i < mSize; i++)
 			{
 				mData[i] = other[i];
 			}
@@ -93,7 +93,7 @@ namespace Portakal
 				mSize = other.GetSize();
 				mCapacity = other.GetCapacity();
 
-				for (unsigned int i = 0; i < mSize; i++)
+				for (UInt32 i = 0; i < mSize; i++)
 				{
 					mData[i] = other.mData[i];
 				}
@@ -112,7 +112,7 @@ namespace Portakal
 		Bool8 Has(const T& element) const
 		{
 
-			for (unsigned int i = 0; i < mSize; i++)
+			for (UInt32 i = 0; i < mSize; i++)
 			{
 				if (mData[i] == element) // Has
 					return true;
@@ -144,7 +144,7 @@ namespace Portakal
 			if (mSize == mCapacity)
 				_Resize(mCapacity * 2);
 
-			for (unsigned int i = mSize; i > index; i--)
+			for (UInt32 i = mSize; i > index; i--)
 			{
 				mData[i] = mData[i - 1];
 			}
@@ -164,7 +164,7 @@ namespace Portakal
 			if (mSize == mCapacity)
 				_Resize(mCapacity * 2);
 
-			for (unsigned int i = mSize; i > index; i--)
+			for (UInt32 i = mSize; i > index; i--)
 			{
 				mData[i] = mData[i - 1];
 			}
@@ -177,7 +177,7 @@ namespace Portakal
 		{
 			int index = -1;
 
-			for (unsigned int i = 0; i < mSize; i++)
+			for (UInt32 i = 0; i < mSize; i++)
 			{
 				if (mData[i] == element)
 				{
@@ -196,7 +196,7 @@ namespace Portakal
 			if (index == -1)
 				return false;
 
-			for (unsigned int i = index + 1; i < mSize; i++)
+			for (UInt32 i = index + 1; i < mSize; i++)
 			{
 				mData[i - 1] = mData[i];
 			}
@@ -221,7 +221,7 @@ namespace Portakal
 			if (mSize == 0)
 				return;
 
-			for (unsigned int i = 0; i < mSize - 1; i++)
+			for (UInt32 i = 0; i < mSize - 1; i++)
 			{
 				mData[i] = mData[i + 1];
 			}
@@ -231,12 +231,12 @@ namespace Portakal
 				_Reset();
 		}
 
-		void RemoveAt(unsigned int index)
+		void RemoveAt(UInt32 index)
 		{
 			if (index >= mSize)
 				return;
 
-			for (unsigned int i = index; i < mSize-1; i++)
+			for (UInt32 i = index; i < mSize-1; i++)
 			{
 				mData[i] = mData[i + 1];
 			}
@@ -258,7 +258,7 @@ namespace Portakal
 			mCapacity = 0;
 		}
 
-		void Reserve(unsigned int capacity)
+		void Reserve(UInt32 capacity)
 		{
 			if (capacity <= mCapacity)
 				return;
@@ -266,7 +266,7 @@ namespace Portakal
 			_Resize(capacity);
 		}
 
-		void Resize(unsigned int size)
+		void Resize(UInt32 size)
 		{
 			if (size == mSize)
 				return;
@@ -280,7 +280,7 @@ namespace Portakal
 			if (size > mCapacity)
 				_Resize(size);
 
-			for (unsigned int i = mSize; i < size; i++)
+			for (UInt32 i = mSize; i < size; i++)
 			{
 				mData[i] = T();
 			}
@@ -296,8 +296,8 @@ namespace Portakal
 		NODISCARD T& GetFirst() const { return mData[0]; }
 		NODISCARD T& operator*() const { return mData; }
 
-		NODISCARD unsigned int GetSize() const { return mSize; }
-		NODISCARD unsigned int GetCapacity() const { return mCapacity; }
+		NODISCARD UInt32 GetSize() const { return mSize; }
+		NODISCARD UInt32 GetCapacity() const { return mCapacity; }
 
 		NODISCARD Bool8 IsEmpty() const { return mSize == 0; }
 
@@ -308,7 +308,7 @@ namespace Portakal
 			if (mSize != other.GetSize())
 				return false;
 
-			for (unsigned int i = 0; i < mSize; i++)
+			for (UInt32 i = 0; i < mSize; i++)
 			{
 				if (mData[i] != other.mData[i])
 					return false;
@@ -322,7 +322,7 @@ namespace Portakal
 			if (mSize != other.GetSize())
 				return true;
 
-			for (unsigned int i = 0; i < mSize; i++)
+			for (UInt32 i = 0; i < mSize; i++)
 			{
 				if (mData[i] != other.mData[i])
 					return true;
@@ -336,11 +336,11 @@ namespace Portakal
 		Iterator<T> end() const { return Iterator<T>(mData + mSize); }
 
 	private:
-		void _Resize(unsigned int newSize)
+		void _Resize(UInt32 newSize)
 		{
 			T* newData = new T[newSize];
 
-			for (unsigned int i = 0; i < mSize; i++)
+			for (UInt32 i = 0; i < mSize; i++)
 			{
 				newData[i] = mData[i];
 			}
@@ -361,8 +361,8 @@ namespace Portakal
 		}
 
 		T* mData;
-		unsigned int mSize;
-		unsigned int mCapacity;
+		UInt32 mSize;
+		UInt32 mCapacity;
 	};
 }
 

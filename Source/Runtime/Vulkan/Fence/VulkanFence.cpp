@@ -3,17 +3,17 @@
 
 namespace Portakal
 {
-    VulkanFence::VulkanFence(VulkanDevice* pDevice,const bool bSignalled) : mLogicalDevice(pDevice->GetVkLogicalDevice()),mFence(VK_NULL_HANDLE)
-    {
-        VkFenceCreateInfo createInfo = {};
-        createInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-        createInfo.pNext = nullptr;
-        createInfo.flags = bSignalled ? VK_FENCE_CREATE_SIGNALED_BIT : VkFenceCreateFlags();
+	VulkanFence::VulkanFence(const FenceDesc& desc, VulkanDevice* pDevice) : Fence(desc,pDevice),mLogicalDevice(pDevice->GetVkLogicalDevice())
+	{
+		VkFenceCreateInfo info = {};
+		info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+		info.flags = desc.bSignalled ? VK_FENCE_CREATE_SIGNALED_BIT : VkFenceCreateFlags();
+		info.pNext = nullptr;
 
-        DEV_ASSERT(vkCreateFence(pDevice->GetVkLogicalDevice(), &createInfo, nullptr, &mFence) == VK_SUCCESS, "VulkanFence", "Failed to create fence");
-    }
-    void VulkanFence::OnShutdown()
-    {
-        vkDestroyFence(mLogicalDevice, mFence, nullptr);
-    }
+		DEV_ASSERT(vkCreateFence(mLogicalDevice, &info, nullptr, &mFence) == VK_SUCCESS, "VulkanFence", "Failed to create fence");
+	}
+	VulkanFence::~VulkanFence()
+	{
+		vkDestroyFence(mLogicalDevice, mFence, nullptr);
+	}
 }

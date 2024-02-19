@@ -7,65 +7,66 @@ namespace Portakal
     {
         None,
         /**
-         * @brief RGBA component order. Each component is an 8-bit normalized unsigned integer.
+         * @brief RGBA component order. Each component is an 8-bit normalized UInt32eger.
          */
         R8_G8_B8_A8_UNorm,
         /**
-         * @brief BGRA component order. Each component is an 8-bit normalized unsigned integer.
+         * @brief BGRA component order. Each component is an 8-bit normalized UInt32eger.
          */
         B8_G8_R8_A8_UNorm,
         /**
-         * @brief Single-channel, 8-bit normalized unsigned integer.
+         * @brief Single-channel, 8-bit normalized UInt32eger.
          */
         R8_UNorm,
         /**
-         * @brief Single-channel, 16-bit normalized unsigned integer. Can be used as a depth format.
+         * @brief Single-channel, 16-bit normalized UInt32eger. Can be used as a depth format.
          */
         R16_UNorm,
         /**
-         *  @brief RGBA component order. Each component is a 32-bit signed floating-point value.
+         *  @brief RGBA component order. Each component is a 32-bit signed Float32ing-point value.
          */
-        R32_G32_B32_A32_Float,
+        R32_G32_B32_A32_Float32,
         /**
-         * @brief Single-channel, 32-bit signed floating-point value. Can be used as a depth format.
+         * @brief Single-channel, 32-bit signed Float32ing-point value. Can be used as a depth format.
          */
-        R32_Float,
+        R32_Float32,
         /**
          * @brief BC3 block compressed format.
          */
         BC3_UNorm,
         /**
-         * @brief A depth-stencil format where the depth is stored in a 24-bit normalized unsigned integer,
-         * and the stencil is stored in an 8-bit unsigned integer.
+         * @brief A depth-stencil format where the depth is stored in a 24-bit normalized UInt32eger,
+         * and the stencil is stored in an 8-bit UInt32eger.
          */
         D24_UNorm_S8_UInt,
+        D32_SFloat32,
         /**
-         * @brief A depth-stencil format where the depth is stored in a 32-bit signed floating-point value,
-         * and the stencil is stored in an 8-bit unsigned integer.
+         * @brief A depth-stencil format where the depth is stored in a 32-bit signed Float32ing-point value,
+         * and the stencil is stored in an 8-bit UInt32eger.
          */
-        D32_Float_S8_UInt,
+        D32_Float32_S8_UInt,
         /**
-         * @brief RGBA component order. Each component is a 32-bit unsigned integer.
+         * @brief RGBA component order. Each component is a 32-bit UInt32eger.
          */
         R32_G32_B32_A32_UInt,
-        R32_G32_B32_Float,
+        R32_G32_B32_Float32,
         R32_G32_B32_UInt,
         R32_G32_B32_SInt,
         R16G16B16_UInt,
         R16G16B16_SInt,
-        R16G16B16_Float,
+        R16G16B16_Float32,
         R64_UInt,
         R64_SInt,
-        R64_Float,
+        R64_Float32,
         R64_G64_UInt,
         R64_G64_SInt,
-        R64_G64_Float,
+        R64_G64_Float32,
         R64_G64_B64_UInt,
         R64_G64_B64_SInt,
-        R64_G64_B64_Float,
+        R64_G64_B64_Float32,
         R64_G64_B64_A64_UInt,
         R64_G64_B64_A64_SInt,
-        R64_G64_B64_A64_Float,
+        R64_G64_B64_A64_Float32,
         /**
          * @brief RG component order. Each component is an 8-bit normalized integer.
          */
@@ -91,21 +92,21 @@ namespace Portakal
         /**
          * @brief A 32-bit packed format. The 10-bit R component occupies bits 0..9, the 10-bit
          * G component occupies bits 10..19, the 10-bit A component occupies 20..29, and the
-         * 2-bit A component occupies bits 30..31. Each value is an unsigned integer.
+         * 2-bit A component occupies bits 30..31. Each value is an UInt32eger.
          */
         R10_G10_B10_A2_UInt,
         /**
          * @brief A 32-bit packed format. The 11-bit R component occupies bits 0..10, the 11-bit
          * G component occupies bits 11..21, and the 10-bit B component occupies bits 22..31.
-         * Each value is an unsigned floating point value.
+         * Each value is an unsigned Float32ing point value.
          */
-        R11_G11_B10_Float,
+        R11_G11_B10_Float32,
         /**
          * @brief Single-channel, 8-bit signed normalized integer.
          */
         R8_SNorm,
         /**
-         * @brief Single-channel, 8-bit unsigned integer.
+         * @brief Single-channel, 8-bit UInt32eger.
          */
         R8_UInt,
         /**
@@ -117,7 +118,7 @@ namespace Portakal
          */
         R16_SNorm,
         /**
-         * @brief Single-channel, 16-bit unsigned integer.
+         * @brief Single-channel, 16-bit UInt32eger.
          */
         R16_UInt,
         /**
@@ -125,11 +126,11 @@ namespace Portakal
          */
         R16_SInt,
         /**
-         * @brief Single-channel, 16-bit signed floating-point value.
+         * @brief Single-channel, 16-bit signed Float32ing-point value.
          */
-        R16_Float,
+        R16_Float32,
         /**
-         * @brief Single-channel, 32-bit unsigned integer
+         * @brief Single-channel, 32-bit UInt32eger
          */
         R32_UInt,
         /**
@@ -137,11 +138,11 @@ namespace Portakal
          */
         R32_SInt,
         /**
-         * @brief RG component order. Each component is an 8-bit normalized unsigned integer.
+         * @brief RG component order. Each component is an 8-bit normalized UInt32eger.
          */
         R8_G8_UNorm,
         /**
-         * @brief RG component order. Each component is an 8-bit unsigned integer.
+         * @brief RG component order. Each component is an 8-bit UInt32eger.
          */
         R8_G8_UInt,
         /**
@@ -149,7 +150,7 @@ namespace Portakal
          */
         R8_G8_SInt,
         /**
-         * @brief RG component order. Each component is a 16-bit normalized unsigned integer.
+         * @brief RG component order. Each component is a 16-bit normalized UInt32eger.
          */
         R16_G16_UNorm,
         /**
@@ -157,7 +158,7 @@ namespace Portakal
          */
         R16_G16_SNorm,
         /**
-         * @brief RG component order. Each component is a 16-bit unsigned integer.
+         * @brief RG component order. Each component is a 16-bit UInt32eger.
          */
         R16_G16_UInt,
         /**
@@ -165,11 +166,11 @@ namespace Portakal
          */
         R16_G16_SInt,
         /**
-         * @brief RG component order. Each component is a 16-bit signed floating-point value.
+         * @brief RG component order. Each component is a 16-bit signed Float32ing-point value.
          */
-        R16_G16_Float,
+        R16_G16_Float32,
         /**
-         * @brief RG component order. Each component is a 32-bit unsigned integer.
+         * @brief RG component order. Each component is a 32-bit UInt32eger.
          */
         R32_G32_UInt,
         /**
@@ -177,15 +178,15 @@ namespace Portakal
          */
         R32_G32_SInt,
         /**
-         * @brief RG component order. Each component is a 32-bit signed floating-point value.
+         * @brief RG component order. Each component is a 32-bit signed Float32ing-point value.
          */
-        R32_G32_Float,
+        R32_G32_Float32,
         /**
          * @brief RGBA component order. Each component is an 8-bit normalized integer.
          */
         R8_G8_B8_A8_SNorm,
         /**
-         * @brief RGBA component order. Each component is an 8-bit unsigned integer.
+         * @brief RGBA component order. Each component is an 8-bit UInt32eger.
          */
         R8_G8_B8_A8_UInt,
         /**
@@ -193,7 +194,7 @@ namespace Portakal
          */
         R8_G8_B8_A8_SInt,
         /**
-         * @brief RGBA component order. Each component is a 16-bit normalized unsigned integer.
+         * @brief RGBA component order. Each component is a 16-bit normalized UInt32eger.
          */
         R16_G16_B16_A16_UNorm,
         /**
@@ -201,7 +202,7 @@ namespace Portakal
          */
         R16_G16_B16_A16_SNorm,
         /**
-         * @brief RGBA component order. Each component is a 16-bit unsigned integer.
+         * @brief RGBA component order. Each component is a 16-bit UInt32eger.
          */
         R16_G16_B16_A16_UInt,
         /**
@@ -209,9 +210,9 @@ namespace Portakal
          */
         R16_G16_B16_A16_SInt,
         /**
-         * @brief RGBA component order. Each component is a 16-bit floating-point value.
+         * @brief RGBA component order. Each component is a 16-bit Float32ing-point value.
          */
-        R16_G16_B16_A16_Float,
+        R16_G16_B16_A16_Float32,
         /**
          * @brief RGBA component order. Each component is a 32-bit signed integer.
          */
@@ -252,12 +253,12 @@ namespace Portakal
         BC7_UNorm,
         /**
          * @brief RGBA component order. Each component is an 8-bit normalized
-         * unsigned integer. This is an sRGB format.
+         * UInt32eger. This is an sRGB format.
          */
         R8_G8_B8_A8_UNorm_SRgb,
         /**
          * @brief BGRA component order. Each component is an 8-bit normalized
-         * unsigned integer. This is an sRGB format.
+         * UInt32eger. This is an sRGB format.
          */
         B8_G8_R8_A8_UNorm_SRgb,
         /**

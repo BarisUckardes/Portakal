@@ -66,9 +66,9 @@ namespace Portakal
 				emitter << YAML::Value << *pValue;
 				break;
 			}
-			case TypeCodes::Float:
+			case TypeCodes::Float32:
 			{
-				float* pValue = (float*)pObject;
+				Float32* pValue = (Float32*)pObject;
 				emitter << YAML::Value << *pValue;
 				break;
 			}
@@ -220,7 +220,7 @@ namespace Portakal
 		}
 		case TypeCodes::UInt32:
 		{
-			const UInt32 nodeValue = node.as<unsigned int>();
+			const UInt32 nodeValue = node.as<UInt32>();
 			*(UInt32*)pObject = nodeValue;
 			break;
 		}
@@ -236,10 +236,10 @@ namespace Portakal
 			*(UInt16*)pObject = nodeValue;
 			break;
 		}
-		case TypeCodes::Float:
+		case TypeCodes::Float32:
 		{
-			const float nodeValue = node.as<float>();
-			*(float*)pObject = nodeValue;
+			const Float32 nodeValue = node.as<Float32>();
+			*(Float32*)pObject = nodeValue;
 			break;
 		}
 		case TypeCodes::Double:
@@ -256,7 +256,7 @@ namespace Portakal
 		}
 		case TypeCodes::UInt64:
 		{
-			const UInt64 nodeValue = node.as<unsigned long long>();
+			const UInt64 nodeValue = node.as<UInt64>();
 			*(UInt64*)pObject = nodeValue;
 			break;
 		}

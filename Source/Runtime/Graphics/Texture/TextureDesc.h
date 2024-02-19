@@ -1,24 +1,25 @@
 #pragma once
-#include <Runtime/Core/Core.h>
-#include <Runtime/Math/Vector3.h>
+#include <Runtime/Graphics/Texture/TextureFormat.h>
 #include <Runtime/Graphics/Texture/TextureSampleCount.h>
 #include <Runtime/Graphics/Texture/TextureType.h>
-#include <Runtime/Graphics/Texture/TextureFormat.h>
 #include <Runtime/Graphics/Texture/TextureUsage.h>
+#include <Runtime/Graphics/Memory/GraphicsMemory.h>
 #include <Runtime/Memory/SharedHeap.h>
-#include <Runtime/Graphics/Memory/GraphicsMemoryHeap.h>
 
 namespace Portakal
 {
+
 	struct RUNTIME_API TextureDesc
 	{
 		TextureType Type;
-		TextureUsage Usage;
+		TextureUsage Usages;
 		TextureFormat Format;
-		Vector3US Size;
-		Byte MipLevels;
+		UInt32 Width;
+		UInt32 Height;
+		UInt32 Depth;
 		Byte ArrayLevels;
+		Byte MipLevels;
 		TextureSampleCount SampleCount;
-		SharedHeap<GraphicsMemoryHeap> pHeap;
+		SharedHeap<GraphicsMemory> pMemory;
 	};
 }

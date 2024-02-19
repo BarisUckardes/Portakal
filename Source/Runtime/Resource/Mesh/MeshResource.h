@@ -5,6 +5,7 @@
 #include <Runtime/Graphics/Fence/Fence.h>
 #include <Runtime/Graphics/Buffer/GraphicsBuffer.h>
 #include "MeshResource.reflected.h"
+#include <Runtime/Memory/MemoryView.h>
 
 namespace Portakal
 {
@@ -64,7 +65,7 @@ namespace Portakal
 			return mSubMeshes[subMeshIndex].pIndexBuffer;
 		}
 	public:
-		void SetMemoryProfile(const SharedHeap<GraphicsMemoryHeap>& pHeapDevice, const SharedHeap<GraphicsMemoryHeap>& pHeapHost,bool bAllocateStagebuffersUpfront = true);
+		void SetMemoryProfile(const SharedHeap<GraphicsMemory>& pHeapDevice, const SharedHeap<GraphicsMemory>& pHeapHost,bool bAllocateStagebuffersUpfront = true);
 		void AllocateSubMesh(const UInt32 vertexCount,const UInt32 perVertexSize,const UInt32 indexCount,const UInt32 perIndexSize);
 		void UpdateSubMeshVertexes(const UInt32 subMeshIndex,const MemoryView memory,const UInt32 offset);
 		void UpdateSubMeshIndexes(const UInt32 subMeshIndex,const MemoryView memory,const UInt32 offset);
@@ -80,8 +81,8 @@ namespace Portakal
 		SharedHeap<CommandList> mCmdList;
 		SharedHeap<Fence> mFence;
 		Array<SubMeshResource> mSubMeshes;
-		SharedHeap<GraphicsMemoryHeap> mHeapDevice;
-		SharedHeap<GraphicsMemoryHeap> mHeapHost;
+		SharedHeap<GraphicsMemory> mHeapDevice;
+		SharedHeap<GraphicsMemory> mHeapHost;
 		UInt64 mTotalVertexCount;
 		UInt64 mTotalIndexCount;
 		bool mAllocateStagebuffersUpfront;

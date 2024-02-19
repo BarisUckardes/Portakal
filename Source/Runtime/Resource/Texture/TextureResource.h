@@ -6,6 +6,8 @@
 #include <Runtime/Memory/SharedHeap.h>
 #include <Runtime/Resource/ResourceAttribute.h>
 #include "TextureResource.reflected.h"
+#include <Runtime/Memory/MemoryView.h>
+#include <Runtime/Math/Vector3.h>
 
 namespace Portakal
 {
@@ -42,7 +44,7 @@ namespace Portakal
 		}
 
 		void Wrap(const SharedHeap<Texture>& pTexture);
-		void SetMemoryProfile(const SharedHeap<GraphicsMemoryHeap>& pHeapDevice, const SharedHeap<GraphicsMemoryHeap>& pHeapHost);
+		void SetMemoryProfile(const SharedHeap<GraphicsMemory>& pHeapDevice, const SharedHeap<GraphicsMemory>& pHeapHost);
 		void AllocateTexture(const TextureDesc& desc, const Bool8 bAllocateStagebuffersUpfront = false,const Bool8 bCreateViewsUpfront = false);
 		SharedHeap<TextureView> CreateView(const Byte mipLevel, const Byte arrayLevel);
 		SharedHeap<TextureView> GetView(const Byte mipLevel, const Byte arrayLevel);
@@ -58,8 +60,8 @@ namespace Portakal
 		SharedHeap<CommandList> mCmdList;
 		SharedHeap<CommandPool> mCmdPool;
 		SharedHeap<Fence> mFence;
-		SharedHeap<GraphicsMemoryHeap> mHeapDevice;
-		SharedHeap<GraphicsMemoryHeap> mHeapHost;
+		SharedHeap<GraphicsMemory> mHeapDevice;
+		SharedHeap<GraphicsMemory> mHeapHost;
 		TextureDesc mDesc;
 		bool mWrapped;
 	};

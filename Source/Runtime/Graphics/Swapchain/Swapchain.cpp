@@ -3,133 +3,78 @@
 
 namespace Portakal
 {
-    Swapchain::Swapchain(const SwapchainDesc& desc) : mColorFormat(desc.ColorFormat),mDepthStencilFormat(desc.DepthStencilFormat),mBufferCount(desc.BufferCount),mWindow(desc.pWindow),mPresentMode(desc.PresentMode), mSize(desc.pWindow->GetSize()), mIndex(0)
-    {
-        //Create internal resources
-        CreateInternalResources(desc.pDevice.GetHeap());
-    }
-    void Swapchain::Resize(const UInt16 width, const UInt16 height)
-    {
-        //Wait for all fences to be idle
-        GetOwnerDevice()->WaitDeviceIdle();
+	Swapchain::~Swapchain()
+	{
+		ClearTextures();
+	}
+	void Swapchain::Resize(const UInt32 width, const UInt32 height)
+	{
+		//Wait device idle
+		GetDevice()->WaitDeviceIdle();
 
-        //First free former textures
-        FreeTextures();
+		//Clear the textures
+		ClearTextures();
 
-        //Call implementation
-        ResizeCore(width, height);
-    }
-    Bool8 Swapchain::Present()
-    {
-        //First wait for the target fence
-        GetOwnerDevice()->WaitFences(mPresentFences[mIndex].GetHeapAddress(), 1);
-        GetOwnerDevice()->ResetFences(mPresentFences[mIndex].GetHeapAddress(), 1);
+		//Resize
+		ResizeCore(width, height);
 
-        //Present
-        const Bool8 bState = PresentCore();
+		mWidth = width;
+		mHeight = height;
+	}
+	void Swapchain::Present(Semaphore** ppWaitSemahpores, const UInt32 waitSemaphoreCount)
+	{
+		//First wait for target fence
+		GetDevice()->WaitFences(mPresentFences[mImageIndex].GetHeapAddress(), 1);
+		GetDevice()->ResetFences(mPresentFences[mImageIndex].GetHeapAddress(),1);
 
-        //Increment the internal index
-        IncrementIndex();
+		//Present
+		PresentCore(ppWaitSemahpores,waitSemaphoreCount);
 
-        return bState;
-    }
-    void Swapchain::WaitForPresent(const Byte index)
-    {
-        GetOwnerDevice()->WaitFences(mPresentFences[index].GetHeapAddress(), 1);
-    }
-    void Swapchain::TransitionToPresent()
-    {
-        mCmdList->BeginRecording();
-        for (Byte i = 0; i < mBufferCount; i++)
-        {
-            CommandListTextureMemoryBarrierDesc barrierDesc = {};
-            barrierDesc.MipIndex = 0;
-            barrierDesc.ArrayIndex = 0;
-            barrierDesc.AspectFlags = TextureAspectFlags::Color;
+		//Increment index
+		mImageIndex = (mImageIndex + 1) % mBufferCount;
+	}
+	void Swapchain::WaitForPresent(const Byte index)
+	{
+		GetDevice()->WaitFences(mPresentFences[index].GetHeapAddress(), 1);
+	}
+	
+	Swapchain::Swapchain(const SwapchainDesc& desc, GraphicsDevice* pDevice) :
+		GraphicsDeviceObject(pDevice),mMode(desc.Mode),mBufferCount(desc.BufferCount),mColorBufferFormat(desc.ColorFormat),mDepthStencilBufferFormat(desc.DepthStencilFormat),mWindow(desc.pWindow),
+		mImageIndex(0),mQueue(desc.pQueue)
+	{
+		mWidth = mWindow->GetSize().X;
+		mHeight = mWindow->GetSize().Y;
 
-            barrierDesc.SourceLayout = TextureMemoryLayout::Unknown;
-            barrierDesc.SourceQueue = GraphicsQueueType::Graphics;
-            barrierDesc.SourceAccessFlags = GraphicsMemoryAccessFlags::Unknown;
-            barrierDesc.SourceStageFlags = PipelineStageFlags::TopOfPipe;
+		for (Byte i = 0; i < desc.BufferCount; i++)
+			mPresentFences.Add(pDevice->CreateFence({ true }));
+	}
+	void Swapchain::SetCustomSize(const UInt32 width, const UInt32 height)
+	{
+		mWidth = width;
+		mHeight = height;
+	}
+	void Swapchain::ClearTextures()
+	{
+		for (Byte i = 0; i < mColorTextures.GetSize(); i++)
+		{
+			mColorTextureViews[i].Shutdown();
+			mColorTextures[i].Shutdown();
+		}
+		mColorTextureViews.Clear();
+		mColorTextures.Clear();
+	}
+	void Swapchain::SetCustomSwapchainTextures(const Array<SharedHeap<Texture>>& textures)
+	{
+		mColorTextures = textures;
+		for (const SharedHeap<Texture> pTexture : textures)
+		{
+			TextureViewDesc desc = {};
+			desc.AspectFlags = TextureAspectFlags::Color;
+			desc.pTexture = pTexture;
+			desc.ArrayLevel = 0;
+			desc.MipLevel = 0;
 
-            barrierDesc.DestinationLayout = TextureMemoryLayout::Present;
-            barrierDesc.DestinationQueue = GraphicsQueueType::Graphics;
-            barrierDesc.DestinationAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentRead;
-            barrierDesc.DestinationStageFlags = PipelineStageFlags::ColorAttachmentOutput;
-
-            mCmdList->SetTextureMemoryBarrier(mTextures[i].GetHeap(), barrierDesc);
-        }
-        mCmdList->EndRecording();
-        GetOwnerDevice()->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, mLayoutFence.GetHeap());
-        GetOwnerDevice()->WaitFences(mLayoutFence.GetHeapAddress(), 1);
-        GetOwnerDevice()->ResetFences(mLayoutFence.GetHeapAddress(), 1);
-    }
-    Bool8 Swapchain::SetMode(const SwapchainMode mode)
-    {
-        //Wait for idle
-        GetOwnerDevice()->WaitDeviceIdle();
-
-        //Set fullscreen
-        const Bool8 bSuccess = mode == SwapchainMode::Fullscreen ? SetFullScreen() : SetWindowed();
-
-        return bSuccess;
-    }
-   
-    void Swapchain::SetTextures(const Array<SharedHeap<Texture>>& textures, const Array<SharedHeap<TextureView>>& views)
-    {
-        mTextures = textures;
-        mViews = views;
-    }
-    void Swapchain::SetSize(const UInt16 width, const UInt16 height)
-    {
-        mSize = { width,height };
-    }
-    void Swapchain::OnShutdown()
-    {
-        //Free textures;
-        FreeTextures();
-
-        //Clear fencens
-        mLayoutFence.Shutdown();
-        for(Byte i = 0;i<mBufferCount;i++)
-            mPresentFences[i].Shutdown();
-
-        //Clear cmds
-        mCmdList.Shutdown();
-        mCmdPool.Shutdown();
-    }
-    void Swapchain::CreateInternalResources(GraphicsDevice* pDevice)
-    {
-        //Create cmd pool
-        CommandPoolDesc poolDesc = {};
-        poolDesc.Type = CommandPoolType::Graphics;
-        mCmdPool = pDevice->CreateCommandPool(poolDesc);
-
-        //Create cmdlist
-        CommandListDesc cmdListDesc = {};
-        cmdListDesc.pPool = mCmdPool.GetHeap();
-        mCmdList = pDevice->CreateCommandList(cmdListDesc);
-
-        //Create layout fence
-        mLayoutFence = pDevice->CreateFence(false);
-
-        //Create present fences
-        for (Byte i = 0; i < mBufferCount; i++)
-            mPresentFences.Add(pDevice->CreateFence(true));
-    }
-    void Swapchain::IncrementIndex()
-    {
-        mIndex = (mIndex + 1) % mBufferCount;
-    }
-    void Swapchain::FreeTextures()
-    {
-        //Clear textures,views and present fences first
-        for (Byte i = 0; i < mBufferCount; i++)
-        {
-            mViews[i].Shutdown();
-            mTextures[i].Shutdown();
-        }
-        mViews.Clear();
-        mTextures.Clear();
-    }
+			mColorTextureViews.Add(GetDevice()->CreateTextureView(desc));
+		}
+	}
 }

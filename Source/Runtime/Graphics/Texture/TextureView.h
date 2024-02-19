@@ -1,35 +1,37 @@
 #pragma once
 #include <Runtime/Graphics/Device/GraphicsDeviceObject.h>
-#include <Runtime/Graphics/Texture/TextureViewDesc.h>
+#include <RUntime/Graphics/Texture/TextureViewDesc.h>
 
 namespace Portakal
 {
 	class RUNTIME_API TextureView : public GraphicsDeviceObject
 	{
 	public:
-		TextureView(const TextureViewDesc& desc);
-		~TextureView() = default;
+		~TextureView();
 
-		FORCEINLINE const Texture* GetTargetTexture() const noexcept
-		{
-			return mTargetTexture.GetHeap();
-		}
-		FORCEINLINE Byte GetMipLevels() const noexcept
-		{
-			return mMipLevel;
-		}
 		FORCEINLINE Byte GetArrayLevel() const noexcept
 		{
 			return mArrayLevel;
+		}
+		FORCEINLINE Byte GetMipLevel() const noexcept
+		{
+			return mMipLevel;
+		}
+		FORCEINLINE const SharedHeap<Texture> GetTargetTexture() const noexcept
+		{
+			return mTexture;
 		}
 
 		virtual GraphicsDeviceObjectType GetObjectType() const noexcept override final
 		{
 			return GraphicsDeviceObjectType::TextureView;
 		}
+	protected:
+		TextureView(const TextureViewDesc& desc, GraphicsDevice* pDevice);
+
 	private:
-		SharedHeap<Texture> mTargetTexture;
-		Byte mMipLevel;
-		Byte mArrayLevel;
+		const Byte mArrayLevel;
+		const Byte mMipLevel;
+		SharedHeap<Texture> mTexture;
 	};
 }

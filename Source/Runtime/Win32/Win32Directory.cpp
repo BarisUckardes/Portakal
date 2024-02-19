@@ -63,7 +63,7 @@ namespace Portakal
 		Array <String> items;
 		GetFileNames(path, items);
 
-		for (unsigned int itemIndex = 0; itemIndex < items.GetSize(); itemIndex++)
+		for (UInt32 itemIndex = 0; itemIndex < items.GetSize(); itemIndex++)
 		{
 			const String& item = items[itemIndex];
 			if (Exists(item))
@@ -77,7 +77,7 @@ namespace Portakal
 		Array <String> files;
 		GetFileNames(path, files);
 
-		for (unsigned int fileIndex = 0; fileIndex < files.GetSize(); fileIndex++)
+		for (UInt32 fileIndex = 0; fileIndex < files.GetSize(); fileIndex++)
 		{
 			const String& file = files[fileIndex];
 

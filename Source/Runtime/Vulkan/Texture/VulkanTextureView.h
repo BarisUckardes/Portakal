@@ -8,18 +8,17 @@ namespace Portakal
 	class RUNTIME_API VulkanTextureView : public TextureView
 	{
 	public:
+		VulkanTextureView(const TextureViewDesc& desc, const VkImageView view, VulkanDevice* pDevice);
 		VulkanTextureView(const TextureViewDesc& desc, VulkanDevice* pDevice);
-		VulkanTextureView(const TextureViewDesc& desc,const VkImageView view, VulkanDevice* pDevice);
-		~VulkanTextureView() = default;
+		~VulkanTextureView();
 
-		FORCEINLINE VkImageView GetVkImageView() const noexcept
+		FORCEINLINE VkImageView GetVkView() const noexcept
 		{
 			return mView;
 		}
-		virtual void OnShutdown() override;
 	private:
-		const Bool8 mSwapchain;
-		const VkDevice mLogicalDevice;
 		VkImageView mView;
+		VkDevice mLogicalDevice;
+		const bool mSwapchain;
 	};
 }

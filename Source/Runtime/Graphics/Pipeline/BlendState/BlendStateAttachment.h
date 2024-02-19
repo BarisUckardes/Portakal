@@ -7,7 +7,7 @@ namespace Portakal
 {
     struct RUNTIME_API BlendStateAttachment
     {
-        Bool8 Enabled;
+        Bool8 bEnabled;
         BlendFactor SourceColorFactor;
         BlendFactor DestinationColorFactor;
         BlendOperation ColorOperation;

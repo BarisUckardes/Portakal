@@ -17,9 +17,10 @@ namespace Portakal
 		Swapchain,
 		Fence,
 		MemoryHeap,
-		ResourceTablePool,
-		ResourceTableLayout,
-		ResourceTable,
-		Queue
+		DescriptorPool,
+		DescriptorLayout,
+		DescriptorSet,
+		Queue,
+		Semaphore
 	};
 }

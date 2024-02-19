@@ -9,22 +9,25 @@ namespace Portakal
 	{
 	public:
 		VulkanSwapchain(const SwapchainDesc& desc, VulkanDevice* pDevice);
-		~VulkanSwapchain() = default;
+		~VulkanSwapchain();
 
-		virtual void OnShutdown() override;
+		FORCEINLINE VkSwapchainKHR GetVkSwapchain() const noexcept
+		{
+			return mSwapchain;
+		}
+		FORCEINLINE VkSurfaceKHR GetVkSurface() const noexcept
+		{
+			return mSurface;
+		}
 	private:
-		Bool8 PresentCore() override;
-		void ResizeCore(const UInt16 width, const UInt16 height) override;
-		void Free();
-		// Inherited via Swapchain
-		Bool8 SetFullScreen() override;
-		Bool8 SetWindowed() override;
+		virtual void ResizeCore(const UInt32 width, const UInt32 height) override;
+		virtual void PresentCore(Semaphore** ppWaitSemahpores, const UInt32 waitSemaphoreCount) override;
+		void Delete();
 	private:
-		VulkanDevice* mDevice;
-		VkSurfaceKHR mSurface;
 		VkSwapchainKHR mSwapchain;
+		VkSurfaceKHR mSurface;
 		VkDevice mLogicalDevice;
 		VkPhysicalDevice mPhysicalDevice;
-		UInt32 mPresentQueueFamilyIndex;
+		VkInstance mInstance;
 	};
 }

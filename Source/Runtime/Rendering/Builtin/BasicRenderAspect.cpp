@@ -13,30 +13,30 @@ namespace Portakal
     static const Char gTestVertexShader[] = R""""(
 layout(set=0,binding=0) cbuffer vertexBuffer         
 {
-	float4x4 Mvp;
+	Float324x4 Mvp;
 };
 struct VS_INPUT
 {
-    float3 pos : POSITION;
-    float3 normal : NORMAL;
-    float3 tangent : TANGENT0;
-    float3 bitangent : TANGENT1;
-    float2 uv : TEXCOORD0;
+    Float323 pos : POSITION;
+    Float323 normal : NORMAL;
+    Float323 tangent : TANGENT0;
+    Float323 bitangent : TANGENT1;
+    Float322 uv : TEXCOORD0;
 };
             
 struct PS_INPUT
 {
-    float4 pos : SV_POSITION;
-    float2 uv : TEXCOORD0;
-	float3 normal : TEXCOORD1;
-	float3 tangent : TEXCOORD2;
-	float3 bitangent : TEXCOORD3;
+    Float324 pos : SV_POSITION;
+    Float322 uv : TEXCOORD0;
+	Float323 normal : TEXCOORD1;
+	Float323 tangent : TEXCOORD2;
+	Float323 bitangent : TEXCOORD3;
 };
             
 PS_INPUT main(VS_INPUT input)
 {
     PS_INPUT output;
-    output.pos = float4(input.pos, 1.0f)*Mvp;
+    output.pos = Float324(input.pos, 1.0f)*Mvp;
     output.uv = input.uv;
 	output.normal = input.normal;
 	output.tangent = input.tangent;
@@ -50,17 +50,17 @@ PS_INPUT main(VS_INPUT input)
 			layout(set=0,binding=2) sampler sampler0;
 			struct PS_INPUT
 			{
-				float4 pos : SV_POSITION;
-				float2 uv : TEXCOORD0;
-				float3 normal : TEXCOORD1;
-				float3 tangent : TEXCOORD2;
-				float3 bitangent : TEXCOORD3;
+				Float324 pos : SV_POSITION;
+				Float322 uv : TEXCOORD0;
+				Float323 normal : TEXCOORD1;
+				Float323 tangent : TEXCOORD2;
+				Float323 bitangent : TEXCOORD3;
 			};
 
           
-			float4 main(PS_INPUT input) : SV_Target
+			Float324 main(PS_INPUT input) : SV_Target
 			{
-				float4 out_col = texture0.Sample(sampler0,input.uv);
+				Float324 out_col = texture0.Sample(sampler0,input.uv);
 				return out_col;
 			}
 )"""";;

@@ -28,8 +28,8 @@ namespace Portakal
 		Array<const BasicRenderable*> mRenderables;
 		SharedHeap<TextureResource> mTexture;
 		SharedHeap<MeshResource> mMesh;
-		SharedHeap<GraphicsMemoryHeap> mDeviceHeap;
-		SharedHeap<GraphicsMemoryHeap> mHostHeap;
+		SharedHeap<GraphicsMemory> mDeviceHeap;
+		SharedHeap<GraphicsMemory> mHostHeap;
 		SharedHeap<GraphicsBuffer> mConstantBufferDevice;
 		SharedHeap<GraphicsBuffer> mConstantBufferHost;
 		SharedHeap<CommandPool> mCmdPool;

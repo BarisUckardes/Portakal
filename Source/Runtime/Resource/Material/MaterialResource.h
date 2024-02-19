@@ -54,7 +54,7 @@ namespace Portakal
 			return mResourceTableLayouts;
 		}
 
-		void SetMemoryProfile(const SharedHeap<GraphicsMemoryHeap>& pHeapDevice,const SharedHeap<GraphicsMemoryHeap>& pHeapHost,const SharedHeap<ResourceTablePool>& pPool);
+		void SetMemoryProfile(const SharedHeap<GraphicsMemory>& pHeapDevice,const SharedHeap<GraphicsMemory>& pHeapHost,const SharedHeap<ResourceTablePool>& pPool);
 		void SetShaderProfile(const Array<SharedHeap<ShaderResource>>& shaders);
 		void SetTextureParameter(const ShaderStage stage, const String& parameterName, const SharedHeap<TextureResource>& pTexture, const Byte arrayIndex, const Byte mipIndex);
 		void SetSamplerParameter(const ShaderStage stage, const String& parameterName, const SharedHeap<SamplerResource>& pSampler);
@@ -74,8 +74,8 @@ namespace Portakal
 		Array<SharedHeap<ShaderResource>> mShaders;
 		SharedHeap<GraphicsDevice> mDevice;
 		SharedHeap<ResourceTablePool> mTablePool;
-		SharedHeap<GraphicsMemoryHeap> mHeapDevice;
-		SharedHeap<GraphicsMemoryHeap> mHeapHost;
+		SharedHeap<GraphicsMemory> mHeapDevice;
+		SharedHeap<GraphicsMemory> mHeapHost;
 		Event<void, MaterialResource*> mOnStateChangeEvent;
 	};
 }

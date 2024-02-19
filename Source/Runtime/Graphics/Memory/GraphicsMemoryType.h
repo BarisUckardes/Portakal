@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-	enum class RUNTIME_API GraphicsMemoryType
+	enum class RUNTIME_API GraphicsMemoryType : Byte
 	{
 		Host,
 		Device

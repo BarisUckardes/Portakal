@@ -25,11 +25,11 @@ namespace Portakal
         {
             switch (stage)
             {
-            case ShaderStage::VertexStage:
+            case ShaderStage::Vertex:
                 return VK_SHADER_STAGE_VERTEX_BIT;
-            case ShaderStage::FragmentStage:
+            case ShaderStage::Fragment:
                 return VK_SHADER_STAGE_FRAGMENT_BIT;
-            case ShaderStage::ComputeStage:
+            case ShaderStage::Compute:
                 return VK_SHADER_STAGE_COMPUTE_BIT;
             default:
                 return VK_SHADER_STAGE_FLAG_BITS_MAX_ENUM;
@@ -103,37 +103,35 @@ namespace Portakal
         }
         FORCEINLINE static VkPipelineStageFlags GetStageFlags(const PipelineStageFlags stages) noexcept
         {
-            switch (stages)
-            {
-            case PipelineStageFlags::TopOfPipe:
-                return VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
-            case PipelineStageFlags::VertexInput:
-                return VK_PIPELINE_STAGE_VERTEX_INPUT_BIT;
-            case PipelineStageFlags::VertexShader:
-                return VK_PIPELINE_STAGE_VERTEX_SHADER_BIT;
-            case PipelineStageFlags::TessellationControlShader:
-                return VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT;
-            case PipelineStageFlags::TessellationEvaluationShader:
-                return VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT;
-            case PipelineStageFlags::GeometryShader:
-                return VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
-            case PipelineStageFlags::FragmentShader:
-                return VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-            case PipelineStageFlags::EarlyFragmentTests:
-                return VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
-            case PipelineStageFlags::LateFragmentTests:
-                return VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
-            case PipelineStageFlags::ColorAttachmentOutput:
-                return VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-            case PipelineStageFlags::ComputeShader:
-                return VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
-            case PipelineStageFlags::Transfer:
-                return VK_PIPELINE_STAGE_TRANSFER_BIT;
-            case PipelineStageFlags::BottomOfPipe:
-                return VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
-            default:
-                return VK_PIPELINE_STAGE_NONE_KHR;
-            }
+            VkPipelineStageFlags flags = 0;
+            if (stages & PipelineStageFlags::BottomOfPipe)
+                flags |= VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+            if (stages & PipelineStageFlags::ColorAttachmentOutput)
+                flags |= VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            if (stages & PipelineStageFlags::ComputeShader)
+                flags |= VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+            if (stages & PipelineStageFlags::EarlyFragmentTests)
+                flags |= VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+            if (stages & PipelineStageFlags::FragmentShader)
+                flags |= VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+            if (stages & PipelineStageFlags::GeometryShader)
+                flags |= VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
+            if (stages & PipelineStageFlags::LateFragmentTests)
+                flags |= VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+            if (stages & PipelineStageFlags::TessellationControlShader)
+                flags |= VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT;
+            if (stages & PipelineStageFlags::TessellationEvaluationShader)
+                flags |= VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT;
+            if (stages & PipelineStageFlags::TopOfPipe)
+                flags |= VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+            if (stages & PipelineStageFlags::Transfer)
+                flags |= VK_PIPELINE_STAGE_TRANSFER_BIT;
+            if (stages & PipelineStageFlags::VertexInput)
+                flags |= VK_PIPELINE_STAGE_VERTEX_INPUT_BIT;
+            if (stages & PipelineStageFlags::VertexShader)
+                flags |= VK_PIPELINE_STAGE_VERTEX_SHADER_BIT;
+
+            return flags;
         }
         FORCEINLINE static VkStencilOp GetStencilOp(const StencilOperation operation) noexcept
         {
@@ -256,7 +254,7 @@ namespace Portakal
         FORCEINLINE static VkPipelineColorBlendAttachmentState GetBlendAttachmentState(const BlendStateAttachment& attachment)
         {
             return {
-                    .blendEnable = attachment.Enabled,
+                    .blendEnable = attachment.bEnabled,
                     .srcColorBlendFactor = GetBlendFactor(attachment.SourceColorFactor),
                     .dstColorBlendFactor = GetBlendFactor(attachment.DestinationColorFactor),
                     .colorBlendOp = GetBlendOperation(attachment.ColorOperation),

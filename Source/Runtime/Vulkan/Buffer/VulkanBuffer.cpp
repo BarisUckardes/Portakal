@@ -1,14 +1,14 @@
 #include "VulkanBuffer.h"
 #include <Runtime/Vulkan/Device/VulkanDevice.h>
-#include <Runtime/Vulkan/Memory/VulkanMemoryHeap.h>
+#include <Runtime/Vulkan/Memory/VulkanMemory.h>
 #include <Runtime/Vulkan/Buffer/VulkanBufferUtils.h>
 
 namespace Portakal
 {
-    VulkanBuffer::VulkanBuffer(const GraphicsBufferDesc& desc, VulkanDevice* pDevice) : GraphicsBuffer(desc),mLogicalDevice(pDevice->GetVkLogicalDevice()),mBuffer(VK_NULL_HANDLE)
-    {
+	VulkanBuffer::VulkanBuffer(const GraphicsBufferDesc& desc, VulkanDevice* pDevice) : GraphicsBuffer(desc,pDevice),mLogicalDevice(pDevice->GetVkLogicalDevice()),mBuffer(VK_NULL_HANDLE),mMemoryOffset(0),mMemoryAlignedOffset(0)
+	{
         //Get vk heap
-        const VulkanMemoryHeap* pHeap = (const VulkanMemoryHeap*)desc.pHeap.GetHeap();
+        const VulkanMemory* pHeap = (const VulkanMemory*)desc.pMemory.GetHeap();
 
         //Create buffer
         VkBufferCreateInfo info = {};
@@ -26,18 +26,17 @@ namespace Portakal
         vkGetBufferMemoryRequirements(mLogicalDevice, mBuffer, &requirements);
 
         //Get buffer memory
-        const UInt64 memoryOffset = desc.pHeap->Allocate(requirements.size + requirements.alignment);
+        const UInt64 memoryOffset = desc.pMemory->Allocate(requirements.size + requirements.alignment);
         const UInt64 alignedMemoryOffset = memoryOffset + (memoryOffset % requirements.alignment == 0 ? 0 : (requirements.alignment - (memoryOffset % requirements.alignment)));
 
         //Bind memory
-        DEV_ASSERT(vkBindBufferMemory(mLogicalDevice, mBuffer, pHeap->GetVkMemory(), alignedMemoryOffset) == VK_SUCCESS,"VulkanBuffer","Failed to bind memory");
+        DEV_ASSERT(vkBindBufferMemory(mLogicalDevice, mBuffer, pHeap->GetVkMemory(), alignedMemoryOffset) == VK_SUCCESS, "VulkanBuffer", "Failed to bind memory");
 
-        //Set aligned handle
-        SetMemoryProperties(memoryOffset, alignedMemoryOffset);
-    }
-    void VulkanBuffer::OnShutdown()
-    {
-        GraphicsBuffer::OnShutdown();
+        mMemoryOffset = memoryOffset;
+        mMemoryAlignedOffset = alignedMemoryOffset;
+	}
+	VulkanBuffer::~VulkanBuffer()
+	{
         vkDestroyBuffer(mLogicalDevice, mBuffer, nullptr);
-    }
+	}
 }

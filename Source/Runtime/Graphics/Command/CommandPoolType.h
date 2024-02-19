@@ -7,6 +7,6 @@ namespace Portakal
 	{
 		Graphics,
 		Compute,
-		Transfer,
+		Transfer
 	};
 }

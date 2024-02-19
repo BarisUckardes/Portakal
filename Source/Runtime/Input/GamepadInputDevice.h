@@ -12,8 +12,8 @@ namespace Portakal
 		GamepadInutDevice();
 		~GamepadInputDevice() = default;
 
-		virtual float GetTriggerLeft() const noexcept = 0;
-		virtual float GetTriggerRight() const noexcept = 0;
+		virtual Float32 GetTriggerLeft() const noexcept = 0;
+		virtual Float32 GetTriggerRight() const noexcept = 0;
 		virtual InputDeviceType GetDeviceType() const noexcept override
 		{
 			return InputDeviceType::Gamepad;
