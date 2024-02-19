@@ -1,11 +1,10 @@
 #pragma once
 #include <Runtime/Graphics/Device/GraphicsDeviceObject.h>
 #include <Runtime/Graphics/Texture/TextureDesc.h>
-#include <Runtime/Graphics/Memory/GraphicsMemoryObject.h>
 
 namespace Portakal
 {
-	class RUNTIME_API Texture : public GraphicsMemoryObject
+	class RUNTIME_API Texture : public GraphicsDeviceObject
 	{
 	public:
 		Texture(const TextureDesc& desc,const Bool8 bSwapchain);
@@ -43,6 +42,10 @@ namespace Portakal
 		{
 			return mSwapchain;
 		}
+		FORCEINLINE SharedHeap<GraphicsMemoryHeap> GetMemory() const noexcept
+		{
+			return mHeap;
+		}
 
 		virtual GraphicsDeviceObjectType GetObjectType() const noexcept override final
 		{
@@ -59,5 +62,6 @@ namespace Portakal
 		const Byte mArrayLevels;
 		const TextureSampleCount mSampleCount;
 		const Bool8 mSwapchain;
+		SharedHeap<GraphicsMemoryHeap> mHeap;
 	};
 }

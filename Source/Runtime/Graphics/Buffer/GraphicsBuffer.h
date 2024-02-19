@@ -1,11 +1,10 @@
 #pragma once
 #include <Runtime/Graphics/Device/GraphicsDeviceObject.h>
 #include <Runtime/Graphics/Buffer/GraphicsBufferDesc.h>
-#include <Runtime/Graphics/Memory/GraphicsMemoryObject.h>
 
 namespace Portakal
 {
-	class RUNTIME_API GraphicsBuffer :public GraphicsMemoryObject
+	class RUNTIME_API GraphicsBuffer :public GraphicsDeviceObject
 	{
 	public:
 		GraphicsBuffer(const GraphicsBufferDesc& desc);
@@ -27,7 +26,10 @@ namespace Portakal
 		{
 			return mTotalSize;
 		}
-		
+		FORCEINLINE SharedHeap<GraphicsMemoryHeap> GetMemory() const noexcept
+		{
+			return mHeap;
+		}
 		virtual GraphicsDeviceObjectType GetObjectType() const noexcept override final
 		{
 			return GraphicsDeviceObjectType::Buffer;
@@ -40,5 +42,6 @@ namespace Portakal
 		const UInt32 mSubItemCount;
 		const UInt32 mSubItemSize;
 		const UInt64 mTotalSize;
+		SharedHeap<GraphicsMemoryHeap> mHeap;
 	};
 }

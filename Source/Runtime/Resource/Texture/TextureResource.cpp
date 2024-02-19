@@ -261,7 +261,7 @@ namespace Portakal
         mCmdList->EndRecording();
 
         //Submit command list
-        mDevice->SubmitCommandLists(mCmdList.GetHeapAddress(),1,GraphicsQueueType::Graphics,mFence.GetHeap());
+        mDevice->SubmitCommandLists(mCmdList.GetHeapAddress(),1,GraphicsAPI::GetDefaultGraphicsQueue().GetHeap(),nullptr,0,nullptr,nullptr,0,mFence.GetHeap());
 
         //Wait for commands to finish
         mDevice->WaitFences(mFence.GetHeapAddress(), 1);

@@ -32,8 +32,8 @@ namespace Portakal
         //Bind memory
         DEV_ASSERT(vkBindBufferMemory(mLogicalDevice, mBuffer, pHeap->GetVkMemory(), alignedMemoryOffset) == VK_SUCCESS,"VulkanBuffer","Failed to bind memory");
 
-        //Set aligned handle
-        SetMemoryProperties(memoryOffset, alignedMemoryOffset);
+        mMemoryOffset = memoryOffset;
+        mMemoryAlignedOffset = alignedMemoryOffset;
     }
     void VulkanBuffer::OnShutdown()
     {

@@ -15,9 +15,19 @@ namespace Portakal
 		{
 			return mBuffer;
 		}
+		FORCEINLINE UInt64 GetVkMemoryOffset() const noexcept
+		{
+			return mMemoryOffset;
+		}
+		FORCEINLINE UInt64 GetVkMemoryAlignedOffset() const noexcept
+		{
+			return mMemoryAlignedOffset;
+		}
 		virtual void OnShutdown() override;
 	private:
 		VkDevice mLogicalDevice;
 		VkBuffer mBuffer;
+		UInt64 mMemoryOffset;
+		UInt64 mMemoryAlignedOffset;
 	};
 }

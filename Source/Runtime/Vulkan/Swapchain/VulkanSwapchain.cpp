@@ -14,6 +14,7 @@
 #endif
 #include <Runtime/Vulkan/Fence/VulkanFence.h>
 #include <Runtime/Graphics/Command/CommandListTextureMemoryBarrierDesc.h>
+#include <Runtime/Vulkan/Queue/VulkanQueue.h>
 
 namespace Portakal
 {
@@ -32,7 +33,7 @@ namespace Portakal
 	Bool8 VulkanSwapchain::PresentCore()
 	{
 		//Get queue first and validate
-		const VkQueue queue = ((VulkanDevice*)mDevice)->GetPresentQueue(mSurface);
+		const VkQueue queue = ((VulkanQueue*)GetQueue().GetHeap())->GetVkQueue();
 		if (queue == VK_NULL_HANDLE)
 		{
 			DEV_LOG("VulkanSwapchain", "Invalid queue handle!");
@@ -150,8 +151,8 @@ namespace Portakal
 		SetSize(selectedExtent.width, selectedExtent.height);
 
 		//Try get present queue family index
-		const Int32 presentFamilyIndex = ((VulkanDevice*)mDevice)->GetPresentQueueFamilyIndex(mSurface);
-		DEV_ASSERT(presentFamilyIndex != -1, "VulkanSwapchain", "No presentable queue found");
+		const VulkanQueue* pQueue = (const VulkanQueue*)GetQueue().GetHeap();
+		const unsigned int presentFamilyIndex = pQueue->GetVkFamilyIndex();
 
 		//Create swapchain
 		VkSwapchainCreateInfoKHR swapchainInfo = {};
@@ -227,28 +228,5 @@ namespace Portakal
 		if(mSurface != VK_NULL_HANDLE)
 			vkDestroySurfaceKHR(((VulkanInstance*)mDevice->GetOwnerAdapter()->GetOwnerInstance())->GetVkInstance(), mSurface, nullptr);
 	}
-	Bool8 VulkanSwapchain::SetFullScreen()
-	{
-		//Get monitor and validate
-		SharedHeap<PlatformMonitor> pMonitor = GetWindow()->GetMonitor();
-		if (pMonitor.IsShutdown())
-			return false;
-
-		//Resize according to the monitor
-		Resize(pMonitor->GetSize().X, pMonitor->GetSize().Y);
-
-		return true;
-	}
-	Bool8 VulkanSwapchain::SetWindowed()
-	{
-		//Get monitor and validate
-		SharedHeap<PlatformMonitor> pMonitor = GetWindow()->GetMonitor();
-		if (pMonitor.IsShutdown())
-			return false;
-
-		//Resize according to the monitor
-		Resize(pMonitor->GetSize().X / 2, pMonitor->GetSize().Y / 2);
-
-		return true;
-	}
+	
 }

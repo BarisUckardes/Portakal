@@ -3,7 +3,8 @@
 
 namespace Portakal
 {
-    Swapchain::Swapchain(const SwapchainDesc& desc) : mColorFormat(desc.ColorFormat),mDepthStencilFormat(desc.DepthStencilFormat),mBufferCount(desc.BufferCount),mWindow(desc.pWindow),mPresentMode(desc.PresentMode), mSize(desc.pWindow->GetSize()), mIndex(0)
+    Swapchain::Swapchain(const SwapchainDesc& desc) :
+        mColorFormat(desc.ColorFormat),mDepthStencilFormat(desc.DepthStencilFormat),mBufferCount(desc.BufferCount),mWindow(desc.pWindow),mPresentMode(desc.PresentMode), mSize(desc.pWindow->GetSize()), mIndex(0),mQueue(desc.pQueue)
     {
         //Create internal resources
         CreateInternalResources(desc.pDevice.GetHeap());
@@ -37,43 +38,6 @@ namespace Portakal
     {
         GetOwnerDevice()->WaitFences(mPresentFences[index].GetHeapAddress(), 1);
     }
-    void Swapchain::TransitionToPresent()
-    {
-        mCmdList->BeginRecording();
-        for (Byte i = 0; i < mBufferCount; i++)
-        {
-            CommandListTextureMemoryBarrierDesc barrierDesc = {};
-            barrierDesc.MipIndex = 0;
-            barrierDesc.ArrayIndex = 0;
-            barrierDesc.AspectFlags = TextureAspectFlags::Color;
-
-            barrierDesc.SourceLayout = TextureMemoryLayout::Unknown;
-            barrierDesc.SourceQueue = GraphicsQueueType::Graphics;
-            barrierDesc.SourceAccessFlags = GraphicsMemoryAccessFlags::Unknown;
-            barrierDesc.SourceStageFlags = PipelineStageFlags::TopOfPipe;
-
-            barrierDesc.DestinationLayout = TextureMemoryLayout::Present;
-            barrierDesc.DestinationQueue = GraphicsQueueType::Graphics;
-            barrierDesc.DestinationAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentRead;
-            barrierDesc.DestinationStageFlags = PipelineStageFlags::ColorAttachmentOutput;
-
-            mCmdList->SetTextureMemoryBarrier(mTextures[i].GetHeap(), barrierDesc);
-        }
-        mCmdList->EndRecording();
-        GetOwnerDevice()->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, mLayoutFence.GetHeap());
-        GetOwnerDevice()->WaitFences(mLayoutFence.GetHeapAddress(), 1);
-        GetOwnerDevice()->ResetFences(mLayoutFence.GetHeapAddress(), 1);
-    }
-    Bool8 Swapchain::SetMode(const SwapchainMode mode)
-    {
-        //Wait for idle
-        GetOwnerDevice()->WaitDeviceIdle();
-
-        //Set fullscreen
-        const Bool8 bSuccess = mode == SwapchainMode::Fullscreen ? SetFullScreen() : SetWindowed();
-
-        return bSuccess;
-    }
    
     void Swapchain::SetTextures(const Array<SharedHeap<Texture>>& textures, const Array<SharedHeap<TextureView>>& views)
     {
@@ -94,22 +58,9 @@ namespace Portakal
         for(Byte i = 0;i<mBufferCount;i++)
             mPresentFences[i].Shutdown();
 
-        //Clear cmds
-        mCmdList.Shutdown();
-        mCmdPool.Shutdown();
     }
     void Swapchain::CreateInternalResources(GraphicsDevice* pDevice)
     {
-        //Create cmd pool
-        CommandPoolDesc poolDesc = {};
-        poolDesc.Type = CommandPoolType::Graphics;
-        mCmdPool = pDevice->CreateCommandPool(poolDesc);
-
-        //Create cmdlist
-        CommandListDesc cmdListDesc = {};
-        cmdListDesc.pPool = mCmdPool.GetHeap();
-        mCmdList = pDevice->CreateCommandList(cmdListDesc);
-
         //Create layout fence
         mLayoutFence = pDevice->CreateFence(false);
 

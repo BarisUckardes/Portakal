@@ -71,10 +71,6 @@ namespace Portakal
 			}
 		}
 		
-		//Set swapchain mode
-		if (!mSwapchain.IsShutdown())
-			mSwapchain->SetMode(mode == WindowMode::Fullscreen ? SwapchainMode::Fullscreen : SwapchainMode::Normal);
-
 		//Set new mode
 		mMode = mode;
 	}
@@ -171,7 +167,6 @@ namespace Portakal
 		if (!mSwapchain.IsShutdown())
 		{
 			mSwapchain->Resize(size.X, size.Y);
-			mSwapchain->TransitionToPresent();
 		}
 
 		//Set size

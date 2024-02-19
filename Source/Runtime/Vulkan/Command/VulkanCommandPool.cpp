@@ -6,26 +6,8 @@ namespace Portakal
 	VulkanCommandPool::VulkanCommandPool(const CommandPoolDesc& desc, VulkanDevice* pDevice) : CommandPool(desc),mLogicalDevice(pDevice->GetVkLogicalDevice()),mPool(VK_NULL_HANDLE)
 	{
         //Get family index
-        Int32 queueFamilyIndex = -1;
-        switch (desc.Type)
-        {
-        case CommandPoolType::Graphics:
-        default:
-        {
-            queueFamilyIndex = pDevice->GetGraphicsQueueFamilyIndex();
-            break;
-        }
-        case CommandPoolType::Compute:
-        {
-            queueFamilyIndex = pDevice->GetComputeQueueFamilyIndex();
-            break;
-        }
-        case CommandPoolType::Transfer:
-        {
-            queueFamilyIndex = pDevice->GetTransfersQueueFamilyIndex();
-            break;
-        }
-        }
+        const unsigned char queueFamilyIndex = pDevice->vkGetQueueFamilyIndex((GraphicsQueueType)desc.Type);
+
 
         DEV_ASSERT(queueFamilyIndex != -1, "VulkanCommandPool", "Failed to find corresponding queue family index");
 

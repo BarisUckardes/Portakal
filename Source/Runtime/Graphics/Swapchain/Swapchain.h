@@ -7,7 +7,6 @@
 #include <Runtime/Graphics/Command/CommandPool.h>
 #include <Runtime/Graphics/Command/CommandList.h>
 #include <Runtime/Graphics/Swapchain/PresentMode.h>
-#include <Runtime/Graphics/Swapchain/SwapchainMode.h>
 
 namespace Portakal
 {
@@ -69,14 +68,16 @@ namespace Portakal
 		{
 			return mViews[mIndex];
 		}
+		FORCEINLINE SharedHeap<GraphicsQueue> GetQueue() const noexcept
+		{
+			return mQueue;
+		}
 	
 		virtual GraphicsDeviceObjectType GetObjectType() const noexcept override final { return GraphicsDeviceObjectType::Swapchain; }
 	
 		void Resize(const UInt16 width, const UInt16 height);
 		Bool8 Present();
 		void WaitForPresent(const Byte index);
-		void TransitionToPresent();
-		Bool8 SetMode(const SwapchainMode mode);
 	protected:
 		void SetTextures(const Array<SharedHeap<Texture>>& textures, const Array<SharedHeap<TextureView>>& views);
 		void SetSize(const UInt16 width, const UInt16 height);
@@ -84,8 +85,6 @@ namespace Portakal
 		virtual void ResizeCore(const UInt16 width, const UInt16 height) = 0;
 		virtual void OnShutdown() override;
 		virtual Bool8 PresentCore() = 0;
-		virtual Bool8 SetFullScreen() = 0;
-		virtual Bool8 SetWindowed() = 0;
 	private:
 		void CreateInternalResources(GraphicsDevice* pDevice);
 		void IncrementIndex();
@@ -96,12 +95,11 @@ namespace Portakal
 		const TextureFormat mDepthStencilFormat;
 		const SharedHeap<PlatformWindow> mWindow;
 		const PresentMode mPresentMode;
+		SharedHeap<GraphicsQueue> mQueue;
 		Array<SharedHeap<Texture>> mTextures;
 		Array<SharedHeap<TextureView>> mViews;
 		Array<SharedHeap<Fence>> mPresentFences;
 		SharedHeap<Fence> mLayoutFence;
-		SharedHeap<CommandPool> mCmdPool;
-		SharedHeap<CommandList> mCmdList;
 		Vector2US mSize;
 		Byte mIndex;
 	};

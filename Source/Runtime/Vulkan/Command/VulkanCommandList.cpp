@@ -132,16 +132,18 @@ namespace Portakal
 	}
 	void VulkanCommandList::SetTextureMemoryBarrierCore(const Texture* Texture, const CommandListTextureMemoryBarrierDesc& desc)
 	{
+		const VulkanDevice* pDevice = (const VulkanDevice*)GetOwnerDevice();
 		const VulkanTexture* pVkTexture = (const VulkanTexture*)Texture;
 		const VkImage image = pVkTexture->GetVkImage();
+
 		VkImageMemoryBarrier memoryBarrier = {};
 		memoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
 		memoryBarrier.pNext = nullptr;
 		memoryBarrier.image = image;
 		memoryBarrier.oldLayout = VulkanTextureUtils::GetImageLayout(desc.SourceLayout);
 		memoryBarrier.newLayout = VulkanTextureUtils::GetImageLayout(desc.DestinationLayout);
-		memoryBarrier.srcQueueFamilyIndex = GetQueueFamilyIndex(desc.SourceQueue);
-		memoryBarrier.dstQueueFamilyIndex = GetQueueFamilyIndex(desc.DestinationQueue);
+		memoryBarrier.srcQueueFamilyIndex = pDevice->vkGetQueueFamilyIndex(desc.SourceQueue);
+		memoryBarrier.dstQueueFamilyIndex = pDevice->vkGetQueueFamilyIndex(desc.DestinationQueue);
 		memoryBarrier.subresourceRange.aspectMask = VulkanTextureUtils::GetImageAspects(desc.AspectFlags);
 		memoryBarrier.subresourceRange.baseMipLevel = desc.MipIndex;
 		memoryBarrier.subresourceRange.levelCount = Texture->GetMipLevels();
@@ -159,15 +161,16 @@ namespace Portakal
 	}
 	void VulkanCommandList::SetBufferMemoryBarrierCore(const GraphicsBuffer* pBuffer, const BufferBarrierDesc& desc)
 	{
+		const VulkanDevice* pDevice = (const VulkanDevice*)GetOwnerDevice();
 		const VulkanBuffer* pVkBuffer = (const VulkanBuffer*)pBuffer;
 
 		VkBufferMemoryBarrier barrier = {};
 		barrier.sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
 		barrier.buffer = pVkBuffer->GetVkBuffer();
 		barrier.srcAccessMask = VulkanMemoryUtils::GetMemoryAccessFlags(desc.SourceAccessFlags);
-		barrier.srcQueueFamilyIndex = GetQueueFamilyIndex(desc.SourceQueueFamily);
+		barrier.srcQueueFamilyIndex = pDevice->vkGetQueueFamilyIndex(desc.SourceQueueFamily);
 		barrier.dstAccessMask = VulkanMemoryUtils::GetMemoryAccessFlags(desc.DestinationAccessFlags);
-		barrier.dstAccessMask = GetQueueFamilyIndex(desc.DestinationQueueFamily);
+		barrier.dstAccessMask = pDevice->vkGetQueueFamilyIndex(desc.DestinationQueueFamily);
 		barrier.offset = desc.OffsetInBytes;
 		barrier.size = desc.SizeInBytes;
 
@@ -178,21 +181,7 @@ namespace Portakal
 							 1, &barrier,
 							 0, nullptr);
 	}
-	Byte VulkanCommandList::GetQueueFamilyIndex(GraphicsQueueType type)
-	{
-		VulkanDevice* pDevice = (VulkanDevice*)GetOwnerDevice();
-
-		switch (type)
-		{
-		case GraphicsQueueType::Graphics:
-		default:
-			return pDevice->GetGraphicsQueueFamilyIndex();
-		case GraphicsQueueType::Compute:
-			return pDevice->GetComputeQueueFamilyIndex();
-		case GraphicsQueueType::Transfer:
-			return pDevice->GetTransfersQueueFamilyIndex();
-		}
-	}
+	
 	void VulkanCommandList::OnShutdown()
 	{
 		vkFreeCommandBuffers(mLogicalDevice, mCommandPool, 1, &mCommandBuffer);

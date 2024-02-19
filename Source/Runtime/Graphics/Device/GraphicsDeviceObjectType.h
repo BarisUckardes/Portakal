@@ -16,10 +16,11 @@ namespace Portakal
 		Pipeline,
 		Swapchain,
 		Fence,
+		Semaphore,
 		MemoryHeap,
 		ResourceTablePool,
 		ResourceTableLayout,
 		ResourceTable,
-		Queue
+		Queue,
 	};
 }

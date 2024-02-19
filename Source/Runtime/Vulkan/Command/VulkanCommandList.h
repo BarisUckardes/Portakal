@@ -51,7 +51,6 @@ namespace Portakal
         // Inherited via CommandList
         void ClearTextureCore(const Texture* pTexture,const Byte arrayIndex,const Byte mipIndex, const Color4F clearColor) override;
     private:
-        Byte GetQueueFamilyIndex(const GraphicsQueueType type);
 
         virtual void OnShutdown() override;
     private:

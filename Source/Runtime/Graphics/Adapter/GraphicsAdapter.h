@@ -32,9 +32,9 @@ namespace Portakal
 		{
 			return mOwnerInstance;
 		}
-		SharedHeap<GraphicsDevice> CreateDevice();
+		SharedHeap<GraphicsDevice> CreateDevice(const GraphicsDeviceDesc* pDesc);
 	protected:
-		virtual GraphicsDevice* CreateDeviceCore() = 0;
+		virtual GraphicsDevice* CreateDeviceCore(const GraphicsDeviceDesc* pDesc) = 0;
 	private:
 
 	private:

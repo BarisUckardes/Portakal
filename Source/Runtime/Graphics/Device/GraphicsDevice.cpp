@@ -4,7 +4,7 @@
 
 namespace Portakal
 {
-    GraphicsDevice::GraphicsDevice(const GraphicsDeviceDesc& desc) : mOwnerAdapter(desc.pAdapter),mBackend(desc.Backend)
+    GraphicsDevice::GraphicsDevice(const GraphicsDeviceDesc* pDesc) : mOwnerAdapter(pDesc->pAdapter),mBackend(pDesc->Backend)
     {
 
     }
@@ -144,9 +144,6 @@ namespace Portakal
         if (mMainSwapchain.IsShutdown())
             mMainSwapchain = pSwapchain;
 
-        //Transition
-        pSwapchain->TransitionToPresent();
-
         //Register swapchain to window
         desc.pWindow->_SetSwapchain(pSwapchain);
 
@@ -157,6 +154,14 @@ namespace Portakal
         SharedHeap<RenderPass> pResourceSet = CreateRenderPassCore(desc);
         RegisterChild(pResourceSet.QueryAs<GraphicsDeviceObject>());
         return pResourceSet;
+    }
+    SharedHeap<GraphicsQueue> GraphicsDevice::OwnQueue(const GraphicsQueueDesc& desc)
+    {
+        SharedHeap<GraphicsQueue> pQueue = OwnQueueCore(desc);
+
+        RegisterChild(pQueue.QueryAs<GraphicsDeviceObject>());
+
+        return pQueue;
     }
     void GraphicsDevice::ResetFences(Fence** ppFences, const Byte count)
     {
@@ -170,10 +175,6 @@ namespace Portakal
     {
         WaitDeviceIdleCore();
     }
-    void GraphicsDevice::WaitQueueDefault(const GraphicsQueueType type)
-    {
-        WaitQueueDefaultCore(type);
-    }
     void GraphicsDevice::UpdateHostBuffer(GraphicsBuffer* pBuffer, const GraphicsBufferHostUpdateDesc& desc)
     {
         UpdateHostBufferCore(pBuffer, desc);
@@ -182,9 +183,13 @@ namespace Portakal
     {
         UpdateResourceTableCore(pTable, desc);
     }
-    void GraphicsDevice::SubmitCommandLists(CommandList** ppCmdLists, const Byte cmdListCount, const GraphicsQueueType type, const Fence* pFence)
+    void GraphicsDevice::SubmitCommandLists(CommandList** ppCmdLists, const unsigned char cmdListCount,
+        const GraphicsQueue* pTargetQueue,
+        Semaphore** ppSignalSemaphores, const unsigned int signalSemaphoreCount,
+        Semaphore** ppWaitSemaphores, const PipelineStageFlags* pWaitStageFlags, const unsigned int waitSemaphoreCount,
+        const Fence* pSignalFence)
     {
-        SubmitCommandListsCore(ppCmdLists, cmdListCount, type, pFence);
+        SubmitCommandListsCore(ppCmdLists, cmdListCount, pTargetQueue, ppSignalSemaphores, signalSemaphoreCount, ppWaitSemaphores, pWaitStageFlags, waitSemaphoreCount, pSignalFence);
     }
     void GraphicsDevice::RegisterChild(const SharedHeap<GraphicsDeviceObject>& pObject)
     {

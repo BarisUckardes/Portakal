@@ -8,8 +8,8 @@ namespace Portakal
         DEV_LOG("VulkanAdapter", "Shutdown");
     }
 
-    GraphicsDevice* VulkanAdapter::CreateDeviceCore()
+    GraphicsDevice* VulkanAdapter::CreateDeviceCore(const GraphicsDeviceDesc* pDesc)
     {
-        return new VulkanDevice({ GraphicsBackend::Vulkan,this });
+        return new VulkanDevice(pDesc);
     }
 }

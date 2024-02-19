@@ -16,6 +16,9 @@ namespace Portakal
 		static SharedHeap<GraphicsMemoryHeap> GetDefaultDeviceHeap();
 		static SharedHeap<GraphicsMemoryHeap> GetDefaultHostHeap();
 		static SharedHeap<ResourceTablePool> GetDefaultTablePool();
+		static SharedHeap<GraphicsQueue> GetDefaultGraphicsQueue();
+		static SharedHeap<GraphicsQueue> GetDefaultComputeQueue();
+		static SharedHeap<GraphicsQueue> GetDefaultTransferQueue();
 	private:
 		static void _SetDevice(const SharedHeap<GraphicsDevice>& pDevice);
 		static void _RemoveDevice();
@@ -27,5 +30,8 @@ namespace Portakal
 		SharedHeap<GraphicsMemoryHeap> mHeapDevice;
 		SharedHeap<GraphicsMemoryHeap> mHeapHost;
 		SharedHeap<ResourceTablePool> mTablePool;
+		SharedHeap<GraphicsQueue> mGraphicsQueue;
+		SharedHeap<GraphicsQueue> mComputeQueue;
+		SharedHeap<GraphicsQueue> mTransferQueue;
 	};
 }

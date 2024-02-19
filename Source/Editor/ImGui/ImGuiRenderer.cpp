@@ -280,7 +280,7 @@ namespace Portakal
         mCmdList->EndRecording();
 
         //Submit commands and wait
-        mDevice->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, mFence.GetHeap());
+        mDevice->SubmitCommandLists(mCmdList.GetHeapAddress(), 1,GraphicsAPI::GetDefaultGraphicsQueue().GetHeap(), nullptr, 0, nullptr, nullptr, 0, mFence.GetHeap());
         mDevice->WaitFences(mFence.GetHeapAddress(), 1);
         mDevice->ResetFences(mFence.GetHeapAddress(), 1);
     }
@@ -461,7 +461,7 @@ namespace Portakal
         mCmdList->BeginRecording();
         mCmdList->SetTextureMemoryBarrier(mDefaultFontTexture->GetTexture().GetHeap(), barrierDesc);
         mCmdList->EndRecording();
-        mDevice->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, mFence.GetHeap());
+        mDevice->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsAPI::GetDefaultGraphicsQueue().GetHeap(), nullptr, 0, nullptr, nullptr, 0, mFence.GetHeap());
         mDevice->WaitFences(mFence.GetHeapAddress(), 1);
         mDevice->ResetFences(mFence.GetHeapAddress(), 1);
 
@@ -705,6 +705,29 @@ namespace Portakal
 
         //Set properties
         mRenderTargets.Add(pRenderTarget);
+
+        mCmdList->BeginRecording();
+        for (const SharedHeap<Texture>& pTexture : pRenderTarget->GetColorTargets())
+        {
+            CommandListTextureMemoryBarrierDesc barrierDesc = {};
+            barrierDesc.AspectFlags = TextureAspectFlags::Color;
+            barrierDesc.ArrayIndex = 0;
+            barrierDesc.MipIndex = 0;
+            barrierDesc.SourceAccessFlags = GraphicsMemoryAccessFlags::Unknown;
+            barrierDesc.SourceLayout = TextureMemoryLayout::Unknown;
+            barrierDesc.SourceQueue = GraphicsQueueType::Graphics;
+            barrierDesc.SourceStageFlags = PipelineStageFlags::TopOfPipe;
+            barrierDesc.DestinationAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentRead;
+            barrierDesc.DestinationLayout = TextureMemoryLayout::Present;
+            barrierDesc.DestinationQueue = GraphicsQueueType::Graphics;
+            barrierDesc.DestinationStageFlags = PipelineStageFlags::ColorAttachmentOutput;
+
+            mCmdList->SetTextureMemoryBarrier(pTexture.GetHeap(), barrierDesc);
+        }
+        mCmdList->EndRecording();
+        mDevice->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsAPI::GetDefaultGraphicsQueue().GetHeap(), nullptr, 0, nullptr, nullptr, 0, mFence.GetHeap());
+        mDevice->WaitFences(mFence.GetHeapAddress(), 1);
+        mDevice->ResetFences(mFence.GetHeapAddress(), 1);
     }
     void ImGuiRenderer::OnShutdown()
     {

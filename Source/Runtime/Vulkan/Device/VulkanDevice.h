@@ -10,27 +10,19 @@ namespace Portakal
 	private:
         struct DeviceQueueFamily
         {
-            DeviceQueueFamily() : FamilyIndex(255), QueueCapacity(0), DefaultQueue(VK_NULL_HANDLE), CanPresent(false)
+            DeviceQueueFamily() : FamilyIndex(255), Capacity(0), RequestedCount(0)
             {
 
             }
 
-            Bool8 OwnQueue(VkQueue& queueOut)
+            VkQueue OwnQueue()
             {
                 if (FreeQueues.GetSize() == 0)
-                {
-                    queueOut = VK_NULL_HANDLE;
-                    return false;
-                }
+                    return VK_NULL_HANDLE;
 
-                queueOut = FreeQueues[0];
+                VkQueue queue = FreeQueues[0];
                 FreeQueues.RemoveAt(0);
-                return true;
-            }
-
-            Bool8 HasFreeQueue() const noexcept
-            {
-                return FreeQueues.GetSize() > 0;
+                return queue;
             }
 
             void ReturnQueue(VkQueue queue)
@@ -38,39 +30,23 @@ namespace Portakal
                 FreeQueues.Add(queue);
             }
 
-            Byte FamilyIndex;
-            Byte QueueCapacity;
-            VkQueue DefaultQueue;
-            Array<VkQueue> Queues;
+            unsigned char FamilyIndex;
+            unsigned char Capacity;
+            unsigned char RequestedCount;
             Array<VkQueue> FreeQueues;
-            VkBool32 CanPresent;
         };
-    public:
-        static PFN_vkCmdBeginRenderingKHR vkCmdBeginRenderingKHR;
-        static PFN_vkCmdEndRenderingKHR vkCmdEndRenderingKHR;
 	public:
-		VulkanDevice(const GraphicsDeviceDesc& desc);
+		VulkanDevice(const GraphicsDeviceDesc* pDesc);
         ~VulkanDevice()
         {
 
         }
 
-        FORCEINLINE Int32 GetPresentQueueFamilyIndex(const VkSurfaceKHR surface) const noexcept;
-        FORCEINLINE VkQueue GetPresentQueue(const VkSurfaceKHR surface) const noexcept;
-        FORCEINLINE Int32 GetGraphicsQueueFamilyIndex()
-        {
-            return mGraphicsQueueFamily.FamilyIndex;
-        }
-        FORCEINLINE Int32 GetComputeQueueFamilyIndex()
-        {
-            return mComputeQueueFamily.FamilyIndex;
-        }
-        FORCEINLINE Int32 GetTransfersQueueFamilyIndex()
-        {
-            return mTransferQueueFamily.FamilyIndex;
-        }
+       
         FORCEINLINE VkDevice GetVkLogicalDevice() const noexcept { return mLogicalDevice; }
-
+        VkQueue vkOwnQueue(const GraphicsQueueType type);
+        void vkReturnQueue(const GraphicsQueueType type, const VkQueue queue);
+        unsigned char vkGetQueueFamilyIndex(const GraphicsQueueType type) const noexcept;
         SharedHeap<Texture> CreateVkSwapchainTexture(const TextureDesc& desc, const VkImage image);
 	private:
 		// Inherited via GraphicsDevice
@@ -88,6 +64,7 @@ namespace Portakal
         Fence* CreateFenceCore(const bool bSignalled) override;
         Swapchain* CreateSwapchainCore(const SwapchainDesc& desc) override;
         RenderPass* CreateRenderPassCore(const RenderPassDesc& desc) override;
+        GraphicsQueue* OwnQueueCore(const GraphicsQueueDesc& desc) override;
 
         // Inherited via GraphicsDevice
         CommandPool* CreateCommandPoolCore(const CommandPoolDesc& desc) override;
@@ -97,10 +74,13 @@ namespace Portakal
         virtual void ResetFencesCore(Fence** ppFences, const Byte count) override;
         void WaitFencesCore(Fence** ppFences, const Byte count) override;
         void WaitDeviceIdleCore() override;
-        void WaitQueueDefaultCore(const GraphicsQueueType type) override;
         void UpdateHostBufferCore(GraphicsBuffer* pBuffer, const GraphicsBufferHostUpdateDesc& desc) override;
         void UpdateResourceTableCore(ResourceTable* pTable, const ResourceTableUpdateDesc& desc) override;
-        void SubmitCommandListsCore(CommandList** ppCmdLists, const Byte cmdListCount, const GraphicsQueueType type, const Fence* pFence) override;
+        void SubmitCommandListsCore(CommandList** ppCmdLists, const unsigned char cmdListCount,
+            const GraphicsQueue* pTargetQueue,
+            Semaphore** ppSignalSemaphores, const unsigned int signalSemaphoreCount,
+            Semaphore** ppWaitSemaphores, const PipelineStageFlags* pWaitStageFlags, const unsigned int waitSemaphoreCount,
+            const Fence* pSignalFence) override;
 	private:
         DeviceQueueFamily mGraphicsQueueFamily;
         DeviceQueueFamily mComputeQueueFamily;

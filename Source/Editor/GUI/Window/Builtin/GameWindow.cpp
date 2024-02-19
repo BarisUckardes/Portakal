@@ -70,7 +70,7 @@ namespace Portakal
 		postMemoryBarrierDesc.DestinationStageFlags = PipelineStageFlags::FragmentShader;
 		pCmdList->SetTextureMemoryBarrier(pTexture->GetTexture().GetHeap(), postMemoryBarrierDesc);
 		pCmdList->EndRecording();
-		GraphicsAPI::GetDefaultDevice()->SubmitCommandLists(pCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, nullptr); 
+		GraphicsAPI::GetDefaultDevice()->SubmitCommandLists(pCmdList.GetHeapAddress(), 1,GraphicsAPI::GetDefaultGraphicsQueue().GetHeap(),nullptr,0,nullptr,nullptr,0,nullptr); 
 	}
 	void GameWindow::OnInitialize()
 	{

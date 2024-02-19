@@ -18,13 +18,13 @@
 #include <Runtime/Vulkan/Texture/VulkanTextureView.h>
 #include <Runtime/Vulkan/Resource/VulkanResourceUtils.h>
 #include <string>
+#include <Runtime/Vulkan/Queue/VulkanQueue.h>
+#include <Runtime/Vulkan/Semaphore/VulkanSemaphore.h>
+#include <Runtime/Vulkan/Pipeline/VulkanPipelineUtils.h>
 
 namespace Portakal
 {
-	PFN_vkCmdBeginRenderingKHR VulkanDevice::vkCmdBeginRenderingKHR = NULL;
-	PFN_vkCmdEndRenderingKHR VulkanDevice::vkCmdEndRenderingKHR = NULL;
-
-	VulkanDevice::VulkanDevice(const GraphicsDeviceDesc& desc) : GraphicsDevice(desc), mPhysicalDevice(((const VulkanAdapter*)desc.pAdapter)->GetVkPhysicalDevice())
+	VulkanDevice::VulkanDevice(const GraphicsDeviceDesc* pDesc) : GraphicsDevice(pDesc), mPhysicalDevice(((const VulkanAdapter*)pDesc->pAdapter)->GetVkPhysicalDevice())
 	{
 		//Get queue families
 		UInt32 queueFamilyCount = 0;
@@ -40,25 +40,23 @@ namespace Portakal
 			const VkQueueFamilyProperties& properties = queueFamilyProperties[i];
 			if (properties.queueFlags & VK_QUEUE_GRAPHICS_BIT && mGraphicsQueueFamily.FamilyIndex == 255)
 			{
-				mGraphicsQueueFamily.QueueCapacity = properties.queueCount;
+				mGraphicsQueueFamily.Capacity = properties.queueCount;
+				mGraphicsQueueFamily.RequestedCount = pDesc->GraphicsQueueCount > properties.queueCount ? properties.queueCount : pDesc->GraphicsQueueCount;
 				mGraphicsQueueFamily.FamilyIndex = i;
 			}
 			else if (properties.queueFlags & VK_QUEUE_COMPUTE_BIT && mComputeQueueFamily.FamilyIndex == 255)
 			{
-				mComputeQueueFamily.QueueCapacity = properties.queueCount;
+				mComputeQueueFamily.Capacity = properties.queueCount;
+				mComputeQueueFamily.RequestedCount = pDesc->ComputeQueueCount > properties.queueCount ? properties.queueCount : pDesc->ComputeQueueCount;
 				mComputeQueueFamily.FamilyIndex = i;
 			}
 			else if (properties.queueFlags & VK_QUEUE_TRANSFER_BIT && mTransferQueueFamily.FamilyIndex == 255)
 			{
-				mTransferQueueFamily.QueueCapacity = properties.queueCount;
+				mTransferQueueFamily.Capacity = properties.queueCount;
+				mTransferQueueFamily.RequestedCount = pDesc->TransferQueueCount > properties.queueCount ? properties.queueCount : pDesc->TransferQueueCount;
 				mTransferQueueFamily.FamilyIndex = i;
 			}
 		}
-
-		//Validate queues
-		DEV_ASSERT(mGraphicsQueueFamily.QueueCapacity != 0, "GraphicsDevice", "There is no queue for vk graphics queue family!");
-		DEV_ASSERT(mComputeQueueFamily.QueueCapacity != 0, "GraphicsDevice", "There is no queue for vk compute queue family");
-		DEV_ASSERT(mTransferQueueFamily.QueueCapacity != 0, "GraphicsDevice", "There is no queue for vk transfer queue family");
 
 		//Get queues
 		constexpr float queuePriorities[] = { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f };
@@ -67,27 +65,30 @@ namespace Portakal
 			VkDeviceQueueCreateInfo graphicsQueueCreateInfo = {};
 			graphicsQueueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
 			graphicsQueueCreateInfo.queueFamilyIndex = mGraphicsQueueFamily.FamilyIndex;
-			graphicsQueueCreateInfo.queueCount = mGraphicsQueueFamily.QueueCapacity;
+			graphicsQueueCreateInfo.queueCount = mGraphicsQueueFamily.RequestedCount;
 			graphicsQueueCreateInfo.pQueuePriorities = queuePriorities;
 			graphicsQueueCreateInfo.pNext = nullptr;
 
 			VkDeviceQueueCreateInfo computeQueueCreateInfo = {};
 			computeQueueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
 			computeQueueCreateInfo.queueFamilyIndex = mComputeQueueFamily.FamilyIndex;
-			computeQueueCreateInfo.queueCount = mComputeQueueFamily.QueueCapacity;
+			computeQueueCreateInfo.queueCount = mComputeQueueFamily.RequestedCount;
 			computeQueueCreateInfo.pQueuePriorities = queuePriorities;
 			computeQueueCreateInfo.pNext = nullptr;
 
 			VkDeviceQueueCreateInfo transferQueueCreateInfo = {};
 			transferQueueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
 			transferQueueCreateInfo.queueFamilyIndex = mTransferQueueFamily.FamilyIndex;
-			transferQueueCreateInfo.queueCount = mTransferQueueFamily.QueueCapacity;
+			transferQueueCreateInfo.queueCount = mTransferQueueFamily.RequestedCount;
 			transferQueueCreateInfo.pQueuePriorities = queuePriorities;
 			transferQueueCreateInfo.pNext = nullptr;
 
-			queueCreateInformations.Add(graphicsQueueCreateInfo);
-			queueCreateInformations.Add(computeQueueCreateInfo);
-			queueCreateInformations.Add(transferQueueCreateInfo);
+			if (mGraphicsQueueFamily.RequestedCount > 0)
+				queueCreateInformations.Add(graphicsQueueCreateInfo);
+			if (mComputeQueueFamily.RequestedCount > 0)
+				queueCreateInformations.Add(computeQueueCreateInfo);
+			if (mTransferQueueFamily.RequestedCount > 0)
+				queueCreateInformations.Add(transferQueueCreateInfo);
 		}
 
 		//Get logical device extensions
@@ -112,66 +113,83 @@ namespace Portakal
 
 		DEV_ASSERT(vkCreateDevice(mPhysicalDevice, &logicalDeviceInfo, nullptr, &mLogicalDevice) == VK_SUCCESS, "VulkanDevice", "Failed to create logical device!");
 
-		//Get dynamic rendering
-		vkCmdBeginRenderingKHR = (PFN_vkCmdBeginRenderingKHR)vkGetDeviceProcAddr(mLogicalDevice, "vkCmdBeginRenderingKHR");
-		vkCmdEndRenderingKHR = (PFN_vkCmdEndRenderingKHR)vkGetDeviceProcAddr(mLogicalDevice, "vkCmdEndRenderingKHR");
-		DEV_ASSERT(vkCmdBeginRenderingKHR != NULL && vkCmdEndRenderingKHR != NULL, "VulkanGraphicsDevice", "Failed to load dynamic rendering functions");
+		//Get queues
+		for (unsigned int i = 0; i < mGraphicsQueueFamily.RequestedCount; i++)
+		{
+			VkQueue queue = VK_NULL_HANDLE;
+			vkGetDeviceQueue(mLogicalDevice, mGraphicsQueueFamily.FamilyIndex, i, &queue);
+			mGraphicsQueueFamily.FreeQueues.Add(queue);
+		}
 
-		//Get default queues
-		vkGetDeviceQueue(mLogicalDevice, mGraphicsQueueFamily.FamilyIndex, 0, &mGraphicsQueueFamily.DefaultQueue);
-		vkGetDeviceQueue(mLogicalDevice, mComputeQueueFamily.FamilyIndex, 0, &mComputeQueueFamily.DefaultQueue);
-		vkGetDeviceQueue(mLogicalDevice, mTransferQueueFamily.FamilyIndex, 0, &mTransferQueueFamily.DefaultQueue);
+		for (unsigned int i = 0; i < mComputeQueueFamily.RequestedCount; i++)
+		{
+			VkQueue queue = VK_NULL_HANDLE;
+			vkGetDeviceQueue(mLogicalDevice, mComputeQueueFamily.FamilyIndex, i, &queue);
+			mComputeQueueFamily.FreeQueues.Add(queue);
+		}
 
-		//check default queues
-		DEV_ASSERT(mGraphicsQueueFamily.DefaultQueue != NULL, "VulkanGraphicsDevice", "Graphics queue is invalid!");
-		DEV_ASSERT(mComputeQueueFamily.DefaultQueue != NULL, "VulkanGraphicsDevice", "Compute queue is invalid!");
-		DEV_ASSERT(mTransferQueueFamily.DefaultQueue != NULL, "VulkanGraphicsDevice", "Transfer queue is invalid!");
+		for (unsigned int i = 0; i < mTransferQueueFamily.RequestedCount; i++)
+		{
+			VkQueue queue = VK_NULL_HANDLE;
+			vkGetDeviceQueue(mLogicalDevice, mTransferQueueFamily.FamilyIndex, i, &queue);
+			mTransferQueueFamily.FreeQueues.Add(queue);
+		}
 
 		DEV_LOG("VulkanDevice", "Initialized");
 	}
-	Int32 VulkanDevice::GetPresentQueueFamilyIndex(const VkSurfaceKHR surface) const noexcept
+	
+	VkQueue VulkanDevice::vkOwnQueue(const GraphicsQueueType type)
 	{
-		//Check graphics
-		VkBool32 bGraphicsCanPresent = false;
-		DEV_ASSERT(vkGetPhysicalDeviceSurfaceSupportKHR(mPhysicalDevice, mGraphicsQueueFamily.FamilyIndex, surface, &bGraphicsCanPresent) == VK_SUCCESS, "VulkanDevice", "Failed to check surface support");
-		if (bGraphicsCanPresent)
-			return mGraphicsQueueFamily.FamilyIndex;
-
-		//Check compute
-		VkBool32 bComputeCanPresent = false;
-		DEV_ASSERT(vkGetPhysicalDeviceSurfaceSupportKHR(mPhysicalDevice, mComputeQueueFamily.FamilyIndex, surface, &bComputeCanPresent) == VK_SUCCESS, "VulkanDevice", "Failed to check surface support");
-		if (bComputeCanPresent)
-			return mComputeQueueFamily.FamilyIndex;
-
-		//Check transfer
-		VkBool32 bTransferCanPresent = false;
-		DEV_ASSERT(vkGetPhysicalDeviceSurfaceSupportKHR(mPhysicalDevice, mTransferQueueFamily.FamilyIndex, surface, &bTransferCanPresent) == VK_SUCCESS, "VulkanDevice", "Failed to check surface support");
-		if (bTransferCanPresent)
-			return mTransferQueueFamily.FamilyIndex;
-
-		return -1;
+		switch (type)
+		{
+			default:
+			case Portakal::GraphicsQueueType::Graphics:
+				return mGraphicsQueueFamily.OwnQueue();
+			case Portakal::GraphicsQueueType::Compute:
+				return mComputeQueueFamily.OwnQueue();
+			case Portakal::GraphicsQueueType::Transfer:
+				return mTransferQueueFamily.OwnQueue();
+		}
 	}
-	VkQueue VulkanDevice::GetPresentQueue(const VkSurfaceKHR surface) const noexcept
+
+	void VulkanDevice::vkReturnQueue(const GraphicsQueueType type, const VkQueue queue)
 	{
-		VkBool32 bGraphicsCanPresent = false;
-		DEV_ASSERT(vkGetPhysicalDeviceSurfaceSupportKHR(mPhysicalDevice, mGraphicsQueueFamily.FamilyIndex, surface, &bGraphicsCanPresent) == VK_SUCCESS, "VulkanDevice", "Failed to check surface support");
-		if (bGraphicsCanPresent)
-			return mGraphicsQueueFamily.DefaultQueue;
-
-		//Check compute
-		VkBool32 bComputeCanPresent = false;
-		DEV_ASSERT(vkGetPhysicalDeviceSurfaceSupportKHR(mPhysicalDevice, mComputeQueueFamily.FamilyIndex, surface, &bComputeCanPresent) == VK_SUCCESS, "VulkanDevice", "Failed to check surface support");
-		if (bComputeCanPresent)
-			return mComputeQueueFamily.DefaultQueue;
-
-		//Check transfer
-		VkBool32 bTransferCanPresent = false;
-		DEV_ASSERT(vkGetPhysicalDeviceSurfaceSupportKHR(mPhysicalDevice, mTransferQueueFamily.FamilyIndex, surface, &bTransferCanPresent) == VK_SUCCESS, "VulkanDevice", "Failed to check surface support");
-		if (bTransferCanPresent)
-			return mTransferQueueFamily.DefaultQueue;
-
-		return VK_NULL_HANDLE;
+		switch (type)
+		{
+			default:
+			case Portakal::GraphicsQueueType::Graphics:
+			{
+				mGraphicsQueueFamily.ReturnQueue(queue);
+				break;
+			}
+			case Portakal::GraphicsQueueType::Compute:
+			{
+				mComputeQueueFamily.ReturnQueue(queue);
+				break;
+			}
+			case Portakal::GraphicsQueueType::Transfer:
+			{
+				mTransferQueueFamily.ReturnQueue(queue);
+				break;
+			}
+		}
 	}
+
+	unsigned char VulkanDevice::vkGetQueueFamilyIndex(const GraphicsQueueType type) const noexcept
+	{
+		switch (type)
+		{
+			case Portakal::GraphicsQueueType::Graphics:
+				return mGraphicsQueueFamily.FamilyIndex;
+			case Portakal::GraphicsQueueType::Compute:
+				return mComputeQueueFamily.FamilyIndex;
+			case Portakal::GraphicsQueueType::Transfer:
+				return mTransferQueueFamily.FamilyIndex;
+			default:
+				return 255;
+		}
+	}
+
 	SharedHeap<Texture> VulkanDevice::CreateVkSwapchainTexture(const TextureDesc& desc, const VkImage image)
 	{
 		SharedHeap<Texture> pTexture = new VulkanTexture(desc, image, this);
@@ -237,6 +255,10 @@ namespace Portakal
 	{
 		return new VulkanRenderPass(desc, this);
 	}
+	GraphicsQueue* VulkanDevice::OwnQueueCore(const GraphicsQueueDesc& desc)
+	{
+		return new VulkanQueue(desc, this);
+	}
 	CommandPool* VulkanDevice::CreateCommandPoolCore(const CommandPoolDesc& desc)
 	{
 		return new VulkanCommandPool(desc, this);
@@ -278,39 +300,14 @@ namespace Portakal
 	{
 		vkDeviceWaitIdle(mLogicalDevice);
 	}
-	void VulkanDevice::WaitQueueDefaultCore(const GraphicsQueueType type)
-	{
-		switch (type)
-		{
-		case GraphicsQueueType::Graphics:
-		default:
-		{
-			vkQueueWaitIdle(mGraphicsQueueFamily.DefaultQueue);
-			break;
-		}
-		case GraphicsQueueType::Compute:
-		{
-			vkQueueWaitIdle(mComputeQueueFamily.DefaultQueue);
-			break;
-		}
-		case GraphicsQueueType::Transfer:
-		{
-			vkQueueWaitIdle(mTransferQueueFamily.DefaultQueue);
-			break;
-		}
-		case GraphicsQueueType::Present:
-		{
-			vkQueueWaitIdle(mGraphicsQueueFamily.DefaultQueue);
-			break;
-		}
-		}
-	}
+	
 	void VulkanDevice::UpdateHostBufferCore(GraphicsBuffer* pBuffer, const GraphicsBufferHostUpdateDesc& desc)
 	{
-		const VulkanMemoryHeap* pHeap = (const VulkanMemoryHeap*)pBuffer->GetGraphicsHeap().GetHeap();
+		const VulkanMemoryHeap* pHeap = (const VulkanMemoryHeap*)pBuffer->GetMemory().GetHeap();
+		const VulkanBuffer* pVkBuffer = (const VulkanBuffer*)pBuffer;
 
 		Byte* pTargetHostData = nullptr;
-		DEV_ASSERT(vkMapMemory(mLogicalDevice, pHeap->GetVkMemory(), pBuffer->GetAlignedMemoryHandle() + desc.OffsetInBytes, desc.View.GetSize(), 0, (void**)&pTargetHostData) == VK_SUCCESS, "VulkanDevice", "Failed to map the host buffer");
+		DEV_ASSERT(vkMapMemory(mLogicalDevice, pHeap->GetVkMemory(), pVkBuffer->GetVkMemoryAlignedOffset() + desc.OffsetInBytes, desc.View.GetSize(), 0, (void**)&pTargetHostData) == VK_SUCCESS, "VulkanDevice", "Failed to map the host buffer");
 		Memory::Copy(pTargetHostData, (void*)desc.View.GetMemory(), desc.View.GetSize());
 		vkUnmapMemory(mLogicalDevice, pHeap->GetVkMemory());
 	}
@@ -411,47 +408,60 @@ namespace Portakal
 
 		vkUpdateDescriptorSets(mLogicalDevice, desc.Entries.GetSize(), writeInformation.GetDataConst(), 0, nullptr);
 	}
-	void VulkanDevice::SubmitCommandListsCore(CommandList** ppCmdLists, const Byte cmdListCount, const GraphicsQueueType type, const Fence* pFence)
+	void VulkanDevice::SubmitCommandListsCore(CommandList** ppCmdLists, const unsigned char cmdListCount,
+		const GraphicsQueue* pTargetQueue,
+		Semaphore** ppSignalSemaphores, const unsigned int signalSemaphoreCount,
+		Semaphore** ppWaitSemaphores, const PipelineStageFlags* pWaitStageFlags, const unsigned int waitSemaphoreCount,
+		const Fence* pSignalFence)
 	{
-		const VulkanFence* pVkFence = (const VulkanFence*)pFence;
-		VkCommandBuffer cmdBuffers[10];
+		const VulkanFence* pVkFence = (const VulkanFence*)pSignalFence;
+		const VulkanQueue* pVkQueue = (const VulkanQueue*)pTargetQueue;
 
-		for (UInt32 cmdListIndex = 0; cmdListIndex < cmdListCount; cmdListIndex++)
+		//Get cmd buffers
+		VkCommandBuffer vkCmdBuffers[32];
+		for (unsigned int cmdListIndex = 0; cmdListIndex < cmdListCount; cmdListIndex++)
 		{
 			const VulkanCommandList* pCmdList = (const VulkanCommandList*)ppCmdLists[cmdListIndex];
+			vkCmdBuffers[cmdListIndex] = pCmdList->GetVkCommandBuffer();
+		}
 
-			cmdBuffers[cmdListIndex] = pCmdList->GetVkCommandBuffer();
+		//Get wait semaphores
+		VkSemaphore vkSignalSemahpores[32];
+		for (unsigned int i = 0; i < signalSemaphoreCount; i++)
+		{
+			const VulkanSemaphore* pSemaphore = (const VulkanSemaphore*)ppSignalSemaphores[i];
+			vkSignalSemahpores[i] = pSemaphore->GetVkSemaphore();
+		}
+
+		//Get wait semaphores
+		VkSemaphore vkWaitSemahpores[32];
+		for (unsigned int i = 0; i < waitSemaphoreCount; i++)
+		{
+			const VulkanSemaphore* pSemaphore = (const VulkanSemaphore*)ppWaitSemaphores[i];
+			vkWaitSemahpores[i] = pSemaphore->GetVkSemaphore();
+		}
+
+		//Get wait semaphore stage flags
+		VkPipelineStageFlags vkStageWaitFlags[32];
+		for (unsigned int i = 0; i < waitSemaphoreCount; i++)
+		{
+			vkStageWaitFlags[i] = VulkanPipelineUtils::GetStageFlags(pWaitStageFlags[i]);
 		}
 
 		VkSubmitInfo submitInfo = {};
 		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 		submitInfo.pNext = nullptr;
-		submitInfo.waitSemaphoreCount = 0;
-		submitInfo.pWaitSemaphores = nullptr;
-		submitInfo.pCommandBuffers = cmdBuffers;
-		submitInfo.commandBufferCount = cmdListCount;
 
-		switch (type)
-		{
-		case GraphicsQueueType::Graphics:
-		default:
-		{
-			DEV_ASSERT(vkQueueSubmit(mGraphicsQueueFamily.DefaultQueue, 1, &submitInfo, pVkFence != nullptr ? pVkFence->GetVkFence() : nullptr) == VK_SUCCESS, "VulkanGraphicsDevice",
-				"Failed to submit command lists to the graphics queue");
-			break;
-		}
-		case GraphicsQueueType::Compute:
-		{
-			DEV_ASSERT(vkQueueSubmit(mComputeQueueFamily.DefaultQueue, 1, &submitInfo, pVkFence != nullptr ? pVkFence->GetVkFence() : nullptr) == VK_SUCCESS, "VulkanGraphicsDevice",
-				"Failed to submit command lists to the compute queue");
-			break;
-		}
-		case GraphicsQueueType::Transfer:
-		{
-			DEV_ASSERT(vkQueueSubmit(mTransferQueueFamily.DefaultQueue, 1, &submitInfo, pVkFence != nullptr ? pVkFence->GetVkFence() : nullptr) == VK_SUCCESS, "VulkanGraphicsDevice",
-				"Failed to submit command lists to the transfer queue");
-			break;
-		}
-		}
+		submitInfo.waitSemaphoreCount = waitSemaphoreCount;
+		submitInfo.pWaitSemaphores = vkWaitSemahpores;
+		submitInfo.pWaitDstStageMask = vkStageWaitFlags;
+
+		submitInfo.signalSemaphoreCount = signalSemaphoreCount;
+		submitInfo.pSignalSemaphores = vkSignalSemahpores;
+
+		submitInfo.commandBufferCount = cmdListCount;
+		submitInfo.pCommandBuffers = vkCmdBuffers;
+
+		DEV_ASSERT(vkQueueSubmit(pVkQueue->GetVkQueue(), cmdListCount, &submitInfo, pVkFence != nullptr ? pVkFence->GetVkFence() : VK_NULL_HANDLE) == VK_SUCCESS, "VulkanDevice", "Failed to submit the command lists");
 	}
 }

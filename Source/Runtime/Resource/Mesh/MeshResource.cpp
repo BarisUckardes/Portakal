@@ -111,7 +111,7 @@ namespace Portakal
 		deviceCopyDesc.SizeInBytes = memory.GetSize();
 		mCmdList->CopyBufferToBuffer(subMesh.pVertexStageBuffer.GetHeap(), subMesh.pVertexBuffer.GetHeap(), deviceCopyDesc);
 		mCmdList->EndRecording();
-		mDevice->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, mFence.GetHeap());
+		mDevice->SubmitCommandLists(mCmdList.GetHeapAddress(), 1,GraphicsAPI::GetDefaultGraphicsQueue().GetHeap(),nullptr,0,nullptr,nullptr,0,mFence.GetHeap());
 		mDevice->WaitFences(mFence.GetHeapAddress(), 1);
 		mDevice->ResetFences(mFence.GetHeapAddress(), 1);
 	}
@@ -150,7 +150,7 @@ namespace Portakal
 		deviceCopyDesc.SizeInBytes = memory.GetSize();
 		mCmdList->CopyBufferToBuffer(subMesh.pIndexStageBuffer.GetHeap(), subMesh.pIndexBuffer.GetHeap(), deviceCopyDesc);
 		mCmdList->EndRecording();
-		mDevice->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsQueueType::Graphics, mFence.GetHeap());
+		mDevice->SubmitCommandLists(mCmdList.GetHeapAddress(), 1, GraphicsAPI::GetDefaultGraphicsQueue().GetHeap(), nullptr, 0, nullptr, nullptr, 0, mFence.GetHeap());
 		mDevice->WaitFences(mFence.GetHeapAddress(), 1);
 		mDevice->ResetFences(mFence.GetHeapAddress(),1);
 	}

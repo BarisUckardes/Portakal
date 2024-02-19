@@ -35,7 +35,13 @@ namespace Portakal
 		}
 
 		//Create device
-		mDevice = mAdapter->CreateDevice();
+		GraphicsDeviceDesc deviceDesc = {};
+		deviceDesc.Backend = GraphicsBackend::Vulkan;
+		deviceDesc.pAdapter = mAdapter.GetHeap();
+		deviceDesc.ComputeQueueCount = 1;
+		deviceDesc.GraphicsQueueCount = 1;
+		deviceDesc.TransferQueueCount = 1;
+		mDevice = mAdapter->CreateDevice(&deviceDesc);
 
 		//Create swapchain
 		SwapchainDesc swapchainDesc = {};
@@ -45,6 +51,7 @@ namespace Portakal
 		swapchainDesc.pDevice = mDevice;
 		swapchainDesc.pWindow = pWindow;
 		swapchainDesc.PresentMode = PresentMode::VsyncImmediate;
+		swapchainDesc.pQueue = GraphicsAPI::GetDefaultGraphicsQueue();
 		mSwapchain = mDevice->CreateSwapchain(swapchainDesc);
 
 		//Set memory profile

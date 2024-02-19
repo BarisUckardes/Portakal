@@ -20,7 +20,7 @@ namespace Portakal
 		virtual void OnShutdown() override;
 	private:
 		// Inherited via GraphicsAdapter
-		GraphicsDevice* CreateDeviceCore() override;
+		GraphicsDevice* CreateDeviceCore(const GraphicsDeviceDesc* pDesc) override;
 	private:
 		VkPhysicalDevice mDevice;
 	};

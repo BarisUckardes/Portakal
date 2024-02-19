@@ -17,10 +17,20 @@ namespace Portakal
 			return mImage;
 		}
 
+		FORCEINLINE UInt64 GetVkMemoryOffset() const noexcept
+		{
+			return mMemoryOffset;
+		}
+		FORCEINLINE UInt64 GetVkMemoryAlignedOffset() const noexcept
+		{
+			return mMemoryAlignedOffset;
+		}
 		virtual void OnShutdown() override;
 	private:
 		const Bool8 mSwapchain;
 		VkImage mImage;
 		VkDevice mLogicalDevice;
+		UInt64 mMemoryOffset;
+		UInt64 mMemoryAlignedOffset;
 	};
 }

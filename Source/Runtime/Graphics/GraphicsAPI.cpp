@@ -74,6 +74,33 @@ namespace Portakal
 
 		return pAPI->mTablePool;
 	}
+
+	SharedHeap<GraphicsQueue> GraphicsAPI::GetDefaultGraphicsQueue()
+	{
+		GraphicsAPI* pAPI = GetUnderlyingAPI();
+		if (pAPI == nullptr)
+			return nullptr;
+
+		return pAPI->mGraphicsQueue;
+	}
+
+	SharedHeap<GraphicsQueue> GraphicsAPI::GetDefaultComputeQueue()
+	{
+		GraphicsAPI* pAPI = GetUnderlyingAPI();
+		if (pAPI == nullptr)
+			return nullptr;
+
+		return pAPI->mComputeQueue;
+	}
+
+	SharedHeap<GraphicsQueue> GraphicsAPI::GetDefaultTransferQueue()
+	{
+		GraphicsAPI* pAPI = GetUnderlyingAPI();
+		if (pAPI == nullptr)
+			return nullptr;
+
+		return pAPI->mTransferQueue;
+	}
 	
 	void GraphicsAPI::_SetDevice(const SharedHeap<GraphicsDevice>& pDevice)
 	{
@@ -84,6 +111,9 @@ namespace Portakal
 		DEV_ASSERT(pAPI->mDevice.IsShutdown(), "GraphicsAPI", "Cannot have more than one graphics device!");
 
 		pAPI->mDevice = pDevice;
+		pAPI->mGraphicsQueue = pDevice->OwnQueue({ GraphicsQueueType::Graphics });
+		pAPI->mComputeQueue = pDevice->OwnQueue({ GraphicsQueueType::Compute });
+		pAPI->mTransferQueue = pDevice->OwnQueue({ GraphicsQueueType::Transfer });
 	}
 	void GraphicsAPI::_RemoveDevice()
 	{

@@ -32,6 +32,7 @@
 #include <Runtime/Graphics/Pipeline/ComputePipelineDesc.h>
 #include <Runtime/Graphics/Swapchain/SwapchainDesc.h>
 
+#include <Runtime/Graphics/Semaphore/Semaphore.h>
 
 namespace Portakal
 {
@@ -59,7 +60,7 @@ namespace Portakal
 	public:
 		static SharedHeap<GraphicsDevice> Create(const GraphicsDeviceDesc& desc);
 	public:
-		GraphicsDevice(const GraphicsDeviceDesc& desc);
+		GraphicsDevice(const GraphicsDeviceDesc* pDesc);
 		~GraphicsDevice() = default;
 
 		FORCEINLINE SharedHeap<Swapchain> GetMainSwapchain() const noexcept
@@ -91,14 +92,18 @@ namespace Portakal
 		SharedHeap<Fence> CreateFence(const bool bSignalled);
 		SharedHeap<Swapchain> CreateSwapchain(const SwapchainDesc& desc);
 		SharedHeap<RenderPass> CreateRenderPass(const RenderPassDesc& desc);
+		SharedHeap<GraphicsQueue> OwnQueue(const GraphicsQueueDesc& desc);
 
 		void ResetFences(Fence** ppFences,const Byte count);
 		void WaitFences(Fence** ppFences, const Byte count);
 		void WaitDeviceIdle();
-		void WaitQueueDefault(const GraphicsQueueType type);
 		void UpdateHostBuffer(GraphicsBuffer* pBuffer, const GraphicsBufferHostUpdateDesc& desc);
 		void UpdateResourceTable(ResourceTable* pTable, const ResourceTableUpdateDesc& desc);
-		void SubmitCommandLists(CommandList** ppCmdLists, const Byte cmdListCount, const GraphicsQueueType type, const Fence* pFence);
+		void SubmitCommandLists(CommandList** ppCmdLists, const unsigned char cmdListCount,
+			const GraphicsQueue* pTargetQueue,
+			Semaphore** ppSignalSemaphores, const unsigned int signalSemaphoreCount,
+			Semaphore** ppWaitSemaphores, const PipelineStageFlags* pWaitStageFlags, const unsigned int waitSemaphoreCount,
+			const Fence* pSignalFence);
 	protected:
 		void RegisterChild(const SharedHeap<GraphicsDeviceObject>& pObject);
 		void RemoveChild(const SharedHeap<GraphicsDeviceObject>& pObject);
@@ -120,14 +125,18 @@ namespace Portakal
 		virtual Fence* CreateFenceCore(const bool bSignalled) = 0;
 		virtual Swapchain* CreateSwapchainCore(const SwapchainDesc& desc) = 0;
 		virtual RenderPass* CreateRenderPassCore(const RenderPassDesc& desc) = 0;
+		virtual GraphicsQueue* OwnQueueCore(const GraphicsQueueDesc& desc) = 0;
 
 		virtual void ResetFencesCore(Fence** ppFences, const Byte count) = 0;
 		virtual void WaitFencesCore(Fence** ppFences, const Byte count) = 0;
 		virtual void WaitDeviceIdleCore() = 0;
-		virtual void WaitQueueDefaultCore(const GraphicsQueueType type) = 0;
 		virtual void UpdateHostBufferCore(GraphicsBuffer* pBuffer, const GraphicsBufferHostUpdateDesc& desc) = 0;
 		virtual void UpdateResourceTableCore(ResourceTable* pTable, const ResourceTableUpdateDesc& desc) = 0;
-		virtual void SubmitCommandListsCore(CommandList** ppCmdLists, const Byte cmdListCount, const GraphicsQueueType type, const Fence* pFence) = 0;
+		virtual void SubmitCommandListsCore(CommandList** ppCmdLists, const unsigned char cmdListCount,
+			const GraphicsQueue* pTargetQueue,
+			Semaphore** ppSignalSemaphores, const unsigned int signalSemaphoreCount,
+			Semaphore** ppWaitSemaphores, const PipelineStageFlags* pWaitStageFlags, const unsigned int waitSemaphoreCount,
+			const Fence* pSignalFence) = 0;
 	private:
 		const GraphicsBackend mBackend;
 		GraphicsAdapter* mOwnerAdapter;

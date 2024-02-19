@@ -16,9 +16,6 @@ namespace Portakal
 		Bool8 PresentCore() override;
 		void ResizeCore(const UInt16 width, const UInt16 height) override;
 		void Free();
-		// Inherited via Swapchain
-		Bool8 SetFullScreen() override;
-		Bool8 SetWindowed() override;
 	private:
 		VulkanDevice* mDevice;
 		VkSurfaceKHR mSurface;

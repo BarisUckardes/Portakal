@@ -9,5 +9,8 @@ namespace Portakal
 	{
 		GraphicsBackend Backend;
 		GraphicsAdapter* pAdapter;
+		Byte GraphicsQueueCount;
+		Byte ComputeQueueCount;
+		Byte TransferQueueCount;
 	};
 }

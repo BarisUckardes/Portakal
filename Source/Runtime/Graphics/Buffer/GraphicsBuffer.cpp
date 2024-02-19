@@ -2,12 +2,12 @@
 
 namespace Portakal
 {
-	GraphicsBuffer::GraphicsBuffer(const GraphicsBufferDesc& desc) : GraphicsMemoryObject(desc.pHeap),mUsages(desc.Usage),mSubItemCount(desc.SubItemCount),mSubItemSize(desc.SubItemSizeInBytes),mTotalSize(desc.SubItemCount*desc.SubItemSizeInBytes)
+	GraphicsBuffer::GraphicsBuffer(const GraphicsBufferDesc& desc) : mUsages(desc.Usage),mSubItemCount(desc.SubItemCount),mSubItemSize(desc.SubItemSizeInBytes),mTotalSize(desc.SubItemCount*desc.SubItemSizeInBytes),mHeap(desc.pHeap)
 	{
 
 	}
 	void GraphicsBuffer::OnShutdown()
 	{
-		GraphicsMemoryObject::OnShutdown();
+
 	}
 }

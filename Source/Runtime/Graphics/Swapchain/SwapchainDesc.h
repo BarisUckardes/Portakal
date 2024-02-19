@@ -2,6 +2,7 @@
 #include <Runtime/Graphics/Texture/TextureFormat.h>
 #include <Runtime/Platform/PlatformWindow.h>
 #include <Runtime/Graphics/Swapchain/PresentMode.h>
+#include <Runtime/Graphics/Queue/GraphicsQueue.h>
 
 namespace Portakal
 {
@@ -14,5 +15,6 @@ namespace Portakal
 		TextureFormat DepthStencilFormat;
 		SharedHeap<PlatformWindow> pWindow;
 		SharedHeap<GraphicsDevice> pDevice;
+		SharedHeap<GraphicsQueue> pQueue;
 	};
 }

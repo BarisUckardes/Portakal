@@ -75,7 +75,7 @@ namespace Portakal
 		pApplication->RegisterModule<WindowModule>(1);
 		pApplication->RegisterModule<GraphicsModule>(2);
 		pApplication->RegisterModule<ResourceModule>(3);
-		pApplication->RegisterModule<ProjectModule>(4, cmdArguments[1]);
+		pApplication->RegisterModule<ProjectModule>(4, "E://TestProject");
 		pApplication->RegisterModule<DomainModule>(5);
 
 		//Add create-only modules
