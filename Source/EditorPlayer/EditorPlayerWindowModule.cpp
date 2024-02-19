@@ -14,7 +14,7 @@ namespace Portakal
         desc.Size = pMonitor->GetSize();
         desc.Position = { 0,0 };
         desc.Title = "Portakal Editor Player";
-        desc.Mode = WindowMode::Windowed;
+        desc.Mode = WindowMode::Fullscreen;
         desc.pMonitor = pMonitor;
         mWindow = PlatformWindow::Create(desc);
     }

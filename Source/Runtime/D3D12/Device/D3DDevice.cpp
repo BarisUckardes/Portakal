@@ -80,5 +80,6 @@ namespace Portakal
 	}
 	void D3DDevice::ResetFencesCore(Fence** ppFences, const Byte count)
 	{
+
 	}
 }

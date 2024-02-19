@@ -98,6 +98,10 @@ namespace Portakal
 	}
 	void DomainFile::OpenFile()
 	{
+		//Abort if open action is nullptr
+		if (mOpenAction == nullptr)
+			return;
+
 		mOpenAction->OnOpen(this);
 	}
 
