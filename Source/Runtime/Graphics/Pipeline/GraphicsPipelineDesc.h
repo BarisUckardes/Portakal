@@ -10,7 +10,7 @@
 #include <Runtime/Graphics/Pipeline/ResourceLayout/ResourceLayoutDesc.h>
 #include <Runtime/Graphics/RenderPass/RenderPass.h>
 #include <Runtime/Graphics/Shader/Shader.h>
-#include <Runtime/Graphics/Command/ViewportDesc.h>
+#include <Runtime/Graphics/Common/ViewportDesc.h>
 
 namespace Portakal
 {

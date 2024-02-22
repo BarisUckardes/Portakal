@@ -1,15 +1,15 @@
 #include "ImGuiTextureBinding.h"
 #include <Runtime/Graphics/Device/GraphicsDevice.h>
 #include <Runtime/Graphics/Texture/Texture.h>
-#include <Runtime/Graphics/Resource/ResourceTable.h>
-#include <Runtime/Graphics/Resource/ResourceTableLayout.h>
-#include <Runtime/Graphics/Resource/ResourceTablePool.h>
+#include <Runtime/Graphics/Descriptor/DescriptorSet.h>
+#include <Runtime/Graphics/Descriptor/DescriptorSetLayout.h>
+#include <Runtime/Graphics/Descriptor/DescriptorSetPool.h>
 #include <Runtime/Resource/Texture/TextureResource.h>
 #include <Runtime/Graphics/GraphicsAPI.h>
 
 namespace Portakal
 {
-	ImGuiTextureBinding::ImGuiTextureBinding(const SharedHeap<TextureResource>& pTexture, const SharedHeap<ResourceTableLayout>& pLayout) : mTexture(pTexture)
+	ImGuiTextureBinding::ImGuiTextureBinding(const SharedHeap<TextureResource>& pTexture, const SharedHeap<DescriptorSetLayout>& pLayout) : mTexture(pTexture)
 	{
 		//Check given texture
 		if (pTexture.IsShutdown())
@@ -27,24 +27,24 @@ namespace Portakal
 
 		
 		//Create resource table
-		ResourceTableDesc tableDesc = {};
+		DescriptorSetDesc tableDesc = {};
 		tableDesc.pOwnerPool = GraphicsAPI::GetDefaultTablePool().GetHeap();
 		tableDesc.pTargetLayout = pLayout.GetHeap();
-		mTable = pTexture->GetDevice()->CreateResourceTable(tableDesc);
+		mTable = pTexture->GetDevice()->CreateDescriptorSet(tableDesc);
 
 		//Update resource table
-		ResourceTableUpdateDesc updateDesc = {};
+		DescriptorSetUpdateDesc updateDesc = {};
 		updateDesc.Entries.Add(
 			{
 					.pResource = pTexture->GetView(0, 0).QueryAs<GraphicsDeviceObject>(),
-					.Type = GraphicsResourceType::SampledTexture,
+					.Type = DescriptorResourceType::SampledTexture,
 					.Count = 1,
 					.ArrayElement = 0,
 					.BufferOffsetInBytes = 0,
 					.Binding = 0
 			});
 
-		pTexture->GetDevice()->UpdateResourceTable(mTable.GetHeap(), updateDesc);
+		pTexture->GetDevice()->UpdateDescriptorSet(mTable.GetHeap(), updateDesc);
 	}
 	void ImGuiTextureBinding::OnShutdown()
 	{

@@ -4,7 +4,7 @@
 
 namespace Portakal
 {
-    GraphicsDevice::GraphicsDevice(const GraphicsDeviceDesc* pDesc) : mOwnerAdapter(pDesc->pAdapter),mBackend(pDesc->Backend)
+    GraphicsDevice::GraphicsDevice(const GraphicsDeviceDesc* pDesc) : mOwnerAdapter(pDesc->pAdapter)
     {
 
     }
@@ -77,9 +77,9 @@ namespace Portakal
         RegisterChild(pPipeline.QueryAs<GraphicsDeviceObject>());
         return pPipeline;
     }
-    SharedHeap<GraphicsMemoryHeap> GraphicsDevice::CreateMemoryHeap(const GraphicsMemoryHeapDesc& desc)
+    SharedHeap<GraphicsMemory> GraphicsDevice::CreateMemoryHeap(const GraphicsMemoryDesc& desc)
     {
-        SharedHeap<GraphicsMemoryHeap> pHeap = CreateMemoryHeapCore(desc);
+        SharedHeap<GraphicsMemory> pHeap = CreateMemoryHeapCore(desc);
         RegisterChild(pHeap.QueryAs<GraphicsDeviceObject>());
         return pHeap;
     }
@@ -101,21 +101,21 @@ namespace Portakal
         RegisterChild(pSampler.QueryAs<GraphicsDeviceObject>());
         return pSampler;
     }
-    SharedHeap<ResourceTableLayout> GraphicsDevice::CreateResourceTableLayout(const ResourceTableLayoutDesc& desc)
+    SharedHeap<DescriptorSetLayout> GraphicsDevice::CreateDescriptorSetLayout(const DescriptorSetLayoutDesc& desc)
     {
-        SharedHeap<ResourceTableLayout> pDescriptorLayout = CreateResourceTableLayoutCore(desc);
+        SharedHeap<DescriptorSetLayout> pDescriptorLayout = CreateDescriptorSetLayoutCore(desc);
         RegisterChild(pDescriptorLayout.QueryAs<GraphicsDeviceObject>());
         return pDescriptorLayout;
     }
-    SharedHeap<ResourceTablePool> GraphicsDevice::CreateResourceTablePool(const ResourceTablePoolDesc& desc)
+    SharedHeap<DescriptorSetPool> GraphicsDevice::CreateDescriptorSetPool(const DescriptorSetPoolDesc& desc)
     {
-        SharedHeap<ResourceTablePool> pPool = CreateResourceTablePoolCore(desc);
+        SharedHeap<DescriptorSetPool> pPool = CreateDescriptorSetPoolCore(desc);
         RegisterChild(pPool.QueryAs<GraphicsDeviceObject>());
         return pPool;
     }
-    SharedHeap<ResourceTable> GraphicsDevice::CreateResourceTable(const ResourceTableDesc& desc)
+    SharedHeap<DescriptorSet> GraphicsDevice::CreateDescriptorSet(const DescriptorSetDesc& desc)
     {
-        SharedHeap<ResourceTable> pResourceSet = CreateResourceTableCore(desc);
+        SharedHeap<DescriptorSet> pResourceSet = CreateDescriptorSetCore(desc);
         RegisterChild(pResourceSet.QueryAs<GraphicsDeviceObject>());
         return pResourceSet;
     }
@@ -128,6 +128,14 @@ namespace Portakal
         RegisterChild(pFence.QueryAs<GraphicsDeviceObject>());
 
         return pFence;
+    }
+    SharedHeap<Semaphore> GraphicsDevice::CreateSyncObject()
+    {
+        SharedHeap<Semaphore> pSyncObject = CreateSyncObjectCore();
+
+        RegisterChild(pSyncObject.QueryAs<GraphicsDeviceObject>());
+
+        return pSyncObject;
     }
     SharedHeap<Swapchain> GraphicsDevice::CreateSwapchain(const SwapchainDesc& desc)
     {
@@ -155,9 +163,9 @@ namespace Portakal
         RegisterChild(pResourceSet.QueryAs<GraphicsDeviceObject>());
         return pResourceSet;
     }
-    SharedHeap<GraphicsQueue> GraphicsDevice::OwnQueue(const GraphicsQueueDesc& desc)
+    SharedHeap<GraphicsQueue> GraphicsDevice::RentQueue(const GraphicsQueueDesc& desc)
     {
-        SharedHeap<GraphicsQueue> pQueue = OwnQueueCore(desc);
+        SharedHeap<GraphicsQueue> pQueue = RentQueueCore(desc);
 
         RegisterChild(pQueue.QueryAs<GraphicsDeviceObject>());
 
@@ -179,9 +187,9 @@ namespace Portakal
     {
         UpdateHostBufferCore(pBuffer, desc);
     }
-    void GraphicsDevice::UpdateResourceTable(ResourceTable* pTable, const ResourceTableUpdateDesc& desc)
+    void GraphicsDevice::UpdateDescriptorSet(DescriptorSet* pTable, const DescriptorSetUpdateDesc& desc)
     {
-        UpdateResourceTableCore(pTable, desc);
+        UpdateDescriptorSetCore(pTable, desc);
     }
     void GraphicsDevice::SubmitCommandLists(CommandList** ppCmdLists, const unsigned char cmdListCount,
         const GraphicsQueue* pTargetQueue,

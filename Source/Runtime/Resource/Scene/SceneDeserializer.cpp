@@ -19,7 +19,7 @@ namespace Portakal
 		for (const Guid& id : descriptor.Resources)
 		{
 			SharedHeap<Resource> pResource = ResourceAPI::GetResource(id);
-			if(pResource.IsAlive())
+			if(!pResource.IsShutdown())
 				pResource->LoadSync();
 		}
 

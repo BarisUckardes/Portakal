@@ -5,7 +5,7 @@
 
 namespace Portakal
 {
-    VulkanSampler::VulkanSampler(const SamplerDesc& desc, VulkanDevice* pDevice) : Sampler(desc), mSampler(VK_NULL_HANDLE), mLogicalDevice(pDevice->GetVkLogicalDevice())
+    VulkanSampler::VulkanSampler(const SamplerDesc& desc, VulkanDevice* pDevice) : Sampler(desc,pDevice), mSampler(VK_NULL_HANDLE), mLogicalDevice(pDevice->GetVkLogicalDevice())
     {
         VkSamplerCreateInfo createInfo = {};
         createInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;

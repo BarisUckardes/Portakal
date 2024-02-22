@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    VulkanQueue::VulkanQueue(const GraphicsQueueDesc& desc,VulkanDevice* pDevice) : GraphicsQueue(desc)
+    VulkanQueue::VulkanQueue(const GraphicsQueueDesc& desc,VulkanDevice* pDevice) : GraphicsQueue(desc,pDevice)
     {
         mQueue = pDevice->vkOwnQueue(desc.Type);
         mFamilyIndex = pDevice->vkGetQueueFamilyIndex(desc.Type);

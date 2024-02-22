@@ -28,7 +28,6 @@ namespace Portakal
 		for (const RenderPassAttachmentDesc& attachment : desc.ColorAttachments)
 			mColorTargets.Add(attachment.pTexture);
 
-		mDepthStencilTarget = desc.DepthStencilAttachment.pTexture;
 	}
 	void RenderTarget::Delete()
 	{

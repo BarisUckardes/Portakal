@@ -28,8 +28,8 @@ namespace Portakal
 		Array<const BasicRenderable*> mRenderables;
 		SharedHeap<TextureResource> mTexture;
 		SharedHeap<MeshResource> mMesh;
-		SharedHeap<GraphicsMemoryHeap> mDeviceHeap;
-		SharedHeap<GraphicsMemoryHeap> mHostHeap;
+		SharedHeap<GraphicsMemory> mDeviceHeap;
+		SharedHeap<GraphicsMemory> mHostHeap;
 		SharedHeap<GraphicsBuffer> mConstantBufferDevice;
 		SharedHeap<GraphicsBuffer> mConstantBufferHost;
 		SharedHeap<CommandPool> mCmdPool;
@@ -38,9 +38,9 @@ namespace Portakal
 		SharedHeap<Shader> mVertexShader;
 		SharedHeap<Shader> mFragmentShader;
 		SharedHeap<Pipeline> mPipeline;
-		SharedHeap<ResourceTableLayout> mResourceLayout;
-		SharedHeap<ResourceTable> mResourceTable;
-		SharedHeap<ResourceTablePool> mResourceTablePool;
+		SharedHeap<DescriptorSetLayout> mResourceLayout;
+		SharedHeap<DescriptorSet> mDescriptorSet;
+		SharedHeap<DescriptorSetPool> mDescriptorSetPool;
 	};
 }
 

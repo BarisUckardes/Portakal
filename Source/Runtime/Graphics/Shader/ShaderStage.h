@@ -7,9 +7,12 @@ namespace Portakal
     PENUM();
     enum class RUNTIME_API ShaderStage : Int64
     {
-        VertexStage = 1,
-        FragmentStage = 2,
-        ComputeStage = 4,
+        Vertex = 1,
+        Fragment = 2,
+        Compute = 4,
+        Geometry = 8,
+        TesellationControl = 16,
+        TesellationEval = 32,
     };
 
     GENERATE_FLAGS(ShaderStage, Byte)

@@ -87,24 +87,23 @@ namespace Portakal
             //Create render pass
             RenderPassDesc desc = {};
             desc.Size = { pTexture->GetSize().X,pTexture->GetSize().Y };
-            desc.AttachmentViews.Add(pView);
+
             RenderPassAttachmentDesc colorAttachmentDesc = {};
             colorAttachmentDesc.ArrayLevel = 0;
-            colorAttachmentDesc.MipLevel = 0;
+            colorAttachmentDesc.MipLevel = 0; 
+            colorAttachmentDesc.Format = pTexture->GetFormat();
+            colorAttachmentDesc.SampleCount = pTexture->GetSampleCount();
             colorAttachmentDesc.ColorLoadOperation = RenderPassLoadOperation::Clear;
             colorAttachmentDesc.ColorStoreOperation = RenderPassStoreOperation::Store;
             colorAttachmentDesc.InputLayout = TextureMemoryLayout::Present;
             colorAttachmentDesc.OutputLayout = TextureMemoryLayout::Present;
             colorAttachmentDesc.pTexture = pTexture;
+            colorAttachmentDesc.pView = pView;
             colorAttachmentDesc.StencilLoadOperation = RenderPassLoadOperation::Clear;
             colorAttachmentDesc.StencilStoreOperation = RenderPassStoreOperation::Store;
-            desc.ColorAttachments.Add(colorAttachmentDesc);
-            RenderPassSubpassDesc subpassDesc = {};
-            subpassDesc.BindPoint = PipelineBindPoint::Graphics;
-            subpassDesc.DepthStencilInput = 0;
-            subpassDesc.Attachments.Add(0);
-            desc.Subpasses.Add(subpassDesc);
 
+            desc.ColorAttachments.Add(colorAttachmentDesc);
+           
             SharedHeap<RenderTarget> pRenderTarget = new RenderTarget();
             pRenderTarget->Create(desc);
             mRenderTargets.Add(pRenderTarget);

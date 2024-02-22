@@ -15,6 +15,8 @@ namespace Portakal
 		{
 			return mSemaphore;
 		}
+
+		virtual void OnShutdown() override;
 	private:
 		VkSemaphore mSemaphore;
 		VkDevice mLogicalDevice;

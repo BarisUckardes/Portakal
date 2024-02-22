@@ -12,7 +12,7 @@ namespace Portakal
 		GraphicsAdapter(const GraphicsAdapterDesc& desc) :
 			mProductName(desc.ProductName),mVendorName(desc.VendorName),mSupportGeometryShader(desc.bSupportGeometryShader),mSupportComputeShader(desc.bSupportComputeShader),
 			mColorAttachmentCount(desc.ColorAttachmentCount),mShaderTextureCount(desc.ShaderTextureCount),mShaderSamplerCount(desc.ShaderSamplerCount),mShaderBufferCount(desc.ShaderBufferCount),
-			mVRam(desc.VRam),mImageDimensions(desc.ImageDimensions),mOwnerInstance(desc.pInstance)
+			mMemory(desc.Memory),mImageDimensions(desc.ImageDimensions),mOwnerInstance(desc.pInstance)
 		{
 			SetName(desc.ProductName);
 		}
@@ -26,13 +26,13 @@ namespace Portakal
 		FORCEINLINE UInt32 GetShaderTextureCount() const noexcept { return mShaderTextureCount; }
 		FORCEINLINE UInt32 GetShaderSamplerCount() const noexcept { return mShaderSamplerCount; }
 		FORCEINLINE UInt32 GetShaderBufferCount() const noexcept { return mShaderBufferCount; }
-		FORCEINLINE UInt64 GetVRam() const noexcept { return mVRam; }
+		FORCEINLINE UInt64 GetMemory() const noexcept { return mMemory; }
 		FORCEINLINE Vector3UI GetImageDimensions() const noexcept { return mImageDimensions; }
 		FORCEINLINE GraphicsInstance* GetOwnerInstance() const noexcept
 		{
 			return mOwnerInstance;
 		}
-		SharedHeap<GraphicsDevice> CreateDevice(const GraphicsDeviceDesc* pDesc);
+		SharedHeap<GraphicsDevice> CreateDevice(GraphicsDeviceDesc* pDesc);
 	protected:
 		virtual GraphicsDevice* CreateDeviceCore(const GraphicsDeviceDesc* pDesc) = 0;
 	private:
@@ -46,7 +46,7 @@ namespace Portakal
 		const UInt32 mShaderTextureCount;
 		const UInt32 mShaderSamplerCount;
 		const UInt32 mShaderBufferCount;
-		const UInt64 mVRam;
+		const UInt64 mMemory;
 		const Vector3UI mImageDimensions;
 		GraphicsInstance* mOwnerInstance;
 		Array<SharedHeap<GraphicsDevice>> mDevices;

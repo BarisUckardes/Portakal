@@ -7,7 +7,7 @@ namespace Portakal
 	class RUNTIME_API CommandPool : public GraphicsDeviceObject
 	{
 	public:
-		CommandPool(const CommandPoolDesc& desc);
+		CommandPool(const CommandPoolDesc& desc,GraphicsDevice* pDevice);
 		~CommandPool() = default;
 
 		FORCEINLINE CommandPoolType GetCommandType() const noexcept

@@ -45,16 +45,16 @@ namespace Portakal
 		{
 			return mShaders;
 		}
-		FORCEINLINE Array<SharedHeap<ResourceTable>> GetTables() const noexcept
+		FORCEINLINE Array<SharedHeap<DescriptorSet>> GetTables() const noexcept
 		{
-			return mResourceTables;
+			return mDescriptorSets;
 		}
-		FORCEINLINE Array<SharedHeap<ResourceTableLayout>> GetTableLayouts() const noexcept
+		FORCEINLINE Array<SharedHeap<DescriptorSetLayout>> GetTableLayouts() const noexcept
 		{
-			return mResourceTableLayouts;
+			return mDescriptorSetLayouts;
 		}
 
-		void SetMemoryProfile(const SharedHeap<GraphicsMemoryHeap>& pHeapDevice,const SharedHeap<GraphicsMemoryHeap>& pHeapHost,const SharedHeap<ResourceTablePool>& pPool);
+		void SetMemoryProfile(const SharedHeap<GraphicsMemory>& pHeapDevice,const SharedHeap<GraphicsMemory>& pHeapHost,const SharedHeap<DescriptorSetPool>& pPool);
 		void SetShaderProfile(const Array<SharedHeap<ShaderResource>>& shaders);
 		void SetTextureParameter(const ShaderStage stage, const String& parameterName, const SharedHeap<TextureResource>& pTexture, const Byte arrayIndex, const Byte mipIndex);
 		void SetSamplerParameter(const ShaderStage stage, const String& parameterName, const SharedHeap<SamplerResource>& pSampler);
@@ -69,13 +69,13 @@ namespace Portakal
 		void OnShaderStateChanged(ShaderResource* pShader);
 	private:
 		Registry<UInt32, MaterialTableDescriptor> mTableDescriptors;
-		Array<SharedHeap<ResourceTable>> mResourceTables;
-		Array<SharedHeap<ResourceTableLayout>> mResourceTableLayouts;
+		Array<SharedHeap<DescriptorSet>> mDescriptorSets;
+		Array<SharedHeap<DescriptorSetLayout>> mDescriptorSetLayouts;
 		Array<SharedHeap<ShaderResource>> mShaders;
 		SharedHeap<GraphicsDevice> mDevice;
-		SharedHeap<ResourceTablePool> mTablePool;
-		SharedHeap<GraphicsMemoryHeap> mHeapDevice;
-		SharedHeap<GraphicsMemoryHeap> mHeapHost;
+		SharedHeap<DescriptorSetPool> mTablePool;
+		SharedHeap<GraphicsMemory> mHeapDevice;
+		SharedHeap<GraphicsMemory> mHeapHost;
 		Event<void, MaterialResource*> mOnStateChangeEvent;
 	};
 }

@@ -3,10 +3,10 @@
 
 namespace Portakal
 {
-    class ResourceTableLayout;
+    class DescriptorSetLayout;
 
     struct RUNTIME_API ResourceLayoutDesc
     {
-        Array<ResourceTableLayout*> ResourceLayouts;
+        Array<DescriptorSetLayout*> ResourceLayouts;
     };
 }

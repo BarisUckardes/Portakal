@@ -12,7 +12,8 @@ namespace Portakal
     class RUNTIME_API Sampler : public GraphicsDeviceObject
     {
     public:
-        Sampler(const SamplerDesc& desc) :
+        Sampler(const SamplerDesc& desc,GraphicsDevice* pDevice) :
+            GraphicsDeviceObject(pDevice),
             mMinFilter(desc.MinFilter),
             mMagFilter(desc.MagFilter),
             mMipmapMode(desc.MipmapMode),

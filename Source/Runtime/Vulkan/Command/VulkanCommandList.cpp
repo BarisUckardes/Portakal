@@ -4,8 +4,8 @@
 #include <Runtime/Vulkan/Command/VulkanCommandPool.h>
 #include <Runtime/Vulkan/Fence/VulkanFence.h>
 #include <Runtime/Vulkan/Pipeline/VulkanPipeline.h>
-#include <Runtime/Vulkan/Resource/VulkanResourcePool.h>
-#include <Runtime/Vulkan/Resource/VulkanResourceTable.h>
+#include <Runtime/Vulkan/Descriptor/VulkanDescriptorSetPool.h>
+#include <Runtime/Vulkan/Descriptor/VulkanDescriptorSet.h>
 #include <Runtime/Vulkan/Sampler/VulkanSampler.h>
 #include <Runtime/Vulkan/Swapchain/VulkanSwapchain.h>
 #include <Runtime/Vulkan/Texture/VulkanTexture.h>
@@ -20,7 +20,7 @@
 namespace Portakal
 {
 
-	VulkanCommandList::VulkanCommandList(const CommandListDesc& desc, VulkanDevice* pDevice) : CommandList(desc), mCommandBuffer(VK_NULL_HANDLE), mLogicalDevice(pDevice->GetVkLogicalDevice())
+	VulkanCommandList::VulkanCommandList(const CommandListDesc& desc, VulkanDevice* pDevice) : CommandList(desc,pDevice), mCommandBuffer(VK_NULL_HANDLE), mLogicalDevice(pDevice->GetVkLogicalDevice())
 	{
 		VulkanCommandPool* pCmdPool = (VulkanCommandPool*)desc.pPool.GetHeap();
 		mCommandPool = pCmdPool->GetVkCmdPool();
@@ -54,18 +54,26 @@ namespace Portakal
 		DEV_ASSERT(vkEndCommandBuffer(mCommandBuffer) == VK_SUCCESS, "VulkanCommandList", "Failed to end command buffer");
 	}
 
-	void VulkanCommandList::SetVertexBufferCore(const GraphicsBuffer* pBuffer)
+	void VulkanCommandList::SetVertexBuffersCore(GraphicsBuffer** ppBuffers, const Byte count)
 	{
-		constexpr VkDeviceSize offsets[] = { 0 };
+		VkDeviceSize offsets[32];
+		VkBuffer buffers[32];
+		unsigned long long offset = 0;
+		for (unsigned char i = 0; i < count; i++)
+		{
+			const VulkanBuffer* pBuffer = (const VulkanBuffer*)ppBuffers[i];
 
-		VulkanBuffer* pVkBuffer = (VulkanBuffer*)pBuffer;
-		VkBuffer buffers = pVkBuffer->GetVkBuffer();
-		vkCmdBindVertexBuffers(mCommandBuffer, 0, 1, &buffers, offsets);
+			buffers[i] = pBuffer->GetVkBuffer();
+			offsets[i] = offset;
+			offset += pBuffer->GetTotalSize();
+		}
+
+		vkCmdBindVertexBuffers(mCommandBuffer, 0, count, buffers, offsets);
 	}
-	void VulkanCommandList::SetIndexBufferCore(const GraphicsBuffer* pBuffer, const CommandListIndexBufferType type)
+	void VulkanCommandList::SetIndexBufferCore(const GraphicsBuffer* pBuffer, const IndexBufferType type)
 	{
 		VulkanBuffer* pVkBuffer = (VulkanBuffer*)pBuffer;
-		vkCmdBindIndexBuffer(mCommandBuffer, pVkBuffer->GetVkBuffer(), 0, type == CommandListIndexBufferType::Unsigned_Short ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32);
+		vkCmdBindIndexBuffer(mCommandBuffer, pVkBuffer->GetVkBuffer(), 0, type == IndexBufferType::UInt16 ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32);
 	}
 	void VulkanCommandList::DrawIndexedCore(const UInt32 indexCount, const UInt32 indexOffset, const UInt32 vertexOffset, const UInt32 instanceCount, const UInt32 instanceOffset)
 	{
@@ -117,20 +125,20 @@ namespace Portakal
 		VkImageBlit blitInfo = {};
 
 		blitInfo.srcOffsets[0] = { (int)desc.SourceOffset.X,(int)desc.SourceOffset.Y,(int)desc.SourceOffset.Z };
-		blitInfo.srcSubresource.aspectMask = VulkanTextureUtils::GetImageAspects(desc.SourceAspectFlags);
+		blitInfo.srcSubresource.aspectMask = VulkanTextureUtils::GetImageAspects(desc.SourceAspect);
 		blitInfo.srcSubresource.baseArrayLayer = desc.SourceArrayIndex;
 		blitInfo.srcSubresource.layerCount = pSourceTexture->GetMipLevels();
 		blitInfo.srcSubresource.mipLevel = desc.SourceMipIndex;
 
 		blitInfo.dstOffsets[0] = { (int)desc.DestinationOffset.X,(int)desc.DestinationOffset.Y,(int)desc.DestinationOffset.Z };
-		blitInfo.dstSubresource.aspectMask = VulkanTextureUtils::GetImageAspects(desc.DestinationAspectFlags);
+		blitInfo.dstSubresource.aspectMask = VulkanTextureUtils::GetImageAspects(desc.DestinationAspect);
 		blitInfo.dstSubresource.baseArrayLayer = desc.DestinationArrayIndex;
 		blitInfo.dstSubresource.layerCount = pDestinationTexture->GetMipLevels();
 		blitInfo.dstSubresource.mipLevel = desc.DestinationMipIndex;
 
 		vkCmdBlitImage(mCommandBuffer, pVkSourceTexture->GetVkImage(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, pVkDestinationTexture->GetVkImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blitInfo, VulkanSamplerUtils::GetFilter(desc.Filtering));
 	}
-	void VulkanCommandList::SetTextureMemoryBarrierCore(const Texture* Texture, const CommandListTextureMemoryBarrierDesc& desc)
+	void VulkanCommandList::SetTextureMemoryBarrierCore(const Texture* Texture, const TextureMemoryBarrierDesc& desc)
 	{
 		const VulkanDevice* pDevice = (const VulkanDevice*)GetOwnerDevice();
 		const VulkanTexture* pVkTexture = (const VulkanTexture*)Texture;
@@ -159,7 +167,7 @@ namespace Portakal
 							 0, nullptr,
 							 1, &memoryBarrier);
 	}
-	void VulkanCommandList::SetBufferMemoryBarrierCore(const GraphicsBuffer* pBuffer, const BufferBarrierDesc& desc)
+	void VulkanCommandList::SetBufferMemoryBarrierCore(const GraphicsBuffer* pBuffer, const BufferMemoryBarrierDesc& desc)
 	{
 		const VulkanDevice* pDevice = (const VulkanDevice*)GetOwnerDevice();
 		const VulkanBuffer* pVkBuffer = (const VulkanBuffer*)pBuffer;
@@ -168,9 +176,9 @@ namespace Portakal
 		barrier.sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
 		barrier.buffer = pVkBuffer->GetVkBuffer();
 		barrier.srcAccessMask = VulkanMemoryUtils::GetMemoryAccessFlags(desc.SourceAccessFlags);
-		barrier.srcQueueFamilyIndex = pDevice->vkGetQueueFamilyIndex(desc.SourceQueueFamily);
+		barrier.srcQueueFamilyIndex = pDevice->vkGetQueueFamilyIndex(desc.SourceQueue);
 		barrier.dstAccessMask = VulkanMemoryUtils::GetMemoryAccessFlags(desc.DestinationAccessFlags);
-		barrier.dstAccessMask = pDevice->vkGetQueueFamilyIndex(desc.DestinationQueueFamily);
+		barrier.dstAccessMask = pDevice->vkGetQueueFamilyIndex(desc.DestinationQueue);
 		barrier.offset = desc.OffsetInBytes;
 		barrier.size = desc.SizeInBytes;
 
@@ -240,12 +248,12 @@ namespace Portakal
 			const ViewportDesc& viewport = pViewports[viewportIndex];
 
 			VkViewport vkViewport = {};
-			vkViewport.x = viewport.OffsetInPixels.X;
-			vkViewport.y = viewport.OffsetInPixels.Y;
-			vkViewport.width = viewport.SizeInPixels.X;
-			vkViewport.height = viewport.SizeInPixels.Y;
-			vkViewport.minDepth = viewport.DepthRange.X;
-			vkViewport.maxDepth = viewport.DepthRange.Y;
+			vkViewport.x = viewport.X;
+			vkViewport.y = viewport.Y;
+			vkViewport.width = viewport.Width;
+			vkViewport.height = viewport.Height;
+			vkViewport.minDepth = viewport.DepthMin;
+			vkViewport.maxDepth = viewport.DepthMax;
 
 			vkViewports[viewportIndex] = vkViewport;
 		}
@@ -260,15 +268,15 @@ namespace Portakal
 			const ScissorDesc& scissor = pScissorss[scissorIndex];
 
 			VkRect2D rect = {};
-			rect.offset = { (Int32)(scissor.OffsetInPixels.X),(Int32)(scissor.OffsetInPixels.Y) };
-			rect.extent = { scissor.SizeInPixels.X,scissor.SizeInPixels.Y };
+			rect.offset = { (Int32)(scissor.X),(Int32)(scissor.Y) };
+			rect.extent = { scissor.Width,scissor.Height };
 
 			vkScissors[scissorIndex] = rect;
 		}
 
 		vkCmdSetScissor(mCommandBuffer, 0, count, vkScissors);
 	}
-	void VulkanCommandList::CommitResourcesCore(ResourceTable** ppTables, const UInt32 count)
+	void VulkanCommandList::CommitResourcesCore(DescriptorSet** ppTables, const UInt32 count)
 	{
 		VkDescriptorSet descriptorSets[128];
 
@@ -276,7 +284,7 @@ namespace Portakal
 
 		for (Byte resourceIndex = 0; resourceIndex < count; resourceIndex++)
 		{
-			const VulkanResourceTable* pResource = (const VulkanResourceTable*)ppTables[resourceIndex];
+			const VulkanDescriptorSet* pResource = (const VulkanDescriptorSet*)ppTables[resourceIndex];
 
 			descriptorSets[resourceIndex] = pResource->GetVkDescriptorSet();
 		}

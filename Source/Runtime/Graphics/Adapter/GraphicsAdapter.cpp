@@ -3,11 +3,12 @@
 
 namespace Portakal
 {
-    SharedHeap<GraphicsDevice> GraphicsAdapter::CreateDevice(const GraphicsDeviceDesc* pDesc)
+    SharedHeap<GraphicsDevice> GraphicsAdapter::CreateDevice(GraphicsDeviceDesc* pDesc)
     {
         DEV_ASSERT(GraphicsAPI::GetDefaultDevice().IsShutdown(), "GraphicsAdapter", "Cannot create device while there is already an instance of it");
 
         //Create device
+        pDesc->pAdapter = this;
         SharedHeap<GraphicsDevice> pDevice = CreateDeviceCore(pDesc);
 
         //Try register to api

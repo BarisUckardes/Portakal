@@ -3,7 +3,8 @@
 
 namespace Portakal
 {
-    Swapchain::Swapchain(const SwapchainDesc& desc) :
+    Swapchain::Swapchain(const SwapchainDesc& desc,GraphicsDevice* pDevice) : 
+        GraphicsDeviceObject(pDevice),
         mColorFormat(desc.ColorFormat),mDepthStencilFormat(desc.DepthStencilFormat),mBufferCount(desc.BufferCount),mWindow(desc.pWindow),mPresentMode(desc.PresentMode), mSize(desc.pWindow->GetSize()), mIndex(0),mQueue(desc.pQueue)
     {
         //Create internal resources
@@ -39,10 +40,20 @@ namespace Portakal
         GetOwnerDevice()->WaitFences(mPresentFences[index].GetHeapAddress(), 1);
     }
    
-    void Swapchain::SetTextures(const Array<SharedHeap<Texture>>& textures, const Array<SharedHeap<TextureView>>& views)
+    void Swapchain::SetTextures(const Array<SharedHeap<Texture>>& textures)
     {
         mTextures = textures;
-        mViews = views;
+        for (const SharedHeap<Texture>& pTexture : textures)
+        {
+            TextureViewDesc desc = {};
+            desc.AspectFlags = TextureAspectFlags::Color;
+            desc.pTexture = pTexture;
+            desc.ArrayLevel = 0;
+            desc.MipLevel = 0;
+            desc.Format = pTexture->GetFormat();
+
+            mViews.Add(GetOwnerDevice()->CreateTextureView(desc));
+        }
     }
     void Swapchain::SetSize(const UInt16 width, const UInt16 height)
     {

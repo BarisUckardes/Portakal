@@ -13,12 +13,12 @@
 #include <vulkan_win32.h>
 #endif
 #include <Runtime/Vulkan/Fence/VulkanFence.h>
-#include <Runtime/Graphics/Command/CommandListTextureMemoryBarrierDesc.h>
+#include <Runtime/Graphics/Common/TextureMemoryBarrierDesc.h>
 #include <Runtime/Vulkan/Queue/VulkanQueue.h>
 
 namespace Portakal
 {
-	VulkanSwapchain::VulkanSwapchain(const SwapchainDesc& desc, VulkanDevice* pDevice) : Swapchain(desc),mLogicalDevice(pDevice->GetVkLogicalDevice()),mPhysicalDevice(((VulkanAdapter*)pDevice->GetOwnerAdapter())->GetVkPhysicalDevice()),mPresentQueueFamilyIndex(0),mSwapchain(VK_NULL_HANDLE),mDevice(pDevice),mSurface(VK_NULL_HANDLE)
+	VulkanSwapchain::VulkanSwapchain(const SwapchainDesc& desc, VulkanDevice* pDevice) : Swapchain(desc,pDevice),mLogicalDevice(pDevice->GetVkLogicalDevice()),mPhysicalDevice(((VulkanAdapter*)pDevice->GetOwnerAdapter())->GetVkPhysicalDevice()),mPresentQueueFamilyIndex(0),mSwapchain(VK_NULL_HANDLE),mDevice(pDevice),mSurface(VK_NULL_HANDLE)
 	{
 		ResizeCore(desc.pWindow->GetSize().X, desc.pWindow->GetSize().Y);
 	}
@@ -189,7 +189,6 @@ namespace Portakal
 
 		//Create texture wrapper around swapchain textures
 		Array<SharedHeap<Texture>> textures;
-		Array<SharedHeap<TextureView>> views;
 		for (Byte i = 0; i < swapchainImageCount; i++)
 		{
 			//Create texture
@@ -205,18 +204,10 @@ namespace Portakal
 
 			SharedHeap<Texture> pTexture = ((VulkanDevice*)mDevice)->CreateVkSwapchainTexture(textureDesc, swapchainImages[i]);
 			textures.Add(pTexture);
-
-			//Create view
-			TextureViewDesc viewDesc = {};
-			viewDesc.MipLevel = 0;
-			viewDesc.ArrayLevel = 0;
-			viewDesc.pTexture = pTexture;
-			SharedHeap<TextureView> pView = mDevice->CreateTextureView(viewDesc);
-			views.Add(pView);
 		}
 
 		//Set framebuffer textures and views
-		SetTextures(textures, views);
+		SetTextures(textures);
 	}
 	void VulkanSwapchain::Free()
 	{

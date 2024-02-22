@@ -4,13 +4,19 @@
 #include <Runtime/Graphics/RenderPass/RenderPassLoadOperation.h>
 #include <Runtime/Graphics/RenderPass/RenderPassStoreOperation.h>
 #include <Runtime/Graphics/Texture/TextureMemoryLayout.h>
+#include <Runtime/Graphics/Texture/TextureView.h>
+#include <Runtime/Graphics/Texture/TextureFormat.h>
+#include <Runtime/Graphics/Texture/TextureSampleCount.h>
+
 
 namespace Portakal
 {
-	class Texture;
 	struct RUNTIME_API RenderPassAttachmentDesc
 	{
 		SharedHeap<Texture> pTexture;
+		SharedHeap<TextureView> pView;
+		TextureFormat Format;
+		TextureSampleCount SampleCount;
 		RenderPassLoadOperation ColorLoadOperation;
 		RenderPassStoreOperation ColorStoreOperation;
 		RenderPassLoadOperation StencilLoadOperation;

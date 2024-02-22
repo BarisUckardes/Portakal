@@ -2,7 +2,7 @@
 #include <Runtime/Graphics/Pipeline/Pipeline.h>
 namespace Portakal
 {
-	CommandList::CommandList(const CommandListDesc& desc) : mCmdPool(desc.pPool)
+	CommandList::CommandList(const CommandListDesc& desc,GraphicsDevice* pDevice) :GraphicsDeviceObject(pDevice),mCmdPool(desc.pPool)
 	{
 		
 	}
@@ -17,21 +17,16 @@ namespace Portakal
 		mRecording = false;
 		mBoundRenderPass = nullptr;
 		mBoundIndexBuffer = nullptr;
-		mBoundVertexBuffer = nullptr;
 		mBoundPipeline = nullptr;
 	}
-	void CommandList::SetVertexBuffer(const SharedHeap<GraphicsBuffer>& pBuffer)
+	void CommandList::SetVertexBuffers(GraphicsBuffer** ppBuffers, const Byte count)
 	{
 		if (IsShutdown())
 			return;
-		if (pBuffer.IsShutdown())
-			return;
 
-		SetVertexBufferCore(pBuffer.GetHeap());
-
-		mBoundVertexBuffer = pBuffer;
+		SetVertexBuffersCore(ppBuffers,count);
 	}
-	void CommandList::SetIndexBuffer(const SharedHeap<GraphicsBuffer>& pBuffer, const CommandListIndexBufferType type)
+	void CommandList::SetIndexBuffer(const SharedHeap<GraphicsBuffer>& pBuffer, const IndexBufferType type)
 	{
 		if (IsShutdown())
 			return;
@@ -121,21 +116,21 @@ namespace Portakal
 
 		CopyTextureToTextureCore(pSource, pDestination, desc);
 	}
-	void CommandList::SetTextureMemoryBarrier(const Texture* pTexture, const CommandListTextureMemoryBarrierDesc& desc)
+	void CommandList::SetTextureMemoryBarrier(const Texture* pTexture, const TextureMemoryBarrierDesc& desc)
 	{
 		if (IsShutdown())
 			return;
 
 		SetTextureMemoryBarrierCore(pTexture, desc);
 	}
-	void CommandList::SetBufferMemoryBarrier(const GraphicsBuffer* pBuffer, const BufferBarrierDesc& desc)
+	void CommandList::SetBufferMemoryBarrier(const GraphicsBuffer* pBuffer, const BufferMemoryBarrierDesc& desc)
 	{
 		if (IsShutdown())
 			return;
 
 		SetBufferMemoryBarrierCore(pBuffer, desc);
 	}
-	void CommandList::CommitResources(ResourceTable** ppTables, const UInt32 count)
+	void CommandList::CommitResources(DescriptorSet** ppTables, const UInt32 count)
 	{
 		if (IsShutdown())
 			return;

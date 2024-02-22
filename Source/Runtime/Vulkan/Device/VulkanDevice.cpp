@@ -8,19 +8,19 @@
 #include <Runtime/Vulkan/Memory/VulkanMemoryHeap.h>
 #include <Runtime/Vulkan/Pipeline/VulkanPipeline.h>
 #include <Runtime/Vulkan/RenderPass/VulkanRenderPass.h>
-#include <Runtime/Vulkan/Resource/VulkanResourceTable.h>
-#include <Runtime/Vulkan/Resource/VulkanResourceTableLayout.h>
-#include <Runtime/Vulkan/Resource/VulkanResourcePool.h>
+#include <Runtime/Vulkan/Descriptor/VulkanDescriptorSet.h>
+#include <Runtime/Vulkan/Descriptor/VulkanDescriptorSetLayout.h>
+#include <Runtime/Vulkan/Descriptor/VulkanDescriptorSetPool.h>
 #include <Runtime/Vulkan/Sampler/VulkanSampler.h>
 #include <Runtime/Vulkan/Shader/VulkanShader.h>
 #include <Runtime/Vulkan/Swapchain/VulkanSwapchain.h>
 #include <Runtime/Vulkan/Texture/VulkanTexture.h>
 #include <Runtime/Vulkan/Texture/VulkanTextureView.h>
-#include <Runtime/Vulkan/Resource/VulkanResourceUtils.h>
-#include <string>
+#include <Runtime/Vulkan/Descriptor/VulkanResourceUtils.h>
 #include <Runtime/Vulkan/Queue/VulkanQueue.h>
 #include <Runtime/Vulkan/Semaphore/VulkanSemaphore.h>
 #include <Runtime/Vulkan/Pipeline/VulkanPipelineUtils.h>
+#include <string>
 
 namespace Portakal
 {
@@ -138,36 +138,36 @@ namespace Portakal
 		DEV_LOG("VulkanDevice", "Initialized");
 	}
 	
-	VkQueue VulkanDevice::vkOwnQueue(const GraphicsQueueType type)
+	VkQueue VulkanDevice::vkOwnQueue(const GraphicsQueueFamilyType type)
 	{
 		switch (type)
 		{
 			default:
-			case Portakal::GraphicsQueueType::Graphics:
+			case Portakal::GraphicsQueueFamilyType::Graphics:
 				return mGraphicsQueueFamily.OwnQueue();
-			case Portakal::GraphicsQueueType::Compute:
+			case Portakal::GraphicsQueueFamilyType::Compute:
 				return mComputeQueueFamily.OwnQueue();
-			case Portakal::GraphicsQueueType::Transfer:
+			case Portakal::GraphicsQueueFamilyType::Transfer:
 				return mTransferQueueFamily.OwnQueue();
 		}
 	}
 
-	void VulkanDevice::vkReturnQueue(const GraphicsQueueType type, const VkQueue queue)
+	void VulkanDevice::vkReturnQueue(const GraphicsQueueFamilyType type, const VkQueue queue)
 	{
 		switch (type)
 		{
 			default:
-			case Portakal::GraphicsQueueType::Graphics:
+			case Portakal::GraphicsQueueFamilyType::Graphics:
 			{
 				mGraphicsQueueFamily.ReturnQueue(queue);
 				break;
 			}
-			case Portakal::GraphicsQueueType::Compute:
+			case Portakal::GraphicsQueueFamilyType::Compute:
 			{
 				mComputeQueueFamily.ReturnQueue(queue);
 				break;
 			}
-			case Portakal::GraphicsQueueType::Transfer:
+			case Portakal::GraphicsQueueFamilyType::Transfer:
 			{
 				mTransferQueueFamily.ReturnQueue(queue);
 				break;
@@ -175,15 +175,15 @@ namespace Portakal
 		}
 	}
 
-	unsigned char VulkanDevice::vkGetQueueFamilyIndex(const GraphicsQueueType type) const noexcept
+	unsigned char VulkanDevice::vkGetQueueFamilyIndex(const GraphicsQueueFamilyType type) const noexcept
 	{
 		switch (type)
 		{
-			case Portakal::GraphicsQueueType::Graphics:
+			case Portakal::GraphicsQueueFamilyType::Graphics:
 				return mGraphicsQueueFamily.FamilyIndex;
-			case Portakal::GraphicsQueueType::Compute:
+			case Portakal::GraphicsQueueFamilyType::Compute:
 				return mComputeQueueFamily.FamilyIndex;
-			case Portakal::GraphicsQueueType::Transfer:
+			case Portakal::GraphicsQueueFamilyType::Transfer:
 				return mTransferQueueFamily.FamilyIndex;
 			default:
 				return 255;
@@ -215,7 +215,7 @@ namespace Portakal
 		return new VulkanCommandList(desc, this);
 	}
 
-	GraphicsMemoryHeap* VulkanDevice::CreateMemoryHeapCore(const GraphicsMemoryHeapDesc& desc)
+	GraphicsMemory* VulkanDevice::CreateMemoryHeapCore(const GraphicsMemoryDesc& desc)
 	{
 		return new VulkanMemoryHeap(desc, this);
 	}
@@ -231,21 +231,25 @@ namespace Portakal
 	{
 		return new VulkanSampler(desc, this);
 	}
-	ResourceTableLayout* VulkanDevice::CreateResourceTableLayoutCore(const ResourceTableLayoutDesc& desc)
+	DescriptorSetLayout* VulkanDevice::CreateDescriptorSetLayoutCore(const DescriptorSetLayoutDesc& desc)
 	{
-		return new VulkanResourceTableLayout(desc, this);
+		return new VulkanDescriptorSetLayout(desc, this);
 	}
-	ResourceTablePool* VulkanDevice::CreateResourceTablePoolCore(const ResourceTablePoolDesc& desc)
+	DescriptorSetPool* VulkanDevice::CreateDescriptorSetPoolCore(const DescriptorSetPoolDesc& desc)
 	{
-		return new VulkanResourcePool(desc, this);
+		return new VulkanDescriptorSetPool(desc, this);
 	}
-	ResourceTable* VulkanDevice::CreateResourceTableCore(const ResourceTableDesc& desc)
+	DescriptorSet* VulkanDevice::CreateDescriptorSetCore(const DescriptorSetDesc& desc)
 	{
-		return new VulkanResourceTable(desc, this);
+		return new VulkanDescriptorSet(desc, this);
 	}
 	Fence* VulkanDevice::CreateFenceCore(const bool bSignalled)
 	{
 		return new VulkanFence(this, bSignalled);
+	}
+	Semaphore* VulkanDevice::CreateSyncObjectCore()
+	{
+		return new VulkanSemaphore(this);
 	}
 	Swapchain* VulkanDevice::CreateSwapchainCore(const SwapchainDesc& desc)
 	{
@@ -255,7 +259,7 @@ namespace Portakal
 	{
 		return new VulkanRenderPass(desc, this);
 	}
-	GraphicsQueue* VulkanDevice::OwnQueueCore(const GraphicsQueueDesc& desc)
+	GraphicsQueue* VulkanDevice::RentQueueCore(const GraphicsQueueDesc& desc)
 	{
 		return new VulkanQueue(desc, this);
 	}
@@ -311,17 +315,17 @@ namespace Portakal
 		Memory::Copy(pTargetHostData, (void*)desc.View.GetMemory(), desc.View.GetSize());
 		vkUnmapMemory(mLogicalDevice, pHeap->GetVkMemory());
 	}
-	void VulkanDevice::UpdateResourceTableCore(ResourceTable* pTable, const ResourceTableUpdateDesc& desc)
+	void VulkanDevice::UpdateDescriptorSetCore(DescriptorSet* pTable, const DescriptorSetUpdateDesc& desc)
 	{
 		Array<VkWriteDescriptorSet> writeInformation(desc.Entries.GetSize());
 		Array<VkDescriptorBufferInfo> writeBufferInformation(desc.Entries.GetSize());
 		Array<VkDescriptorImageInfo> writeImageInformation(desc.Entries.GetSize());
 
-		const VulkanResourceTable* pVkSet = (const VulkanResourceTable*)pTable;
+		const VulkanDescriptorSet* pVkSet = (const VulkanDescriptorSet*)pTable;
 
 		for (Byte entryIndex = 0; entryIndex < desc.Entries.GetSize(); entryIndex++)
 		{
-			const ResourceTableUpdateEntry& entry = desc.Entries[entryIndex];
+			const DescriptorSetUpdateEntry& entry = desc.Entries[entryIndex];
 
 			VkWriteDescriptorSet writeInfo = {};
 			writeInfo.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -336,7 +340,7 @@ namespace Portakal
 
 			switch (entry.Type)
 			{
-			case GraphicsResourceType::Sampler:
+			case DescriptorResourceType::Sampler:
 			{
 				const VulkanSampler* pSampler = (const VulkanSampler*)entry.pResource.GetHeap();
 
@@ -349,7 +353,7 @@ namespace Portakal
 				writeInfo.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER;
 				break;
 			}
-			case GraphicsResourceType::SampledTexture:
+			case DescriptorResourceType::SampledTexture:
 			{
 				const VulkanTextureView* Texture = (const VulkanTextureView*)entry.pResource.GetHeap();
 
@@ -362,7 +366,7 @@ namespace Portakal
 				writeInfo.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
 				break;
 			}
-			case GraphicsResourceType::StorageTexture:
+			case DescriptorResourceType::StorageTexture:
 			{
 				const VulkanTextureView* Texture = (const VulkanTextureView*)entry.pResource.GetHeap();
 
@@ -375,7 +379,7 @@ namespace Portakal
 				writeInfo.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
 				break;
 			}
-			case GraphicsResourceType::ConstantBuffer:
+			case DescriptorResourceType::ConstantBuffer:
 			{
 				const VulkanBuffer* pBuffer = (const VulkanBuffer*)entry.pResource.GetHeap();
 
@@ -388,7 +392,7 @@ namespace Portakal
 				writeInfo.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 				break;
 			}
-			case GraphicsResourceType::StorageBuffer:
+			case DescriptorResourceType::StorageBuffer:
 			{
 				const VulkanBuffer* pBuffer = (const VulkanBuffer*)entry.pResource.GetHeap();
 

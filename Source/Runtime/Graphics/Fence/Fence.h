@@ -6,7 +6,10 @@ namespace Portakal
 	class RUNTIME_API Fence : public GraphicsDeviceObject
 	{
 	public:
-		Fence() = default;
+		Fence(GraphicsDevice* pDevice) : GraphicsDeviceObject(pDevice)
+		{
+
+		}
 		~Fence() = default;
 
 		virtual GraphicsDeviceObjectType GetObjectType() const noexcept override final

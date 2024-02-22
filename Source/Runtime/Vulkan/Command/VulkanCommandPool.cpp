@@ -3,10 +3,10 @@
 
 namespace Portakal
 {
-	VulkanCommandPool::VulkanCommandPool(const CommandPoolDesc& desc, VulkanDevice* pDevice) : CommandPool(desc),mLogicalDevice(pDevice->GetVkLogicalDevice()),mPool(VK_NULL_HANDLE)
+	VulkanCommandPool::VulkanCommandPool(const CommandPoolDesc& desc, VulkanDevice* pDevice) : CommandPool(desc,pDevice),mLogicalDevice(pDevice->GetVkLogicalDevice()),mPool(VK_NULL_HANDLE)
 	{
         //Get family index
-        const unsigned char queueFamilyIndex = pDevice->vkGetQueueFamilyIndex((GraphicsQueueType)desc.Type);
+        const unsigned char queueFamilyIndex = pDevice->vkGetQueueFamilyIndex((GraphicsQueueFamilyType)desc.Type);
 
 
         DEV_ASSERT(queueFamilyIndex != -1, "VulkanCommandPool", "Failed to find corresponding queue family index");

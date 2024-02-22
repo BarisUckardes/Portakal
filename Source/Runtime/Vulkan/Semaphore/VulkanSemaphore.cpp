@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    VulkanSemaphore::VulkanSemaphore(VulkanDevice* pDevice) : mSemaphore(VK_NULL_HANDLE),mLogicalDevice(pDevice->GetVkLogicalDevice())
+    VulkanSemaphore::VulkanSemaphore(VulkanDevice* pDevice) : Semaphore(pDevice), mSemaphore(VK_NULL_HANDLE),mLogicalDevice(pDevice->GetVkLogicalDevice())
     {
         VkSemaphoreCreateInfo info = {};
         info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
@@ -12,5 +12,9 @@ namespace Portakal
 
         DEV_ASSERT(vkCreateSemaphore(mLogicalDevice, &info, nullptr, &mSemaphore) == VK_SUCCESS, "VulkanSemaphore", "Failed to create semaphore");
 
+    }
+    void VulkanSemaphore::OnShutdown()
+    {
+        vkDestroySemaphore(mLogicalDevice, mSemaphore, nullptr);
     }
 }

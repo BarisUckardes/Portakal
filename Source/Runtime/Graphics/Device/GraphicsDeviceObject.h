@@ -10,7 +10,10 @@ namespace Portakal
 	{
 		friend class GraphicsDevice;
 	public:
-		GraphicsDeviceObject() = default;
+		GraphicsDeviceObject(GraphicsDevice* pDevice) : mOwnerDevice(pDevice)
+		{
+
+		}
 		~GraphicsDeviceObject() = default;
 
 

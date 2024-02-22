@@ -4,7 +4,7 @@
 
 namespace Portakal
 {
-	ShaderResource::ShaderResource() : mLanguage(ShaderLanguage::Unknown),mStage(ShaderStage::VertexStage)
+	ShaderResource::ShaderResource() : mLanguage(ShaderLanguage::Unknown),mStage(ShaderStage::Vertex)
 	{
 		mDevice = GraphicsAPI::GetDefaultDevice();
 	}
@@ -80,7 +80,7 @@ namespace Portakal
 		mEntryPoint = "";
 		mErrorMessage = "";
 		mLanguage = ShaderLanguage::Unknown;
-		mStage = ShaderStage::VertexStage;
+		mStage = ShaderStage::Vertex;
 		mReflection.Deference();
 
 		mShader.Shutdown();

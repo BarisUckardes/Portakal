@@ -12,10 +12,6 @@ namespace Portakal
 	public:
 		static SharedHeap<GraphicsInstance> Create(const GraphicsInstanceDesc& desc);
 	public:
-		FORCEINLINE Array<String> GetVulkanExtensions() const noexcept
-		{
-			return mVulkanExtensions;
-		}
 		FORCEINLINE GraphicsBackend GetBackend()const noexcept
 		{
 			return mBackend;
@@ -25,7 +21,7 @@ namespace Portakal
 			return mAdapters;
 		}
 	protected:
-		GraphicsInstance(const GraphicsInstanceDesc& desc) : mVulkanExtensions(desc.VulkanExtensions), mBackend(desc.Backend)
+		GraphicsInstance(const GraphicsInstanceDesc& desc) : mBackend(desc.Backend)
 		{
 
 		}
@@ -33,7 +29,6 @@ namespace Portakal
 
 		void SetAdapters(const Array<SharedHeap<GraphicsAdapter>>& adapters);
 	private:
-		const Array<String> mVulkanExtensions;
 		const GraphicsBackend mBackend;
 		Array<SharedHeap<GraphicsAdapter>> mAdapters;
 	};

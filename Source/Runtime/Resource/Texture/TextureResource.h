@@ -5,6 +5,8 @@
 #include <Runtime/Graphics/Device/GraphicsDevice.h>
 #include <Runtime/Memory/SharedHeap.h>
 #include <Runtime/Resource/ResourceAttribute.h>
+#include <Runtime/Graphics/Memory/GraphicsMemoryAccessFlags.h>
+#include <Runtime/Graphics/Pipeline/PipelineStageFlags.h>
 #include "TextureResource.reflected.h"
 
 namespace Portakal
@@ -42,11 +44,11 @@ namespace Portakal
 		}
 
 		void Wrap(const SharedHeap<Texture>& pTexture);
-		void SetMemoryProfile(const SharedHeap<GraphicsMemoryHeap>& pHeapDevice, const SharedHeap<GraphicsMemoryHeap>& pHeapHost);
+		void SetMemoryProfile(const SharedHeap<GraphicsMemory>& pHeapDevice, const SharedHeap<GraphicsMemory>& pHeapHost);
 		void AllocateTexture(const TextureDesc& desc, const Bool8 bAllocateStagebuffersUpfront = false,const Bool8 bCreateViewsUpfront = false);
 		SharedHeap<TextureView> CreateView(const Byte mipLevel, const Byte arrayLevel);
 		SharedHeap<TextureView> GetView(const Byte mipLevel, const Byte arrayLevel);
-		void Update(const MemoryView& memory,const Vector3US offset,const TextureMemoryLayout inputMemoryLayout,const GraphicsMemoryAccessFlags inputAccessFlags,const PipelineStageFlags inputPipelineFlags,const GraphicsQueueType inputQueueType,const Byte mipLevel,const Byte arrayLevel);
+		void Update(const MemoryView& memory,const Vector3US offset,const TextureMemoryLayout inputMemoryLayout,const GraphicsMemoryAccessFlags inputAccessFlags,const PipelineStageFlags inputPipelineFlags,const GraphicsQueueFamilyType inputQueueType,const Byte mipLevel,const Byte arrayLevel);
 	private:
 		void CreateInternalResources();
 		void Clear();
@@ -58,8 +60,8 @@ namespace Portakal
 		SharedHeap<CommandList> mCmdList;
 		SharedHeap<CommandPool> mCmdPool;
 		SharedHeap<Fence> mFence;
-		SharedHeap<GraphicsMemoryHeap> mHeapDevice;
-		SharedHeap<GraphicsMemoryHeap> mHeapHost;
+		SharedHeap<GraphicsMemory> mHeapDevice;
+		SharedHeap<GraphicsMemory> mHeapHost;
 		TextureDesc mDesc;
 		bool mWrapped;
 	};

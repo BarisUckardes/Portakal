@@ -1,14 +1,14 @@
 #pragma once
-#include <Runtime/Graphics/Memory/GraphicsMemoryHeap.h>
+#include <Runtime/Graphics/Memory/GraphicsMemory.h>
 #include <vulkan.h>
 
 namespace Portakal
 {
 	class VulkanDevice;
-	class RUNTIME_API VulkanMemoryHeap : public GraphicsMemoryHeap
+	class RUNTIME_API VulkanMemoryHeap : public GraphicsMemory
 	{
 	public:
-		VulkanMemoryHeap(const GraphicsMemoryHeapDesc& desc, VulkanDevice* pDevice);
+		VulkanMemoryHeap(const GraphicsMemoryDesc& desc, VulkanDevice* pDevice);
 		~VulkanMemoryHeap() = default;
 
 		FORCEINLINE VkDeviceMemory GetVkMemory() const noexcept
@@ -19,7 +19,7 @@ namespace Portakal
 		VkDeviceMemory mMemory;
 		VkDevice mLogicalDevice;
 
-		// Inherited via GraphicsMemoryHeap
+		// Inherited via GraphicsMemory
 		void OnShutdown() override;
 	};
 }

@@ -5,7 +5,7 @@
 
 namespace Portakal
 {
-	VulkanMemoryHeap::VulkanMemoryHeap(const GraphicsMemoryHeapDesc& desc, VulkanDevice* pDevice) : GraphicsMemoryHeap(desc),mLogicalDevice(pDevice->GetVkLogicalDevice()),mMemory(VK_NULL_HANDLE)
+	VulkanMemoryHeap::VulkanMemoryHeap(const GraphicsMemoryDesc& desc, VulkanDevice* pDevice) : GraphicsMemory(desc,pDevice),mLogicalDevice(pDevice->GetVkLogicalDevice()),mMemory(VK_NULL_HANDLE)
 	{
 		// Get device memory properties
 		VkPhysicalDeviceMemoryProperties memoryProperties = {};

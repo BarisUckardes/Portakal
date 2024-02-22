@@ -19,8 +19,8 @@ namespace Portakal
         virtual void EndRecordingCore() override;
 
         // Inherited via CommandList
-        virtual void SetVertexBufferCore(const GraphicsBuffer* pBuffer) override;
-        virtual void SetIndexBufferCore(const GraphicsBuffer* pBuffer, const CommandListIndexBufferType type) override;
+        virtual void SetVertexBuffersCore(GraphicsBuffer** ppBuffers, const Byte count) override;
+        virtual void SetIndexBufferCore(const GraphicsBuffer* pBuffer, const IndexBufferType type) override;
 
         // Inherited via CommandList
         virtual void DrawIndexedCore(const UInt32 indexCount, const UInt32 indexOffset, const UInt32 vertexOffset, const UInt32 instanceCount, const UInt32 instanceOffset) override;
@@ -38,11 +38,11 @@ namespace Portakal
         virtual void CopyTextureToTextureCore(const Texture* pSourceTexture, const Texture* pDestinationTexture, const TextureCopyDesc& desc) override;
 
         // Inherited via CommandList
-        virtual void SetTextureMemoryBarrierCore(const Texture* Texture, const CommandListTextureMemoryBarrierDesc& desc) override;
-        virtual void SetBufferMemoryBarrierCore(const GraphicsBuffer* pBuffer, const BufferBarrierDesc& desc) override;
+        virtual void SetTextureMemoryBarrierCore(const Texture* Texture, const TextureMemoryBarrierDesc& desc) override;
+        virtual void SetBufferMemoryBarrierCore(const GraphicsBuffer* pBuffer, const BufferMemoryBarrierDesc& desc) override;
 
         // Inherited via CommandList
-        void CommitResourcesCore(ResourceTable** ppTables, const UInt32 count) override;
+        void CommitResourcesCore(DescriptorSet** ppTables, const UInt32 count) override;
 
         // Inherited via CommandList
         void BeginRenderPassCore(const RenderPass* pRenderPass, const Color4F& clearColor) override;

@@ -92,8 +92,8 @@ namespace Portakal
         mDevice->WaitDeviceIdle();
 
         mTextureBindings.Clear();
-        mFontResourceTable.Shutdown();
-        mStaticResourceTable.Shutdown();
+        mFontDescriptorSet.Shutdown();
+        mStaticDescriptorSet.Shutdown();
         mFontResourceLayout.Shutdown();
         mStaticResourceLayout.Shutdown();
         mDefaultFontTexture.Shutdown();
@@ -190,6 +190,7 @@ namespace Portakal
         mCmdList->SetPipeline(mPipeline);
 
         //Start rendering
+        const Color4F clearColors = Color4F::CornflowerBlue();
         mCmdList->BeginRenderPass(pRenderTarget->GetRenderPass(), Color4F::CornflowerBlue());
 
         //Check the renderable range
@@ -200,8 +201,8 @@ namespace Portakal
             /*
             * Set vertex&index buffers
             */
-            mCmdList->SetVertexBuffer(mMesh->GetVertexBuffer(0));
-            mCmdList->SetIndexBuffer(mMesh->GetIndexBuffer(0), CommandListIndexBufferType::Unsigned_Short);
+            mCmdList->SetVertexBuffers(mMesh->GetVertexBuffer(0).GetHeapAddress(),1);
+            mCmdList->SetIndexBuffer(mMesh->GetIndexBuffer(0), IndexBufferType::UInt16);
 
             /*
             * Set clip rects
@@ -212,9 +213,12 @@ namespace Portakal
             * Set viewport
             */
             ViewportDesc viewport = {};
-            viewport.OffsetInPixels = { 0,0 };
-            viewport.SizeInPixels = { (UInt16)pDrawData->DisplaySize.x,(UInt16)pDrawData->DisplaySize.y };
-            viewport.DepthRange = { 0.0f,1.0f };
+            viewport.X = 0;
+            viewport.Y = 0;
+            viewport.Width =(UInt16)pDrawData->DisplaySize.x;
+            viewport.Height = pDrawData->DisplaySize.y;
+            viewport.DepthMin = 0.0f;
+            viewport.DepthMax = 1.0f;
            //mCmdList->SetViewports(&viewport, 1);
 
             /*
@@ -223,9 +227,9 @@ namespace Portakal
             const Vector2F clipOffset = { pDrawData->DisplayPos.x,pDrawData->DisplayPos.y };
             UInt32 drawVertexOffset = 0;
             UInt32 drawIndexOffset = 0;
-            ResourceTable* ppResourceTables[]
+            DescriptorSet* ppDescriptorSets[]
             {
-                mStaticResourceTable.GetHeap(),
+                mStaticDescriptorSet.GetHeap(),
                 nullptr
             };
             for (UInt32 cmdListIndex = 0; cmdListIndex < pDrawData->CmdListsCount; cmdListIndex++)
@@ -250,21 +254,23 @@ namespace Portakal
                         continue;
 
                     ScissorDesc scissor = {};
-                    scissor.OffsetInPixels = { (UInt32)clipMin.X,(UInt32)clipMin.Y };
-                    scissor.SizeInPixels = { (UInt32)clipMax.X,(UInt32)clipMax.Y };
+                    scissor.X = clipMin.X;
+                    scissor.Y = clipMin.Y;
+                    scissor.Width = clipMax.X;
+                    scissor.Height = clipMax.Y;
 
                     mCmdList->SetScissors(&scissor, 1);
 
                     if (cmd.TextureId == nullptr) // default font texture
                     {
-                        ppResourceTables[1] = mFontResourceTable.GetHeap();
+                        ppDescriptorSets[1] = mFontDescriptorSet.GetHeap();
                     }
                     else // custom texture
                     {
-                        ppResourceTables[1] = (ResourceTable*)cmd.TextureId;
+                        ppDescriptorSets[1] = (DescriptorSet*)cmd.TextureId;
                     }
 
-                    mCmdList->CommitResources(ppResourceTables,2);
+                    mCmdList->CommitResources(ppDescriptorSets,2);
                     mCmdList->DrawIndexed(cmd.ElemCount, (drawIndexOffset + cmd.IdxOffset), (drawVertexOffset + cmd.VtxOffset), 1, 0);
                 }
 
@@ -369,8 +375,8 @@ namespace Portakal
         //Create shaders
         mVertexShader = new ShaderResource();
         mFragmentShader = new ShaderResource();
-        mVertexShader->CompileShader(vertexShaderSource, "main", ShaderLanguage::HLSL, ShaderStage::VertexStage);
-        mFragmentShader->CompileShader(pixelShaderSource, "main", ShaderLanguage::HLSL, ShaderStage::FragmentStage);
+        mVertexShader->CompileShader(vertexShaderSource, "main", ShaderLanguage::HLSL, ShaderStage::Vertex);
+        mFragmentShader->CompileShader(pixelShaderSource, "main", ShaderLanguage::HLSL, ShaderStage::Fragment);
 
         //Create sampler
         SamplerDesc samplerDesc = {};
@@ -389,21 +395,21 @@ namespace Portakal
         mSampler = mDevice->CreateSampler(samplerDesc);
 
         //Create static resource layout
-        ResourceTableLayoutDesc staticResourceLayoutDesc = {};
+        DescriptorSetLayoutDesc staticResourceLayoutDesc = {};
         staticResourceLayoutDesc.Entries =
         {
-            {GraphicsResourceType::ConstantBuffer,ShaderStage::VertexStage,0},
-            {GraphicsResourceType::Sampler,ShaderStage::FragmentStage,1}
+            {DescriptorResourceType::ConstantBuffer,ShaderStage::Vertex,0},
+            {DescriptorResourceType::Sampler,ShaderStage::Fragment,1}
         };
-        mStaticResourceLayout = mDevice->CreateResourceTableLayout(staticResourceLayoutDesc);
+        mStaticResourceLayout = mDevice->CreateDescriptorSetLayout(staticResourceLayoutDesc);
 
         //Create dynamic resource layout
-        ResourceTableLayoutDesc dynamicResourceLayoutDesc = {};
+        DescriptorSetLayoutDesc dynamicResourceLayoutDesc = {};
         dynamicResourceLayoutDesc.Entries =
         {
-            {GraphicsResourceType::SampledTexture, ShaderStage::FragmentStage,0}
+            {DescriptorResourceType::SampledTexture, ShaderStage::Fragment,0}
         };
-        mFontResourceLayout = mDevice->CreateResourceTableLayout(dynamicResourceLayoutDesc);
+        mFontResourceLayout = mDevice->CreateDescriptorSetLayout(dynamicResourceLayoutDesc);
 
         //Create fence
         mFence = mDevice->CreateFence(false);
@@ -440,23 +446,23 @@ namespace Portakal
         mDefaultFontTexture = new TextureResource();
         mDefaultFontTexture->SetMemoryProfile(GraphicsAPI::GetDefaultDeviceHeap(), GraphicsAPI::GetDefaultHostHeap());
         mDefaultFontTexture->AllocateTexture(defaultFontTextureDesc, true, true);
-        mDefaultFontTexture->Update(MemoryView(pFontData, width* height * 4), { 0,0,0 },TextureMemoryLayout::Unknown,GraphicsMemoryAccessFlags::Unknown,PipelineStageFlags::TopOfPipe,GraphicsQueueType::Graphics,0,0);
+        mDefaultFontTexture->Update(MemoryView(pFontData, width* height * 4), { 0,0,0 },TextureMemoryLayout::Unknown,GraphicsMemoryAccessFlags::Unknown,PipelineStageFlags::TopOfPipe,GraphicsQueueFamilyType::Graphics,0,0);
         mDefaultFontTexture->CreateView(0, 0);
 
         //Set texture memory barrier
-        CommandListTextureMemoryBarrierDesc barrierDesc = {};
+        TextureMemoryBarrierDesc barrierDesc = {};
         barrierDesc.ArrayIndex = 0;
         barrierDesc.MipIndex = 0;
         barrierDesc.AspectFlags = TextureAspectFlags::Color;
 
         barrierDesc.SourceAccessFlags = GraphicsMemoryAccessFlags::TransferWrite;
         barrierDesc.SourceLayout = TextureMemoryLayout::Unknown;
-        barrierDesc.SourceQueue = GraphicsQueueType::Graphics;
+        barrierDesc.SourceQueue = GraphicsQueueFamilyType::Graphics;
         barrierDesc.SourceStageFlags = PipelineStageFlags::Transfer;
 
         barrierDesc.DestinationAccessFlags = GraphicsMemoryAccessFlags::ShaderRead;
         barrierDesc.DestinationLayout = TextureMemoryLayout::ShaderReadOnly;
-        barrierDesc.DestinationQueue = GraphicsQueueType::Graphics;
+        barrierDesc.DestinationQueue = GraphicsQueueFamilyType::Graphics;
         barrierDesc.DestinationStageFlags = PipelineStageFlags::FragmentShader;
         mCmdList->BeginRecording();
         mCmdList->SetTextureMemoryBarrier(mDefaultFontTexture->GetTexture().GetHeap(), barrierDesc);
@@ -466,34 +472,34 @@ namespace Portakal
         mDevice->ResetFences(mFence.GetHeapAddress(), 1);
 
         // Create static resource set
-        ResourceTableDesc staticResourceTableDesc = {};
-        staticResourceTableDesc.pOwnerPool = GraphicsAPI::GetDefaultTablePool().GetHeap();
-        staticResourceTableDesc.pTargetLayout = mStaticResourceLayout.GetHeap();
-        mStaticResourceTable = mDevice->CreateResourceTable(staticResourceTableDesc);
+        DescriptorSetDesc staticDescriptorSetDesc = {};
+        staticDescriptorSetDesc.pOwnerPool = GraphicsAPI::GetDefaultTablePool().GetHeap();
+        staticDescriptorSetDesc.pTargetLayout = mStaticResourceLayout.GetHeap();
+        mStaticDescriptorSet = mDevice->CreateDescriptorSet(staticDescriptorSetDesc);
 
         //Create font resource table
-        ResourceTableDesc fontResourceTableDesc = {};
-        fontResourceTableDesc.pOwnerPool = GraphicsAPI::GetDefaultTablePool().GetHeap();
-        fontResourceTableDesc.pTargetLayout = mFontResourceLayout.GetHeap();
-        mFontResourceTable = mDevice->CreateResourceTable(fontResourceTableDesc);
+        DescriptorSetDesc fontDescriptorSetDesc = {};
+        fontDescriptorSetDesc.pOwnerPool = GraphicsAPI::GetDefaultTablePool().GetHeap();
+        fontDescriptorSetDesc.pTargetLayout = mFontResourceLayout.GetHeap();
+        mFontDescriptorSet = mDevice->CreateDescriptorSet(fontDescriptorSetDesc);
 
         //Update static resource table
-        ResourceTableUpdateDesc staticTableUpdateDesc = {};
+        DescriptorSetUpdateDesc staticTableUpdateDesc = {};
         staticTableUpdateDesc.Entries =
         {
-            {mConstantBuffer.QueryAs<GraphicsDeviceObject>(),GraphicsResourceType::ConstantBuffer,1,0,0,0},
-            {mSampler.QueryAs<GraphicsDeviceObject>(),GraphicsResourceType::Sampler,1,0,1,1},
+            {mConstantBuffer.QueryAs<GraphicsDeviceObject>(),DescriptorResourceType::ConstantBuffer,1,0,0,0},
+            {mSampler.QueryAs<GraphicsDeviceObject>(),DescriptorResourceType::Sampler,1,0,1,1},
         };
-        mDevice->UpdateResourceTable(mStaticResourceTable.GetHeap(), staticTableUpdateDesc);
+        mDevice->UpdateDescriptorSet(mStaticDescriptorSet.GetHeap(), staticTableUpdateDesc);
 
         //Update font resource table
         SharedHeap<TextureView> pFontTextureView = mDefaultFontTexture->GetView(0, 0);
-        ResourceTableUpdateDesc fontTableUpdateDesc = {};
+        DescriptorSetUpdateDesc fontTableUpdateDesc = {};
         fontTableUpdateDesc.Entries =
         {
-            {pFontTextureView.QueryAs<GraphicsDeviceObject>(),GraphicsResourceType::SampledTexture,0,0,0,0}
+            {pFontTextureView.QueryAs<GraphicsDeviceObject>(),DescriptorResourceType::SampledTexture,0,0,0,0}
         };
-        mDevice->UpdateResourceTable(mFontResourceTable.GetHeap(), fontTableUpdateDesc);
+        mDevice->UpdateDescriptorSet(mFontDescriptorSet.GetHeap(), fontTableUpdateDesc);
 
         //Create mesh
         mMesh = new MeshResource();
@@ -685,9 +691,12 @@ namespace Portakal
 
         //Create viewport desc
         ViewportDesc viewport = {};
-        viewport.OffsetInPixels = { 0,0 };
-        viewport.SizeInPixels = pRenderTarget->GetRenderPass()->GetRenderRegion();
-        viewport.DepthRange = { 0.0f,1.0f };
+        viewport.X = 0;
+        viewport.Y = 0;
+        viewport.Width = pRenderTarget->GetRenderPass()->GetRenderRegion().X;
+        viewport.Height = pRenderTarget->GetRenderPass()->GetRenderRegion().Y;
+        viewport.DepthMin = 0.0f;
+        viewport.DepthMax = 1.0f;
 
         //Create graphics device
         GraphicsPipelineDesc pipelineDesc = {};
@@ -709,17 +718,17 @@ namespace Portakal
         mCmdList->BeginRecording();
         for (const SharedHeap<Texture>& pTexture : pRenderTarget->GetColorTargets())
         {
-            CommandListTextureMemoryBarrierDesc barrierDesc = {};
+            TextureMemoryBarrierDesc barrierDesc = {};
             barrierDesc.AspectFlags = TextureAspectFlags::Color;
             barrierDesc.ArrayIndex = 0;
             barrierDesc.MipIndex = 0;
             barrierDesc.SourceAccessFlags = GraphicsMemoryAccessFlags::Unknown;
             barrierDesc.SourceLayout = TextureMemoryLayout::Unknown;
-            barrierDesc.SourceQueue = GraphicsQueueType::Graphics;
+            barrierDesc.SourceQueue = GraphicsQueueFamilyType::Graphics;
             barrierDesc.SourceStageFlags = PipelineStageFlags::TopOfPipe;
             barrierDesc.DestinationAccessFlags = GraphicsMemoryAccessFlags::ColorAttachmentRead;
             barrierDesc.DestinationLayout = TextureMemoryLayout::Present;
-            barrierDesc.DestinationQueue = GraphicsQueueType::Graphics;
+            barrierDesc.DestinationQueue = GraphicsQueueFamilyType::Graphics;
             barrierDesc.DestinationStageFlags = PipelineStageFlags::ColorAttachmentOutput;
 
             mCmdList->SetTextureMemoryBarrier(pTexture.GetHeap(), barrierDesc);

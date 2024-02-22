@@ -6,7 +6,7 @@ namespace Portakal
 {
     class RUNTIME_API Shader : public GraphicsDeviceObject {
     public:
-        Shader(const ShaderDesc& desc) : mStage(desc.Stage), mEntryPoint(desc.EntryPoint),mLanguage(desc.Language)
+        Shader(const ShaderDesc& desc,GraphicsDevice* pDevice) : GraphicsDeviceObject(pDevice), mStage(desc.Stage), mEntryPoint(desc.EntryPoint),mLanguage(desc.Language)
         {
 
         }

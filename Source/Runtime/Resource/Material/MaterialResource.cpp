@@ -8,7 +8,7 @@ namespace Portakal
 		mDevice = GraphicsAPI::GetDefaultDevice();
 	}
 
-	void MaterialResource::SetMemoryProfile(const SharedHeap<GraphicsMemoryHeap>& pHeapDevice, const SharedHeap<GraphicsMemoryHeap>& pHeapHost, const SharedHeap<ResourceTablePool>& pPool)
+	void MaterialResource::SetMemoryProfile(const SharedHeap<GraphicsMemory>& pHeapDevice, const SharedHeap<GraphicsMemory>& pHeapHost, const SharedHeap<DescriptorSetPool>& pPool)
 	{
 		if (IsShutdown())
 			return;

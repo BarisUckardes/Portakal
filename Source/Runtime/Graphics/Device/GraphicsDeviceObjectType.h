@@ -18,9 +18,9 @@ namespace Portakal
 		Fence,
 		Semaphore,
 		MemoryHeap,
-		ResourceTablePool,
-		ResourceTableLayout,
-		ResourceTable,
+		DescriptorSetPool,
+		DescriptorSetLayout,
+		DescriptorSet,
 		Queue,
 	};
 }

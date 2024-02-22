@@ -13,7 +13,7 @@ namespace Portakal
 	class RUNTIME_API Swapchain : public GraphicsDeviceObject
 	{
 	public:
-		Swapchain(const SwapchainDesc& desc);
+		Swapchain(const SwapchainDesc& desc,GraphicsDevice* pDevice);
 		~Swapchain() = default;
 
 		FORCEINLINE Byte GetBufferCount() const noexcept
@@ -79,7 +79,7 @@ namespace Portakal
 		Bool8 Present();
 		void WaitForPresent(const Byte index);
 	protected:
-		void SetTextures(const Array<SharedHeap<Texture>>& textures, const Array<SharedHeap<TextureView>>& views);
+		void SetTextures(const Array<SharedHeap<Texture>>& textures);
 		void SetSize(const UInt16 width, const UInt16 height);
 
 		virtual void ResizeCore(const UInt16 width, const UInt16 height) = 0;

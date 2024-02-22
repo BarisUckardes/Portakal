@@ -56,17 +56,17 @@ namespace Portakal
 
 		//Render to target
 		pCmdList->BeginRecording();
-		CommandListTextureMemoryBarrierDesc postMemoryBarrierDesc = {};
+		TextureMemoryBarrierDesc postMemoryBarrierDesc = {};
 		postMemoryBarrierDesc.ArrayIndex = 0;
 		postMemoryBarrierDesc.MipIndex = 0;
 		postMemoryBarrierDesc.AspectFlags = TextureAspectFlags::Color;
 		postMemoryBarrierDesc.SourceAccessFlags = GraphicsMemoryAccessFlags::TransferWrite;
 		postMemoryBarrierDesc.SourceLayout = TextureMemoryLayout::Unknown;
-		postMemoryBarrierDesc.SourceQueue = GraphicsQueueType::Graphics;
+		postMemoryBarrierDesc.SourceQueue = GraphicsQueueFamilyType::Graphics;
 		postMemoryBarrierDesc.SourceStageFlags = PipelineStageFlags::Transfer;
 		postMemoryBarrierDesc.DestinationAccessFlags = GraphicsMemoryAccessFlags::ShaderRead;
 		postMemoryBarrierDesc.DestinationLayout = TextureMemoryLayout::ShaderReadOnly;
-		postMemoryBarrierDesc.DestinationQueue = GraphicsQueueType::Graphics;
+		postMemoryBarrierDesc.DestinationQueue = GraphicsQueueFamilyType::Graphics;
 		postMemoryBarrierDesc.DestinationStageFlags = PipelineStageFlags::FragmentShader;
 		pCmdList->SetTextureMemoryBarrier(pTexture->GetTexture().GetHeap(), postMemoryBarrierDesc);
 		pCmdList->EndRecording();

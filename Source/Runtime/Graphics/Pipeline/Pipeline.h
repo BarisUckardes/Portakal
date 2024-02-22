@@ -24,7 +24,7 @@ namespace Portakal
     class RUNTIME_API Pipeline : public GraphicsDeviceObject
     {
     public:
-        Pipeline(const GraphicsPipelineDesc& desc) : mBindPoint(PipelineBindPoint::Graphics),
+        Pipeline(const GraphicsPipelineDesc& desc,GraphicsDevice* pDevice) : GraphicsDeviceObject(pDevice), mBindPoint(PipelineBindPoint::Graphics),
             mBlendState(desc.BlendState), mDepthStencilState(desc.DepthStencilState),
             mInputLayout(desc.InputLayout), mMultisample(desc.Multisample),
             mRasterizerState(desc.RasterizerState),
@@ -32,7 +32,7 @@ namespace Portakal
         {
         }
 
-        Pipeline(const ComputePipelineDesc& desc) : mBindPoint(PipelineBindPoint::Compute),
+        Pipeline(const ComputePipelineDesc& desc,GraphicsDevice* pDevice) : GraphicsDeviceObject(pDevice), mBindPoint(PipelineBindPoint::Compute),
             mBlendState(), mDepthStencilState(),
             mInputLayout(), mMultisample(),
             mRasterizerState(),

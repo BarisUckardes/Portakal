@@ -39,7 +39,7 @@ namespace Portakal
 		pTexture->AllocateTexture(textureDesc, true, true);
 
 		//Update texture data
-		pTexture->Update(loadResult.pView,{0,0,0},TextureMemoryLayout::Unknown,GraphicsMemoryAccessFlags::TransferWrite,PipelineStageFlags::Transfer,GraphicsQueueType::Graphics,0,0);
+		pTexture->Update(loadResult.pView,{0,0,0},TextureMemoryLayout::Unknown,GraphicsMemoryAccessFlags::TransferWrite,PipelineStageFlags::Transfer,GraphicsQueueFamilyType::Graphics,0,0);
 
 		//Delete intermediate data
 		delete loadResult.pView;

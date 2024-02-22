@@ -6,6 +6,7 @@ namespace Portakal
 	enum class RUNTIME_API TextureMemoryLayout : Byte
 	{
 		Unknown,
+		General,
 		ColorAttachment,
 		DepthStencilAttachment,
 		ShaderReadOnly,

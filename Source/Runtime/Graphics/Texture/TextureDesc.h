@@ -6,7 +6,7 @@
 #include <Runtime/Graphics/Texture/TextureFormat.h>
 #include <Runtime/Graphics/Texture/TextureUsage.h>
 #include <Runtime/Memory/SharedHeap.h>
-#include <Runtime/Graphics/Memory/GraphicsMemoryHeap.h>
+#include <Runtime/Graphics/Memory/GraphicsMemory.h>
 
 namespace Portakal
 {
@@ -19,6 +19,6 @@ namespace Portakal
 		Byte MipLevels;
 		Byte ArrayLevels;
 		TextureSampleCount SampleCount;
-		SharedHeap<GraphicsMemoryHeap> pHeap;
+		SharedHeap<GraphicsMemory> pHeap;
 	};
 }

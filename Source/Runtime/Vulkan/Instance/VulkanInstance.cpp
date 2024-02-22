@@ -44,10 +44,9 @@ namespace Portakal
             const Char* pName;
             Bool8 bSupported;
         };
+
         //Create instance extension array
         Array<ExtensionEntry> instanceRequestedExtensions;
-        for (const String& extension : desc.VulkanExtensions)
-            instanceRequestedExtensions.Add({ extension.GetCopyRaw(),false });
 
         //Get supported extension count
         UInt32 supportedInstanceExtensionCount = 0;

@@ -7,7 +7,7 @@ namespace Portakal
 	class RUNTIME_API Texture : public GraphicsDeviceObject
 	{
 	public:
-		Texture(const TextureDesc& desc,const Bool8 bSwapchain);
+		Texture(const TextureDesc& desc,const Bool8 bSwapchain,GraphicsDevice* pDevice);
 		~Texture() = default;
 
 		FORCEINLINE TextureType GetTextureType() const noexcept
@@ -42,7 +42,7 @@ namespace Portakal
 		{
 			return mSwapchain;
 		}
-		FORCEINLINE SharedHeap<GraphicsMemoryHeap> GetMemory() const noexcept
+		FORCEINLINE SharedHeap<GraphicsMemory> GetMemory() const noexcept
 		{
 			return mHeap;
 		}
@@ -62,6 +62,6 @@ namespace Portakal
 		const Byte mArrayLevels;
 		const TextureSampleCount mSampleCount;
 		const Bool8 mSwapchain;
-		SharedHeap<GraphicsMemoryHeap> mHeap;
+		SharedHeap<GraphicsMemory> mHeap;
 	};
 }

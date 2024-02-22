@@ -6,7 +6,10 @@ namespace Portakal
 	class RUNTIME_API Semaphore : public GraphicsDeviceObject
 	{
 	public:
-		Semaphore() = default;
+		Semaphore(GraphicsDevice* pDevice) : GraphicsDeviceObject(pDevice)
+		{
+
+		}
 		~Semaphore() = default;
 
 		virtual GraphicsDeviceObjectType GetObjectType() const noexcept override final

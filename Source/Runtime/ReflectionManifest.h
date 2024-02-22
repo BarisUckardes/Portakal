@@ -321,9 +321,12 @@ extern "C"
 		Portakal::TypeDispatcher::RegisterEnum("GLSL",1,pShaderLanguage);
 		Portakal::TypeDispatcher::RegisterEnum("HLSL",2,pShaderLanguage);
 		Portakal::TypeDispatcher::RegisterEnum("MSL",3,pShaderLanguage);
-		Portakal::TypeDispatcher::RegisterEnum("VertexStage",1,pShaderStage);
-		Portakal::TypeDispatcher::RegisterEnum("FragmentStage",2,pShaderStage);
-		Portakal::TypeDispatcher::RegisterEnum("ComputeStage",4,pShaderStage);
+		Portakal::TypeDispatcher::RegisterEnum("Vertex",1,pShaderStage);
+		Portakal::TypeDispatcher::RegisterEnum("Fragment",2,pShaderStage);
+		Portakal::TypeDispatcher::RegisterEnum("Compute",4,pShaderStage);
+		Portakal::TypeDispatcher::RegisterEnum("Geometry",8,pShaderStage);
+		Portakal::TypeDispatcher::RegisterEnum("TesellationControl",16,pShaderStage);
+		Portakal::TypeDispatcher::RegisterEnum("TesellationEval",32,pShaderStage);
 		Portakal::TypeDispatcher::RegisterEnum("EntityComponent",0,pSceneComponentFieldType);
 		Portakal::TypeDispatcher::RegisterEnum("Resource",1,pSceneComponentFieldType);
 

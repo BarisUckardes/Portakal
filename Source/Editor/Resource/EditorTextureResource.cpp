@@ -56,7 +56,7 @@ namespace Portakal
 			TextureMemoryLayout::Unknown,
 			GraphicsMemoryAccessFlags::ShaderRead,
 			PipelineStageFlags::FragmentShader,
-			GraphicsQueueType::Graphics,
+			GraphicsQueueFamilyType::Graphics,
 			0, 0);
 
 		//Clean up the raw texture data

@@ -2,7 +2,7 @@
 #include <Runtime/Core/Core.h>
 #include <Runtime/Memory/SharedHeap.h>
 #include <Runtime/Graphics/Buffer/GraphicsBufferUsage.h>
-#include <Runtime/Graphics/Memory/GraphicsMemoryHeap.h>
+#include <Runtime/Graphics/Memory/GraphicsMemory.h>
 
 namespace Portakal
 {
@@ -16,6 +16,6 @@ namespace Portakal
 		GraphicsBufferUsage Usage;
 		UInt32 SubItemCount;
 		UInt32 SubItemSizeInBytes;
-		SharedHeap<GraphicsMemoryHeap> pHeap;
+		SharedHeap<GraphicsMemory> pHeap;
 	};
 }

@@ -5,11 +5,11 @@
 
 namespace Portakal
 {
-	VulkanTexture::VulkanTexture(const TextureDesc& desc, const VkImage image, VulkanDevice* pDevice) : Texture(desc, true), mSwapchain(true), mLogicalDevice(pDevice->GetVkLogicalDevice()), mImage(image)
+	VulkanTexture::VulkanTexture(const TextureDesc& desc, const VkImage image, VulkanDevice* pDevice) : Texture(desc, true,pDevice), mSwapchain(true), mLogicalDevice(pDevice->GetVkLogicalDevice()), mImage(image)
 	{
 
 	}
-	VulkanTexture::VulkanTexture(const TextureDesc& desc, VulkanDevice* pDevice) : Texture(desc, false), mSwapchain(false), mLogicalDevice(pDevice->GetVkLogicalDevice()), mImage(VK_NULL_HANDLE)
+	VulkanTexture::VulkanTexture(const TextureDesc& desc, VulkanDevice* pDevice) : Texture(desc, false,pDevice), mSwapchain(false), mLogicalDevice(pDevice->GetVkLogicalDevice()), mImage(VK_NULL_HANDLE)
 	{
 		//Get vulkan memory heap
 		const VulkanMemoryHeap* pHeap = (const VulkanMemoryHeap*)desc.pHeap.GetHeap();

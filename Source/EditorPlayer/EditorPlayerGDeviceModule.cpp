@@ -36,8 +36,6 @@ namespace Portakal
 
 		//Create device
 		GraphicsDeviceDesc deviceDesc = {};
-		deviceDesc.Backend = GraphicsBackend::Vulkan;
-		deviceDesc.pAdapter = mAdapter.GetHeap();
 		deviceDesc.ComputeQueueCount = 1;
 		deviceDesc.GraphicsQueueCount = 1;
 		deviceDesc.TransferQueueCount = 1;

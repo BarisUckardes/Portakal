@@ -9,7 +9,7 @@ namespace Portakal
 		CreateInternalResources();
 	}
 
-	void MeshResource::SetMemoryProfile(const SharedHeap<GraphicsMemoryHeap>& pHeapDevice, const SharedHeap<GraphicsMemoryHeap>& pHeapHost, bool bAllocateStagebuffersUpfront)
+	void MeshResource::SetMemoryProfile(const SharedHeap<GraphicsMemory>& pHeapDevice, const SharedHeap<GraphicsMemory>& pHeapHost, bool bAllocateStagebuffersUpfront)
 	{
 		//Clear current setup
 		Clear();

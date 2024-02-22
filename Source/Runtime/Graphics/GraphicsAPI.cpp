@@ -8,14 +8,14 @@ namespace Portakal
 		if (pAPI == nullptr)
 			return;
 
-		DEV_ASSERT(pAPI->mDevice.IsAlive(), "GraphicsAPI", "Cannot set memory profile without creating a graphics device first!");
+		DEV_ASSERT(!pAPI->mDevice.IsShutdown(), "GraphicsAPI", "Cannot set memory profile without creating a graphics device first!");
 
-		GraphicsMemoryHeapDesc deviceHeapDesc = {};
+		GraphicsMemoryDesc deviceHeapDesc = {};
 		deviceHeapDesc.SizeInBytes = deviceMemorySize;
 		deviceHeapDesc.Type = GraphicsMemoryType::Device;
 		pAPI->mHeapDevice = pAPI->mDevice->CreateMemoryHeap(deviceHeapDesc);
 
-		GraphicsMemoryHeapDesc hostHeapDesc = {};
+		GraphicsMemoryDesc hostHeapDesc = {};
 		hostHeapDesc.SizeInBytes = hostMemorySize;
 		hostHeapDesc.Type = GraphicsMemoryType::Host;
 		pAPI->mHeapHost = pAPI->mDevice->CreateMemoryHeap(hostHeapDesc);
@@ -26,19 +26,19 @@ namespace Portakal
 		if (pAPI == nullptr)
 			return;
 
-		DEV_ASSERT(pAPI->mDevice.IsAlive(), "GraphicsAPI", "Cannot set memory profile without creating a graphics device first!");
+		DEV_ASSERT(!pAPI->mDevice.IsShutdown(), "GraphicsAPI", "Cannot set memory profile without creating a graphics device first!");
 
-		ResourceTablePoolDesc desc = {};
+		DescriptorSetPoolDesc desc = {};
 		desc.Entries =
 		{
-			{GraphicsResourceType::Sampler,resourceCount},
-			{GraphicsResourceType::ConstantBuffer,resourceCount},
-			{GraphicsResourceType::SampledTexture,resourceCount},
-			{GraphicsResourceType::StorageBuffer,resourceCount},
-			{GraphicsResourceType::StorageTexture,resourceCount}
+			{DescriptorResourceType::Sampler,resourceCount},
+			{DescriptorResourceType::ConstantBuffer,resourceCount},
+			{DescriptorResourceType::SampledTexture,resourceCount},
+			{DescriptorResourceType::StorageBuffer,resourceCount},
+			{DescriptorResourceType::StorageTexture,resourceCount}
 		};
 		desc.MaxTables = setCount;
-		pAPI->mTablePool = pAPI->mDevice->CreateResourceTablePool(desc);
+		pAPI->mTablePool = pAPI->mDevice->CreateDescriptorSetPool(desc);
 	}
 	SharedHeap<GraphicsDevice> GraphicsAPI::GetDefaultDevice()
 	{
@@ -49,7 +49,7 @@ namespace Portakal
 		return pAPI->mDevice;
 	}
 
-	SharedHeap<GraphicsMemoryHeap> GraphicsAPI::GetDefaultDeviceHeap()
+	SharedHeap<GraphicsMemory> GraphicsAPI::GetDefaultDeviceHeap()
 	{
 		GraphicsAPI* pAPI = GetUnderlyingAPI();
 		if (pAPI == nullptr)
@@ -58,7 +58,7 @@ namespace Portakal
 		return pAPI->mHeapDevice;
 	}
 
-	SharedHeap<GraphicsMemoryHeap> GraphicsAPI::GetDefaultHostHeap()
+	SharedHeap<GraphicsMemory> GraphicsAPI::GetDefaultHostHeap()
 	{
 		GraphicsAPI* pAPI = GetUnderlyingAPI();
 		if (pAPI == nullptr)
@@ -66,7 +66,7 @@ namespace Portakal
 
 		return pAPI->mHeapHost;
 	}
-	SharedHeap<ResourceTablePool> GraphicsAPI::GetDefaultTablePool()
+	SharedHeap<DescriptorSetPool> GraphicsAPI::GetDefaultTablePool()
 	{
 		GraphicsAPI* pAPI = GetUnderlyingAPI();
 		if (pAPI == nullptr)
@@ -111,9 +111,9 @@ namespace Portakal
 		DEV_ASSERT(pAPI->mDevice.IsShutdown(), "GraphicsAPI", "Cannot have more than one graphics device!");
 
 		pAPI->mDevice = pDevice;
-		pAPI->mGraphicsQueue = pDevice->OwnQueue({ GraphicsQueueType::Graphics });
-		pAPI->mComputeQueue = pDevice->OwnQueue({ GraphicsQueueType::Compute });
-		pAPI->mTransferQueue = pDevice->OwnQueue({ GraphicsQueueType::Transfer });
+		pAPI->mGraphicsQueue = pDevice->RentQueue({ GraphicsQueueFamilyType::Graphics });
+		pAPI->mComputeQueue = pDevice->RentQueue({ GraphicsQueueFamilyType::Compute });
+		pAPI->mTransferQueue = pDevice->RentQueue({ GraphicsQueueFamilyType::Transfer });
 	}
 	void GraphicsAPI::_RemoveDevice()
 	{

@@ -12,7 +12,7 @@ namespace Portakal
 	{
 		GENERATE_OBJECT;
 	public:
-		CreateShaderContextMenuItem() : mOpen(false),mStage(ShaderStage::VertexStage),mLanguage(ShaderLanguage::Unknown)
+		CreateShaderContextMenuItem() : mOpen(false),mStage(ShaderStage::Vertex),mLanguage(ShaderLanguage::Unknown)
 		{
 
 		}

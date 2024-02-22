@@ -7,7 +7,7 @@ namespace Portakal
 	class RUNTIME_API GraphicsBuffer :public GraphicsDeviceObject
 	{
 	public:
-		GraphicsBuffer(const GraphicsBufferDesc& desc);
+		GraphicsBuffer(const GraphicsBufferDesc& desc,GraphicsDevice* pDevice);
 		~GraphicsBuffer() = default;
 
 		FORCEINLINE GraphicsBufferUsage GetUsages() const noexcept
@@ -26,7 +26,7 @@ namespace Portakal
 		{
 			return mTotalSize;
 		}
-		FORCEINLINE SharedHeap<GraphicsMemoryHeap> GetMemory() const noexcept
+		FORCEINLINE SharedHeap<GraphicsMemory> GetMemory() const noexcept
 		{
 			return mHeap;
 		}
@@ -42,6 +42,6 @@ namespace Portakal
 		const UInt32 mSubItemCount;
 		const UInt32 mSubItemSize;
 		const UInt64 mTotalSize;
-		SharedHeap<GraphicsMemoryHeap> mHeap;
+		SharedHeap<GraphicsMemory> mHeap;
 	};
 }

@@ -72,11 +72,11 @@ namespace Portakal
 		SharedHeap<Sampler> mSampler;
 
 		SharedHeap<TextureResource> mDefaultFontTexture;
-		SharedHeap<ResourceTableLayout> mStaticResourceLayout;
-		SharedHeap<ResourceTableLayout> mFontResourceLayout;
+		SharedHeap<DescriptorSetLayout> mStaticResourceLayout;
+		SharedHeap<DescriptorSetLayout> mFontResourceLayout;
 
-		SharedHeap<ResourceTable> mStaticResourceTable;
-		SharedHeap<ResourceTable> mFontResourceTable;
+		SharedHeap<DescriptorSet> mStaticDescriptorSet;
+		SharedHeap<DescriptorSet> mFontDescriptorSet;
 
 		SharedHeap<Pipeline> mPipeline;
 		SharedHeap<Fence> mFence;

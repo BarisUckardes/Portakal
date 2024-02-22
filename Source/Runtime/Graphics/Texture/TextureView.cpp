@@ -2,7 +2,7 @@
 
 namespace Portakal
 {
-	TextureView::TextureView(const TextureViewDesc& desc) : mTargetTexture(desc.pTexture),mArrayLevel(desc.ArrayLevel),mMipLevel(desc.MipLevel)
+	TextureView::TextureView(const TextureViewDesc& desc,GraphicsDevice* pDevice) : GraphicsDeviceObject(pDevice),mTargetTexture(desc.pTexture),mArrayLevel(desc.ArrayLevel),mMipLevel(desc.MipLevel)
 	{
 
 	}

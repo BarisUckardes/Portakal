@@ -7,7 +7,7 @@ namespace Portakal
 	class RUNTIME_API TextureView : public GraphicsDeviceObject
 	{
 	public:
-		TextureView(const TextureViewDesc& desc);
+		TextureView(const TextureViewDesc& desc,GraphicsDevice* pDevice);
 		~TextureView() = default;
 
 		FORCEINLINE const Texture* GetTargetTexture() const noexcept

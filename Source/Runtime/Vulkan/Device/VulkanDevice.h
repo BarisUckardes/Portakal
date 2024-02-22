@@ -44,27 +44,33 @@ namespace Portakal
 
        
         FORCEINLINE VkDevice GetVkLogicalDevice() const noexcept { return mLogicalDevice; }
-        VkQueue vkOwnQueue(const GraphicsQueueType type);
-        void vkReturnQueue(const GraphicsQueueType type, const VkQueue queue);
-        unsigned char vkGetQueueFamilyIndex(const GraphicsQueueType type) const noexcept;
+        VkQueue vkOwnQueue(const GraphicsQueueFamilyType type);
+        void vkReturnQueue(const GraphicsQueueFamilyType type, const VkQueue queue);
+        unsigned char vkGetQueueFamilyIndex(const GraphicsQueueFamilyType type) const noexcept;
         SharedHeap<Texture> CreateVkSwapchainTexture(const TextureDesc& desc, const VkImage image);
+
+        virtual GraphicsBackend GetBackend() const noexcept override final
+        {
+            return GraphicsBackend::Vulkan;
+        }
 	private:
 		// Inherited via GraphicsDevice
 		void OnShutdown() override;
 		Texture* CreateTextureCore(const TextureDesc& desc) override;
 		TextureView* CreateTextureViewCore(const TextureViewDesc& desc) override;
 		CommandList* CreateCommandListCore(const CommandListDesc& desc) override;
-		GraphicsMemoryHeap* CreateMemoryHeapCore(const GraphicsMemoryHeapDesc& desc) override;
+		GraphicsMemory* CreateMemoryHeapCore(const GraphicsMemoryDesc& desc) override;
 		GraphicsBuffer* CreateBufferCore(const GraphicsBufferDesc& desc) override;
 		Shader* CreateShaderCore(const ShaderDesc& desc) override;
 		Sampler* CreateSamplerCore(const SamplerDesc& desc) override;
-		ResourceTableLayout* CreateResourceTableLayoutCore(const ResourceTableLayoutDesc& desc) override;
-		ResourceTablePool* CreateResourceTablePoolCore(const ResourceTablePoolDesc& desc) override;
-		ResourceTable* CreateResourceTableCore(const ResourceTableDesc& desc) override;
+		DescriptorSetLayout* CreateDescriptorSetLayoutCore(const DescriptorSetLayoutDesc& desc) override;
+		DescriptorSetPool* CreateDescriptorSetPoolCore(const DescriptorSetPoolDesc& desc) override;
+		DescriptorSet* CreateDescriptorSetCore(const DescriptorSetDesc& desc) override;
         Fence* CreateFenceCore(const bool bSignalled) override;
+        Semaphore* CreateSyncObjectCore() override;
         Swapchain* CreateSwapchainCore(const SwapchainDesc& desc) override;
         RenderPass* CreateRenderPassCore(const RenderPassDesc& desc) override;
-        GraphicsQueue* OwnQueueCore(const GraphicsQueueDesc& desc) override;
+        GraphicsQueue* RentQueueCore(const GraphicsQueueDesc& desc) override;
 
         // Inherited via GraphicsDevice
         CommandPool* CreateCommandPoolCore(const CommandPoolDesc& desc) override;
@@ -75,7 +81,7 @@ namespace Portakal
         void WaitFencesCore(Fence** ppFences, const Byte count) override;
         void WaitDeviceIdleCore() override;
         void UpdateHostBufferCore(GraphicsBuffer* pBuffer, const GraphicsBufferHostUpdateDesc& desc) override;
-        void UpdateResourceTableCore(ResourceTable* pTable, const ResourceTableUpdateDesc& desc) override;
+        void UpdateDescriptorSetCore(DescriptorSet* pTable, const DescriptorSetUpdateDesc& desc) override;
         void SubmitCommandListsCore(CommandList** ppCmdLists, const unsigned char cmdListCount,
             const GraphicsQueue* pTargetQueue,
             Semaphore** ppSignalSemaphores, const unsigned int signalSemaphoreCount,

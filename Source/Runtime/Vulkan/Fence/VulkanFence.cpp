@@ -3,7 +3,7 @@
 
 namespace Portakal
 {
-    VulkanFence::VulkanFence(VulkanDevice* pDevice,const bool bSignalled) : mLogicalDevice(pDevice->GetVkLogicalDevice()),mFence(VK_NULL_HANDLE)
+    VulkanFence::VulkanFence(VulkanDevice* pDevice,const bool bSignalled) : Fence(pDevice), mLogicalDevice(pDevice->GetVkLogicalDevice()),mFence(VK_NULL_HANDLE)
     {
         VkFenceCreateInfo createInfo = {};
         createInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;

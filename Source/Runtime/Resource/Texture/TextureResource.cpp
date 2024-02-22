@@ -30,7 +30,7 @@ namespace Portakal
             mData.Add(mips);
         }
     }
-    void TextureResource::SetMemoryProfile(const SharedHeap<GraphicsMemoryHeap>& pHeapDevice, const SharedHeap<GraphicsMemoryHeap>& pHeapHost)
+    void TextureResource::SetMemoryProfile(const SharedHeap<GraphicsMemory>& pHeapDevice, const SharedHeap<GraphicsMemory>& pHeapHost)
     {
         if (IsShutdown())
             return;
@@ -84,6 +84,7 @@ namespace Portakal
                     viewDesc.pTexture = mTexture;
                     viewDesc.MipLevel = mipIndex;
                     viewDesc.ArrayLevel = arrayIndex;
+                    viewDesc.Format = mTexture->GetFormat();
                     mipData.pView = mDevice->CreateTextureView(viewDesc);
                 }
 
@@ -138,6 +139,7 @@ namespace Portakal
         desc.ArrayLevel = arrayLevel;
         desc.MipLevel = mipLevel;
         desc.pTexture = mTexture;
+        desc.Format = mTexture->GetFormat();
         data.pView = mDevice->CreateTextureView(desc);
 
         return data.pView;
@@ -169,12 +171,13 @@ namespace Portakal
             TextureViewDesc desc = {};
             desc.ArrayLevel = arrayLevel;
             desc.MipLevel = mipLevel;
-            desc.pTexture = mTexture.GetHeap();
+            desc.pTexture = mTexture;
+            desc.Format = mTexture->GetFormat();
             mip.pView = mDevice->CreateTextureView(desc);
         }
         return mip.pView;
     }
-    void TextureResource::Update(const MemoryView& memory, const Vector3US offset, const TextureMemoryLayout inputMemoryLayout, const GraphicsMemoryAccessFlags inputAccessFlags, const PipelineStageFlags inputPipelineFlags, const GraphicsQueueType inputQueueType, const Byte mipLevel, const Byte arrayLevel)
+    void TextureResource::Update(const MemoryView& memory, const Vector3US offset, const TextureMemoryLayout inputMemoryLayout, const GraphicsMemoryAccessFlags inputAccessFlags, const PipelineStageFlags inputPipelineFlags, const GraphicsQueueFamilyType inputQueueType, const Byte mipLevel, const Byte arrayLevel)
     {
         //Validate if shutdown
         if (IsShutdown())
@@ -219,14 +222,14 @@ namespace Portakal
         mCmdList->BeginRecording();
 
         //Translate texture layout to transfer dest
-        CommandListTextureMemoryBarrierDesc preBarrierDesc = {};
+        TextureMemoryBarrierDesc preBarrierDesc = {};
         preBarrierDesc.SourceQueue = inputQueueType;
         preBarrierDesc.SourceAccessFlags = inputAccessFlags;
         preBarrierDesc.SourceStageFlags = inputPipelineFlags;
         preBarrierDesc.SourceLayout = inputMemoryLayout;
         preBarrierDesc.AspectFlags = TextureAspectFlags::Color;
 
-        preBarrierDesc.DestinationQueue = GraphicsQueueType::Graphics;
+        preBarrierDesc.DestinationQueue = GraphicsQueueFamilyType::Graphics;
         preBarrierDesc.DestinationAccessFlags = GraphicsMemoryAccessFlags::TransferWrite;
         preBarrierDesc.DestinationStageFlags = PipelineStageFlags::Transfer;
         preBarrierDesc.DestinationLayout = TextureMemoryLayout::TransferDestination;
@@ -243,8 +246,8 @@ namespace Portakal
         mCmdList->CopyBufferToTexture(mipData.pStageBuffer.GetHeap(), mTexture.GetHeap(), bufferTextureCopyDesc);
         
         //Translate texture back to it's input layout
-        CommandListTextureMemoryBarrierDesc postBarrierDesc = {};
-        postBarrierDesc.SourceQueue = GraphicsQueueType::Graphics;
+        TextureMemoryBarrierDesc postBarrierDesc = {};
+        postBarrierDesc.SourceQueue = GraphicsQueueFamilyType::Graphics;
         postBarrierDesc.SourceAccessFlags = GraphicsMemoryAccessFlags::TransferWrite;
         postBarrierDesc.SourceStageFlags = PipelineStageFlags::Transfer;
         postBarrierDesc.SourceLayout = TextureMemoryLayout::TransferDestination;

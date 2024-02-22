@@ -18,11 +18,11 @@ namespace Portakal
 		{
 			switch (stage)
 			{
-			case ShaderStage::VertexStage:
+			case ShaderStage::Vertex:
 				return shaderc_vertex_shader;
-			case ShaderStage::FragmentStage:
+			case ShaderStage::Fragment:
 				return shaderc_fragment_shader;
-			case ShaderStage::ComputeStage:
+			case ShaderStage::Compute:
 				return shaderc_compute_shader;
 			default:
 				return shaderc_glsl_infer_from_source;

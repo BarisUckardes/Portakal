@@ -7,10 +7,10 @@ namespace Portakal
 	class RUNTIME_API GraphicsQueue : public GraphicsDeviceObject
 	{
 	public:
-		GraphicsQueue(const GraphicsQueueDesc& desc);
+		GraphicsQueue(const GraphicsQueueDesc& desc,GraphicsDevice* pDevice);
 		~GraphicsQueue() = default;
 
-		FORCEINLINE GraphicsQueueType GetQueueType() const noexcept
+		FORCEINLINE GraphicsQueueFamilyType GetQueueType() const noexcept
 		{
 			return mType;
 		}
@@ -19,6 +19,6 @@ namespace Portakal
 			return GraphicsDeviceObjectType::Queue;
 		}
 	private:
-		const GraphicsQueueType mType;
+		const GraphicsQueueFamilyType mType;
 	};
 }
